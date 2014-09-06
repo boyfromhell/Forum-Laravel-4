@@ -1,0 +1,81 @@
+@header-height: 130px;
+@header-bg: #444;
+@subheader-bg: #666;
+@body-bg: #666;
+@post-body-bg: #7f7f7f;
+@main-bg: #333;
+@maingray: #4f4f4f;
+@darker-bg: #555;
+
+@nav-color: #bbb;
+@nav-hover: #bbb;
+@nav-hover-bg: #4f4f4f;
+@babynav-hover: #777;
+
+@text-color: #ccc;
+@lighter-text: #aaa;
+@sig-color: #ccc;
+@scaled-bg: #777;
+
+@quote-header: #555;
+@quote-bg: #777;
+
+@form-span: #fff;
+@input-bg: #555;
+@input-color: #fff;
+@input-hover: #5f5f5f;
+
+@welcome-color: #e3cb00;
+@menu-bg: #666; /*888;*/
+@menu-hover: #888; /*#666;*/
+@menu-color: #ddd;
+
+@photo-bg: #888;
+@photo-border: #333;
+@photo-hover: #999;
+@photo-border-hover: #444;
+@description-bg: #777;
+
+@link-color: #e3cb00;
+@link-hover: #ffe400;
+@button-color: #e3cb00;
+@button-hover: #5f5f5f;
+@active-color: #fff;
+@th-color: #e3cb00;
+@footer-color: #e3cb00;
+
+@gradient-bottom: rgb(51,51,51);
+@gradient-top: rgb(102,102,102);
+
+#jenny {
+	width:32px; height:32px; background:url('/images/custom/genetrix.png');
+	position:absolute; z-index:10; right:10%; top:151px;
+	
+	body.mobile & { position:relative; left:80%; top:-31px; float:left; }
+}
+
+div.icon {
+	background:url('/images/skins/ivan/sprite.png') 0 0 no-repeat;
+	width:19px; height:18px; display:block; margin:0 auto;
+	a { display:block; }
+	
+	&.forum { width:25px; height:25px; margin:0 11px; }
+	&.forum_unread { width:25px; height:25px; background-position:-25px 0; }
+	&.topic { background-position:0 -25px; }
+	&.topic_unread { background-position:-25px -25px; }
+	&.topic_hot { background-position:0 -43px; }
+	&.topic_hot_unread { background-position:-25px -43px; }
+	&.topic_locked { background-position:0 -61px; }
+	&.topic_locked_unread { background-position:-25px -61px; }
+	&.topic_sticky { background-position:0 -79px; }
+	&.topic_sticky_unread { background-position:-25px -79px; }
+	&.topic_announce { background-position:0 -97px; }
+	&.topic_announce_unread { background-position:-25px -97px; }
+	&.offline { width:15px; height:15px; background-position:0 -115px; }
+	&.online { width:15px; height:15px; background-position:-25px -115px; }
+	&.group { width:15px; height:15px; background-position:0 -130px; }
+	&.minipost { width:12px; height:9px; background-position:-15px -130px; }
+	&.minipost_unread { width:12px; height:9px; background-position:-27px -130px; }
+	&.latest_reply { width:18px; height:9px; background-position:-15px -139px; }
+	&.newest_reply { width:18px; height:9px; background-position:-33px -139px; }
+}
