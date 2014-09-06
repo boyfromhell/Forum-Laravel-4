@@ -3,6 +3,9 @@
 class Topic extends Earlybird\Foundry
 {
 
+	// @todo
+	public $timestamps = false;
+
 	protected $appends = array(
 		'url',
 		'short_title',
@@ -10,7 +13,7 @@ class Topic extends Earlybird\Foundry
 
 	public function forum()
 	{
-		return $this->belongsTo('forum');
+		return $this->belongsTo('Forum');
 	}
 	public function author()
 	{

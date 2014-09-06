@@ -1,7 +1,94 @@
 <?php
 
-class User extends Controller_W 
+class UserController extends Earlybird\FoundryController
 {
+
+	/**
+	 * Display a user
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function display( $id, $name = NULL )
+	{
+		global $me;
+
+		// @todo
+		$access = 2;
+
+		$user = User::findOrFail($id);
+
+		$_PAGE = array(
+			'category' => 'forums',
+			'section'  => 'forums',
+			'title'    => $user->name,
+		);
+
+		if( $me->id && ( $user->id != $me->id ) && !$me->administrator ) {
+			$user->increment('views');
+		}
+
+		// Birthday
+		list($year, $month, $day) = explode('-', $user->birthday);
+		$month = date('F', mktime(0, 0, 0, $month));
+		$day = (int)$day;
+		$birthday = $month . ' ' . $day;
+		if( $user->bdaypref == 0 ) {
+			$birthday .= ', ' . $year;
+		}
+
+		// Custom fields
+		$custom = $user->custom()
+			->join('custom_fields', 'custom_data.field_id', '=', 'custom_fields.id')
+			->where('profile', '=', 1)
+			->where('permission', '<=', $access)
+			->orderBy('order', 'asc')
+			->get(['custom_fields.name', 'custom_data.value']);
+
+		// Lists
+		/*$on_list = false;
+		if( $user->id != $me->id )
+		{
+			$sql = "SELECT `entry_type`
+				FROM `user_lists`
+				WHERE `entry_user` = {$me->id}
+					AND `entry_subject` = {$user->id}";
+			$exec = $_db->query($sql);
+			$on_list = $exec->num_rows;
+
+			if( $on_list ) {
+				list( $list_type ) = $exec->fetch_row();
+				$list_text = $list_type == 0 ? 'ignore' : 'buddy';
+			}
+		}*/
+
+		// Stats
+		//$user->fetch_stats();
+
+		return View::make('users.profile')
+			->with('user', $user)
+			->with('custom', $custom);
+
+		/*$Smarty->assign('online_text', $user->online ? 'online' : 'offline');
+		$Smarty->assign('user_last', $user_last);
+
+		$Smarty->assign('custom', $custom);
+
+		$Smarty->assign('show_birthday', $user->bdaypref < 2 ? true : false);
+		$Smarty->assign('birthday', $birthday);
+
+		$Smarty->assign('on_list', $on_list);
+		$Smarty->assign('list_text', $list_text);
+
+		// Contact
+		$Smarty->assign('ims', $ims);
+		$Smarty->assign('website_url', $user->website);
+		$Smarty->assign('website_text', $website_text);
+		$Smarty->assign('allow_email', $user->allow_email || $me->administrator ? true : false);
+		$Smarty->assign('edit_url', ( $me->administrator ? '/admin/edit_user?id=' . $u : '/users/edit' ));
+		*/
+	}
+
 	/**
 	 * Load all users whose birthday is today
 	 * @todo optional argument to check a different day
@@ -22,71 +109,6 @@ class User extends Controller_W
 		}
 		
 		return $birthdays;
-	}
-
-	public function view()
-	{
-		global $_db;
-		$sql = "UPDATE `users`
-			SET `views` = `views` + 1
-			WHERE `id` = {$this->id}";
-		$_db->query($sql);
-	}
-
-	public function load_groups()
-	{
-		global $_db;
-		$sql = "SELECT `groups`.*
-			FROM `group_members`
-				JOIN `groups`
-					ON `group_members`.`group_id` = `groups`.`id`
-			WHERE `group_members`.`user_id` = {$this->id}
-			ORDER BY `groups`.`name` ASC";
-		$exec = $_db->query($sql);
-
-		$groups = array();
-		while( $data = $exec->fetch_assoc() )
-		{
-			$group = new Group($data['id'], $data);
-			$groups[] = $group;
-		}
-		return $groups;
-	}
-
-	/**
-	 * @param access int global current user access level
-	 */
-	public function load_custom_fields( $access, $section = 'profile' )
-	{
-		global $_db;
-		$access = (int)$access;
-		$section_sql = '';
-
-		if( $section == 'topic' ) {
-			$section_sql = 'AND `custom_fields`.`topic` = 1';
-		} else {
-			$section_sql = 'AND `custom_fields`.`profile` = 1';
-		}
-	
-		$sql = "SELECT `custom_fields`.`name`, `custom_data`.`value`
-			FROM `custom_data`
-				JOIN `custom_fields`
-					ON `custom_data`.`field_id` = `custom_fields`.`id`
-			WHERE `custom_data`.`user_id` = {$this->id}
-				{$section_sql}
-				AND `custom_fields`.`permission` <= {$access}
-			ORDER BY `custom_fields`.`order` ASC";
-		$exec = $_db->query($sql);
-
-		$custom = array();
-		while( $data = $exec->fetch_assoc() )
-		{
-			$custom[] = array(
-				'name' => $data['name'],
-				'value' => $data['value']
-			);
-		}
-		return $custom;
 	}
 
 	public function load_screennames()
@@ -148,36 +170,6 @@ class User extends Controller_W
 			$this->last_online = $this->last_visit ? $this->last_visit : $this->joined;
 			$this->last_online = datestring($this->last_online + ($me->tz*3600),1);
 		}
-	}
-	
-	/**
-	 * Fetch the name and image of the user's current level
-	 */
-	public function fetch_level()
-	{
-		global $_db;
-		$sql = "SELECT `name`, `image`
-			FROM `levels`
-			WHERE `type` = 0
-				AND `min_posts` <= {$this->posts}
-			ORDER BY `min_posts` DESC
-			LIMIT 1";
-		$exec = $_db->query($sql);
-		list( $level_name, $level_image ) = $exec->fetch_row();
-
-		if( $this->rank ) {
-			$sql = "SELECT `name`, `image`
-				FROM `levels`
-				WHERE `id` = {$this->rank}";
-			$exec = $_db->query($sql);
-			list( $level_name, $new_image ) = $exec->fetch_row();
-			if( $new_image ) {
-				$level_image = $new_image;
-			}
-		}
-		
-		$this->level_name = $level_name;
-		$this->level_image = $level_image;
 	}
 
 	/**

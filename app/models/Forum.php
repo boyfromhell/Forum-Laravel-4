@@ -5,12 +5,14 @@ class Forum extends Earlybird\Foundry
 
 	protected $appends = array(
 		'url',
+		'parents',
 	);
 
 	public function parent()
 	{
 		return $this->belongsTo('Forum', 'parent_id');
 	}
+
 	public function children()
 	{
 		return $this->hasMany('Forum', 'parent_id')
@@ -27,11 +29,35 @@ class Forum extends Earlybird\Foundry
 			->orderBy('last_date', 'desc');
 	}
 
+	/**
+	 * Permalink
+	 *
+	 * @return string
+	 */
 	public function getUrlAttribute()
 	{
 		$url = preg_replace('/[^A-Za-z0-9]/', '_', $this->name);
 		$url = trim(preg_replace('/(_)+/', '_', $url), '_');
 		return '/forums/' . $this->id . '/' . $url;
+	}
+
+	/**
+	 * Get parent breadcrumbs
+	 *
+	 * @return array
+	 */
+	public function getParentsAttribute()
+	{
+		$parents = array();
+		$child = $this;
+
+		while( $child->parent_id )
+		{
+			$parent = Forum::find($child->parent_id);
+			$parents[] = $parent;
+			$child = $parent;
+		}
+		return array_reverse($parents);
 	}
 
 	/**

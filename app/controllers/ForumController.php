@@ -465,20 +465,4 @@ class ForumController extends Earlybird\FoundryController
 			->with('topics', $topics);
 	}
 
-	/**
-	 * Load a hierarchy of parent forums
-	 */
-	public function load_parents()
-	{	
-		$parents = array();
-		$child = $this;
-
-		while( $child->parent_id )
-		{
-			$parent = new Forum($child->parent_id);
-			$parents[] = $parent;
-			$child = $parent;
-		}
-		return array_reverse($parents);
-	}
 }

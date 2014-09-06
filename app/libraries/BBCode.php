@@ -155,9 +155,9 @@ class BBCode
 	 */
 	static public function load_smileys()
 	{
-		/*$smileys = Smiley::all();
+		$smileys = Smiley::all();
 
-		usort($smileys, 'BBCode::_sort_smileys');*/
+		usort($smileys, 'BBCode::_sort_smileys');
 		
 		return $smileys;
 	}
@@ -166,10 +166,10 @@ class BBCode
 	 * Sorts smileys so that those starting with the same characters don't conflict
 	 */
 	static protected function _sort_smileys($a, $b) {
-		if( strlen($a['code']) == strlen($b['code']) ) {
+		if( strlen($a->code) == strlen($b->code) ) {
 			return 0;
 		}
-		return ( strlen($a['code']) > strlen($b['code']) ) ? -1 : 1;
+		return ( strlen($a->code) > strlen($b->code) ) ? -1 : 1;
 	}
 
 	/**
@@ -188,8 +188,8 @@ class BBCode
 		$smileys = BBCode::load_smileys();
 
 		foreach( $smileys as $smiley ) {
-			$orig[] = $smiley['code'];
-			$repl[] = '[smiley]/images/smileys/' . $smiley['file'] . '[/smiley]';
+			$orig[] = $smiley->code;
+			$repl[] = '[smiley]/images/smileys/' . $smiley->file . '[/smiley]';
 		}
 		if( count($orig) ) {
 			$text = str_replace($orig, $repl, $text);
@@ -247,7 +247,7 @@ class BBCode
 	 */
 	static protected function _embed_quotes( $matches ) {
 		global $_CONFIG;
-		$skin = '/images/skins/' . $_CONFIG['skin'] . '/';
+		$skin = '/images/skins/' . Config::get('app.skin') . '/';
 
 		$parts = explode(';', $matches[1]);
 		if( count($parts) > 1 ) {

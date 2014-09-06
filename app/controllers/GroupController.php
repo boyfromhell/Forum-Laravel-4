@@ -1,27 +1,7 @@
 <?php
-class GroupModel extends Model_W
-{
-	protected static $_table = 'groups';
-	protected static $_instance = null;
-}
 
-class Group extends Controller_W 
+class GroupController extends Earlybird\FoundryController
 {
-	protected static $_table = 'groups';
-
-	public function __construct( $pri = null, $data = null )
-	{
-		parent::__construct($pri, $data);
-		
-		$this->generate_url();
-	}
-	
-	public function generate_url()
-	{
-		$url = preg_replace('/[^A-Za-z0-9]/', '_', $this->name);
-		$url = trim(preg_replace('/(_)+/', '_', $url), '_');
-		$this->url = '/groups/' . $this->id . '/' . $url;
-	}
 
 	public function get_type()
 	{

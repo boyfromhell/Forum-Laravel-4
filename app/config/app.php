@@ -3,7 +3,11 @@
 return array(
 
 	'forum_name' => 'The Cathedral of Attnam',
+	'mobile_name' => 'Attnam',
 	'short_name' => 'Attnam.com',
+
+	'skin' => 'ivan',
+	'cdn' => 'http://s3.attnam.com',
 
 	/*
 	|--------------------------------------------------------------------------
