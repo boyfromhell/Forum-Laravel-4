@@ -3,6 +3,70 @@
 class GroupController extends Earlybird\FoundryController
 {
 
+	/**
+	 * Show all groups
+	 *
+	 * @return Response
+	 */
+	public function index()
+	{
+		$_PAGE = array(
+			'category' => 'community',
+			'section'  => 'groups',
+			'title'    => 'Groups',
+		);
+
+		/*if( !$me->administrator ) {
+			$where_sql = 'WHERE `approved` = 1';
+		}*/
+
+		// Groups
+		$groups = Group::where('approved', '=', 1)
+			->orderBy('name', 'asc')
+			->get();
+
+		return View::make('groups.index')
+			->with('_PAGE', $_PAGE)
+			->with('groups', $groups);
+	}
+
+	/**
+	 * Display a group
+	 *
+	 * @param  int  $id
+	 * @param  string  $name  For SEO only
+	 * @return Response
+	 */
+	public function display( $id, $name = NULL )
+	{
+		$group = Group::findOrFail($id);
+
+		// @todo add and remove members
+		// @todo request to join groups
+		// @todo send private message to all members
+
+		// Add a new member to this group
+		/*if( isset($_POST['add_member']) && $group->check_membership($me->id) == 2 ) {
+			$id = User::lookup_id($_POST['username']);
+			$group->add_member($id, (int)$_POST['type']);
+			header("Location: " . $group->url);
+			exit;
+		}*/
+
+		$_PAGE = array(
+			'category' => 'community',
+			'section'  => 'groups',
+			'title'    => $group->name,
+		);
+
+		return View::make('groups.display')
+			->with('_PAGE', $_PAGE)
+			->with('group', $group);
+
+		/*$Smarty->assign('info', $group->get_info($mygroups));
+		$Smarty->assign('membership', $group->check_membership($me->id));*/
+	}
+
 	public function get_type()
 	{
 		switch( $this->type ) {

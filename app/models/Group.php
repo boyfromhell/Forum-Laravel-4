@@ -12,9 +12,31 @@ class Group extends Earlybird\Foundry
 	 *
 	 * @return Relation
 	 */
+	public function allMembers()
+	{
+		return $this->belongsToMany('user', 'group_members');
+	}
+
+	/**
+	 * Moderators
+	 *
+	 * @return Relation
+	 */
+	public function moderators()
+	{
+		return $this->belongsToMany('User', 'group_members')
+			->where('group_members.type', '=', 1);
+	}
+
+	/**
+	 * Normal members
+	 *
+	 * @return Relation
+	 */
 	public function members()
 	{
-		return $this->belongsToMany('User', 'group_members');
+		return $this->belongsToMany('User', 'group_members')
+			->where('group_members.type', '=', 0);
 	}
 
 	/**
