@@ -1,42 +1,49 @@
 <?php
-class ScreennameModel extends Model_W
-{
-	protected static $_table = 'screennames';
-	protected static $_instance = null;
-}
 
-class Screenname extends Controller_W 
+class Screenname extends Earlybird\Foundry
 {
-	protected static $_table = 'screennames';
 
-	public function __construct( $pri = null, $data = null )
+	protected $appends = array(
+		'name',
+		'image',
+	);
+
+	/**
+	 * User who owns this screenname
+	 *
+	 * @return Relation
+	 */
+	public function user()
 	{
-		parent::__construct($pri, $data);
+		return $this->belongsTo('User');
 	}
 
 	/**
 	 * Convert enum data to formatted Protocol name
+	 *
+	 * @return string
 	 */
-	function get_protocol_name()
+	public function getNameAttribute()
 	{
-		$protocols = array(
-			'aim' => 'AIM',
+		$protocols = [
+			'aim'   => 'AIM',
 			'yahoo' => 'Yahoo!',
-			'msn' => 'MSN',
-			'icq' => 'ICQ'
-		);
+			'msn'   => 'MSN',
+			'icq'   => 'ICQ'
+		];
+
 		return $protocols[$this->protocol];
 	}
 
 	/**
 	 * Fetch the appropriate online/offline image
+	 *
+	 * @return string
 	 */
-	function get_image()
+	public function getImageAttribute()
 	{
-		global $_CONFIG;
-
-		$msn_domain = $_CONFIG['domain'] . '/images/';
-		$domain = 'http://' . $msn_domain;
+		$msn_domain = Config::get('app.domain').'/images/';
+		$domain = 'http://'.$msn_domain;
 
 		switch( $this->protocol )
 		{
@@ -58,4 +65,6 @@ class Screenname extends Controller_W
 				break;
 		}
 	}
+
 }
+

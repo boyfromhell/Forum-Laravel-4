@@ -7,6 +7,8 @@ return array(
 	'short_name' => 'Attnam.com',
 
 	'skin' => 'ivan',
+
+	'domain' => 'beta.attnam.com',
 	'cdn' => 'http://s3.attnam.com',
 
 	/*

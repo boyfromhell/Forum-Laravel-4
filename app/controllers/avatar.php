@@ -1,18 +1,7 @@
 <?php
-class AvatarModel extends Model_W
-{
-	protected static $_table = 'avatars';
-	protected static $_instance = null;
-}
 
 class Avatar extends Controller_W 
 {
-	protected static $_table = 'avatars';
-
-	public function __construct( $pri = null, $data = null )
-	{
-		parent::__construct($pri, $data);
-	}
 
 	public function get_path()
 	{

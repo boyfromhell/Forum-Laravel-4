@@ -71,11 +71,13 @@
 		{{{ $field->value }}}<br><br>
 	@endforeach
 	</td>
-	<td class="right v_top" style="width:50%; padding:10px 15px;">@if ( $me->loggedin )
+	<td class="right v_top" style="width:50%; padding:10px 15px;">@if ( $me->id )
 	<b>Contact:</b><br>
-	{foreach $ims as $im}
-		<b>{$im['protocol']}</b> <img src="{$im['image']}" alt="{$im['protocol']} status" style="vertical-align:middle"> {htmlspecialchars($im['screenname'])}<br>
-	{/foreach}
+
+	@foreach ( $user->screennames as $im )
+		<b>{{ $im->name }}</b> <img src="{{ $im->image }}" alt="{{ $im->name }} status" style="vertical-align:middle"> {{{ $im->screenname }}}<br>
+	@endforeach
+
 	@if ( $me->id != $user->id )
 	{{--if $allow_email}<a href="/email.php?u={{ $user->id }}">Send {{{ $user->name }}} an email</a><br>--}}
 	<a href="/messages/compose?u={{ $user->id }}">Send {{{ $user->name }}} a message</a>

@@ -1,19 +1,7 @@
 <?php
-class NewsletterModel extends Model_W
-{
-	protected static $_table = 'newsletters';
-	protected static $_instance = null;
-}
 
 class Newsletter extends Controller_W 
 {
-	protected static $_table = 'newsletters';
-
-	public function __construct( $pri = null, $data = null )
-	{
-		parent::__construct($pri, $data);
-	}
-	
 	/**
 	 * Count number of subscribers
 	 */

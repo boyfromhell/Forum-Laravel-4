@@ -89,6 +89,18 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	}
 
 	/**
+	 * Screennames
+	 *
+	 * @return Relation
+	 */
+	public function screennames()
+	{
+		return $this->hasMany('Screenname')
+			->orderBy('protocol', 'asc')
+			->orderBy('screenname', 'asc');
+	}
+
+	/**
 	 * Permalink
 	 *
 	 * @return string

@@ -81,7 +81,6 @@ class UserController extends Earlybird\FoundryController
 		$Smarty->assign('list_text', $list_text);
 
 		// Contact
-		$Smarty->assign('ims', $ims);
 		$Smarty->assign('website_url', $user->website);
 		$Smarty->assign('website_text', $website_text);
 		$Smarty->assign('allow_email', $user->allow_email || $me->administrator ? true : false);
@@ -109,30 +108,6 @@ class UserController extends Earlybird\FoundryController
 		}
 		
 		return $birthdays;
-	}
-
-	public function load_screennames()
-	{
-		global $_db;
-
-		$sql = "SELECT `id`, `protocol`, `screenname`
-			FROM `screennames`
-			WHERE `user_id` = {$this->id}
-			ORDER BY `protocol` ASC, `screenname` ASC";
-		$exec = $_db->query($sql);
-
-		$ims = array();
-		while( $data = $exec->fetch_assoc() )
-		{
-			$im = new Screenname($data['id'], $data);
-			
-			$ims[] = array(
-				'protocol' => $im->get_protocol_name(),
-				'image' => $im->get_image(),
-				'screenname' => $im->screenname,
-			);
-		}
-		return $ims;
 	}
 
 	/** 

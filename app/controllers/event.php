@@ -1,28 +1,8 @@
 <?php
-class EventModel extends Model_W
-{
-	protected static $_table = 'events';
-	protected static $_instance = null;
-}
 
 class Event extends Controller_W 
 {
-	protected static $_table = 'events';
-
-	public function __construct( $pri = null, $data = null )
-	{
-		parent::__construct($pri, $data);
-		
-		$this->generate_url();
-	}
 	
-	public function generate_url()
-	{
-		$url = preg_replace('/[^A-Za-z0-9]/', '_', $this->name);
-		$url = trim(preg_replace('/(_)+/', '_', $url), '_');
-		$this->url = '/events/' . $this->id . '/' . $url;
-	}
-
 	/**
 	 * Delete event
 	 */
