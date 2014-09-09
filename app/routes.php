@@ -29,6 +29,7 @@ Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));
 Route::any('groups/new', array('uses' => 'GroupController@add'));
 
 // All users
+Route::get('/', array('uses' => 'ForumController@home'));
 Route::get('forum', array('uses' => 'ForumController@index'));
 Route::get('forums/{id}/{name?}', array('uses' => 'ForumController@display'));
 Route::get('topics/{id}/{name?}', array('uses' => 'TopicController@display'));

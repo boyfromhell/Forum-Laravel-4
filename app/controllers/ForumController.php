@@ -4,6 +4,128 @@ class ForumController extends Earlybird\FoundryController
 {
 
 	/**
+	 * Welcome page with recent activity
+	 *
+	 * @return Response
+	 */
+	public function home()
+	{
+		global $me;
+
+		// Mark all forums read
+		if( Input::has('mark') && $me->id )
+		{
+			SessionTopic::where('user_id', '=', $me->id)->delete();
+
+			Session::push('messages', 'All forums marked read');
+
+			return Redirect::to('forum');
+		}
+
+		$_PAGE = array(
+			'category' => 'home',
+			'section'  => 'welcome',
+			'title'    => 'Welcome',
+		);
+
+		// Announcements
+		$announcement = Announcement::where('id', '=', 2)->first();
+
+		//$birthdays = User::check_birthdays();
+
+		// Newest user
+		$newest_user = User::orderBy('id', 'desc')->first();
+
+		$stats = array(
+			'total_topics' => number_format(Topic::count()),
+			'total_posts'  => number_format(Post::count()),
+			'total_users'  => number_format(User::count()),
+		);
+
+		//-----------------------------------------------------------------------------
+		// Most recent topics
+
+		$topics = Topic::join('forums', 'topics.forum_id', '=', 'forums.id')
+			->where('forums.read', '<=', $me->access)
+			->orderBy('last_date', 'desc')
+			->take(10)
+			->get();
+
+		if( count($topics) > 0 )
+		{
+			// Check if unread
+			/*$sql = "SELECT `session_post`, `topic_id`
+				FROM `session_topics`
+				WHERE `user_id` = {$me->id}
+				AND `topic_id` IN ( " . implode(',', $topic_ids) . " )";
+			$exec = $_db->query($sql);
+
+			while( $data = $exec->fetch_assoc() )
+			{
+				if( $topics[$data['topic_id']]->img == 'topic' ) {
+					$topics[$data['topic_id']]->img_alt = 'New posts';
+				}
+				$topics[$data['topic_id']]->img .= '_unread';
+
+				$data['url'] = '/posts/' . $data['session_post'] . '#' . $data['session_post'];
+				$data['alt'] = 'Go to first unread post';
+
+				$topics[$data['topic_id']]->unread = $data;
+			}
+
+			// Latest posts
+			$sql = "SELECT `posts`.`id`, `posts`.`topic_id`, `posts`.`user_id`, `users`.`name`, `posts`.`time`
+				FROM
+				( SELECT MAX( posts.time ) AS date, topics.id AS id
+					FROM posts, topics
+					WHERE posts.topic_id = topics.id
+					AND topics.id IN ( " . implode(',', $topic_ids ) . " )
+					GROUP BY topics.id ) p1
+				JOIN posts
+					ON posts.time = p1.date AND posts.topic_id = p1.id
+				JOIN users
+					ON posts.user_id = users.id";
+			$exec = $_db->query($sql);
+
+			while( $data = $exec->fetch_assoc() )
+			{
+				$data['author'] = new User($data['user_id'], array('name' => $data['name']));
+
+				$data['time'] += ($me->tz*3600);
+				$data['date'] = datestring($data['time'], 2);
+				$data['url'] = '/posts/' . $data['id'] . '#' . $data['id'];
+
+				$topics[$data['topic_id']]->latest_post = $data;
+			}*/
+		}
+
+		//-----------------------------------------------------------------------------
+		// Random photo and recent album
+
+		$photo = Photo::join('albums', 'photos.album_id', '=', 'albums.id')
+			->where('permission_view', '<=', $access)
+			->orderBy(DB::raw('RAND()'), 'asc')
+			->first();
+
+		$album = Album::where('permission_view', '<=', $access)
+			->orderBy('modified', 'desc')
+			->first();
+		//$album->cover = '/photos/' . $album->folder . '/thumbs/' . substr($data['file'], 0, -4) . '.jpg';
+
+		return View::make('forums.welcome')
+			->with('_PAGE', $_PAGE)
+			->with('announcement', $announcement)
+			->with('birthdays', $birthdays)
+			->with('topics', $topics)
+
+			->with('photo', $photo)
+			->with('album', $album)
+
+			->with('stats', $stats)
+			->with('newest_user', $newest_user);
+	}
+
+	/**
 	 * List all forums
 	 *
 	 * @return Response
@@ -32,6 +154,7 @@ class ForumController extends Earlybird\FoundryController
 		$announcement = Announcement::where('id', '=', 2)->first();
 
 		// Quote bot
+		// @todo
 		if( true || app_active('quotebot') )
 		{
 			if( Input::has('quote') ) {
@@ -193,45 +316,25 @@ class ForumController extends Earlybird\FoundryController
 			}
 		}*/
 
-		// Statistics
-		/*$sql = "SELECT COUNT( id ) FROM topics";
-		$exec = $_db->query($sql);
-		list( $total_topics ) = $exec->fetch_row();
-
-		$sql = "SELECT COUNT( id ) FROM posts";
-		$exec = $_db->query($sql);
-		list( $total_posts ) = $exec->fetch_row();
-
-		$sql = "SELECT COUNT( id ) FROM users";
-		$exec = $_db->query($sql);
-		list( $total_users ) = $exec->fetch_row();
-
 		// Newest user
-		$sql = "SELECT `id`, `name`
-			FROM `users`
-			ORDER BY `id` DESC
-			LIMIT 1";
-		$exec = $_db->query($sql);
-		$data = $exec->fetch_assoc();
-		$newest_user = new User($data['id'], $data);
-
-		sort_by($forums, 'order', 'asc', 'object');
+		$newest_user = User::orderBy('id', 'desc')->first();
 
 		$stats = array(
-			'total_topics' => number_format($total_topics),
-			'total_posts'  => number_format($total_posts),
-			'total_users'  => number_format($total_users),
-		);*/
+			'total_topics' => number_format(Topic::count()),
+			'total_posts'  => number_format(Post::count()),
+			'total_users'  => number_format(User::count()),
+		);
 
 		return View::make('forums.index')
 			->with('_PAGE', $_PAGE)
 			->with('announcement', $announcement)
 			->with('quote', $quote)
-			->with('categories', $categories);
+			->with('categories', $categories)
 
-/*		$Smarty->assign('stats', $stats);
-		$Smarty->assign('online_stats', $online_stats);
-		$Smarty->assign('newest_user', $newest_user);*/
+			->with('stats', $stats)
+			->with('newest_user', $newest_user);
+
+		//$Smarty->assign('online_stats', $online_stats);
 	}
 
 	/**
@@ -407,29 +510,6 @@ class ForumController extends Earlybird\FoundryController
 					$topics[$data['topic_id']]->unread = $data;
 				}
 			
-				// Topic attachments
-				$sql = "SELECT `posts`.`topic_id`, COUNT( `attachments`.`id` ) AS `total`
-					FROM `attachments`
-						LEFT JOIN `posts`
-							ON `attachments`.`post_id` = `posts`.`id`
-					WHERE `posts`.`topic_id` IN ( " . implode(',', $topic_ids) . " )
-					GROUP BY `posts`.`topic_id`";
-				$exec = $_db->query($sql);
-
-				while( $data = $exec->fetch_assoc() ) {
-					$topics[$data['topic_id']]->attachments = $data['total'];
-				}
-
-				// Polls
-				$sql = "SELECT `poll_id`, `poll_topic`
-					FROM `polls`
-					WHERE `poll_topic` IN ( " . implode(',', $topic_ids) . " )";
-				$exec = $_db->query($sql);
-
-				while( $data = $exec->fetch_assoc() ) {
-					$topics[$data['poll_topic']]->poll = $data['poll_id'];
-				}
-
 				// Latest posts
 				$sql = "SELECT `posts`.`id`, `posts`.`topic_id`, `posts`.`user_id`, `users`.`name`, `posts`.`time`
 					FROM

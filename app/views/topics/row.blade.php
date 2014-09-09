@@ -19,9 +19,9 @@
 	</td>
 
 	<td style="width:{{ $topic_mode == 'subscription' ? '30%' : '50%' }}" class="topic">
-		@if ( $topic->attachments )<img src="{{ $skin }}icons/attachment.png" alt="att">@endif
+		@if ( $topic->has_attachments )<img src="{{ $skin }}icons/attachment.png" alt="att">@endif
 		
-		@if ( $topic->poll )<b>[ Poll ]</b>@endif
+		@if ( $topic->has_poll )<b>[ Poll ]</b>@endif
 	
 		@if ( $topic->unread )<a href="{{ $topic->unread['url'] }}"><img src="{{ $skin }}icons/newest_reply.png" title="{{{ $topic->unread['alt'] }}}"></a> @endif
 	

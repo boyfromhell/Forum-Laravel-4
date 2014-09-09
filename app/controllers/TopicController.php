@@ -349,43 +349,6 @@ class TopicController extends Earlybird\FoundryController
 	}
 
 	/**
-	 * Format some of the common display information
-	 */
-	public function format()
-	{
-		$this->short_title = $this->title;
-		if( strlen($this->title) > 50 ) {
-			$this->short_title = substr($this->title, 0, 45) . '...';
-		}
-		if( $this->smiley ) {
-			list($this->smiley_img, $this->smiley_alt) = topic_smiley($this->smiley);
-		}
-
-		$this->pages = ceil(($this->replies+1)/25);
-		$this->alt = 'Go to topic';
-
-		if( $this->type == 2 ) {
-			$this->img     = 'topic_announce';
-			$this->img_alt = 'Announcement';
-			$this->prefix  = 'Announcement: ';
-		}
-		elseif( $this->type == 1 ) {
-			$this->img     = 'topic_sticky';
-			$this->img_alt = 'Sticky';
-			$this->prefix  = 'Sticky: ';
-		}
-		elseif( $this->status == 1 ) {
-			$this->img     = 'topic_locked';
-			$this->img_alt = 'Locked';
-		}
-		else {
-			$this->img     = 'topic';
-			$this->img_alt = 'No new posts';
-			if( $this->pages > 1 ) { $this->img .= '_hot'; }
-		}
-	}
-
-	/**
 	 * Delete this topic
 	 * This function should never be called - it is only called from inside the Post::delete() function
 	 */

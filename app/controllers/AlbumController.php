@@ -3,18 +3,6 @@
 class AlbumController extends Earlybird\FoundryController
 {
 	
-	public function generate_url()
-	{
-		if( $this->id == 1 ) {
-			$this->url = '/albums/';
-		}
-		else {
-			$url = preg_replace('/[^A-Za-z0-9]/', '_', $this->name);
-			$url = trim(preg_replace('/(_)+/', '_', $url), '_');
-			$this->url = '/albums/' . $this->id . '/' . $url;
-		}
-	}
-	
 	public function get_cover()
 	{
 		global $_db;
@@ -54,23 +42,6 @@ class AlbumController extends Earlybird\FoundryController
 		}
 
 		return "/photos/empty.png";
-	}
-	
-	/**
-	 * Load a hierarchy of parent forums
-	 */
-	public function load_parents()
-	{	
-		$parents = array();
-		$child = $this;
-
-		while( $child->parent_id && !in_array($child->parent_id, array(-1, 1)) )
-		{
-			$parent = new Album($child->parent_id);
-			$parents[] = $parent;
-			$child = $parent;
-		}
-		return array_reverse($parents);
 	}
 	
 	/**

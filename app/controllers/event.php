@@ -22,12 +22,6 @@ class Event extends Controller_W
 
 
 
-class EventRepeatModel extends Model_W
-{
-	protected static $_table = 'event_repeats';
-	protected static $_instance = null;
-}
-
 class EventRepeat extends Controller_W 
 {
 	protected static $_table = 'event_repeats';

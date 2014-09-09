@@ -1,27 +1,7 @@
 <?php
-class PostModel extends Model_W
-{
-	protected static $_table = 'posts';
-	protected static $_instance = null;
-}
 
 class Post extends Controller_W 
 {
-	protected static $_table = 'posts';
-	
-	public $text;
-
-	public function __construct( $pri = null, $data = null )
-	{
-		parent::__construct($pri, $data);
-		
-		$this->generate_url();
-	}
-	
-	public function generate_url()
-	{
-		$this->url = '/posts/' . $this->id . '#' . $this->id;
-	}
 
 	/**
 	 * Delete this post

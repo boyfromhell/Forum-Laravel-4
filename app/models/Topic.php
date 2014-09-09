@@ -8,7 +8,12 @@ class Topic extends Earlybird\Foundry
 
 	protected $appends = array(
 		'url',
+
+		'prefix',
 		'short_title',
+
+		'has_attachments',
+		'has_poll',
 	);
 
 	public function forum()
@@ -42,6 +47,28 @@ class Topic extends Earlybird\Foundry
 	}
 
 	/**
+	 * Get the topic prefix based on type
+	 *
+	 * @return string
+	 */
+	public function getPrefixAttribute()
+	{
+		switch( $this->type ) {
+			case 2:
+				return 'Announcement: ';
+				break;
+
+			case 1:
+				return 'Sticky: ';
+				break;
+
+			default:
+				return '';
+				break;
+		}
+	}
+
+	/**
 	 * Get a truncated title
 	 *
 	 * @return string
@@ -52,6 +79,33 @@ class Topic extends Earlybird\Foundry
 			return substr($this->title, 0, 45) . '...';
 		}
 		return $this->title;
+	}
+
+	/**
+	 * Check if it has attachments
+	 *
+	 * @return bool
+	 */
+	public function getHasAttachmentsAttribute()
+	{
+		$total = Attachment::leftJoin('posts', 'attachments.post_id', '=', 'posts.id')
+			->where('posts.topic_id', '=', $this->id)
+			->count();
+
+		return ( $total > 0 ? true : false );
+	}
+
+	/**
+	 * Check if it has a poll
+	 *
+	 * @return bool
+	 */
+	public function getHasPollAttribute()
+	{
+		$poll = Poll::where('poll_topic', '=', $this->id)
+			->first();
+
+		return ( $poll->id ? true : false );
 	}
 
 }

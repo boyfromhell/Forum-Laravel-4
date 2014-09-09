@@ -8,6 +8,7 @@ $me = User::find(2);
 
 View::share('me', $me);
 View::share('cdn', Config::get('app.cdn'));
+View::share('skin', '/images/skins/ivan/');
 
 /*
 |--------------------------------------------------------------------------
