@@ -45,23 +45,6 @@ class UserController extends Earlybird\FoundryController
 			->orderBy('order', 'asc')
 			->get(['custom_fields.name', 'custom_data.value']);
 
-		// Lists
-		/*$on_list = false;
-		if( $user->id != $me->id )
-		{
-			$sql = "SELECT `entry_type`
-				FROM `user_lists`
-				WHERE `entry_user` = {$me->id}
-					AND `entry_subject` = {$user->id}";
-			$exec = $_db->query($sql);
-			$on_list = $exec->num_rows;
-
-			if( $on_list ) {
-				list( $list_type ) = $exec->fetch_row();
-				$list_text = $list_type == 0 ? 'ignore' : 'buddy';
-			}
-		}*/
-
 		// Stats
 		//$user->fetch_stats();
 

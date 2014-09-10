@@ -44,18 +44,14 @@ class ForumController extends Earlybird\FoundryController
 			'total_users'  => number_format(User::count()),
 		);
 
-		//-----------------------------------------------------------------------------
 		// Most recent topics
-
 		$topics = Topic::join('forums', 'topics.forum_id', '=', 'forums.id')
 			->where('forums.read', '<=', $me->access)
 			->orderBy('last_date', 'desc')
 			->take(10)
 			->get(['topics.*']);
 
-		//-----------------------------------------------------------------------------
 		// Random photo and recent album
-
 		$photo = Photo::join('albums', 'photos.album_id', '=', 'albums.id')
 			->where('permission_view', '<=', $access)
 			->orderBy(DB::raw('RAND()'), 'asc')
@@ -267,39 +263,8 @@ class ForumController extends Earlybird\FoundryController
 				if( $topic->smiley ) {
 					list($topic->smiley_img, $topic->smiley_alt) = topic_smiley($topic->smiley);
 				}
-
-				$topic->alt = 'Go to topic';
 			}
 		}
-
-		foreach( $children as $key => &$child )
-		{
-			// If latest topic is also unread
-			if( $child->unread['topic_id'] == $child->latest_topic->id ) {
-				$child->latest_topic->url = $child->latest_topic->latest_post->url;
-				$child->latest_topic->alt = 'Go to first unread post';
-			}
-		}
-
-			
-			if( count($topic_ids) )
-			{
-				{
-
-					$data['url'] = '/posts/' . $data['session_post'] . '#' . $data['session_post'];
-					$data['alt'] = 'Go to first unread post';
-
-					$topics[$data['topic_id']]->unread = $data;
-				}
-			
-				while( $data = $exec->fetch_assoc() )
-				{
-					$data['author'] = new User($data['user_id'], array('name' => $data['name']));
-
-					$data['url'] = '/posts/' . $data['id'] . '#' . $data['id'];
-				}
-			}
-
 		}*/
 
 		return View::make('forums.display')

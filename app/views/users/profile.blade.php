@@ -20,7 +20,7 @@
 	{{{ $user->level->name }}}</small>
 
 	@if ( $user->avatar->id )<br><br>
-	<img id="profileavatar" src="{{ $cdn }}/images/avatars/{{ $user->avatar->file }}" alt="{{{ $user->name }}}'s avatar" title="{{{ $user->name }}}'s avatar">
+	<img id="profileavatar" src="{{ $cdn }}images/avatars/{{ $user->avatar->file }}" alt="{{{ $user->name }}}'s avatar" title="{{{ $user->name }}}'s avatar">
 	@endif
 	</td>
 	<td class="right v_top" style="width:50%; padding:15px;">
@@ -93,10 +93,19 @@
 	{if $scores[0]}#{$scores[0]->rank} in defeats - {$scores[0]->score}<br>{/if}
 	<br>
 	@endif
-	{if $me->loggedin}
-	{if $me->id != $user->id}{if $on_list}<a href="/userlist.php?u={$user->id}&amp;remove=1">Remove from {$list_text} list</a>{else}<a href="/userlist.php?u={$user->id}&amp;buddy=1">Add to buddy list</a><br>
-	{if $user->level == 0}<a href="/userlist.php?u={$user->id}&amp;ignore=1">Add to ignore list</a>{/if}{/if}{/if}
-	{/if}
+
+	@if ( $me->id && $me->id != $user->id )
+		@if ( $me->buddies->contains($user->id) )
+			<a href="/userlist.php?u={{ $user->id }}&amp;remove=1">Remove from buddy list</a>
+		@elseif ( $me->ignoredUsers->contains($user->id) )
+			<a href="/userlist.php?u={{ $user->id }}&amp;remove=1">Remove from ignore list</a>
+		@else
+			<a href="/userlist.php?u={{ $user->id }}&amp;buddy=1">Add to buddy list</a><br>
+			@if ( $user->level == 0 )
+			<a href="/userlist.php?u={{ $user->id }}@amp;ignore=1">Add to ignore list</a>
+			@endif
+		@endif
+	@endif
 	</td>
 	</tr>
 	

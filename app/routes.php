@@ -29,14 +29,19 @@ Route::group(array('before' => 'loggedin'), function()
 {
 	Route::get('profile', array('uses' => 'UserController@myProfile'));
 
+	// Settings
 	Route::get('users/avatar', array('uses' => 'AvatarController@manage'));
 	Route::get('users/edit', array('uses' => 'UserController@editProfile'));
 	Route::get('users/reset_password', array('uses' => 'UserController@resetPassword'));
 	Route::get('users/settings', array('uses' => 'UserController@settings'));
 	Route::get('users/topics', array('uses' => 'UserController@subscriptions'));
 
+	// Group membership
 	Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));
 	Route::any('groups/new', array('uses' => 'GroupController@add'));
+
+	// Shoutbox
+	Route::get('community/shoutbox', array('uses' => 'ShoutboxController@embed'));
 });
 
 // All users

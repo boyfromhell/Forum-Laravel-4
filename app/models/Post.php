@@ -8,7 +8,20 @@ class Post extends Earlybird\Foundry
 		'url',
 
 		'date',
+
+		'subject',
+		'text',
 	);
+
+	/**
+	 * Post text storing extra data
+	 *
+	 * @return Relation
+	 */
+	public function postText()
+	{
+		return $this->hasOne('PostText', 'post_id');
+	}
 
 	/**
 	 * Topic this belongs to
@@ -59,6 +72,26 @@ class Post extends Earlybird\Foundry
 	public function getDateAttribute()
 	{
 		return Helpers::date_string($this->time, 2);
+	}
+
+	/**
+	 * Get the subject from the PostText
+	 *
+	 * @return string
+	 */
+	public function getSubjectAttribute()
+	{
+		return $this->postText->post_subject;
+	}
+
+	/**
+	 * Get the text from the PostText
+	 *
+	 * @return string
+	 */
+	public function getTextAttribute()
+	{
+		return $this->postText->post_text;
 	}
 
 }

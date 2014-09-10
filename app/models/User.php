@@ -101,6 +101,28 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	}
 
 	/**
+	 * Ignored users
+	 *
+	 * @return Relation
+	 */
+	public function ignoredUsers()
+	{
+		return $this->belongsToMany('User', 'user_lists', 'entry_user', 'entry_subject')
+			->where('entry_type', '=', 0);
+	}
+
+	/**
+	 * Buddies
+	 *
+	 * @return Relation
+	 */
+	public function buddies()
+	{
+		return $this->belongsToMany('User', 'user_lists', 'entry_user', 'entry_subject')
+			->where('entry_type', '=', 1);
+	}
+
+	/**
 	 * Permalink
 	 *
 	 * @return string

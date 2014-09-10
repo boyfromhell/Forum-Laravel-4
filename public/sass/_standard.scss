@@ -1,61 +1,54 @@
-@header-height: 130px;
-@header-bg: #444;
-@subheader-bg: #666;
-@body-bg: #666;
-@post-body-bg: #7f7f7f;
-@main-bg: #333;
-@maingray: #4f4f4f;
-@darker-bg: #555;
+$header-height: 137px;
+$header-bg: #036;
+$subheader-bg: #69c;
+$body-bg: #d6d6d6;
+$post-body-bg: #d6d6d6;
+$main-bg: #369;
+$maingray: #e7e7e7;
+$darker-bg: #c7c7c7;
 
-@nav-color: #bbb;
-@nav-hover: #bbb;
-@nav-hover-bg: #4f4f4f;
-@babynav-hover: #777;
+$nav-color: #036;
+$nav-hover: #fff;
+$nav-hover-bg: #036;
+$babynav-hover: #036;
 
-@text-color: #ccc;
-@lighter-text: #aaa;
-@sig-color: #ccc;
-@scaled-bg: #777;
+$text-color: #012;
+$lighter-text: #777;
+$sig-color: #777;
+$scaled-bg: #fffeaf;
 
-@quote-header: #555;
-@quote-bg: #777;
+$quote-header: #69c;
+$quote-bg: #eee;
 
-@form-span: #fff;
-@input-bg: #555;
-@input-color: #fff;
-@input-hover: #5f5f5f;
+$form-span: #036;
+$input-bg: #eee;
+$input-color: #000;
+$input-hover: #fff;
 
-@welcome-color: #e3cb00;
-@menu-bg: #666; /*888;*/
-@menu-hover: #888; /*#666;*/
-@menu-color: #ddd;
+$welcome-color: #c96;
+$menu-bg: #ddd;
+$menu-hover: #4c7fb2;
+$menu-color: #036;
 
-@photo-bg: #888;
-@photo-border: #333;
-@photo-hover: #999;
-@photo-border-hover: #444;
-@description-bg: #777;
+$photo-bg: #fff;
+$photo-border: #333;
+$photo-hover: #cbd3d9;
+$photo-border-hover: #045882;
+$description-bg: #eee;
 
-@link-color: #e3cb00;
-@link-hover: #ffe400;
-@button-color: #e3cb00;
-@button-hover: #5f5f5f;
-@active-color: #fff;
-@th-color: #e3cb00;
-@footer-color: #e3cb00;
+$link-color: #369;
+$link-hover: #c96;
+$button-color: #fff;
+$button-hover: #b7987a;
+$active-color: #036;
+$th-color: #69c;
+$footer-color: #fff;
 
-@gradient-bottom: rgb(51,51,51);
-@gradient-top: rgb(102,102,102);
-
-#jenny {
-	width:32px; height:32px; background:url('/images/custom/genetrix.png');
-	position:absolute; z-index:10; right:10%; top:151px;
-	
-	body.mobile & { position:relative; left:80%; top:-31px; float:left; }
-}
+$gradient-bottom: rgb(51,51,51);
+$gradient-top: rgb(102,102,102);
 
 div.icon {
-	background:url('/images/skins/ivan/sprite.png') 0 0 no-repeat;
+	background:url('/images/skins/standard/sprite.png') 0 0 no-repeat;
 	width:19px; height:18px; display:block; margin:0 auto;
 	a { display:block; }
 	

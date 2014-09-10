@@ -12,6 +12,8 @@ class TopicController extends Earlybird\FoundryController
 	 */
 	public function display( $id, $name = NULL )
 	{
+		global $me;
+
 		$topic = Topic::findOrFail($id);
 		$forum = $topic->forum;
 

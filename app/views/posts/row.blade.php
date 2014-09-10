@@ -20,7 +20,7 @@
 	@endif
 
 	<div class="header soft">
-		<div style="float:left"><a name="{{ $post->id }}"></a>{{ $post->formatted_date }}</div>
+		<div style="float:left"><a name="{{ $post->id }}"></a>{{ $post->date }}</div>
 		
 		<div style="float:right"><a href="{{ $post->url }}" style="color:#888">#{{ $post->count }}</a>
 		@if ( $me->administrator || $me->moderator )

@@ -1,26 +1,28 @@
-.box-shadow (@blur: 6px) {
-	-webkit-box-shadow: 0px 0px @blur rgba(50, 50, 50, 0.75);
-	-moz-box-shadow:    0px 0px @blur rgba(50, 50, 50, 0.75);
-	box-shadow:         0px 0px @blur rgba(50, 50, 50, 0.75);
+@import 'ivan';
+
+@mixin box-shadow ($blur: 6px) {
+	-webkit-box-shadow: 0px 0px $blur rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:    0px 0px $blur rgba(50, 50, 50, 0.75);
+	box-shadow:         0px 0px $blur rgba(50, 50, 50, 0.75);
 }
-.border-box () {
+@mixin border-box () {
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
-.vert-gradient () {
-	background-image: linear-gradient(bottom, @gradient-bottom 33%, @gradient-top 100%);
-	background-image: -o-linear-gradient(bottom, @gradient-bottom 33%, @gradient-top 100%);
-	background-image: -moz-linear-gradient(bottom, @gradient-bottom 33%, @gradient-top 100%);
-	background-image: -webkit-linear-gradient(bottom, @gradient-bottom 33%, @gradient-top 100%);
-	background-image: -ms-linear-gradient(bottom, @gradient-bottom 33%, @gradient-top 100%);
+@mixin vert-gradient () {
+	background-image: linear-gradient(bottom, $gradient-bottom 33%, $gradient-top 100%);
+	background-image: -o-linear-gradient(bottom, $gradient-bottom 33%, $gradient-top 100%);
+	background-image: -moz-linear-gradient(bottom, $gradient-bottom 33%, $gradient-top 100%);
+	background-image: -webkit-linear-gradient(bottom, $gradient-bottom 33%, $gradient-top 100%);
+	background-image: -ms-linear-gradient(bottom, $gradient-bottom 33%, $gradient-top 100%);
 
 	background-image: -webkit-gradient(
 		linear,
 		left bottom,
 		left top,
-		color-stop(0.33, @gradient-bottom),
-		color-stop(1, @gradient-top)
+		color-stop(0.33, $gradient-bottom),
+		color-stop(1, $gradient-top)
 	);
 }
 
@@ -37,12 +39,14 @@ h2 {	font-size:11pt; font-weight:bold;
 	img { vertical-align:middle; }
 }
 small { font-size:8pt; }
-* { .border-box; }
+* {
+	@include border-box;
+}
 hr {
 	height:1px; width:100%; margin:5px 0; border:0; color:#ccc; background:#999;
 }
 
-body { background:@main-bg; position: relative; }
+body { background:$main-bg; position: relative; }
 img { border:0; }
 ul, ol { margin:6px 20px; padding:0; }
 .break { width:100%; height:1px; margin:0 0 -1px; clear:both; }
@@ -50,24 +54,24 @@ ul, ol { margin:6px 20px; padding:0; }
 .float_right { float:right; }
 .v_top { vertical-align:top; }
 
-a { color:@link-color; text-decoration:none;
-	&:hover { color:@link-hover; }
+a { color:$link-color; text-decoration:none;
+	&:hover { color:$link-hover; }
 	&.light { color:#888; text-decoration:none; }
 	&.admin, &.mod { font-weight:bold; }
 	&.admin { color:#00b4ff; }
 	
 	&.button {
-		margin:7px 5px 7px 0; padding:6px 15px; background:@header-bg; border:1px solid #000; font-weight:bold;
-		color:@button-color; display:block; float:left; text-transform:uppercase; font-size:11pt;
+		margin:7px 5px 7px 0; padding:6px 15px; background:$header-bg; border:1px solid #000; font-weight:bold;
+		color:$button-color; display:block; float:left; text-transform:uppercase; font-size:11pt;
 		
 		&.small { padding:2px 9px; font-size:10pt; }
-		&:hover { background:@button-hover; }
+		&:hover { background:$button-hover; }
 	}
 }
 
 header {
 	position: absolute; top: 0; left: 0; width: 100%;
-	background:#222 url('/images/custom/grunge.jpg'); padding:10px 0 0 0; height:@header-height;
+	background:#222 url('/images/custom/grunge.jpg'); padding:10px 0 0 0; height:$header-height;
 	.center { width:90%; min-width:1000px; margin:0 auto; }
 
 	h1 { float:left; margin:0; padding:13px 0; }
@@ -79,8 +83,8 @@ header {
 	
 	#welcome {
 		float:right; display:block; padding:8px 12px;
-		border:1px solid #000; margin-top:10px; background:@main-bg; color:#fff;
-		a { color:@welcome-color; &:hover { color:@link-hover; } }
+		border:1px solid #000; margin-top:10px; background:$main-bg; color:#fff;
+		a { color:$welcome-color; &:hover { color:$link-hover; } }
 		img { float:left; margin-right:6px; }
 		div.text { float:left; padding:4px 0 0; }
 	}
@@ -88,9 +92,9 @@ header {
 
 nav {
 	margin:0; font-size:11pt; padding:0 0 0 140px; position:absolute; bottom:0;
-	a { color:@nav-color; padding:8px 20px; margin:0; display:block; text-decoration:none; font-weight:bold;
-		&:hover { color:@nav-hover; background:@nav-hover-bg; text-decoration:none; }
-		&.active { background:@main-bg; color:#fff; }
+	a { color:$nav-color; padding:8px 20px; margin:0; display:block; text-decoration:none; font-weight:bold;
+		&:hover { color:$nav-hover; background:$nav-hover-bg; text-decoration:none; }
+		&.active { background:$main-bg; color:#fff; }
 		&.unread { background:#c00 url('/images/nav_unread.png') left top repeat-x; color:#fff; }
 	}
 	ul { margin:0; padding:0; line-height:100%;
@@ -100,7 +104,7 @@ nav {
 }
 
 #babynav {
-	position: absolute; top: @header-height; left: 5%;
+	position: absolute; top: $header-height; left: 5%;
 	padding:10px 0 0 0; width:90%; font-size:11pt;
 
 	ul { display:block;
@@ -109,9 +113,9 @@ nav {
 			padding:7px 14px 0; font-weight:normal; color:#fff; text-decoration:none; display:block;
 			margin-top:2px; height:31px;
 			
-			&:hover { background:@babynav-hover; }
+			&:hover { background:$babynav-hover; }
 			&.sub_active {
-				padding:8px 16px 0; background:@maingray; color:@active-color; margin:0;
+				padding:8px 16px 0; background:$maingray; color:$active-color; margin:0;
 				border:1px solid #000; border-bottom:0; height:35px;
 			}
 		}
@@ -125,9 +129,9 @@ nav {
 }
 
 #main_beta {
-	width:90%; margin:0 auto; min-width:1000px; min-height:580px; background:@maingray;
-	padding:20px 10px; border:1px solid #000; color:@text-color;
-	position: relative; top: (@header-height+50);
+	width:90%; margin:0 auto; min-width:1000px; min-height:580px; background:$maingray;
+	padding:20px 10px; border:1px solid #000; color:$text-color;
+	position: relative; top: ($header-height+50);
 	
 	.actions { float:right; margin:13px 0; }
 	
@@ -146,10 +150,10 @@ nav {
 .welcome {
 	margin-bottom:20px;
 	.table-header {
-		.vert-gradient;
+		@include vert-gradient;
 	}
 	.header {
-		background:@header-bg; padding:6px 10%; border-top:2px solid #333; font-size:14pt;
+		background:$header-bg; padding:6px 10%; border-top:2px solid #333; font-size:14pt;
 		font-weight:bold; color:#fff; font-variant:small-caps;
 		&.soft { 
 			font-variant:normal; color:#888; font-size:11pt; padding-top:8px; padding-bottom:8px;
@@ -163,7 +167,7 @@ nav {
 		}
 	}
 	.subheading {
-		background:@subheader-bg; border-top:2px solid #333;
+		background:$subheader-bg; border-top:2px solid #333;
 		.details { float:right; width:40%; padding:10px; font-size:10pt; }
 		&.messages {
 			padding: 6px 10px;
@@ -176,19 +180,19 @@ nav {
 	}
 	.body {
 		border-top:2px solid #333; border-bottom:2px solid #333; padding:15px 10%; font-size:11pt;
-		background:@body-bg; color:#000; word-wrap: break-word;
+		background:$body-bg; color:#000; word-wrap: break-word;
 		
 		textarea { width:100%; height:66px; }
 		.empty { padding:30px 0; text-align:center; }
 		p {
 			margin: 0; padding: 0;
 			&.photo-description {
-				background:@description-bg; border:1px solid #333; padding:8px; margin:0 0 10px 0;
+				background:$description-bg; border:1px solid #333; padding:8px; margin:0 0 10px 0;
 			}
 		}
 		
 		&.post-row {
-			background:@post-body-bg;
+			background:$post-body-bg;
 			p { margin: 10px 0; padding: 0 10px; }
 		}
 	}
@@ -206,7 +210,7 @@ nav {
 	}
 	&.calendar {
 		.header { padding:6px 10px; }
-		.body { padding:0; background:@maingray; border-bottom:0; }
+		.body { padding:0; background:$maingray; border-bottom:0; }
 	}
 	&.static {
 		h1 { margin-top:8px; }
@@ -237,12 +241,12 @@ nav {
 }
 
 .form2 {
-	margin:0 auto; color:@form-span;
+	margin:0 auto; color:$form-span;
 	
 	label.left { float:left; text-align:right; margin:7px 15px 7px 0; width:30%; color:#000; }
-	span.left { float:left; margin:7px 0; color:@form-span; }
+	span.left { float:left; margin:7px 0; color:$form-span; }
 	input { 
-		&:hover { background:@input-hover; }
+		&:hover { background:$input-hover; }
 		&.left { float:left; width:200px; }
 		&[type=submit], &[type=reset] { padding:6px 20px; margin:15px 2px; font-size:11pt; text-transform:uppercase; }
 		&.primary { font-weight:bold; }
@@ -250,7 +254,7 @@ nav {
 	}
 	
 	input, select, textarea {
-		background:@input-bg; border:1px solid #000; color:@input-color; font-size:11pt; padding: 3px;
+		background:$input-bg; border:1px solid #000; color:$input-color; font-size:11pt; padding: 3px;
 		margin: 4px 0;
 	}
 	small { font-size:10pt; }
@@ -283,10 +287,10 @@ nav {
 }
 
 footer {
-	position: relative; top:(@header-height+50);
+	position: relative; top:($header-height+50);
 	padding:10px 10px 15px; text-align:center; font-size:8pt; color:#ccc; margin:0 auto; width:50%;
 	img { margin-left:13px; }
-	a { color:@footer-color; text-decoration:none; margin-left:13px;
+	a { color:$footer-color; text-decoration:none; margin-left:13px;
 		&.static-page { color:#bbb; }
 	}
 }
@@ -303,9 +307,9 @@ footer {
 	float:left; padding:5px; border:0; text-align:center;
 	
 	a.thumb {
-		display: block; background:@photo-bg; border:1px solid @photo-border; line-height:0;
+		display: block; background:$photo-bg; border:1px solid $photo-border; line-height:0;
 		text-decoration:none; padding: 5px;
-		&:hover { background:@photo-hover; border:1px solid @photo-border-hover; }
+		&:hover { background:$photo-hover; border:1px solid $photo-border-hover; }
 	}
 	&.large { float:none; }
 }
@@ -319,7 +323,7 @@ table.table2 {
 	th {
 		text-align:center; font-weight:bold; font-size:10pt; color:#fff; padding:7px 0;
 		&.soft { text-align:left; font-size:12pt; padding:8px 10px; }
-		a { color:@th-color; &:hover { color:@link-hover; } }
+		a { color:$th-color; &:hover { color:$link-hover; } }
 	}
 	tr {
 		td {
@@ -345,7 +349,7 @@ table.table2 {
 			&.score { padding:4px 0; }
 			&.ending { font-size:10pt; }
 			&.date { font-size:10pt; text-align:center; }
-			&.posts { font-size:10pt; text-align:center; color:@lighter-text; }
+			&.posts { font-size:10pt; text-align:center; color:$lighter-text; }
 		}
 		&.unread {
 			td {
@@ -355,9 +359,11 @@ table.table2 {
 			}
 		}
 		&.selected {
-			td { background:@darker-bg !important; }
+			td { background:$darker-bg !important; }
 		}
-		&:hover { .box-shadow; }
+		&:hover {
+			@include box-shadow;
+		}
 		.tiny { font-size:9pt; color:#000 !important; font-weight:normal !important; }
 	}
 	th.icon,td.icon { width:50px;
@@ -371,8 +377,8 @@ table.table2 {
 }
 .emote {
 	padding: 4px 6px 2px 6px; float:left;
-	border: 1px solid @body-bg; background:@body-bg;
-	&:hover { background:@input-hover; border: 1px solid @main-bg; }
+	border: 1px solid $body-bg; background:$body-bg;
+	&:hover { background:$input-hover; border: 1px solid $main-bg; }
 	&:active { background: #444; border: 1px solid #222; }
 }
 
@@ -406,7 +412,7 @@ table.calendar {
 	padding:0; border-collapse:collapse;
 	th { text-align:center; width:14%; color:#ccc; }
 	td.day {
-		width:14%; height:85px; border:1px solid #999; background:@body-bg;
+		width:14%; height:85px; border:1px solid #999; background:$body-bg;
 		vertical-align:top; padding:4px; font-size:8pt;
 		&.has-events { border:2px solid #000; background:#7f7f7f; }
 		&.today { border:2px solid #000;
@@ -417,16 +423,16 @@ table.calendar {
 
 .shoutbox {
 	padding:0; background:none; font-size:10pt;
-	a { color:@link-color;
+	a { color:$link-color;
 		&.at_reply { color:#ccc; text-decoration:none; }
 	}
 	
 	table.shouts {
 		th.date {
-			background:@header-bg; color:#eee; text-align:right; padding:3px 8px;
+			background:$header-bg; color:#eee; text-align:right; padding:3px 8px;
 			font-variant:small-caps; border-top:1px solid #333; border-bottom:1px solid #333;
 		}
-		td { background:@body-bg; padding:3px 8px; }
+		td { background:$body-bg; padding:3px 8px; }
 	}
 }
 
@@ -438,16 +444,16 @@ table.calendar {
 	padding:8px 0; border-bottom:1px solid #999;
 }
 fieldset { border:1px grooved #ccc; margin-bottom:6px; padding:6px 10px 10px; }
-legend { background:@body-bg; padding:0 10px; color:#333; }
+legend { background:$body-bg; padding:0 10px; color:#333; }
 
 .userbox {
 	padding:0; position:absolute; top:-400px; left:-400px; z-index:10; 
-	background:@menu-bg; border:1px solid #333;
+	background:$menu-bg; border:1px solid #333;
 	
 	a {
 		display:block; width:178px; padding:3px 8px 3px 20px; text-decoration:none; 
-		cursor:default; border:1px solid @menu-bg; color:@menu-color;
-		&:hover { background:@menu-hover; border:1px solid #333; color:#fff; }
+		cursor:default; border:1px solid $menu-bg; color:$menu-color;
+		&:hover { background:$menu-hover; border:1px solid #333; color:#fff; }
 	}
 	hr {
 		width:80%; border:0; height:1px; margin:2px 0 2px 20px; background:#ccc;
@@ -456,39 +462,39 @@ legend { background:@body-bg; padding:0 10px; color:#333; }
 
 .usermenu, .userhov, .usersel {
 	padding:3px 10px; height:28px; font-size:11pt; font-weight:bold;
-	background:@subheader-bg; float:left; cursor:default; position:relative; z-index:10;
+	background:$subheader-bg; float:left; cursor:default; position:relative; z-index:10;
 }
-.usermenu { border:1px solid @subheader-bg; }
-.userhov, .usermenu:hover { background:@menu-hover; border:1px solid #333; }
-.usersel, .usermenu:active { background:@menu-bg; border:1px solid #333; }
+.usermenu { border:1px solid $subheader-bg; }
+.userhov, .usermenu:hover { background:$menu-hover; border:1px solid #333; }
+.usersel, .usermenu:active { background:$menu-bg; border:1px solid #333; }
 
 .paginate {
 	height:26px; margin:7px 0;
 	a { 
 		display:block; float:right; width:55px; padding:5px; height:26px;
-		background:@body-bg; text-decoration:none; text-align:center;
+		background:$body-bg; text-decoration:none; text-align:center;
 		&:hover { background:#777; }
 	}
 	.selector { height:26px; display:block; float:right; }
 	select {
 		min-width:55px; height:26px; margin:0;
-		background:@body-bg; border:1px solid #888; color:@input-color; padding-left:3px;
+		background:$body-bg; border:1px solid #888; color:$input-color; padding-left:3px;
 	}
 }
 
 .jumpbox {
-	border:2px solid #333; background:@body-bg; padding:8px 10px; float:left; color:#000;
+	border:2px solid #333; background:$body-bg; padding:8px 10px; float:left; color:#000;
 }
 
 a.scaled {
 	text-decoration:none; display:block; padding:4px 6px; border:1px solid #000; 
-	background:@scaled-bg; color:#000; font-size:10pt
+	background:$scaled-bg; color:#000; font-size:10pt
 }
 
 .quote {
-	margin:5px 0 5px 20px; border:1px solid #333; background:@quote-bg; padding:0;
+	margin:5px 0 5px 20px; border:1px solid #333; background:$quote-bg; padding:0;
 	.author {
-		margin:0; padding:5px; border-bottom:1px solid #333; background:@quote-header;
+		margin:0; padding:5px; border-bottom:1px solid #333; background:$quote-header;
 		img { margin-left: 10px; vertical-align: middle; }
 	}
 	.content { margin:0; padding:5px 15px 5px 5px; }
@@ -510,10 +516,10 @@ pre.code {
 }
 
 .sig {
-	background:@body-bg; border-top:1px dotted @sig-color; color:@sig-color; font-size:10pt; padding:10px;
+	background:$body-bg; border-top:1px dotted $sig-color; color:$sig-color; font-size:10pt; padding:10px;
 	margin-top:5px;
 	object { display:none; }
-	.post-row & { background:@body-bg; }
+	.post-row & { background:$body-bg; }
 }
 
 .thumbnail-selector {
@@ -530,8 +536,8 @@ pre.code {
 
 #menu-button {
 	display: block;
-	background: @button-hover;
-	color: @button-color;
+	background: $button-hover;
+	color: $button-color;
 	padding: 4px 8px;
 	margin: -10px 0 10px 0;
 	float: left;
