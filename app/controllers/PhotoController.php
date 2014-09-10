@@ -8,9 +8,100 @@ class PhotoController extends Earlybird\FoundryController
 	 *
 	 * @return Response
 	 */
-	public function display()
+	public function display( $id )
 	{
-		$id = Input::get('id');
+		$photo = Photo::findOrFail($id);
+		
+		// @todo
+		$access = 2;
+
+		if( $photo->album->permission_view > $access ) {
+			App::abort(403);
+		}
+
+		$_PAGE = array(
+			'category' => 'gallery',
+			'section'  => 'photos',
+			'id'       => 'viewphoto',
+			'title'    => $photo->album->name
+		);
+
+		/*if( $_CONFIG['aws'] === null ) {
+			list($width, $height, $type, $attr) = getimagesize(ROOT . 'web' . $photo->image);
+		}
+		else {
+			list($width, $height, $type, $attr) = getimagesize($_CONFIG['cdn'] . $photo->image);
+		}*/
+
+		$_PAGE['og_image'] = array($_CONFIG['cdn'] . $photo->image);
+
+		$photo->width = $width;
+		$photo->height = $height;
+		$photo->attr = $attr;
+
+		$photo->increment('views');
+
+		return View::make('photos.display')
+			->with('_PAGE', $_PAGE)
+			->with('photo', $photo);
+
+		$Smarty->assign('prev', $prev);
+		$Smarty->assign('next', $next);
+		$Smarty->assign('page', $page);
+
+		$Smarty->assign('next_photo', $next_photo);
+
+		if( isset($_GET['ajax']) ) {
+			header("Cache-control: no-store, no-cache, must-revalidate");
+			header("Expires: Mon, 26 Jun 1997 05:00:00 GMT");
+			header("Pragma: no-cache");
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+
+			$json = array(
+				'html' => View::make('photos.photo')->render()
+			);
+			
+			echo json_encode($json);
+		}
+
+		/*
+		if( function_exists(exif_read_data)) {
+			$exif = @exif_read_data( "../photos/$folder/$file", "IFD0,COMPUTED,EXIF", true );
+			if( $exif ) {
+				echo "<small><b>EXIF Data:</b><br>";
+				if( $exif['IFD0']['Make'] ) {	echo "Make: ".$exif['IFD0']['Make']."<br>";	}
+				if( $exif['IFD0']['Model'] ) {	echo "Model: ".$exif['IFD0']['Model']."<br>";	}
+				if( $exif['EXIF']['ExposureTime'] ) {
+					$shutspd = explode("/",$exif['EXIF']['ExposureTime'],2);
+					echo "Shutter Speed: ";
+					if( $shutspd[0] >= $shutspd[1] ) { echo round($shutspd[0]/$shutspd[1],1); }
+					else { echo $shutspd[0]."/".$shutspd[1]; }
+					echo " second";
+					if( $shutspd[0] > $shutspd[1] ) { echo "s"; }
+					echo "<br>";
+				}
+				if( $exif['COMPUTED']['ApertureFNumber'] ) {
+					echo "F Number: ".$exif['COMPUTED']['ApertureFNumber']."<br>";
+				}
+				if( $exif['EXIF']['FocalLength'] ) {
+					$flength = explode("/",$exif['EXIF']['FocalLength'],2);
+					$flen = ($flength[0]/$flength[1]);
+					echo "Focal Length: ".$flen." mm<br>";
+				}
+				if( $exif['EXIF']['ISOSpeedRatings'] ) {
+					echo "ISO Speed: ".$exif['EXIF']['ISOSpeedRatings']."<br>";
+				}
+				$datetaken = $exif['EXIF']['DateTimeOriginal'];
+				$dtaken = substr($datetaken,0,11);
+				$dtaken = str_replace(":","/",$dtaken);
+				$ttaken = substr($datetaken,11,9);
+				if( substr($dtaken,0,4) > 2000 ) {
+					echo "Date Taken: ".datestring(strtotime($dtaken.$ttaken),1)."<br>";
+				}
+				echo "</small>";
+			}
+		}
+		*/
 	}
 
 	/**

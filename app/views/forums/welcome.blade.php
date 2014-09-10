@@ -97,7 +97,7 @@
 		
 		<div class="body">
 			<div class="photo" style="height:215px; float:none; margin:0 auto">
-				<a class="thumb" href="{{ $album->url }}"><img src="{{ $cdn }}{{ $album->cover }}" alt="album cover"></a>
+				<a class="thumb" href="{{ $album->url }}"><img src="{{ $cdn }}{{ $album->coverPhoto->thumbnail }}" alt="album cover"></a>
 				<div style="height:18px; overflow:hidden">{{{ $album->name }}}</div>
 				by <a href="{{ $album->user->url }}">{{{ $album->user->name }}}</a>
 			</div>

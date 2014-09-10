@@ -26,7 +26,7 @@ class AlbumController extends Earlybird\FoundryController
 			->where('albums.permission_view', '<=', $access)
 			->orderBy(DB::raw('RAND()'), 'asc')
 			->take($limit)
-			->get();
+			->get(['photos.*']);
 		if( count($photos) > 0 ) {
 			$photos->load(['album', 'user']);
 		}
@@ -157,47 +157,6 @@ class AlbumController extends Earlybird\FoundryController
 			->with('photos', $photos);
 
 		/*$Smarty->assign('allow', $allow);*/
-	}
-	
-	public function get_cover()
-	{
-		global $_db;
-		
-		try {
-			if( $this->cover === null ) {
-				throw new Exception('No cover set');
-			}
-			// @todo why doesn't this throw an exception when cover is null??
-			$photo = new Photo($this->cover);
-			$thumbnail = substr($photo->file, 0, -4) . '.jpg';
-			return "/photos/{$this->folder}/thumbs/{$thumbnail}";
-		}
-		catch( Exception $e ) {
-			$sql = "SELECT `albums`.`id`, `albums`.`cover`, `albums`.`folder`, `photos`.`file`
-				FROM `albums`
-					LEFT JOIN `photos`
-						ON `albums`.`cover` = `photos`.`id`
-				WHERE `albums`.`parent_id` = {$this->id}
-				ORDER BY `albums`.`name` ASC";
-			$exec = $_db->query($sql);
-		
-			while( $data = $exec->fetch_assoc() ) {
-				$child = new Album($data['id'], $data);
-			
-				if( !$data['cover'] ) {
-					$cover = $child->get_cover();
-					if( $cover != '/photos/empty.png' ) {
-						return $cover;
-					}
-				}
-				else {
-					$thumbnail = substr($data['file'], 0, -4) . '.jpg';
-					return "/photos/{$child->folder}/thumbs/{$thumbnail}";
-				}
-			}
-		}
-
-		return "/photos/empty.png";
 	}
 	
 	/**

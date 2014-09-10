@@ -55,6 +55,25 @@ class Album extends Earlybird\Foundry
 	}
 
 	/**
+	 * Cover photo	
+	 *
+	 * @return Relation
+	 */
+	public function coverPhoto()
+	{
+		if( $this->cover ) {
+			return $this->belongsTo('Photo', 'cover');
+		}
+		else {
+			foreach( $this->children as $child ) {
+				return $child->coverPhoto();
+			}
+		}
+
+		return $this->belongsTo('Photo', 'cover');
+	}
+
+	/**
 	 * Permalink
 	 *
 	 * @return string

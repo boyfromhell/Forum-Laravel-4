@@ -27,7 +27,7 @@
 	@foreach ( $albums as $album )
 
 	<div class="photo" style="height:230px">
-		<a class="thumb" href="{{ $album->url }}"><img src="{{ $cdn }}{{ $album->cover }}" alt="album cover"></a>
+		<a class="thumb" href="{{ $album->url }}"><img src="{{ $cdn }}{{ $album->coverPhoto->thumbnail }}" alt="album cover"></a>
 		<div style="height:18px; overflow:hidden">{{{ $album->name }}}</div>
 		by <a href="{{ $album->user->url }}">{{{ $album->user->name }}}</a>
 	</div>

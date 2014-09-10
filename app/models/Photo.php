@@ -9,6 +9,7 @@ class Photo extends Earlybird\Foundry
 		'scale',
 		'thumbnail',
 	);
+	public $timestamps = false;
 
 	public function album()
 	{

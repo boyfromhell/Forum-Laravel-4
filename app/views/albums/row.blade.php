@@ -1,6 +1,6 @@
 <div class="album">
 		
-	<div class="photo"><a class="thumb" href="{{ $child->url }}"><img src="{{ $cdn }}{{ $child->cover }}"></a></div>
+	<div class="photo"><a class="thumb" href="{{ $child->url }}"><img src="{{ $cdn }}{{ $child->coverPhoto->thumbnail }}"></a></div>
 	
 	<div class="description">
 	<b><a href="{{ $child->url }}">{{{ $child->name }}}</a></b><br>
