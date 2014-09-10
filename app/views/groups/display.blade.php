@@ -26,7 +26,7 @@
 
 </div>
 
-@if ( $me->id && !$membership )
+@if ( $me->id && !$group->allMembers->contains($me->id) )
 @if ( $group->type == 'open' )
 <a href="/groups/join?id={{ $group->id }}" class="button">Join Group</a>
 @elseif ( $group->type == 'closed' )
@@ -80,7 +80,7 @@
 
 </div>
 
-@if ( $me->id && !$membership )
+@if ( $me->id && !$group->allMembers->contains($me->id) )
 @if ( $group->type == 'open' )
 <a href="/groups/join?id={{ $group->id }}" class="button">Join Group</a>
 @elseif ( $group->type == 'closed' )

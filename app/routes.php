@@ -51,17 +51,21 @@ Route::get('topics/{id}/{name?}', array('uses' => 'TopicController@display'));
 Route::get('print/{id}/{name?}', array('uses' => 'TopicController@print'));
 Route::get('posts/{id}/{name?}', array('uses' => 'PostController@display'));
 
+// Community
 Route::get('groups', array('uses' => 'GroupController@index'));
 Route::get('groups/{id}/{name?}', array('uses' => 'GroupController@display'));
 Route::get('users/{id}/{name?}', array('uses' => 'UserController@display'));
+Route::get('chat-popup', array('uses' => 'PageController@chatPopup'));
 
+// Projects
 Route::get('downloads/{category?}', array('uses' => 'ProjectController@index'));
 Route::get('projects/{id}/{name?}', array('uses' => 'ProjectController@display'));
 Route::get('download/{id}/{name?}', array('uses' => 'ProjectController@download'));
 
 // Static pages
 Route::get('about', array('uses' => 'PageController@display', 'as' => 'about'));
+Route::any('contact', array('uses' => 'PageController@contact'));
 Route::get('donate', array('uses' => 'PageController@display', 'as' => 'donate'));
 Route::get('privacy', array('uses' => 'PageController@display', 'as' => 'privacy'));
 Route::get('terms', array('uses' => 'PageController@display', 'as' => 'terms'));
-
+Route::get('community/chat', array('uses' => 'PageController@display', 'as' => 'chat'));
