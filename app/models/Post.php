@@ -51,6 +51,7 @@ class Post extends Earlybird\Foundry
 	public function attachments()
 	{
 		return $this->hasMany('Attachment')
+			->orderBy('filetype', 'desc')
 			->orderBy('created_at', 'asc');
 	}
 

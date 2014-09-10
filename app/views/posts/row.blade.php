@@ -52,13 +52,13 @@
 	<div style="float:right">
 	@if ( $me->id )
 		@if ( !$topic->status )
-			<a href="/forum/post?mode=quote&amp;p={{ $post->id }}" class="button small">Quote</a>
+			<a href="/quote-post/{{ $post->id }}" class="button small">Quote</a>
 		@endif
 	@endif
 	@if ( $me->id && ( $me->id == $post->user_id || $me->is_mod ) )
 		@if ( !$topic->status || $me->is_mod )
-			<a href="/forum/post?mode=edit&amp;p={{ $post->id }}" onClick="parangi.quickEdit({{ $post->id }}, 'edit'); return false" class="button small">Edit</a>
-			<a href="/delete.php?p={{ $post->id }}" class="button small">x</a>
+			<a href="/edit-post/{{ $post->id }}" onClick="parangi.quickEdit({{ $post->id }}, 'edit'); return false" class="button small">Edit</a>
+			<a href="/delete-post/{{ $post->id }}" class="button small">x</a>
 		@endif
 	@endif
 	

@@ -32,6 +32,13 @@ Route::group(array('before' => 'loggedin'), function()
 {
 	Route::get('profile', array('uses' => 'UserController@myProfile'));
 
+	// Forum
+	Route::any('reply-to-topic/{id}', array('uses' => 'PostController@reply'));
+	Route::any('quote-post/{id}', array('uses' => 'PostController@quote'));
+	Route::any('edit-post/{id}', array('uses' => 'PostController@edit'));
+	Route::any('new-topic/{id}', array('uses' => 'PostController@newTopic'));
+	Route::get('topic-review/{id}', array('uses' => 'TopicController@review'));
+
 	// Attachments
 	Route::get('forum/attachments/{id}', array('uses' => 'AttachmentController@download'));
 

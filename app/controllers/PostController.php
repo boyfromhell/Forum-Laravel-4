@@ -3,6 +3,588 @@
 class PostController extends Earlybird\FoundryController
 {
 
+	protected $mode;
+	protected $title;
+
+	protected $post;
+	protected $topic;
+	protected $forum;
+
+	protected $subject = '';
+	protected $content = '';
+
+	/**
+	 * Reply to a topic
+	 *
+	 * @return Response
+	 */
+	public function reply( $id )
+	{
+		global $me;
+
+		$this->topic = Topic::findOrFail($id);
+		$this->forum = $this->topic->forum;
+
+		$this->mode = 'reply';
+		$this->title = 'Post a reply';
+
+		if( $this->topic->status && !$me->is_mod ) {
+			App::abort(403);
+		}
+
+		$this->subject = 'Re: '.$this->topic->title;
+
+		return $this->createPost();
+	}
+
+	/**
+	 * Edit a post
+	 *
+	 * @return Response
+	 */
+	public function edit( $id )
+	{
+		global $me;
+
+		$this->post = Post::findOrFail($id);
+		$this->topic = $this->post->topic;
+		$this->forum = $this->topic->forum;
+
+		$this->mode = 'edit';
+		$this->title = 'Edit post';
+
+		if( $this->post->user_id != $me->id && !$me->is_mod ) {
+			App::abort(403);
+		}
+		if( $this->topic->status && !$me->is_mod ) {
+			App::abort(403);
+		}
+
+		$this->subject = $this->post->subject;
+		$this->content = $this->post->text;
+
+		return $this->createPost();
+	}
+
+	/**
+	 * Quote a post
+	 *
+	 * @return Response
+	 */
+	public function quote( $id )
+	{
+		global $me;
+
+		$this->post = Post::findOrFail($id);
+		$this->topic = $this->post->topic;
+		$this->forum = $this->topic->forum;
+
+		$this->mode = 'quote';
+		$this->title = 'Post a reply';
+
+		if( $this->topic->status && !$me->is_mod ) {
+			App::abort(403);
+		}
+
+		$this->subject = 'Re: '.$this->topic->title;
+		$this->content = '[quote="' . $this->post->user->name . '"]' .
+			BBCode::strip_quotes(BBCode::undo_prepare($this->post->text)) .
+			'[/quote]' . "\n\n";
+
+		return $this->createPost();
+	}
+
+	/**
+	 * Create a new topic
+	 *
+	 * @return Response
+	 */
+	public function newTopic( $id )
+	{
+		global $me;
+
+		$this->forum = Forum::findOrFail($id);
+
+		$this->mode = 'newtopic';
+		$this->title = 'Post a new topic';
+
+		return $this->createPost();
+	}
+
+	/**
+	 * Handle all post creation
+	 *
+	 * @return Response
+	 */
+	public function createPost()
+	{
+		$post = $this->post;
+		$topic = $this->topic;
+		$forum = $this->forum;
+
+		$subject = Input::get('subject', $this->subject);
+		$content = Input::get('content', $this->content);
+		// show_smileys = 1
+		// attach_sig = $me->attach_sig;
+
+		$hash = Input::get('hash', md5($me->name.time().rand(0,9999)));
+
+		// Check for existing subscription
+		/*$subscribed = $check_sub = false;
+		if( $topic->id ) {
+			list( $subscribed, $check_sub ) = $me->check_subscribe($topic->id);
+		}
+		else {
+			if( $me->notify ) {
+				$check_sub = true;
+			}
+		}
+
+		// @todo support group view/read permission
+		if( $forum->id == 19 ) {
+			if( in_array(1, $mygroups) || $me->is_mod ) {
+				$access = $forum->read;
+			}
+			else {
+				$access = $forum->read-1;
+			}
+		}
+
+		if( $access < $forum->read ) {
+			App::abort(403);
+		}*/
+
+		//-----------------------------------------------------------------------------
+		// Form submitted
+
+		if( Input::has('preview') )
+		{
+			// Don't validate anything for a preview
+		}
+		else if( Request::isMethod('post') )
+		{
+			$rules = [
+				'content' => 'required',
+			];
+			if( $this->mode == 'newtopic' ) {
+				$rules['subject'] = 'required';
+			}
+
+			// Upload attachments
+			$successful = $total = 0;
+			if( count($_FILES['files']) > 0 ) {
+				for( $i = 0; $i < count($_FILES['files']['name']); $i++ ) {
+					$file_errors = array();
+				
+					if( $_FILES['files']['name'][$i] ) {
+					
+						try {
+							$success = Attachment::upload($_FILES['files'], $i, $hash);
+						}
+						catch( Exception $e ) {
+							$file_errors[] = $e->getMessage();
+							$errors[] = $e->getMessage();
+						}
+						if( $success ) {
+							$successful++;
+						}
+
+						$total++;
+					}
+				}
+			}
+
+			$content = BBCode::prepare($content);
+
+			// Only moderators can set type
+			if( !$me->is_mod ) {
+				if( $this->mode == 'newtopic' ) {
+					$type = 0;
+				} else {
+					$type = $topic->type;
+				}
+			}
+
+			if( !count($errors) ) {
+				if( $this->mode == 'newtopic' ) {
+					$topic = Topic::create([
+						'forum_id'  => $forum->id,
+						'title'     => $subject,
+						'poster'    => $me->id,
+						'views'     => 0,
+						'replies'   => 0,
+						'status'    => 0,
+						'type'      => $type,
+						'smiley'    => $smiley,
+						'spam'      => 0
+					]);
+
+					$forum->increment('total_topics');
+				}
+				else {
+					if( $this->mode == 'reply' || $this->mode == 'quote' ) {
+						$topic->increment('replies');
+					}
+					else {
+						$topic->type = $type;
+						
+						// If this is the first post in the topic, update the smiley and title as well				
+						if( $first_post == $post->id && $subject ) {
+							$topic->title = $subject;
+							$topic->smiley = $smiley;
+						}
+
+						$topic->save();
+					}
+				}
+				
+				if( $this->mode != 'edit' ) {
+					$forum->increment('total_posts');
+					
+					$post = Post::create([
+						'topic_id'   => $topic->id,
+						'user_id'    => $me->id,
+						'ip'         => $ip,
+						'edit_count' => 0,
+						'smileys'    => Input::get('show_smileys'),
+						'signature'  => Input::get('attach_sig'),
+					]);
+
+					// Save post text
+					PostText::create([
+						'post_id'      => $post->id,
+						'post_subject' => $subject,
+						'post_text'    => $content,
+						'post_smiley'  => $smiley
+					]);
+
+					// Create unread notices for users who are currently logged in
+					// and don't already have notices for this topic
+					$sql = "SELECT `user_id`
+						FROM `session_users`
+						WHERE `expiration` >= {$gmt}
+							AND `user_id` != {$me->id}";
+					$exec = $_db->query($sql);
+					
+					while( $data = $exec->fetch_assoc() ) {
+						$sql = "SELECT `session_id`
+							FROM `session_topics`
+							WHERE `topic_id` = {$topic->id}
+								AND `forum_id` = {$forum->id}
+								AND `user_id` = {$data['user_id']}";
+						$exec2 = $_db->query($sql);
+						if( !$exec2->num_rows ) {
+							// @todo set primary key on topic_id, user_id and just use insert ignore
+							$sql = "INSERT INTO `session_topics` SET
+								`topic_id`     = {$topic->id},
+								`forum_id`     = {$forum->id},
+								`user_id`      = {$data['user_id']},
+								`session_post` = {$post->id}";
+							$_db->query($sql);
+						}
+					}
+
+					$me->increment('total_posts');
+				}
+				else {
+					$post->increment('edit_count', [
+						'edit_user_id' => $me->id,
+						'smileys'      => Input::get('show_smileys'),
+						'signature'    => Input::get('attach_sig'),
+					]);
+
+					$post->postText->update([
+						'post_subject' => $subject,
+						'post_text'    => $content,
+						'post_smiley'  => $smily
+					]);
+				}
+
+				// Update attachments with post ID
+				Attachment::whereNull('post_id')
+					->where('user_id', '=', $me->id)
+					->where('hash', '=', $hash)
+					->update([
+						'hash'    => NULL,
+						'post_id' => $post->id
+					]);
+
+				// (un)subscribe to topic
+				$post->generate_url();
+				$url = $post->url;
+				if( $subscribe && !$subscribed ) {
+					$url = str_replace('#', '?subscribe#', $url);
+				}
+				else if( !$subscribe && $subscribed ) {
+					$url = str_replace('#', '?unsubscribe#', $url);
+				}
+				
+				// Send topic subscribers an email notification
+				$sql = "SELECT *
+					FROM `topic_subs`
+						WHERE `topic_id` = {$topic->id}
+							AND `notified` = 1";
+				$exec = $_db->query($sql);
+				
+				while( $data = $exec->fetch_assoc() ) {
+					$user = new User($data['user_id']);
+					
+					if( $user->id != $me->id ) {
+					
+						$Smarty->assign('user', $me);
+						$Smarty->assign('topic', $topic);
+						$Smarty->assign('post', $post);
+						$Smarty->assign('content', $content);
+						$html = $Smarty->fetch('emails/post.tpl');
+
+						try {
+							queue_email( $user->id, 'Topic Reply Notification', $html );
+						}
+						catch( Exception $e ) { }
+						
+						$sql = "UPDATE `topic_subs` SET
+							`notified` = 0
+							WHERE `user_id` = {$user->id}
+								AND `topic_id` = {$topic->id}";
+						$_db->query($sql);
+					}
+				}
+
+				header("Location: {$url}");
+				exit;
+			}
+		}
+
+		// Load attachments, including pending
+		$attachments = Attachment::where('post_id', '=', $post->id)
+			->orWhere( function($query) use ($me, $hash)
+			{
+				$query->whereNull('post_id')
+					->where('user_id', '=', $me->id)
+					->where('hash', '=', $hash);
+			})
+			->orderBy('filetype', 'desc')
+			->orderBy('created_at', 'asc');
+
+		$_PAGE = array(
+			'category' => 'forums',
+			'section'  => 'forums',
+			'title'    => $this->title
+		);
+
+		$post_max_size = intval(ini_get('post_max_size'));
+		$max_total = $post_max_size * 1024 * 1024;
+		$upload_max_filesize = intval(ini_get('upload_max_filesize'));
+		$max_bytes = $upload_max_filesize * 1024 * 1024;
+		$max_file_uploads = ini_get('max_file_uploads');
+
+		return View::make('posts.create')
+			->with('_PAGE', $_PAGE)
+			->with('mode', $this->mode)
+			->with('attachments', $attachments)
+			->with('hash', $hash)
+
+			->with('post', $post)
+			->with('topic', $topic)
+			->with('forum', $forum)
+
+			// From input or pre-filled
+			->with('subject', $subject)
+			->with('content', $content)
+
+			->with('post_max_size', $post_max_size)
+			->with('max_total', $max_total)
+			->with('upload_max_filesize', $upload_max_filesize)
+			->with('max_bytes', $max_bytes)
+			->with('max_file_uploads', $max_file_uploads);
+
+		//$Smarty->assign('check_sub', $check_sub);
+
+		/*
+			$sql = "
+			UPDATE polls SET poll_hash = '', poll_topic = '" . (int)$t . "'
+			WHERE (poll_topic = '0' AND poll_hash = '" . $_db->escape($hash) . "') OR (poll_topic = '" . (int)$t . "')";
+			$res = query($sql);
+			
+
+		$pollq = $_POST["pollq"];
+			if( $pollq && !$_POST["advanced"] ) {
+				$pollmax = (int)$_POST["pollmax"];
+				$pollpub = (int)$_POST["pollpub"];
+				if( $pollmax < 1 ) { $pollmax = 1; }
+
+				$sql = "SELECT poll_id FROM polls WHERE (poll_topic = '0' AND poll_hash = '" . $_db->escape($hash) . "')";
+				if( $mode == "edit" ) { $sql .= " OR (poll_topic = '" . (int)$t . "')"; }
+				$res = query($sql);
+				if( !mysql_num_rows($res)) {
+					$sql = "INSERT INTO polls
+					( `poll_topic`, `poll_question`, `poll_max`, `poll_hash`, `poll_public` )
+					VALUES
+					( '" . (int)$t . "', '" . $_db->escape($pollq) . "',
+					  '" . (int)$pollmax . "', '" . $_db->escape($hash) . "', '" . (int)$pollpub . "' )";
+					$res2 = query($sql);
+				}
+				$sql = "SELECT poll_id FROM polls WHERE (poll_topic = '0' AND poll_hash = '" . $_db->escape($hash) . "')";
+				if( $mode == "edit" ) { $sql .= " OR (poll_topic = '" . (int)$t . "')"; }
+				$res = query($sql);
+				list( $pollid ) = mysql_fetch_array($res);
+
+				$sql = "UPDATE polls SET 
+					poll_question = '" . $_db->escape($pollq) . "',
+					poll_max = '" . (int)$pollmax . "',
+					poll_public = '" . (int)$pollpub . "'
+					WHERE poll_id = '" . (int)$pollid . "'";
+				$res = query($sql);
+
+				$sql = "SELECT option_id FROM poll_options WHERE option_poll = '" . (int)$pollid . "'";
+				$res = query($sql);
+				while( $option = mysql_fetch_array($res)) {
+					list( $optid ) = $option;
+					if( $_POST["opt".$optid]) {
+						$opttext = $_POST["opt".$optid];
+						$sql = "UPDATE poll_options SET option_text = '" . $_db->escape($opttext) . "' WHERE option_id = '" . (int)$optid . "'";
+						$res2 = query($sql);
+					}
+					else {
+						$sql = "DELETE FROM poll_options WHERE option_id = '" . $optid . "'";
+						$res2 = query($sql);
+						$sql = "SELECT vote_id, vote_choices FROM poll_votes WHERE vote_poll = '" . (int)$pollid . "'";
+						$res2 = query($sql);
+						while( $delvote = mysql_fetch_array($res2)) {
+							list( $voteid, $choices ) = $delvote;
+							$choicelist = explode(',',$choices);
+							$pos = array_search( $optid, $choicelist );
+							unset($choicelist[$pos]);
+							$choices = implode(',',$choicelist);
+							if( count($choicelist)) {
+								$sql = "UPDATE poll_votes SET vote_choices = '" . (int)$choices . "' WHERE vote_id = '" . (int)$voteid . "'";
+								$res3 = query($sql);
+							}
+							else {
+								$sql = "DELETE FROM poll_votes WHERE vote_id = '" . (int)$voteid . "'";
+								$res3 = query($sql);
+							}
+						}
+					}
+				}
+				for( $i=1; $i<=15; $i++ ) {
+					if( $_POST["new".$i]) {
+						$opttext = $_POST["new".$i];
+						$sql = "INSERT INTO poll_options 
+						( `option_poll`, `option_text`, `option_votes` )
+						VALUES
+						( '" . (int)$pollid . "', '" . $_db->escape($opttext) . "', '0' )";
+						$res2 = query($sql);
+					}
+				}
+			}
+			else if( !$_POST["advanced"] ) {
+				if( $mode == "edit" ) {
+					$sql = "SELECT poll_id FROM polls WHERE poll_topic = '" . (int)$t . "'";
+					$res = query($sql);
+					list( $delpoll ) = mysql_fetch_array($res);
+					$sql = "DELETE FROM polls WHERE poll_topic = '" . (int)$t . "'";
+					$res = query($sql);
+					$sql = "DELETE FROM poll_options WHERE option_poll = '" . (int)$delpoll . "'";
+					$res = query($sql);
+					$sql = "DELETE FROM poll_votes WHERE vote_poll = '" . (int)$delpoll . "'";
+					$res = query($sql);			
+				}
+			}
+			
+		if( $mode == "newtopic" || ( $mode == "edit" && ( $me->administrator || $me->moderator ))) { 
+			$sql = "
+			SELECT poll_id, poll_question, poll_max, poll_public
+			FROM polls 
+			WHERE (poll_topic = '0' AND poll_hash = '" . $_db->escape($hash) . "')";
+			if( $mode == "edit" ) { $sql .= " OR (poll_topic = '" . (int)$t . "')"; }
+			$res = query($sql);
+			if( mysql_num_rows($res)) {
+				list( $pollid, $pollq, $pollmax, $pollpub ) = mysql_fetch_array($res);
+				$pollq = stripslashes($pollq);
+			}
+			else {
+				$pollid = 0; $pollmax = 1; $pollpub = 0;
+			}
+		?>
+		<tr>
+			<td class="category" colspan="2">Poll</td>
+		</tr>
+		<tr>
+			<td class="left">Question:</td>
+			<td class="right"><input tabindex="2" name="pollq" type="text" style="width:300px"
+			value="<?= $pollq; ?>"></td>
+		</tr>
+		<tr>
+			<td class="left">Maximum Selection:</td>
+			<td class="right"><input tabindex="2" name="pollmax" type="text" style="width:50px"
+			value="<?= $pollmax; ?>">
+			&nbsp;&nbsp;&nbsp;Results:&nbsp;&nbsp;&nbsp;
+			<select name="pollpub" tabindex="1" style="width:100px">
+			<option value="0"<?php if( $pollpub == 0 ) { echo " selected"; } ?>>Private</option>
+			<option value="1"<?php if( $pollpub == 1 ) { echo " selected"; } ?>>Public</option>
+			</select>
+			<input tabindex="1" type="submit" name="poll" value="Update">
+			</td>
+		</tr>
+
+		<script type="text/javascript"><!--
+			function addanother() {
+				for( i=1; i<=15; i++ ) {
+					var newrow = document.getElementById("option"+i);
+					if( newrow.style.display == "none" ) {
+						newrow.style.display = "table-row";
+						break;
+					}
+				}
+			}
+		--></script>
+
+		<?php 
+			$counter = 1;
+			$sql = "
+			SELECT option_id, option_text 
+			FROM poll_options 
+			WHERE option_poll = '" . (int)$pollid . "'
+			ORDER BY option_id ASC";
+			$res = query($sql);
+			$total = mysql_num_rows($res);
+			while( $pollopt = mysql_fetch_array($res)) {
+				list( $optid, $opttext ) = $pollopt;
+				$opttext = stripslashes($opttext);
+		?>
+		<tr id="option<?= $counter; ?>" style="display:table-row">
+			<td class="left">Option:</td>
+			<td class="right"><input tabindex="2" name="opt<?= $optid; ?>" type="text" 
+			style="width:300px" value="<?= $opttext; ?>">
+			<?php if( $counter == 1 ) { ?>
+			<a href="#" onClick="javascript:addanother(); return false">Add another</a>
+			<?php } ?>
+			</td>
+		</tr>
+		<?php 
+				$counter++;
+			}
+			while( $counter <= 15 ) {
+		?>
+		<tr id="option<?= $counter; ?>" style="display:<?php if( $counter > $total+1 ) { echo "none"; } else { echo "table-row"; } ?>">
+			<td class="left">New Option:</td>
+			<td class="right"><input tabindex="2" name="new<?= $counter; ?>" type="text" style="width:300px">
+			<?php if( $counter == 1 ) { ?>
+			<a href="#" onClick="javascript:addanother(); return false">Add another</a>
+			<?php } ?>
+			</td>
+		</tr>
+		<?php 
+				$counter++;
+			}
+		} ?>
+
+		</form>
+
+		*/
+	}
+
 	/**
 	 * Delete this post
 	 *
@@ -98,26 +680,5 @@ class PostController extends Earlybird\FoundryController
 
 		return $result;
 	}
-	
-	public function load_attachments( $access )
-	{
-		global $_db;
 
-		$sql = "SELECT *
-			FROM `attachments`
-			WHERE `post_id` = {$this->id}
-				AND `filetype` <= {$access}
-			ORDER BY `filetype` DESC, `date` ASC";
-		$exec = $_db->query($sql);
-
-		$attachments = array();
-		while( $data = $exec->fetch_assoc() ) {
-			$attachment = new Attachment($data['id'], $data);
-			$attachment->thumb = substr($attachment->filename, 0, -4) . '.jpg';
-			
-			$attachments[] = $attachment;
-		}
-		
-		return $attachments;
-	}
 }

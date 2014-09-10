@@ -16,8 +16,8 @@
 {{ $posts->links() }}
 
 @if ( $me->id )
-<a href="/forum/post?f={{ $forum->id }}" class="button">New Topic</a>
-<a href="/forum/post?mode=reply&amp;t={{ $topic->id }}" class="button">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
+<a href="/new-topic/{{ $forum->id }}" class="button">New Topic</a>
+<a href="/reply-to-topic/{{ $topic->id }}" class="button">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
 @endif
 
 <div class="actions">
@@ -36,8 +36,8 @@
 @endforeach
 
 @if ( $me->id )
-<a href="/forum/post?f={{ $forum->id }}" class="button">New Topic</a>
-<a href="/forum/post?mode=reply&amp;t={{ $topic->id }}" class="button">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
+<a href="/new-topic/{{ $forum->id }}" class="button">New Topic</a>
+<a href="/reply-to-topic/{{ $topic->id }}" class="button">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
 @endif
 
 {{ $posts->links() }}

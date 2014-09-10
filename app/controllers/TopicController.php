@@ -348,6 +348,30 @@ class TopicController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Review a topic
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function review( $id )
+	{
+		$topic = Topic::findOrFail($id);
+
+		$posts = Post::where('topic_id', '=', $topic->id)
+			->orderBy('created_at', 'desc')
+			->paginate(20);
+
+		$_PAGE = array(
+			'title' => 'Topic Review'
+		);
+
+		return View::make('topics.review')
+			->with('_PAGE', $_PAGE)
+			->with('topic', $topic)
+			->with('posts', $posts);
+	}
+
+	/**
 	 * Delete this topic
 	 * This function should never be called - it is only called from inside the Post::delete() function
 	 */
