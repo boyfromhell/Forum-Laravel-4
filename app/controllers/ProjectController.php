@@ -9,7 +9,7 @@ class ProjectController extends Earlybird\FoundryController
 	 * @param  string  $category
 	 * @return Response
 	 */
-	public function index( $category = 'official' )
+	public function category( $category = 'official' )
 	{
 		if( ! Module::isActive('downloads') ) {
 			App::abort(404);
@@ -56,7 +56,7 @@ class ProjectController extends Earlybird\FoundryController
 			$projects->load(['downloads']);
 		}
 
-		return View::make('projects.index')
+		return View::make('projects.category')
 			->with('_PAGE', $_PAGE)
 			->with('projects', $projects);
 	}

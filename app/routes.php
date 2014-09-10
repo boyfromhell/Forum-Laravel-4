@@ -17,6 +17,9 @@ Route::pattern('id', '[0-9]+');
 Route::group(array('before' => 'admin'), function()
 {
 	Route::get('admin/messages/{id}', array('uses' => 'AdminController@viewMessage'));
+
+	Route::resource('admin/groups', 'GroupController');
+	Route::resource('admin/projects', 'ProjectController');
 });
 
 // Moderators
@@ -41,8 +44,8 @@ Route::group(array('before' => 'loggedin'), function()
 
 	// Community
 	Route::any('community/members', array('uses' => 'UserController@members'));
-	Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));
-	Route::any('groups/new', array('uses' => 'GroupController@add'));
+	/*Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));
+	Route::any('groups/new', array('uses' => 'GroupController@add'));*/
 	Route::any('community/submit_score', array('uses' => 'ScoreController@submit'));
 	Route::get('community/shoutbox', array('uses' => 'ShoutboxController@embed'));
 
@@ -59,7 +62,7 @@ Route::get('print/{id}/{name?}', array('uses' => 'TopicController@print'));
 Route::get('posts/{id}/{name?}', array('uses' => 'PostController@display'));
 
 // Community
-Route::get('groups', array('uses' => 'GroupController@index'));
+Route::get('groups', array('uses' => 'GroupController@showAll'));
 Route::get('groups/{id}/{name?}', array('uses' => 'GroupController@display'));
 Route::get('community/honor_rolls', array('uses' => 'ScoreController@index'));
 Route::get('users/{id}/{name?}', array('uses' => 'UserController@display'));
@@ -75,7 +78,7 @@ Route::any('albums/new', array('uses' => 'AlbumController@add'));
 Route::get('media/photo/{id}', array('uses' => 'PhotoController@display'));
 
 // Projects
-Route::get('downloads/{category?}', array('uses' => 'ProjectController@index'));
+Route::get('downloads/{category?}', array('uses' => 'ProjectController@category'));
 Route::get('projects/{id}/{name?}', array('uses' => 'ProjectController@display'));
 Route::get('download/{id}/{name?}', array('uses' => 'ProjectController@download'));
 

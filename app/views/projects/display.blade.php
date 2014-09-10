@@ -26,7 +26,7 @@
 
 	@if ( $project->user_id == $me->id || $me->is_admin )
 	<br><br>
-	<a href="/downloads/edit_project?id={{ $project->id }}" class="button small">Edit</a>
+	<a href="/admin/projects/{{ $project->id }}/edit" class="button small">Edit</a>
 	<div class="break"></div>
 	@endif
 	</div>

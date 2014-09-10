@@ -8,7 +8,7 @@ class GroupController extends Earlybird\FoundryController
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function showAll()
 	{
 		$_PAGE = array(
 			'category' => 'community',
@@ -25,7 +25,7 @@ class GroupController extends Earlybird\FoundryController
 			->orderBy('name', 'asc')
 			->get();
 
-		return View::make('groups.index')
+		return View::make('groups.list')
 			->with('_PAGE', $_PAGE)
 			->with('groups', $groups);
 	}

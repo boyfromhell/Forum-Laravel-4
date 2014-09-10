@@ -3,6 +3,7 @@
 class Project extends Earlybird\Foundry
 {
 
+	protected $guarded = array('id');
 	protected $appends = array(
 		'url',
 

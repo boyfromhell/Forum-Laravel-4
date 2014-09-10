@@ -3,9 +3,20 @@
 class Group extends Earlybird\Foundry
 {
 
+	protected $guarded = array('id');
 	protected $appends = array(
 		'url',
 	);
+
+	/**
+	 * User who owns the group
+	 *
+	 * @return Relation
+	 */
+	public function user()
+	{
+		return $this->belongsTo('User');
+	}
 
 	/**
 	 * All members

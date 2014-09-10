@@ -2,7 +2,7 @@
 
 @section('content')
 
-@include('foundry::index')
+@include('foundry::edit')
 
 @stop
 
