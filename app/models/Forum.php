@@ -6,6 +6,11 @@ class Forum extends Earlybird\Foundry
 	protected $appends = array(
 		'url',
 		'parents',
+
+		'is_unread',
+		'alt_text',
+
+		'latest_topic',
 	);
 
 	public function parent()
@@ -58,6 +63,48 @@ class Forum extends Earlybird\Foundry
 			$child = $parent;
 		}
 		return array_reverse($parents);
+	}
+
+	/**
+	 * Check if there are any unread topics in this forum
+	 *
+	 * @return bool
+	 */
+	public function getIsUnreadAttribute()
+	{
+		global $me;
+
+		if( ! $me->id ) {
+			return false;
+		}
+
+		$unread = SessionTopic::where('user_id', '=', $me->id)
+			->where('forum_id', '=', $this->id)
+			->count();
+
+		return ( $unread > 0 ? true : false );
+	}
+
+	/**
+	 * Alt text for this forum
+	 *
+	 * @return string
+	 */
+	public function getAltTextAttribute()
+	{
+		return ( $this->is_unread ? 'New posts' : 'No new posts' );
+	}
+
+	/**
+	 * Most recent topic
+	 *
+	 * @return Topic
+	 */
+	public function getLatestTopicAttribute()
+	{
+		return Topic::where('forum_id', '=', $this->id)
+			->orderBy('last_date', 'desc')
+			->first();
 	}
 
 	/**

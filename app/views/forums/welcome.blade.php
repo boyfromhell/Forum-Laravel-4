@@ -20,7 +20,7 @@
 	@if ( !$me->id || $announcement->id )
 	<div class="welcome{{ $me->id ? ' no-margin' : '' }}">
 
-		<div class="header">{{{ $me->loggedin ? $announcement->title : 'Welcome to the '.Config::get('app.forum_name') }}}</div>
+		<div class="header">{{{ $me->id ? $announcement->title : 'Welcome to the '.Config::get('app.forum_name') }}}</div>
 
 		@if ( $me->id )
 		<div id="announcement_{{ $announcement->id }}" class="announcement body">{{ BBCode::parse($announcement->text) }}</div>
@@ -40,7 +40,7 @@
 	<div class="break"></div>
 	@endif
 	
-	<div class="welcome wide{{ !$me->loggedin ? ' no-margin' : '' }}">
+	<div class="welcome wide{{ !$me->id ? ' no-margin' : '' }}">
 	
 		<div class="table-header">
 			<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
@@ -105,9 +105,15 @@
 		</div>
 	</div>
 	
-	<div class="welcome small{{ !$me->loggedin ? ' no-margin' : '' }}">
+	<div class="welcome small{{ !$me->id ? ' no-margin' : '' }}">
 
-		<div class="header">{if $me->loggedin}<a href="/forum/stats">Forum Statistics</a>{else}Forum Statistics{/if}</div>
+		<div class="header">
+		@if ( $me->id )
+			<a href="/forum/stats">Forum Statistics</a>
+		@else
+			Forum Statistics
+		@endif
+		</div>
 
 		<div class="body">
 		
@@ -128,7 +134,7 @@
 
 <div class="break"></div>
 
-@if ( !$is_mobile && app_active('shoutbox') )
+@if ( !$is_mobile && Module::isActive('shoutbox') )
 <iframe src="/community/shoutbox" width="100%" height="200" frameborder="no" scrolling="auto"></iframe>
 @endif
 

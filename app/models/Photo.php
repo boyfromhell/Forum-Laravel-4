@@ -31,9 +31,9 @@ class Photo extends Earlybird\Foundry
 
 	protected function getPhoto( $size )
 	{
-		list( $name, $ext ) = parse_file_name($this->file);
+		list( $name, $ext ) = Helpers::parse_file_name($this->file);
 
-		$folder = '/photos/'.$this->folder.'/';
+		$folder = '/photos/'.$this->album->folder.'/';
 
 		switch( $size )
 		{

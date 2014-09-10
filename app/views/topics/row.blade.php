@@ -1,4 +1,4 @@
-<tr class="thread-row{{ $topic->unread ? ' unread' : '' }}" data-id="{{ $topic->id }}" data-all="1" data-read="{{ !$topic->unread }}" data-title="{{{ $topic->title }}}">
+<tr class="thread-row{{ $topic->unread_post->id ? ' unread' : '' }}" data-id="{{ $topic->id }}" data-all="1" data-read="{{ $topic->unread_post->id ? '1' : '0' }}" data-title="{{{ $topic->title }}}">
 
 	@if ( $topic_mode == 'subscription' )
 	<td class="icon">
@@ -7,7 +7,7 @@
 	@endif
 
 	<td class="icon">
-		<div class="icon {{{ $topic->img }}}" title="{{{ $topic->img_alt }}}"></div>
+		<div class="icon {{{ $topic->image }}}" title="{{{ $topic->alt_text }}}"></div>
 	</td>
 
 	<td class="icon">
@@ -23,10 +23,10 @@
 		
 		@if ( $topic->has_poll )<b>[ Poll ]</b>@endif
 	
-		@if ( $topic->unread )<a href="{{ $topic->unread['url'] }}"><img src="{{ $skin }}icons/newest_reply.png" title="{{{ $topic->unread['alt'] }}}"></a> @endif
+		@if ( $topic->unread_post->id )<a href="{{ $topic->unread_post->url }}"><img src="{{ $skin }}icons/newest_reply.png" title="Go to first unread post"></a> @endif
 	
 		{{{ $topic->prefix }}}
-		<a href="{{ $topic->url }}" title="{{{ $topic->alt }}}">{{{ $topic->short_title }}}</a>
+		<a href="{{ $topic->url }}" title="Go to topic">{{{ $topic->short_title }}}</a>
 	
 		@if ( $topic->pages > 1 )
 			<small> ( <img src="{{ $skin }}icons/multi_page.png" alt="+"> 
@@ -53,11 +53,11 @@
 	
 	@if ( $topic_mode != 'forum' )
 	<td class="lastpost topic">
-		{{ $topic->latest_post['date'] }}
+		{{ $topic->latest_post->date }}
 		<br>
 	
-		<a href="{{ $topic->latest_post['author']->url }}" title="{{{ $topic->latest_post['author']->name }}}'s profile">{{{ $topic->latest_post['author']->name }}} </a>
-		<a href="{{ $topic->latest_post['url'] }}"><img src="{{ $skin }}icons/latest_reply.png" alt="-&gt;" title="Go to last post"></a>
+		<a href="{{ $topic->latest_post->user->url }}" title="{{{ $topic->latest_post->user->name }}}'s profile">{{{ $topic->latest_post->user->name }}} </a>
+		<a href="{{ $topic->latest_post->url }}"><img src="{{ $skin }}icons/latest_reply.png" alt="-&gt;" title="Go to last post"></a>
 	</td>
 	@endif
 

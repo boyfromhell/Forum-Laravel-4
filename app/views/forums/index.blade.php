@@ -50,9 +50,11 @@
 <div class="welcome wide no-margin">
 
 	<div class="header">
-		@if ( $me->id )<a href="/forum/stats">@endif
-		Forum Statistics
-		@if ( $me->id )</a>@endif
+		@if ( $me->id )
+			<a href="/forum/stats">Forum Statistics</a>
+		@else
+			Forum Statistics
+		@endif
 	</div>
 
 	<div class="body">

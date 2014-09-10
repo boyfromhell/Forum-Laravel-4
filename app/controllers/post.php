@@ -1,6 +1,6 @@
 <?php
 
-class Post extends Controller_W 
+class PostController extends Earlybird\FoundryController
 {
 
 	/**
@@ -119,46 +119,5 @@ class Post extends Controller_W
 		}
 		
 		return $attachments;
-	}
-}
-
-
-
-
-
-class PostTextModel extends Model
-{
-	const TABLE = 'posts_text';
-	protected static $myclass = 'PostText';
-	protected $table = 'posts_text';
-
-	// single object
-	protected static $instance;
-
-	public static function singleton()
-	{
-		if( !isset(self::$instance) ) {
-			$c = __CLASS__;
-			self::$instance = new $c;
-		}
-
-		return self::$instance;
-	}
-}
-
-class PostText extends Controller
-{
-	const TABLE = 'posts_text';
-	protected static $myclass = 'PostText';
-	protected $table = 'posts_text';
-
-	function __construct( $id = 0, $data = array() )
-	{
-		$this->model = PostTextModel::singleton();
-		parent::__construct( $id, $data );
-
-		$this->_extra = array(
-			'permalink' => ''
-		);
 	}
 }

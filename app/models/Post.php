@@ -6,6 +6,8 @@ class Post extends Earlybird\Foundry
 	protected $guarded = array('id');
 	protected $appends = array(
 		'url',
+
+		'date',
 	);
 
 	/**
@@ -47,6 +49,16 @@ class Post extends Earlybird\Foundry
 	public function getUrlAttribute()
 	{
 		return '/posts/' . $this->id . '#' . $this->id;
+	}
+
+	/**
+	 * Date, formatted and in my local timezone
+	 *
+	 * @return string
+	 */
+	public function getDateAttribute()
+	{
+		return Helpers::date_string($this->time, 2);
 	}
 
 }

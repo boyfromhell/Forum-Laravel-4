@@ -10,10 +10,16 @@ class Topic extends Earlybird\Foundry
 		'url',
 
 		'prefix',
+		'image',
+		'alt_text',
 		'short_title',
+
+		'unread_post',
+		'latest_post',
 
 		'has_attachments',
 		'has_poll',
+		'pages',
 	);
 
 	public function forum()
@@ -69,6 +75,61 @@ class Topic extends Earlybird\Foundry
 	}
 
 	/**
+	 * Get the image based on type & unread status
+	 *
+	 * @return string
+	 */
+	public function getImageAttribute()
+	{
+		if( $this->type == 2 ) {
+			$image = 'topic_announce';
+		}
+		else if( $this->type == 1 ) {
+			$image = 'topic_sticky';
+		}
+		else if( $this->status == 1 ) {
+			$image = 'topic_locked';
+		}
+		else {
+			$image = 'topic';
+
+			if( $this->pages > 1 ) {
+				$image .= '_hot';
+			}
+		}
+
+		if( $this->unread_post->id ) {
+			$image .= '_unread';
+		}
+
+		return $image;
+	}
+
+	/**
+	 * Alt text
+	 *
+	 * @return string
+	 */
+	public function getAltTextAttribute()
+	{
+		if( $this->type == 2 ) {
+			return 'Announcement';
+		}
+		else if( $this->type == 1 ) {
+			return 'Sticky';
+		}
+		else if( $this->status == 1 ) {
+			return 'Locked';
+		}
+		else if( $this->unread_post->id ) {
+			return 'New posts';
+		}
+		else {
+			return 'No new posts';
+		}
+	}
+
+	/**
 	 * Get a truncated title
 	 *
 	 * @return string
@@ -79,6 +140,42 @@ class Topic extends Earlybird\Foundry
 			return substr($this->title, 0, 45) . '...';
 		}
 		return $this->title;
+	}
+
+	/**
+	 * Get first unread post
+	 *
+	 * @return Post
+	 */
+	public function getUnreadPostAttribute()
+	{
+		global $me;
+
+		if( ! $me->id ) {
+			return NULL;
+		}
+
+		$session = SessionTopic::where('user_id', '=', $me->id)
+			->where('topic_id', '=', $this->id)
+			->first();
+
+		if( $session->session_post ) {
+			return Post::find($session->session_post);
+		}
+
+		return NULL;
+	}
+
+	/**
+	 * Get most recent post
+	 *
+	 * @return Post
+	 */
+	public function getLatestPostAttribute()
+	{
+		return Post::where('topic_id', '=', $this->id)
+			->orderBy('time', 'desc')
+			->first();
 	}
 
 	/**
@@ -106,6 +203,16 @@ class Topic extends Earlybird\Foundry
 			->first();
 
 		return ( $poll->id ? true : false );
+	}
+
+	/**
+	 * Get the number of pages
+	 *
+	 * @return int
+	 */
+	public function getPagesAttribute()
+	{
+		return ceil(($this->replies + 1) / 25);
 	}
 
 }

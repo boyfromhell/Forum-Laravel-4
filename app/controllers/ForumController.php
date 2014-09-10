@@ -12,6 +12,8 @@ class ForumController extends Earlybird\FoundryController
 	{
 		global $me;
 
+		$me->access = $access = 2;
+
 		// Mark all forums read
 		if( Input::has('mark') && $me->id )
 		{
@@ -49,55 +51,7 @@ class ForumController extends Earlybird\FoundryController
 			->where('forums.read', '<=', $me->access)
 			->orderBy('last_date', 'desc')
 			->take(10)
-			->get();
-
-		if( count($topics) > 0 )
-		{
-			// Check if unread
-			/*$sql = "SELECT `session_post`, `topic_id`
-				FROM `session_topics`
-				WHERE `user_id` = {$me->id}
-				AND `topic_id` IN ( " . implode(',', $topic_ids) . " )";
-			$exec = $_db->query($sql);
-
-			while( $data = $exec->fetch_assoc() )
-			{
-				if( $topics[$data['topic_id']]->img == 'topic' ) {
-					$topics[$data['topic_id']]->img_alt = 'New posts';
-				}
-				$topics[$data['topic_id']]->img .= '_unread';
-
-				$data['url'] = '/posts/' . $data['session_post'] . '#' . $data['session_post'];
-				$data['alt'] = 'Go to first unread post';
-
-				$topics[$data['topic_id']]->unread = $data;
-			}
-
-			// Latest posts
-			$sql = "SELECT `posts`.`id`, `posts`.`topic_id`, `posts`.`user_id`, `users`.`name`, `posts`.`time`
-				FROM
-				( SELECT MAX( posts.time ) AS date, topics.id AS id
-					FROM posts, topics
-					WHERE posts.topic_id = topics.id
-					AND topics.id IN ( " . implode(',', $topic_ids ) . " )
-					GROUP BY topics.id ) p1
-				JOIN posts
-					ON posts.time = p1.date AND posts.topic_id = p1.id
-				JOIN users
-					ON posts.user_id = users.id";
-			$exec = $_db->query($sql);
-
-			while( $data = $exec->fetch_assoc() )
-			{
-				$data['author'] = new User($data['user_id'], array('name' => $data['name']));
-
-				$data['time'] += ($me->tz*3600);
-				$data['date'] = datestring($data['time'], 2);
-				$data['url'] = '/posts/' . $data['id'] . '#' . $data['id'];
-
-				$topics[$data['topic_id']]->latest_post = $data;
-			}*/
-		}
+			->get(['topics.*']);
 
 		//-----------------------------------------------------------------------------
 		// Random photo and recent album
@@ -105,7 +59,7 @@ class ForumController extends Earlybird\FoundryController
 		$photo = Photo::join('albums', 'photos.album_id', '=', 'albums.id')
 			->where('permission_view', '<=', $access)
 			->orderBy(DB::raw('RAND()'), 'asc')
-			->first();
+			->first(['photos.*']);
 
 		$album = Album::where('permission_view', '<=', $access)
 			->orderBy('modified', 'desc')
@@ -154,8 +108,7 @@ class ForumController extends Earlybird\FoundryController
 		$announcement = Announcement::where('id', '=', 2)->first();
 
 		// Quote bot
-		// @todo
-		if( true || app_active('quotebot') )
+		if( Module::isActive('quotebot') )
 		{
 			if( Input::has('quote') ) {
 				$quote = Quote::find(Input::get('quote'));
@@ -168,19 +121,13 @@ class ForumController extends Earlybird\FoundryController
 		// Categories
 		$categories = Category::orderBy('order', 'asc')->get();
 
-		/*$read_ids = array();
-		$forums = array();
-		while( $data = $exec->fetch_assoc() )
+		/*while( $data = $exec->fetch_assoc() )
 		{
 			$forum = new Forum($data['id'], $data);
 
 			$forum->subforums = array();
 			$forum->perm_view = $forum->check_permission('view', $me, $mygroups);
 			$forum->perm_read = $forum->check_permission('read', $me, $mygroups);
-
-			if( $forum->perm_read ) {
-				$read_ids[] = $forum->id;
-			}
 
 			if( $forum->perm_view ) {
 				if( $forum->external ) { $forum->alt = 'External'; }
@@ -192,96 +139,13 @@ class ForumController extends Earlybird\FoundryController
 
 		if( count($read_ids) )
 		{
-			// Check if unread
-			$sql = "SELECT `session_post`, `topic_id`, `forum_id`
-				FROM `session_topics`
-				WHERE `user_id` = {$me->id}
-					AND `forum_id` IN ( " . implode(',', $read_ids) . " )
-				ORDER BY `session_post` ASC";
-			$exec = $_db->query($sql);
-
 			while( $data = $exec->fetch_assoc() )
 			{
-				$forums[$data['forum_id']]->alt = 'New posts';
-				$forums[$data['forum_id']]->unread = $data;
-			}
-
-			// Latest topics
-			$sql = "SELECT `topics`.`id`, `topics`.`forum_id`, `topics`.`title`, `topics`.`smiley`
-				FROM
-				( SELECT MAX( topics.last_date ) AS date, forums.id AS id
-					FROM topics, forums
-					WHERE topics.forum_id = forums.id
-						AND forums.id IN ( " . implode(',', $read_ids ) . " )
-					GROUP BY forums.id ) t1
-				JOIN topics
-				ON topics.last_date = t1.date AND topics.forum_id = t1.id";
-			$exec = $_db->query($sql);
-
-			$topic_ids = array();
-			$topics = array();
-			while( $data = $exec->fetch_assoc() )
-			{
-				$topic = new Topic($data['id'], $data);
-
-				$topic->short_title = $topic->title;
-				if( strlen($topic->title) > 50 ) {
-					$topic->short_title = substr($topic->title, 0, 45) . '...';
-				}
 				if( $topic->smiley ) {
 					list($topic->smiley_img, $topic->smiley_alt) = topic_smiley($topic->smiley);
 				}
 
 				$topic->alt = 'Go to topic';
-
-				$topic_ids[] = $topic->id;
-				$topics[$topic->id] = $topic;
-			}
-
-			if( count($topic_ids) )
-			{
-				// Latest topic attachments
-				$sql = "SELECT `posts`.`topic_id`, COUNT( `attachments`.`id` ) AS `total`
-					FROM `attachments`
-						LEFT JOIN `posts`
-							ON `attachments`.`post_id` = `posts`.`id`
-					WHERE `posts`.`topic_id` IN ( " . implode(',', $topic_ids) . " )
-					GROUP BY `posts`.`topic_id`";
-				$exec = $_db->query($sql);
-
-				while( $data = $exec->fetch_assoc() )
-				{
-					$topics[$data['topic_id']]->attachments = $data['total'];
-				}
-
-				// Latest posts
-				$sql = "SELECT `posts`.`id`, `posts`.`topic_id`, `posts`.`user_id`, `users`.`name`, `posts`.`time`
-					FROM
-					( SELECT MAX( posts.time ) AS date, topics.id AS id
-						FROM posts, topics
-						WHERE posts.topic_id = topics.id
-						AND topics.id IN ( " . implode(',', $topic_ids ) . " )
-						GROUP BY topics.id ) p1
-					JOIN posts
-					ON posts.time = p1.date AND posts.topic_id = p1.id
-					JOIN users
-					ON posts.user_id = users.id";
-				$exec = $_db->query($sql);
-
-				while( $data = $exec->fetch_assoc() )
-				{
-					$post = new Post($data['id'], $data);
-					$post->user = new User($data['user_id'], array('name' => $data['name']));
-
-					$post->time += ($me->tz*3600);
-					$post->date = datestring($post->time, 2);
-
-					$topics[$data['topic_id']]->latest_post = $post;
-				}
-			}
-
-			foreach( $topics as $topic ) {
-				$forums[$topic->forum_id]->latest_topic = $topic;
 			}
 		}
 
@@ -398,31 +262,6 @@ class ForumController extends Earlybird\FoundryController
 		// Check if unread
 /*		if( count($read_ids) )
 		{
-			$sql = "SELECT `session_post`, `topic_id`, `forum_id`
-				FROM `session_topics`
-				WHERE `user_id` = {$me->id}
-				AND `forum_id` IN ( " . implode(',', $read_ids) . " )";
-			$exec = $_db->query($sql);
-
-			while( $data = $exec->fetch_assoc() )
-			{
-				$children[$data['forum_id']]->alt = 'New posts';
-				$children[$data['forum_id']]->unread = $data;
-			}
-
-			// Latest topics
-			$sql = "SELECT `topics`.`id`, `topics`.`forum_id`, `topics`.`title`, `topics`.`smiley`
-				FROM
-				( SELECT MAX( topics.last_date ) AS date, forums.id AS id
-					FROM topics, forums
-					WHERE topics.forum_id = forums.id
-					AND forums.id IN ( " . implode(',', $read_ids ) . " )
-					GROUP BY forums.id ) t1
-				JOIN topics
-				ON topics.last_date = t1.date AND topics.forum_id = t1.id";
-			$exec = $_db->query($sql);
-
-			$topic_ids = array();
 			while( $data = $exec->fetch_assoc() )
 			{
 				if( $topic->smiley ) {
@@ -430,51 +269,6 @@ class ForumController extends Earlybird\FoundryController
 				}
 
 				$topic->alt = 'Go to topic';
-			}
-			
-			if( count($topic_ids) )
-			{
-				// Latest topic attachments
-				$sql = "SELECT `posts`.`topic_id`, COUNT( `attachments`.`id` ) AS `total`
-					FROM `attachments`
-						LEFT JOIN `posts`
-							ON `attachments`.`post_id` = `posts`.`id`
-					WHERE `posts`.`topic_id` IN ( " . implode(',', $topic_ids) . " )
-					GROUP BY `posts`.`topic_id`";
-				$exec = $_db->query($sql);
-
-				while( $data = $exec->fetch_assoc() ) {
-					$topics[$data['topic_id']]->attachments = $data['total'];
-				}
-
-				// Latest posts
-				$sql = "SELECT `posts`.`id`, `posts`.`topic_id`, `posts`.`user_id`, `users`.`name`, `posts`.`time`
-					FROM
-					( SELECT MAX( posts.time ) AS date, topics.id AS id
-						FROM posts, topics
-						WHERE posts.topic_id = topics.id
-						AND topics.id IN ( " . implode(',', $topic_ids ) . " )
-						GROUP BY topics.id ) p1
-					JOIN posts
-					ON posts.time = p1.date AND posts.topic_id = p1.id
-					JOIN users
-					ON posts.user_id = users.id";
-				$exec = $_db->query($sql);
-
-				while( $data = $exec->fetch_assoc() )
-				{
-					$post = new Post($data['id'], $data);
-					$post->user = new User($data['user_id'], array('name' => $data['name']));
-
-					$post->time += ($me->tz*3600);
-					$post->date = datestring($post->time, 2);
-
-					$topics[$data['topic_id']]->latest_post = $post;
-				}
-			}
-
-			foreach( $topics as $topic ) {
-				$children[$topic->forum_id]->latest_topic = $topic;
 			}
 		}
 
@@ -490,19 +284,7 @@ class ForumController extends Earlybird\FoundryController
 			
 			if( count($topic_ids) )
 			{
-				// Check if unread
-				$sql = "SELECT `session_post`, `topic_id`
-					FROM `session_topics`
-					WHERE `user_id` = {$me->id}
-					AND `topic_id` IN ( " . implode(',', $topic_ids) . " )";
-				$exec = $_db->query($sql);
-
-				while( $data = $exec->fetch_assoc() )
 				{
-					if( $topics[$data['topic_id']]->img == 'topic' ) {
-						$topics[$data['topic_id']]->img_alt = 'New posts';
-					}
-					$topics[$data['topic_id']]->img .= '_unread';
 
 					$data['url'] = '/posts/' . $data['session_post'] . '#' . $data['session_post'];
 					$data['alt'] = 'Go to first unread post';
@@ -510,29 +292,11 @@ class ForumController extends Earlybird\FoundryController
 					$topics[$data['topic_id']]->unread = $data;
 				}
 			
-				// Latest posts
-				$sql = "SELECT `posts`.`id`, `posts`.`topic_id`, `posts`.`user_id`, `users`.`name`, `posts`.`time`
-					FROM
-					( SELECT MAX( posts.time ) AS date, topics.id AS id
-						FROM posts, topics
-						WHERE posts.topic_id = topics.id
-						AND topics.id IN ( " . implode(',', $topic_ids ) . " )
-						GROUP BY topics.id ) p1
-					JOIN posts
-						ON posts.time = p1.date AND posts.topic_id = p1.id
-					JOIN users
-						ON posts.user_id = users.id";
-				$exec = $_db->query($sql);
-
 				while( $data = $exec->fetch_assoc() )
 				{
 					$data['author'] = new User($data['user_id'], array('name' => $data['name']));
 
-					$data['time'] += ($me->tz*3600);
-					$data['date'] = datestring($data['time'], 2);
 					$data['url'] = '/posts/' . $data['id'] . '#' . $data['id'];
-
-					$topics[$data['topic_id']]->latest_post = $data;
 				}
 			}
 
