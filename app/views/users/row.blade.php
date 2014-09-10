@@ -1,7 +1,7 @@
 <div class="subheading">
 	<div class="avatar" style="float:left; margin:10px">
 	@if ( $user->avatar->id )
-	<a href="{{ $user->url }}"><img src="{{ $cdn }}images/avatars/{{ $user->avatar->file }}" alt="{{{ $user->name }}}'s avatar" title="{{{ $user->name }}}'s avatar"></a>
+	<a href="{{ $user->url }}"><img src="{{ $cdn }}/images/avatars/{{ $user->avatar->file }}" alt="{{{ $user->name }}}'s avatar" title="{{{ $user->name }}}'s avatar"></a>
 	@endif
 
 	</div>

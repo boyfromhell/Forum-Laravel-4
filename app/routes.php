@@ -40,6 +40,7 @@ Route::group(array('before' => 'loggedin'), function()
 	Route::any('community/members', array('uses' => 'UserController@members'));
 	Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));
 	Route::any('groups/new', array('uses' => 'GroupController@add'));
+	Route::any('community/submit_score', array('uses' => 'ScoreController@submit'));
 	Route::get('community/shoutbox', array('uses' => 'ShoutboxController@embed'));
 });
 
@@ -54,7 +55,9 @@ Route::get('posts/{id}/{name?}', array('uses' => 'PostController@display'));
 // Community
 Route::get('groups', array('uses' => 'GroupController@index'));
 Route::get('groups/{id}/{name?}', array('uses' => 'GroupController@display'));
+Route::get('community/honor_rolls', array('uses' => 'ScoreController@index'));
 Route::get('users/{id}/{name?}', array('uses' => 'UserController@display'));
+Route::get('honor-rolls', array('uses' => 'ScoreController@index'));
 Route::get('chat-popup', array('uses' => 'PageController@chatPopup'));
 
 // Projects

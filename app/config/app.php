@@ -9,7 +9,7 @@ return array(
 	'skin' => 'ivan',
 
 	'domain' => 'beta.attnam.com',
-	'cdn' => 'http://s3.attnam.com/',
+	'cdn' => 'http://s3.attnam.com',
 
 	/*
 	|--------------------------------------------------------------------------

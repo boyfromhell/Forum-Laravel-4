@@ -20,7 +20,7 @@
 	{{{ $user->level->name }}}</small>
 
 	@if ( $user->avatar->id )<br><br>
-	<img id="profileavatar" src="{{ $cdn }}images/avatars/{{ $user->avatar->file }}" alt="{{{ $user->name }}}'s avatar" title="{{{ $user->name }}}'s avatar">
+	<img id="profileavatar" src="{{ $cdn }}/images/avatars/{{ $user->avatar->file }}" alt="{{{ $user->name }}}'s avatar" title="{{{ $user->name }}}'s avatar">
 	@endif
 	</td>
 	<td class="right v_top" style="width:50%; padding:15px;">
