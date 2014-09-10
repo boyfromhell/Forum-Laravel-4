@@ -7,7 +7,6 @@ class Download extends Earlybird\Foundry
 		'url',
 		'size',
 	);
-	public $timestamps = false;
 
 	/**
 	 * Project this belongs to

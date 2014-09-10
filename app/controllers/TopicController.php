@@ -49,14 +49,14 @@ class TopicController extends Earlybird\FoundryController
 		//-----------------------------------------------------------------------------
 		// Check permissions
 		// @todo support group view/read permission
-		if( $f == 19 ) {
+		/*if( $f == 19 ) {
 			if( in_array(1, $mygroups) || $me->is_mod ) {
 				$access = $forum->read;
 			}
 			else {
 				$access = $forum->read-1;
 			}
-		}
+		}*/
 
 		//-----------------------------------------------------------------------------
 		// Mark topic read
@@ -148,10 +148,7 @@ class TopicController extends Earlybird\FoundryController
 			}
 			$post->showhr = $showhr;
 
-			$post->time += ($me->tz*3600);
 			$post->formatted_date = datestring($post->time, 1);
-			$post->edit_time += ($me->tz*3600);
-			$user->joined += ($me->tz*3600);
 			
 			// Check if ignored
 			$sql = "SELECT `entry_id`

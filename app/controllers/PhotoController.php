@@ -146,9 +146,9 @@ class PhotoController extends Earlybird\FoundryController
 		
 		// Update album cover if this photo is the current cover
 		$sql = "UPDATE `albums` SET
-			`cover` = {$first_photo_id}
+			`cover_id` = {$first_photo_id}
 			WHERE `id` = {$this->album_id}
-				AND `cover` = {$this->id}";
+				AND `cover_id` = {$this->id}";
 		$_db->query($sql);
 	}
 	

@@ -11,7 +11,7 @@ class Category extends Earlybird\Foundry
 	public function forums()
 	{
 		// @todo should be just whereNull
-		return $this->hasMany('Forum', 'category')
+		return $this->hasMany('Forum')
 			->where('parent_id', '=', 0)
 			->orWhereNull('parent_id')
 			->orderBy('order', 'asc');

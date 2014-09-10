@@ -25,13 +25,13 @@ class Forum extends Earlybird\Foundry
 	}
 	public function category()
 	{
-		return $this->hasMany('Category', 'category');
+		return $this->belongsTo('Category');
 	}
 	public function topics()
 	{
 		return $this->hasMany('Topic')
 			->orderBy('type', 'desc')
-			->orderBy('last_date', 'desc');
+			->orderBy('updated_at', 'desc');
 	}
 
 	/**
@@ -103,7 +103,7 @@ class Forum extends Earlybird\Foundry
 	public function getLatestTopicAttribute()
 	{
 		return Topic::where('forum_id', '=', $this->id)
-			->orderBy('last_date', 'desc')
+			->orderBy('updated_at', 'desc')
 			->first();
 	}
 

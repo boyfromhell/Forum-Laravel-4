@@ -104,7 +104,6 @@ class PageController extends BaseController
 					'email'   => Input::get('email'),
 					'subject' => Input::get('subject'),
 					'message' => Input::get('message'),
-					'date'    => gmmktime(),
 					'ip'      => Request::getClientIp(),
 				]);
 

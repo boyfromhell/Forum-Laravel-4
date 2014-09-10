@@ -33,7 +33,7 @@
 			@foreach ( $customs as $custom )
 			<th width="{{ $column_width }}%">{{{ $custom->name }}}</th>
 			@endforeach
-			<th width="14%"><a href="{{ $sort_url }}sort=joined&amp;order={{ $orderby == 'joined' && $order == 'asc' ? 'desc' : 'asc' }}">Joined</a></th>
+			<th width="14%"><a href="{{ $sort_url }}sort=joined&amp;order={{ $orderby == 'created_at' && $order == 'asc' ? 'desc' : 'asc' }}">Joined</a></th>
 			<th class="posts"><a href="{{ $sort_url }}sort=posts&amp;order={{ $orderby == 'posts' && $order == 'desc' ? 'asc' : 'desc' }}">Posts</a></th>
 			<th style="width:10px">&nbsp;</th>
 		</tr>
@@ -61,8 +61,8 @@
 	@foreach ( $customs as $custom )
 		<td width="{{ $column_width }}%">{{{ $member->custom[$custom->id] }}}</td>
 	@endforeach
-	<td width="14%" class="date">{{ date('M j, Y', $member->joined) }}</td>
-	<td class="posts">{{ number_format($member->posts) }}</td>
+	<td width="14%" class="date">{{ Helpers::local_date('M j, Y', $member->created_at) }}</td>
+	<td class="posts">{{ number_format($member->total_posts) }}</td>
 </tr>
 @endforeach
 </table>

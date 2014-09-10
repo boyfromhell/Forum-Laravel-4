@@ -94,7 +94,7 @@ class UserController extends Earlybird\FoundryController
 
 		if( $sort == 'name' ) { $orderby = 'name'; }
 		else if( $sort == 'posts' ) { $orderby = 'posts'; }
-		else { $sort = $orderby = 'joined'; }
+		else { $sort = $orderby = 'created_at'; }
 		if( $order != 'desc' ) { $order = 'asc'; }
 
 		if( $search ) {
@@ -120,7 +120,7 @@ class UserController extends Earlybird\FoundryController
 
 		/*$params = array();
 		if( $search ) { $params['search'] = $search; }
-		if( $orderby != 'joined' || $order != 'asc' ) {
+		if( $orderby != 'created_at' || $order != 'asc' ) {
 			$params['sort'] = $orderby;
 			$params['order'] = $order;
 		}
@@ -140,9 +140,7 @@ class UserController extends Earlybird\FoundryController
 		while( $data = $exec->fetch_assoc() )
 		{
 			$member = new User($data['id'], $data);
-			$member->joined += ($me->tz*3600);
 			$member_custom = array();
-			$member->fetch_level();
 
 			if( !$is_mobile ) {
 				foreach( $customs as $custom ) {
@@ -227,8 +225,8 @@ class UserController extends Earlybird\FoundryController
 			$this->last_online = 'Unknown';
 		}
 		else {
-			$this->last_online = $this->last_visit ? $this->last_visit : $this->joined;
-			$this->last_online = datestring($this->last_online + ($me->tz*3600),1);
+			$this->last_online = $this->last_visit ? $this->last_visit : $this->created_at;
+			$this->last_online = datestring($this->last_online,1);
 		}
 	}
 
@@ -253,8 +251,8 @@ class UserController extends Earlybird\FoundryController
 		$exec = $_db->query($sql);
 		list( $shouts ) = $exec->fetch_row();
 
-		$today = $gmt+($me->tz*3600);
-		$days = floor(($today-$this->joined)/86400)+1;
+		$today = $gmt;
+		$days = floor(($today-$this->created-at)/86400)+1;
 
 		$this->shouts = $shouts;
 		$this->posts_per_day = round($this->posts/$days,2);

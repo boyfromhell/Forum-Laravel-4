@@ -4,6 +4,26 @@ class Helpers
 {
 
 	/**
+	 * Adjust timezone and format date
+	 *
+	 * @param  string  $format
+	 * @param  mixed  $time
+	 * @return string
+	 */
+	public static function local_date( $format, $time )
+	{
+		global $me;
+
+		if( ! is_numeric($time) ) {
+			$time = strtotime($time);
+		}
+
+		$time += ($me->tz*3600);
+
+		return date($format, $time);
+	}
+
+	/**
 	 * Takes the name and returns base and extension
 	 * Also renames to legal characters if second argument is true
 	 *

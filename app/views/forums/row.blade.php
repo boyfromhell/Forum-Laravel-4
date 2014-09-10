@@ -24,7 +24,7 @@
 			{{{ $forum->description }}}
 		@elseif ( false && !$forum->perm_read )
 			Private<br><small>&nbsp;</small>
-		@elseif ( !$forum->posts )
+		@elseif ( !$forum->total_posts )
 			No posts<br><small>&nbsp;</small>
 		@endif
 	
@@ -45,10 +45,10 @@
 	</td>
 
 	<td class="posts">
-		{{ number_format($forum->topics) }}
+		{{ number_format($forum->total_topics) }}
 	</td>
 
 	<td class="posts">
-		{{ number_format($forum->posts) }}
+		{{ number_format($forum->total_posts) }}
 	</td>
 </tr>

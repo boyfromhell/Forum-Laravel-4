@@ -10,7 +10,6 @@ class Attachment extends Earlybird\Foundry
 		'scale',
 		'thumbnail',
 	);
-	public $timestamps = false;
 
 	/**
 	 * Post this attachment belongs to
@@ -64,8 +63,7 @@ class Attachment extends Earlybird\Foundry
 	{
 		list( $name, $ext ) = Helpers::parse_file_name($this->filename);
 
-		$year = date('Y', $this->date);
-		$month = date('m', $this->date);
+		list( $year, $month, ) = explode('-', $this->created_at);
 
 		$folder = '/attachments/' . $year . '/' . $month . '/';
 

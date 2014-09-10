@@ -11,7 +11,7 @@ class BBCode
 	 * Scales down large images
 	 * This should be run before any bb code gets stored in the database or previewed
 	 */
-	static public function prepare( $text )
+	public static function prepare( $text )
 	{
 		$text = preg_replace_callback('/\[img\](.*?)\[\/img\]/isu', 'BBCode::_scale_images', $text);
 		return $text;
@@ -20,7 +20,7 @@ class BBCode
 	/**
 	 * Undo database preparation - for editing posts which were modified by prepare_bb
 	 */
-	static public function undo_prepare( $text )
+	public static function undo_prepare( $text )
 	{
 		$text = preg_replace('/\[img:([0-9]*):([0-9]*)\](.*?)\[\/img\]/isu', '[img]$3[/img]', $text);
 		
@@ -43,7 +43,7 @@ class BBCode
 	 *   Decodes [img], [video], and [url] links.
 	 *   Decodes [code] content. Must come after everything else. Runs htmlspecialchars internally
 	 */
-	static public function parse( $text, $smileys = true, $text_only = false )
+	public static function parse( $text, $smileys = true, $text_only = false )
 	{
 		// For consistency
 		$text = str_replace("\r\n", "\n", $text);
@@ -119,7 +119,7 @@ class BBCode
 	/**
 	 * Removes all bbcode tags
 	 */
-	static public function simplify( $text ) {
+	public static function simplify( $text ) {
 		$text = BBCode::strip_quotes($text);
 		$text = str_replace(array('[', ']'), array('<', '>'), $text);
 		$text = htmlspecialchars(trim(strip_tags($text)));
@@ -129,7 +129,7 @@ class BBCode
 	/**
 	 * Removes [quote] blocks (and the content inside)
 	 */
-	static public function strip_quotes( $text ) {
+	public static function strip_quotes( $text ) {
 		$text = preg_replace('/\[quote\](.*?)\[\/quote\]/isu', '', $text);
 		$count = 0;
 		do {
@@ -141,7 +141,7 @@ class BBCode
 	/**
 	 * Replaces any [x][/x] tags with <y></y>
 	 */
-	static protected function _simple_replace( $code, $text ) {
+	protected static function _simple_replace( $code, $text ) {
 		$count = 0;
 		do {
 			$text = preg_replace("/{$code[0]}(.*?){$code[1]}/isu", $code[2], $text, -1, $count);
@@ -153,7 +153,7 @@ class BBCode
 	/**
 	 * Loads and sorts smileys
 	 */
-	static public function load_smileys()
+	public static function load_smileys()
 	{
 		$smileys = Smiley::all();
 
@@ -165,7 +165,7 @@ class BBCode
 	/**
 	 * Sorts smileys so that those starting with the same characters don't conflict
 	 */
-	static protected function _sort_smileys($a, $b) {
+	protected static function _sort_smileys($a, $b) {
 		if( strlen($a->code) == strlen($b->code) ) {
 			return 0;
 		}
@@ -175,7 +175,7 @@ class BBCode
 	/**
 	 * Replace all smiley codes with images
 	 */
-	static protected function _parse_smileys( $text ) {
+	protected static function _parse_smileys( $text ) {
 		global $me;
 		
 		// Smileys disabled
@@ -200,7 +200,7 @@ class BBCode
 	/**
 	 * Encodes any text within [video] tags so that URLs aren't auto-detected
 	 */
-	static protected function _protect_videos( $matches ) {
+	protected static function _protect_videos( $matches ) {
 		$url = $matches[2];
 		return '[video]' . base64_encode($url) . '[/video]';
 	}
@@ -208,7 +208,7 @@ class BBCode
 	/**
 	 * Turns Youtube and Vimeo links into embedded iframes
 	 */
-	static protected function _embed_videos( $matches ) {
+	protected static function _embed_videos( $matches ) {
 		$url = base64_decode($matches[1]);
 		if( !preg_match('#(f|ht)tp(s?)://#i', $url) ) {
 			$url = 'http://' . $url;
@@ -245,7 +245,7 @@ class BBCode
 	/**
 	 * Formats quote blocks
 	 */
-	static protected function _embed_quotes( $matches ) {
+	protected static function _embed_quotes( $matches ) {
 		global $_CONFIG;
 		$skin = '/images/skins/' . Config::get('app.skin') . '/';
 
@@ -270,7 +270,7 @@ class BBCode
 	/**
 	 * Encodes any text within [code] tags so that other replacements don't apply
 	 */
-	static protected function _protect_code( $matches ) {
+	protected static function _protect_code( $matches ) {
 		$text = $matches[2];
 		return '[code]' . base64_encode($text) . '[/code]';
 	}
@@ -278,7 +278,7 @@ class BBCode
 	/**
 	 * Undo the encoding from protect_code
 	 */
-	static protected function _embed_code( $matches ) {
+	protected static function _embed_code( $matches ) {
 		$text = $matches[2];
 		return '<pre class="code">' . htmlspecialchars(base64_decode($text)) . '</pre>';
 	}
@@ -286,7 +286,7 @@ class BBCode
 	/**
 	 * Encodes any text within [img] tags so that URLs aren't auto-detected
 	 */
-	static protected function _protect_images( $matches ) {
+	protected static function _protect_images( $matches ) {
 		$text = str_replace(' ', '%20', $matches[5]);
 		$dimensions = implode('', array_splice($matches, 1, 4));
 		return '[img' . $dimensions . ']' . base64_encode($text) . '[/img]';
@@ -295,7 +295,7 @@ class BBCode
 	/**
 	 * Undo the encoding from protect_images
 	 */
-	static protected function _embed_images( $matches ) {
+	protected static function _embed_images( $matches ) {
 		$url = $matches[5];
 		$width = $matches[2]; $height = $matches[4];
 		$url = base64_decode($url);
@@ -311,7 +311,7 @@ class BBCode
 	/**
 	 * Scales down large images
 	 */
-	static protected function _scale_images( $matches ) {
+	protected static function _scale_images( $matches ) {
 		global $_CONFIG;
 		$url = $matches[1];
 		list($width, $height, $type, $attr) = getimagesize($url);
@@ -332,7 +332,7 @@ class BBCode
 	/**
 	 * Encodes any text within [url] tags so that URLs aren't auto-detected
 	 */
-	static protected function _protect_urls( $code, $text ) {
+	protected static function _protect_urls( $code, $text ) {
 		$count = 0;
 		do {
 			$text = preg_replace_callback($code, 'BBCode::_encode_urls', $text, -1, $count);
@@ -341,7 +341,7 @@ class BBCode
 		return $text;
 	}
 
-	static protected function _encode_urls( $matches ) {
+	protected static function _encode_urls( $matches ) {
 		// can be [url=link] or [url="link"]
 		$url = $matches[1];
 		if( substr($url, 0, 6) == '&quot;' ) { $url = substr($url, 6); }
@@ -352,7 +352,7 @@ class BBCode
 		return '[#url=' . base64_encode($url) . '#]' . $text . '[#/url#]';
 	}
 
-	static protected function _detect_urls( $matches ) {
+	protected static function _detect_urls( $matches ) {
 		$url = $matches[1];
 		$url = base64_encode($url);
 		return '[#url=' . $url . '#]' . $url . '[#/url#]';
@@ -361,7 +361,7 @@ class BBCode
 	/**
 	 * Undo the encoding from protect_urls, protect from malicious links, and shorten long urls
 	 */
-	static protected function _embed_urls( $matches ) {
+	protected static function _embed_urls( $matches ) {
 		global $_CONFIG;
 
 		$url = $matches[1];
@@ -394,9 +394,8 @@ class BBCode
 	/**
 	 * Display the BBCode buttons
 	 */
-	static public function show_bbcode_controls() {
-		global $Smarty, $_PAGE;
-
+	public static function show_bbcode_controls()
+	{
 		$colors = array(
 			'000000', 'a0522d', '556b2f', '006400', '2f4f4f', '000080', '4b0082', '696969', 
 			'8b0000', 'ff8c00', '808000', '008000', '008080', '0000ff', '483d8b', '808080', 
@@ -406,32 +405,22 @@ class BBCode
 		);
 		$sizes = array(8, 10, 12, 16, 20, 24, 30);
 
-		$Smarty->assign('_PAGE', $_PAGE);
-		$Smarty->assign('colors', $colors);
-		$Smarty->assign('sizes', $sizes);
-
-		$Smarty->display('blocks/bbcode.tpl');
+		echo View::make('blocks.bbcode')
+			->with('colors', $colors)
+			->with('sizes', $sizes);
 	}
 
 	/**
 	 * Display the smiley buttons next to textarea with a link to popup more
 	 */
-	static public function show_smiley_controls() {
-		global $_db, $Smarty;
+	public static function show_smiley_controls()
+	{
+		$smileys = Smiley::where('show', '=', 2)
+			->orderBy('order', 'asc')
+			->take(25)
+			->get();
 
-		$sql = "SELECT `code`, `file`
-			FROM `smileys` 
-			WHERE `show` = 2 
-			ORDER BY `order` ASC
-			LIMIT 25";
-		$exec = $_db->query($sql);
-		
-		$smileys = array();
-		while( $data = $exec->fetch_assoc() ) {
-			$smileys[] = $data;
-		}
-
-		$Smarty->assign('smileys', $smileys);
-		$Smarty->display('blocks/smileys.tpl');
+		echo View::make('blocks.smileys')
+			->with('smileys', $smileys);
 	}
 }

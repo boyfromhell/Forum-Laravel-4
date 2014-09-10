@@ -47,7 +47,7 @@ class ForumController extends Earlybird\FoundryController
 		// Most recent topics
 		$topics = Topic::join('forums', 'topics.forum_id', '=', 'forums.id')
 			->where('forums.read', '<=', $me->access)
-			->orderBy('last_date', 'desc')
+			->orderBy('updated_at', 'desc')
 			->take(10)
 			->get(['topics.*']);
 
@@ -58,9 +58,8 @@ class ForumController extends Earlybird\FoundryController
 			->first(['photos.*']);
 
 		$album = Album::where('permission_view', '<=', $access)
-			->orderBy('modified', 'desc')
+			->orderBy('updated_at', 'desc')
 			->first();
-		//$album->cover = '/photos/' . $album->folder . '/thumbs/' . substr($data['file'], 0, -4) . '.jpg';
 
 		return View::make('forums.welcome')
 			->with('_PAGE', $_PAGE)

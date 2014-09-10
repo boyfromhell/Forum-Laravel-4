@@ -4,7 +4,6 @@ class Score extends Earlybird\Foundry
 {
 
 	protected $guarded = array('id');
-	public $timestamps = false;
 
 	/**
 	 * User who submitted the score

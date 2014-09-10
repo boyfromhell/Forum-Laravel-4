@@ -89,11 +89,6 @@ class ProjectController extends Earlybird\FoundryController
 			'title'    => $project->name
 		);
 
-		/*while( $data = $exec->fetch_assoc() )
-		{
-			$download->date += ($me->tz*3600);
-		}*/
-
 		return View::make('projects.display')
 			->with('_PAGE', $_PAGE)
 			->with('project', $project);

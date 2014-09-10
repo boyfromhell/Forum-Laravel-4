@@ -51,7 +51,7 @@ class Post extends Earlybird\Foundry
 	public function attachments()
 	{
 		return $this->hasMany('Attachment')
-			->orderBy('date', 'asc');
+			->orderBy('created_at', 'asc');
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Post extends Earlybird\Foundry
 	 */
 	public function getDateAttribute()
 	{
-		return Helpers::date_string($this->time, 2);
+		return Helpers::date_string(strtotime($this->created_at), 2);
 	}
 
 	/**

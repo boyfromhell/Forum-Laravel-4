@@ -24,7 +24,7 @@
 	</div>
 	
 	<div class="details">
-	Joined: {{ date("M j, Y", $user->joined) }}<br>
+	Joined: {{ Helpers::local_date("M j, Y", $user->created_at) }}<br>
 	@if ( $user->location )
 	Location: {{{ $user->location }}}<br>
 	@endif

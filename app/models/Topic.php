@@ -3,9 +3,6 @@
 class Topic extends Earlybird\Foundry
 {
 
-	// @todo
-	public $timestamps = false;
-
 	protected $appends = array(
 		'url',
 
@@ -28,16 +25,12 @@ class Topic extends Earlybird\Foundry
 	}
 	public function author()
 	{
-		return $this->belongsTo('User', 'poster');
-	}
-	public function lastUser()
-	{
-		return $this->belongsTo('User', 'last');
+		return $this->belongsTo('User', 'user_id');
 	}
 	public function posts()
 	{
 		return $this->hasMany('Post')
-			->orderBy('time', 'asc');
+			->orderBy('created_at', 'asc');
 	}
 
 	/**
@@ -174,7 +167,7 @@ class Topic extends Earlybird\Foundry
 	public function getLatestPostAttribute()
 	{
 		return Post::where('topic_id', '=', $this->id)
-			->orderBy('time', 'desc')
+			->orderBy('created_at', 'desc')
 			->first();
 	}
 

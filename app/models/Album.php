@@ -50,7 +50,7 @@ class Album extends Earlybird\Foundry
 	public function photos()
 	{
 		return $this->hasMany('Photo')
-			->orderBy('date', 'asc')
+			->orderBy('created_at', 'asc')
 			->orderBy('id', 'asc');
 	}
 
@@ -61,8 +61,8 @@ class Album extends Earlybird\Foundry
 	 */
 	public function coverPhoto()
 	{
-		if( $this->cover ) {
-			return $this->belongsTo('Photo', 'cover');
+		if( $this->cover_id ) {
+			return $this->belongsTo('Photo', 'cover_id');
 		}
 		else {
 			foreach( $this->children as $child ) {
@@ -70,7 +70,7 @@ class Album extends Earlybird\Foundry
 			}
 		}
 
-		return $this->belongsTo('Photo', 'cover');
+		return $this->belongsTo('Photo', 'cover_id');
 	}
 
 	/**

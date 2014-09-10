@@ -40,7 +40,6 @@ class ShoutboxController extends BaseController
 			}
 			$shout->message = preg_replace_callback('#@([\\d\\w]+)#', 'parse_at_reply', $shout->message);
 			
-			$shout->time += ($me->tz*3600);
 			$thedate = date('F j', $shout->time);
 
 			$shout->show_date = ( $thedate != $prevdate );

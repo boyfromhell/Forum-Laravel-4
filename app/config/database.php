@@ -55,7 +55,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'attnam',
+			'database'  => 'newattnam',
 			'username'  => 'attnam',
 			'password'  => 'TheCathedral0fIvanDenisovichthe24th',
 			'charset'   => 'utf8',
@@ -66,9 +66,9 @@ return array(
 		'pgsql' => array(
 			'driver'   => 'pgsql',
 			'host'     => 'localhost',
-			'database' => 'attnam',
-			'username' => 'attnam',
-			'password' => 'TheCathedral0fIvanDenisovichthe24th',
+			'database' => 'forge',
+			'username' => 'forge',
+			'password' => '',
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',

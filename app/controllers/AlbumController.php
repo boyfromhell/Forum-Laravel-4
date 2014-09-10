@@ -34,7 +34,7 @@ class AlbumController extends Earlybird\FoundryController
 		// Get recent albums
 		$albums = Album::where('permission_view', '<=', $access)
 			->whereHas('photos')
-			->orderBy('modified', 'desc')
+			->orderBy('updated_at', 'desc')
 			->take($limit)
 			->get();
 		if( count($albums) > 0 ) {

@@ -122,7 +122,7 @@ class GroupController extends Earlybird\FoundryController
 		global $_db;
 	
 		// Members
-		$sql = "SELECT `users`.`id`, `users`.`name`, `users`.`rank`, `users`.`posts`, `group_members`.`type`
+		$sql = "SELECT `users`.`id`, `users`.`name`, `users`.`user_type`, `users`.`posts`, `group_members`.`type`
 			FROM `users`
 				JOIN `group_members`
 					ON `users`.`id` = `group_members`.`user_id`
@@ -135,8 +135,7 @@ class GroupController extends Earlybird\FoundryController
 		$counter = 0;
 		while( $data = $exec->fetch_assoc() )
 		{
-			$user = new User($data['id'], array('name' => $data['name'], 'rank' => $data['rank'], 'posts' => $data['posts']));
-			$user->fetch_level();
+			$user = new User($data['id'], array('name' => $data['name'], 'user_type' => $data['user_type'], 'posts' => $data['posts']));
 			$user->counter = ++$counter;
 
 			if( $data['type'] == 1 ) {

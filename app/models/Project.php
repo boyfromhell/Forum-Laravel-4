@@ -31,7 +31,7 @@ class Project extends Earlybird\Foundry
 	public function downloads()
 	{
 		return $this->hasMany('Download')
-			->orderBy('date', 'desc');
+			->orderBy('created_at', 'desc');
 	}
 
 	/**

@@ -9,9 +9,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait;
 
-	// @todo
-	public $timestamps = false;
-
 	/**
 	 * The database table used by the model.
 	 *
@@ -92,6 +89,16 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	}
 
 	/**
+	 * Posts
+	 *
+	 * @return Relation
+	 */
+	public function posts()
+	{
+		return $this->hasMany('Post');
+	}
+
+	/**
 	 * Screennames
 	 *
 	 * @return Relation
@@ -144,13 +151,13 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	public function getLevelAttribute()
 	{
-		if( $this->rank ) {
-			$level = Level::find($this->rank);
+		if( $this->level_id ) {
+			$level = Level::find($this->level_id);
 		}
 
-		if( ! $this->rank || ! $level->image ) {
+		if( ! $this->level_id || ! $level->image ) {
 			$post_level = Level::where('type', '=', 0)
-				->where('min_posts', '<=', $this->posts)
+				->where('min_posts', '<=', $this->total_posts)
 				->orderBy('min_posts', 'desc')
 				->first();
 
@@ -169,7 +176,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	public function getIsAdminAttribute()
 	{
-		return ( $this->level >= 2 );
+		return ( $this->user_type >= 2 );
 
 		/*$group = Group::where('name', '=', 'Administrators')->first();
 
@@ -183,7 +190,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	public function getIsModeratorAttribute()
 	{
-		return ( $this->level >= 1 );
+		return ( $this->user_type >= 1 );
 
 		/*$group = Group::where('name', '=', 'Moderators')->first();
 

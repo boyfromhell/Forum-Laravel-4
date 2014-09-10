@@ -35,7 +35,7 @@
 
 @endforeach
 
-@if ( $me->loggedin )
+@if ( $me->id )
 <a href="/forum/post?f={{ $forum->id }}" class="button">New Topic</a>
 <a href="/forum/post?mode=reply&amp;t={{ $topic->id }}" class="button">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
 @endif
@@ -48,7 +48,7 @@
 <a href="/" style="text-decoration:none;">{{{ Config::get('app.forum_name') }}}</a> &gt; <a href="/forum/">Forum</a> &gt; <a href="{{ $forum->url }}" style="text-decoration:none;">{{{ $forum->name }}}</a> &gt; <a href="{{ $topic->url }}" style="text-decoration:none;">{{{ $topic->title }}}</a>
 <br><br>
 
-@if ( $me->loggedin && !$topic->status )
+@if ( $me->id && !$topic->status )
 	@include ('topics.quick_reply')
 @endif
 

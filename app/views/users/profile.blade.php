@@ -29,9 +29,9 @@
 	@if ( $show_birthday )
 	Birthday: <b>{{ $birthday }}</b><br>
 	@endif
-	Member Since: <b>{{-- local_date('F j, Y', $user->joined) --}}</b><br><br>
+	Member Since: <b>{{ Helpers::local_date('F j, Y', $user->created_at) }}</b><br><br>
 	
-	Posts: <b>{{ number_format($user->posts) }}</b> ({{ $user->posts_per_day }} posts per day, {{ $user->posts_percent }}% of total)<br>
+	Posts: <b>{{ number_format($user->total_posts) }}</b> ({{ $user->posts_per_day }} posts per day, {{ $user->posts_percent }}% of total)<br>
 	Shoutbox Posts: <b>{{ number_format($user->shouts) }}</b> ({{ $user->shouts_per_day }} per day, {{ $user->shouts_percent }}% of total)
 	@if ( $me->id )<br><br>
 	<a href="/forum/search?u={{ $user->id }}">Find all posts by {{{ $user->name }}}</a><br>
