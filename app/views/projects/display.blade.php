@@ -2,7 +2,7 @@
 
 @section('content')
 
-@if ( $project->user_id == $me->id || $me->administrator )
+@if ( $project->user_id == $me->id || $me->is_admin )
 <a href="/projects/upload?id={{ $project->id }}" class="button">Upload</a>
 
 <div class="break"></div>
@@ -24,7 +24,7 @@
 
 	{{ BBCode::parse($project->description) }}
 
-	@if ( $project->user_id == $me->id || $me->administrator )
+	@if ( $project->user_id == $me->id || $me->is_admin )
 	<br><br>
 	<a href="/downloads/edit_project?id={{ $project->id }}" class="button small">Edit</a>
 	<div class="break"></div>
@@ -78,7 +78,7 @@
 
 </div>
 
-@if ( $project->user_id == $me->id || $me->administrator )
+@if ( $project->user_id == $me->id || $me->is_admin )
 <a href="/projects/upload?id={{ $project->id }}" class="button">Upload</a>
 
 <div class="break"></div>

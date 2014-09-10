@@ -17,7 +17,7 @@
 		@endif
 		<div class="photo{{ !$is_mobile ? '-large' : '' }}"> 
 		<a class="thumb" href="{{ $attachment->url }}">
-		<img src="{{ $cdn }}{{{ $attachment->path }}}{{ $is_mobile ? 'thumbs' : 'scale' }}/{{{ $attachment->thumb }}}"></a>
+		<img src="{{ $cdn }}{{ $is_mobile ? $attachment->thumb : $attachment->scale }}"></a>
 		</div>
 	@endif
 	<?php $prev_type = $attachment->filetype; ?>

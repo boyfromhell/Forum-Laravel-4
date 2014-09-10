@@ -50,7 +50,7 @@ class TopicController extends Earlybird\FoundryController
 		// Check permissions
 		// @todo support group view/read permission
 		if( $f == 19 ) {
-			if( in_array(1, $mygroups) || $me->administrator || $me->moderator ) {
+			if( in_array(1, $mygroups) || $me->is_mod ) {
 				$access = $forum->read;
 			}
 			else {
@@ -309,9 +309,9 @@ class TopicController extends Earlybird\FoundryController
 			$voteless = str_replace("&vote=results","",$_SERVER['REQUEST_URI']);
 			echo "</table>
 			<b>Total Votes: ";
-			if( $me->administrator || $me->moderator || ( $pollpub && $me->loggedin )) { echo "<a href=\"/showresults.php?id=$pollid\">"; }
+			if( $me->is_mod || ( $pollpub && $me->loggedin )) { echo "<a href=\"/showresults.php?id=$pollid\">"; }
 			echo $totalvotes;
-			if( $me->administrator || $me->moderator ) { echo "</a>"; }
+			if( $me->is_mod ) { echo "</a>"; }
 			echo "</b>";
 			if( !mysql_num_rows($res2)) {
 				echo "<br>

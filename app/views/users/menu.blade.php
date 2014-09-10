@@ -1,7 +1,7 @@
 <div id="ubox{{ $content_id }}" class="userbox" name="ubox">
 	<a href="{{ $user->url }}">View profile</a>
 	
-	@if ( $me->administrator )
+	@if ( $me->is_admin )
 		<a href="/admin/edit_user?id={{ $user->id }}">Edit profile</a>
 	@elseif ( $user->id == $me->id )
 		<a href="/users/edit">Edit profile</a>

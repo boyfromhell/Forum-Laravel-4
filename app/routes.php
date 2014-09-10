@@ -29,6 +29,9 @@ Route::group(array('before' => 'loggedin'), function()
 {
 	Route::get('profile', array('uses' => 'UserController@myProfile'));
 
+	// Attachments
+	Route::get('forum/attachments/{id}', array('uses' => 'AttachmentController@download'));
+
 	// Settings
 	Route::get('users/avatar', array('uses' => 'AvatarController@manage'));
 	Route::get('users/edit', array('uses' => 'UserController@editProfile'));

@@ -24,7 +24,7 @@ class UserController extends Earlybird\FoundryController
 			'title'    => $user->name,
 		);
 
-		if( $me->id && ( $user->id != $me->id ) && !$me->administrator ) {
+		if( $me->id && ( $user->id != $me->id ) && !$me->is_admin ) {
 			$user->increment('views');
 		}
 
@@ -66,8 +66,8 @@ class UserController extends Earlybird\FoundryController
 		// Contact
 		$Smarty->assign('website_url', $user->website);
 		$Smarty->assign('website_text', $website_text);
-		$Smarty->assign('allow_email', $user->allow_email || $me->administrator ? true : false);
-		$Smarty->assign('edit_url', ( $me->administrator ? '/admin/edit_user?id=' . $u : '/users/edit' ));
+		$Smarty->assign('allow_email', $user->allow_email || $me->is_admin ? true : false);
+		$Smarty->assign('edit_url', ( $me->is_admin ? '/admin/edit_user?id=' . $u : '/users/edit' ));
 		*/
 	}
 
@@ -216,14 +216,14 @@ class UserController extends Earlybird\FoundryController
 	{
 		global $gmt, $me;
 	
-		if( $this->last_view <= $gmt-300 || ( $this->online && !$me->administrator )) { 
+		if( $this->last_view <= $gmt-300 || ( $this->online && !$me->is_admin )) { 
 			$this->online = false;
 		}
 		else {
 			$this->online = true;
 		}
 		
-		if( $this->online && !$me->administrator ) {
+		if( $this->online && !$me->is_admin ) {
 			$this->last_online = 'Unknown';
 		}
 		else {

@@ -29,6 +29,12 @@ class Photo extends Earlybird\Foundry
 		return '/media/photo?id=' . $this->id;
 	}
 
+	/**
+	 * Get the URL to this photo at the given size
+	 *
+	 * @param  string  $size
+	 * @return string
+	 */
 	protected function getPhoto( $size )
 	{
 		list( $name, $ext ) = Helpers::parse_file_name($this->file);

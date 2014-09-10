@@ -2,7 +2,7 @@
 
 @section('content')
 
-@if ( $me->administrator )
+@if ( $me->is_admin )
 <a href="/downloads/new_project" class="button">New Project</a>
 
 <div class="break"></div>
@@ -88,7 +88,7 @@
 
 @endif
 
-@if ( $me->administrator )
+@if ( $me->is_admin )
 <a href="/downloads/new_project" class="button">New Project</a>
 
 <div class="break"></div>

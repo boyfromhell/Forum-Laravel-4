@@ -1,11 +1,11 @@
 @if ( $shout->show_date )
 <tr>
-	<th class="date" colspan="4" name="shouts{{ $shout->get_date('md') }}">{{ $shout->get_date('F j') }}</th>
+	<th class="date" colspan="4" name="shouts{{ date('md', $shout->time) }}">{{ date('F j', $shout->time) }}</th>
 </tr>
 @endif
 <tr id="shout{{ $shout->id }}">
 	<td width="80" valign="top">
-	<small>{{ $shout->get_date('g:i&\n\b\s\p;a') }}</small></td>
+	<small>{{ date('g:i&\n\b\s\p;a', $shout->time) }}</small></td>
 @if ( substr($shout->message, 0, 4) == "/me " )
 	<td colspan="2" style="padding:2px 0" valign="top">* <a target="_top" href="{{ $shout->user->url }}" style="text-decoration:none; font-weight:bold">{{{ $shout->user->name }}}</a> {{{ substr($shout->message, 4) }}} *</td>
 @else

@@ -24,14 +24,15 @@ class ShoutboxController extends BaseController
 
 		// Fetch most recent shouts
 		$shouts = Shout::orderBy('id', 'desc')
-			->take(30);
+			->take(30)
+			->get();
 
 		/*$count = 0;
 		$prevdate = -1;
 		while( $data = $exec->fetch_assoc() )
 		{
 			// This is sloppy, I don't like it
-			// @todo clean this up, also get rid of Shout::get_date() function
+			// @todo clean this up
 			$shout->at_me = false;
 			$shout->message = BBCode::parse($shout->message, true, true);
 			if( stristr($shout->message, '@'.$me->name) ) {
@@ -40,7 +41,7 @@ class ShoutboxController extends BaseController
 			$shout->message = preg_replace_callback('#@([\\d\\w]+)#', 'parse_at_reply', $shout->message);
 			
 			$shout->time += ($me->tz*3600);
-			$thedate = $shout->get_date('F j');
+			$thedate = date('F j', $shout->time);
 
 			$shout->show_date = ( $thedate != $prevdate );
 

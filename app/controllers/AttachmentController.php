@@ -1,11 +1,73 @@
 <?php
 
-class Attachment extends Controller_W 
+class AttachmentController extends Earlybird\FoundryController
 {
 
-	public function generate_url()
+	/**
+	 * Download
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function download( $id )
 	{
-		$this->url = '/forum/attachment?id=' . $this->id;
+		$attachment = Attachment::findOrFail($id);
+
+		// Check if they have read permission on this forum / message
+		if( $attachment->post_id )
+		{
+			$forum = $attachment->post->topic->forum;
+
+			// @todo support group view/read permission
+			if( $forum->id == 19 ) {
+				if( in_array(1, $mygroups) || $me->is_mod ) {
+					$access = $forum->read;
+				}
+				else {
+					$access = $forum->read-1;
+				}
+			}
+
+			if( $access < $forum->read ) {
+				throw new Exception('You do not have permission to view this attachment');
+			}
+		}
+		else {
+			if( !$me->loggedin || $me->id != $attachment->user_id ) {
+				throw new Exception('You do not have permission to view this attachment');
+			}
+		}
+
+		$attachment->increment('downloads');
+
+		if( $_CONFIG['aws'] === null ) {
+			$path = ROOT . 'web' . $attachment->get_path() . $attachment->filename;
+		}
+		else {
+			$path = ltrim($attachment->get_path(), '/') . $attachment->filename;
+			
+			$s3 = new S3($_CONFIG['aws']['access_key'], $_CONFIG['aws']['secret_key']);
+			$url = $s3->getAuthenticatedURL($_CONFIG['s3_bucket'], $path, 60*60, true);
+		}
+
+		header("Content-type: " . $attachment->mimetype);
+		header("Content-transfer-encoding: binary");
+		header("Content-length: " . filesize($path));
+			
+		if( $attachment->filetype == 0 ) {
+			header("Content-Disposition: inline; filename=". $attachment->origfilename);
+		} else {
+			header("Content-Disposition: attachment; filename=" . $attachment->origfilename);
+		}
+
+		if( $_CONFIG['aws'] === null ) {	
+			@readfile($path);
+		}
+		else {
+			echo file_get_contents($url);
+		}
+
+		exit;
 	}
 
 	/**
@@ -160,20 +222,6 @@ class Attachment extends Controller_W
 	}
 	
 	/**
-	 * Get the folder path of this attachment
-	 */
-	public function get_path( $subfolder = '' )
-	{
-		if( $subfolder ) {
-			$subfolder = trim($subfolder, '/') . '/';
-		}
-		$this->year = date('Y', $this->date);
-		$this->month = date('m', $this->date);
-		$path = '/attachments/' . $this->year . '/' . $this->month . '/' . $subfolder;
-		return $path;
-	}
-
-	/**
 	 * Delete this attachment
 	 */
 	public function delete()
@@ -182,7 +230,7 @@ class Attachment extends Controller_W
 		
 		list( $name, $ext ) = parse_file_name($this->filename);
 
-		if( $this->user_id == $me->id || $me->administrator || $me->moderator ) {
+		if( $this->user_id == $me->id || $me->is_mod ) {
 			$sql = "DELETE FROM `attachments`
 				WHERE `id` = {$this->id}";
 			$_db->query($sql);

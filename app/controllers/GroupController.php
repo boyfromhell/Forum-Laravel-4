@@ -16,7 +16,7 @@ class GroupController extends Earlybird\FoundryController
 			'title'    => 'Groups',
 		);
 
-		/*if( !$me->administrator ) {
+		/*if( !$me->is_admin ) {
 			$where_sql = 'WHERE `approved` = 1';
 		}*/
 
@@ -184,7 +184,7 @@ class GroupController extends Earlybird\FoundryController
 	{
 		global $_db, $me;
 
-		if( $user_id == $me->id && $me->administrator ) {
+		if( $user_id == $me->id && $me->is_admin ) {
 			return 2;
 		}
 	

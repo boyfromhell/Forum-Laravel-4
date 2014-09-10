@@ -29,6 +29,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		'url',
 		'level',
 		'custom',
+
+		'is_admin',
+		'is_mod',
 	);
 
 	public function albums()
@@ -159,4 +162,33 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return ( $level ? $level : $post_level );
 	}
 
+	/**
+	 * Check if this user is an admin
+	 *
+	 * @return bool
+	 */
+	public function getIsAdminAttribute()
+	{
+		return ( $this->level >= 2 );
+
+		/*$group = Group::where('name', '=', 'Administrators')->first();
+
+		return $group->allMembers->contains($this->id);*/
+	}
+
+	/**
+	 * Check if this user is a moderator
+	 *
+	 * @return bool
+	 */
+	public function getIsModeratorAttribute()
+	{
+		return ( $this->level >= 1 );
+
+		/*$group = Group::where('name', '=', 'Moderators')->first();
+
+		return $group->allMembers->contains($this->id);*/
+	}
+
 }
+

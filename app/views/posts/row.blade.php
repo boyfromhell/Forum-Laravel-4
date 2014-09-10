@@ -23,7 +23,7 @@
 		<div style="float:left"><a name="{{ $post->id }}"></a>{{ $post->date }}</div>
 		
 		<div style="float:right"><a href="{{ $post->url }}" style="color:#888">#{{ $post->count }}</a>
-		@if ( $me->administrator || $me->moderator )
+		@if ( $me->is_mod )
 			<a href="/lookup.php?p={{ $post->id }}">IP</a>
 		@endif
 		<a href="/forum/report?p={{ $post->id }}"><img src="{{ $skin }}icons/report.png" alt="!" title="Report post" style="vertical-align:top"></a></div>
@@ -55,8 +55,8 @@
 			<a href="/forum/post?mode=quote&amp;p={{ $post->id }}" class="button small">Quote</a>
 		@endif
 	@endif
-	@if ( $me->id && ( $me->id == $post->user_id || $me->administrator || $me->moderator ) )
-		@if ( !$topic->status || $me->administrator || $me->moderator )
+	@if ( $me->id && ( $me->id == $post->user_id || $me->is_mod ) )
+		@if ( !$topic->status || $me->is_mod )
 			<a href="/forum/post?mode=edit&amp;p={{ $post->id }}" onClick="parangi.quickEdit({{ $post->id }}, 'edit'); return false" class="button small">Edit</a>
 			<a href="/delete.php?p={{ $post->id }}" class="button small">x</a>
 		@endif

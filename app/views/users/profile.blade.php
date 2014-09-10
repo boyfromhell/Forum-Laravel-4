@@ -39,8 +39,8 @@
 	@endif
 	<br><br>
 
-	@if ( $me->administrator || $me->id == $user->id )<a href="{{ $edit_url }}" class="button small">Edit</a>@endif
-	@if ( $me->administrator || $me->moderator )<a href="/lookup.php?u={{ $user->id }}" class="button small">IP</a>@endif
+	@if ( $me->is_admin || $me->id == $user->id )<a href="{{ $edit_url }}" class="button small">Edit</a>@endif
+	@if ( $me->is_mod )<a href="/lookup.php?u={{ $user->id }}" class="button small">IP</a>@endif
 	<div class="break"></div>
 	</td>
 </tr>
