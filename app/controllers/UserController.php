@@ -381,4 +381,22 @@ class UserController extends Earlybird\FoundryController
 		
 		return true;
 	}
+
+	/**
+	 * Log me out
+	 *
+	 * @return Response
+	 */
+	public function logout()
+	{
+		$me->last_visit = gmmktime();
+		$me->save();
+
+		Auth::logout();
+		Session::flush();
+
+		return Redirect::to('/');
+	}
+
 }
+

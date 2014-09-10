@@ -7,6 +7,8 @@ class Album extends Earlybird\Foundry
 	protected $appends = array(
 		'url',
 		'parents',
+
+		'total_photos',
 	);
 
 	/**
@@ -26,7 +28,8 @@ class Album extends Earlybird\Foundry
 	 */
 	public function children()
 	{
-		return $this->hasMany('Album', 'parent_id');
+		return $this->hasMany('Album', 'parent_id')
+			->orderBy('name', 'asc');
 	}
 
 	/**
@@ -84,6 +87,16 @@ class Album extends Earlybird\Foundry
 			$child = $parent;
 		}
 		return array_reverse($parents);
+	}
+
+	/**
+	 * Count how many photos there are
+	 *
+	 * @return int
+	 */
+	public function getTotalPhotosAttribute()	
+	{
+		return $this->photos()->count();
 	}
 
 }

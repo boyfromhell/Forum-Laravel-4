@@ -45,6 +45,9 @@ Route::group(array('before' => 'loggedin'), function()
 	Route::any('groups/new', array('uses' => 'GroupController@add'));
 	Route::any('community/submit_score', array('uses' => 'ScoreController@submit'));
 	Route::get('community/shoutbox', array('uses' => 'ShoutboxController@embed'));
+
+	// Account
+	Route::get('logout', array('uses' => 'UserController@logout'));
 });
 
 // All users
@@ -62,6 +65,14 @@ Route::get('community/honor_rolls', array('uses' => 'ScoreController@index'));
 Route::get('users/{id}/{name?}', array('uses' => 'UserController@display'));
 Route::get('honor-rolls', array('uses' => 'ScoreController@index'));
 Route::get('chat-popup', array('uses' => 'PageController@chatPopup'));
+
+// Gallery
+Route::get('media', array('uses' => 'AlbumController@gallery'));
+Route::get('albums', array('uses' => 'AlbumController@display'));
+Route::get('albums/{id}/{name?}', array('uses' => 'AlbumController@display'));
+Route::any('albums/edit/{id}', array('uses' => 'AlbumController@edit'));
+Route::any('albums/new', array('uses' => 'AlbumController@add'));
+Route::get('media/photo/{id}', array('uses' => 'PhotoController@display'));
 
 // Projects
 Route::get('downloads/{category?}', array('uses' => 'ProjectController@index'));
