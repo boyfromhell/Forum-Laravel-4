@@ -64,15 +64,15 @@
 
 <div id="babynav">
 	<ul>
-	@foreach ( $menu as $app )
-		<li><a href="{{ $app->url }}"{{ $app->selected ? ' class="sub_active"' : '' }}>{{{ $app->name }}}</a></li>
+	@foreach ( $sub_menu as $app )
+		<li><a href="{{ $app->url }}"{{ $_PAGE['section'] == $app->section ? ' class="sub_active"' : '' }}>{{{ $app->name }}}</a></li>
 	@endforeach
 	</ul>
 	
 	<div id="social-media">
-		{foreach $_CONFIG['social'] as $social => $url}
-		<a href="{$url}" target="_blank"><img src="/images/social/{$social}.png" alt="{$social}" width="32" height="32"></a>
-		{/foreach}
+		@foreach ( Config::get('app.social') as $social => $url )
+		<a href="{{ $url }}" target="_blank"><img src="/images/social/{{ $social }}.png" alt="{{ $social }}" width="32" height="32"></a>
+		@endforeach
 		<div class="break"></div>
 	</div>
 	
@@ -83,9 +83,9 @@
 <footer>
 	@if ( $is_mobile )
 	<div id="social-media">
-		{foreach $_CONFIG['social'] as $social => $url}
-		<a href="{$url}" target="_blank"><img src="/images/social/{$social}.png" alt="{$social}" width="32" height="32"></a>
-		{/foreach}
+		@foreach ( Config::get('app.social') as $social => $url )
+		<a href="{{ $url }}" target="_blank"><img src="/images/social/{{ $social }}.png" alt="{{ $social }}" width="32" height="32"></a>
+		@endforeach
 		<div class="break"></div>
 	</div>
 	@endif

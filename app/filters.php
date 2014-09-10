@@ -19,6 +19,22 @@ View::creator(array('layout'), function($view)
 
 	$_PAGE = $view->_PAGE;
 
+	// Sub menu
+	foreach( $menu as $menu_item ) {
+		if( $menu_item->page == $_PAGE['category'] ) {
+			$sub_nav = $menu_item->id;
+			break;
+		}
+	}
+
+	if( $sub_nav ) {
+		$sub_menu = Module::where('permission', '<=', $access)
+			->where('enabled', '=', 1)
+			->where('category_id', '=', $sub_nav)
+			->orderBy('order', 'asc')
+			->get();
+	}
+
 	if( ! $_PAGE['title'] ) {
 		$_PAGE['window_title'] = Config::get('app.forum_name');
 	}
@@ -52,6 +68,7 @@ View::creator(array('layout'), function($view)
 
 	$view->with('_PAGE', $_PAGE)
 		->with('menu', $menu)
+		->with('sub_menu', $sub_menu)
 		->with('messages', $messages)
 		->with('errors', $errors)
 		->with('ga_events', $ga_events)

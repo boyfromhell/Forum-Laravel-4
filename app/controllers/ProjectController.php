@@ -46,7 +46,9 @@ class ProjectController extends Earlybird\FoundryController
 			'title'    => $title
 		);
 
+		// Load projects that have downloads
 		$projects = Project::where('category', '=', $category_id)
+			->whereHas('downloads')
 			->orderBy('name', 'asc')
 			->get();
 
