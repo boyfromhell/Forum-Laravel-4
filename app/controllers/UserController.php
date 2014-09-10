@@ -72,6 +72,108 @@ class UserController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Members list
+	 *
+	 * @return Response
+	 */
+	public function members()
+	{
+		// @todo
+		$access = 2;
+
+		$_PAGE = array(
+			'category' => 'community',
+			'section'  => 'members',
+			'title'    => 'Members'
+		);
+
+		// Search for / sort members
+		$search = Input::get('search');
+		$sort = Input::get('sort');
+		$order = Input::get('order');
+
+		if( $sort == 'name' ) { $orderby = 'name'; }
+		else if( $sort == 'posts' ) { $orderby = 'posts'; }
+		else { $sort = $orderby = 'joined'; }
+		if( $order != 'desc' ) { $order = 'asc'; }
+
+		if( $search ) {
+			$users = User::leftJoin('custom_data', 'users.id', '=', 'custom_data.user_id')
+				->leftJoin('custom_fields', 'custom_data.field_id', '=', 'custom_fields.id')
+				->where('users.name', 'LIKE', '%'.$search.'%')
+				->orWhere( function($q) use ($search)
+				{
+					$q->where('custom_data.value', 'LIKE', '%'.$search.'%')
+						->where('custom_fields.memberlist', '=', 1)
+						->where('custom_fields.permission', '<=', 2);
+				})
+				->groupBy('users.id')
+				->orderBy($orderby, $order)
+				->orderBy('users.id', 'asc');
+		}
+		else {
+			$users = User::orderBy($orderby, $order)
+				->orderBy('users.id', 'asc');
+		}
+
+		$users = $users->paginate(25, ['users.*']);
+
+		/*$params = array();
+		if( $search ) { $params['search'] = $search; }
+		if( $orderby != 'joined' || $order != 'asc' ) {
+			$params['sort'] = $orderby;
+			$params['order'] = $order;
+		}
+		$query_string = http_build_query($params);
+		$url = "/community/members" . ( $query_string ? '?' . $query_string : '' );
+		$sort_url = "/community/members?" . ( $search ? "search={$search}&amp;" : '' );*/
+
+		// Load the custom fields
+		$customs = CustomField::where('memberlist', '=', 1)
+			->where('permission', '<=', $access)
+			->orderBy('order', 'asc')
+			->get();
+
+		$column_width = round(55/count($customs));
+
+		/*$counter = $start;
+		while( $data = $exec->fetch_assoc() )
+		{
+			$member = new User($data['id'], $data);
+			$member->joined += ($me->tz*3600);
+			$member_custom = array();
+			$member->fetch_level();
+
+			if( !$is_mobile ) {
+				foreach( $customs as $custom ) {
+					$sql = "SELECT `value`
+						FROM `custom_data`
+						WHERE `user_id` = {$member->id}
+							AND `field_id` = {$custom['id']}
+						LIMIT 1";
+					$exec2 = $_db->query($sql);
+					list( $c_value ) = $exec2->fetch_row();
+					$member_custom[$custom['id']] = $c_value;
+				}
+			}
+			
+			$member->custom = $member_custom;
+			$member->counter = ++$counter;
+		}*/
+
+		return View::make('users.members')
+			->with('_PAGE', $_PAGE)
+			->with('users', $users)
+			->with('customs', $customs)
+			->with('column_width', $column_width);
+
+		/*$Smarty->assign('search', $search);
+		$Smarty->assign('orderby', $orderby);
+		$Smarty->assign('order', $order);
+		$Smarty->assign('sort_url', $sort_url);*/
+	}
+
+	/**
 	 * Load all users whose birthday is today
 	 * @todo optional argument to check a different day
 	 */

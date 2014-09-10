@@ -6,6 +6,10 @@ class Helpers
 	/**
 	 * Takes the name and returns base and extension
 	 * Also renames to legal characters if second argument is true
+	 *
+	 * @param  string  $name
+	 * @param  bool    $rename
+	 * @return array
 	 */
 	public static function parse_file_name( $name, $rename = false )
 	{
@@ -25,6 +29,30 @@ class Helpers
 		}
 
 		return array( $name, $ext );
+	}
+
+	/**
+	 * Convert bytes to a user-friendly size
+	 *
+	 * @param  string  $file  path to file
+	 * @return string
+	 */
+	public static function english_size( $file )
+	{
+		if( ! file_exists($file) ) {
+			return 0;
+		}
+
+		$bytes = filesize($file);
+		$units = array('bytes', 'kb', 'MB', 'GB');
+		$counter = 0;
+		
+		while( $bytes >= 1024 ) {
+			$bytes /= 1024;
+			$counter++;
+		}
+
+		return( number_format($bytes, 2) . ' ' . $units[$counter] );
 	}
 
 	/**

@@ -468,14 +468,23 @@ legend { background:$body-bg; padding:0 10px; color:#333; }
 .userhov, .usermenu:hover { background:$menu-hover; border:1px solid #333; }
 .usersel, .usermenu:active { background:$menu-bg; border:1px solid #333; }
 
-.paginate {
+ul.pagination {
 	height:26px; margin:7px 0;
+	float: right;
+
+	li {
+		list-style-type: none;
+		display: block;
+		float: left;
+	}
 	a { 
-		display:block; float:right; width:55px; padding:5px; height:26px;
+		display:block; padding:5px 10px; height:26px;
 		background:$body-bg; text-decoration:none; text-align:center;
 		&:hover { background:#777; }
 	}
-	.selector { height:26px; display:block; float:right; }
+	span {
+		height:26px; display:block; padding:5px 10px;
+	}
 	select {
 		min-width:55px; height:26px; margin:0;
 		background:$body-bg; border:1px solid #888; color:$input-color; padding-left:3px;

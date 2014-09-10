@@ -142,13 +142,21 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	public function getLevelAttribute()
 	{
 		if( $this->rank ) {
-			return Level::find($this->rank);
+			$level = Level::find($this->rank);
 		}
 
-		return Level::where('type', '=', 0)
-			->where('min_posts', '<=', $this->posts)
-			->orderBy('min_posts', 'desc')
-			->first();
+		if( ! $this->rank || ! $level->image ) {
+			$post_level = Level::where('type', '=', 0)
+				->where('min_posts', '<=', $this->posts)
+				->orderBy('min_posts', 'desc')
+				->first();
+
+			if( ! $level->image ) {
+				$level->image = $post_level->image;
+			}
+		}
+
+		return ( $level ? $level : $post_level );
 	}
 
 }

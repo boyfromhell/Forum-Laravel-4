@@ -36,11 +36,10 @@ Route::group(array('before' => 'loggedin'), function()
 	Route::get('users/settings', array('uses' => 'UserController@settings'));
 	Route::get('users/topics', array('uses' => 'UserController@subscriptions'));
 
-	// Group membership
+	// Community
+	Route::any('community/members', array('uses' => 'UserController@members'));
 	Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));
 	Route::any('groups/new', array('uses' => 'GroupController@add'));
-
-	// Shoutbox
 	Route::get('community/shoutbox', array('uses' => 'ShoutboxController@embed'));
 });
 
@@ -56,9 +55,9 @@ Route::get('groups', array('uses' => 'GroupController@index'));
 Route::get('groups/{id}/{name?}', array('uses' => 'GroupController@display'));
 Route::get('users/{id}/{name?}', array('uses' => 'UserController@display'));
 
-Route::get('downloads/{category}', array('uses' => 'ProjectController@index'));
-Route::get('download/{id}/{name?}', array('uses' => 'ProjectController@download'));
+Route::get('downloads/{category?}', array('uses' => 'ProjectController@index'));
 Route::get('projects/{id}/{name?}', array('uses' => 'ProjectController@display'));
+Route::get('download/{id}/{name?}', array('uses' => 'ProjectController@download'));
 
 // Static pages
 Route::get('about', array('uses' => 'PageController@display', 'as' => 'about'));
