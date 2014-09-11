@@ -8,7 +8,7 @@
 	<br><br>
 	@if ( !$is_mobile )
 		@if ( $child->description )
-		<span style="font-size:10pt">{{{ $child->description }}}</span>
+		<span style="font-size:10pt">{{ BBCode::parse($child->description) }}</span>
 	<br><br>
 		@endif
 	@endif

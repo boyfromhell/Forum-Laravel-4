@@ -4,6 +4,18 @@ class UserController extends Earlybird\FoundryController
 {
 
 	/**
+	 * My profile
+	 *
+	 * @return Response
+	 */
+	public function myProfile()
+	{
+		global $me;
+
+		return $this->display($me->id);
+	}
+
+	/**
 	 * Display a user
 	 *
 	 * @param  int  $id
@@ -20,7 +32,7 @@ class UserController extends Earlybird\FoundryController
 
 		$_PAGE = array(
 			'category' => 'forums',
-			'section'  => 'forums',
+			'section'  => ( $me->id == $user->id ? 'profile' : 'forums' ),
 			'title'    => $user->name,
 		);
 
@@ -46,16 +58,26 @@ class UserController extends Earlybird\FoundryController
 			->get(['custom_fields.name', 'custom_data.value']);
 
 		// Stats
-		//$user->fetch_stats();
+		$stats = [
+			'total_posts' => Post::count(),
+			'total_shouts' => Shout::count(),
+			'user_shouts' => Shout::where('user_id', '=', $user->id)->count(),
+			'days' => floor((gmmktime()-strtotime($user->created_at))/86400) + 1,
+		];
+		$stats['posts_per_day'] = round($user->total_posts/$stats['days'], 2);
+		$stats['posts_percent'] = round(100*($user->total_posts/$stats['total_posts']), 1);
+		$stats['shouts_per_day'] = round($stats['user_shouts']/$stats['days'], 2);
+		$stats['shouts_percent'] = round(100*($stats['user_shouts']/$stats['total_shouts']), 1);
 
 		return View::make('users.profile')
+			->with('_PAGE', $_PAGE)
 			->with('user', $user)
-			->with('custom', $custom);
+			->with('custom', $custom)
+
+			->with('stats', $stats);
 
 		/*$Smarty->assign('online_text', $user->online ? 'online' : 'offline');
 		$Smarty->assign('user_last', $user_last);
-
-		$Smarty->assign('custom', $custom);
 
 		$Smarty->assign('show_birthday', $user->bdaypref < 2 ? true : false);
 		$Smarty->assign('birthday', $birthday);
@@ -230,37 +252,6 @@ class UserController extends Earlybird\FoundryController
 		}
 	}
 
-	/**
-	 * Fetch user's post statistics
-	 */
-	public function fetch_stats()
-	{
-		global $_db, $gmt, $me;
-	
-		$sql = "SELECT COUNT(1) FROM `posts`";
-		$exec = $_db->query($sql);
-		list( $total_posts ) = $exec->fetch_row();
-
-		$sql = "SELECT COUNT(1) FROM `shoutbox`";
-		$exec = $_db->query($sql);
-		list( $total_shouts ) = $exec->fetch_row();
-
-		$sql = "SELECT COUNT(1)
-			FROM `shoutbox`
-			WHERE `user_id` = {$this->id}";
-		$exec = $_db->query($sql);
-		list( $shouts ) = $exec->fetch_row();
-
-		$today = $gmt;
-		$days = floor(($today-$this->created-at)/86400)+1;
-
-		$this->shouts = $shouts;
-		$this->posts_per_day = round($this->posts/$days,2);
-		$this->posts_percent = round(100*($this->posts/$total_posts),1);
-		$this->shouts_per_day = round($shouts/$days,2);
-		$this->shouts_percent = round(100*($shouts/$total_shouts),1);
-	}
-	
 	/**
 	 * Check if I should mark the "subscribe" checkbox when replying to this topic
 	 */

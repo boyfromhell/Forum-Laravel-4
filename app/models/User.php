@@ -43,7 +43,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	public function avatars()
 	{
-		return $this->hasMany('Avatar');
+		return $this->hasMany('Avatar')
+			->orderBy('created_at', 'asc');
 	}
 
 	/**
@@ -75,7 +76,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	public function scores()
 	{
 		return $this->hasMany('Score')
-			->orderBy('score', 'asc');
+			->orderBy('score', 'desc');
 	}
 
 	/**
@@ -130,6 +131,16 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	{
 		return $this->belongsToMany('User', 'user_lists', 'entry_user', 'entry_subject')
 			->where('entry_type', '=', 1);
+	}
+
+	/**
+	 * Topic subscriptions
+	 *
+	 * @return Relation
+	 */
+	public function subscriptions()
+	{
+		return $this->belongsToMany('Topic', 'topic_subs');
 	}
 
 	/**

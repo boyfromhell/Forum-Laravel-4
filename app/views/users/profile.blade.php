@@ -31,8 +31,8 @@
 	@endif
 	Member Since: <b>{{ Helpers::local_date('F j, Y', $user->created_at) }}</b><br><br>
 	
-	Posts: <b>{{ number_format($user->total_posts) }}</b> ({{ $user->posts_per_day }} posts per day, {{ $user->posts_percent }}% of total)<br>
-	Shoutbox Posts: <b>{{ number_format($user->shouts) }}</b> ({{ $user->shouts_per_day }} per day, {{ $user->shouts_percent }}% of total)
+	Posts: <b>{{ number_format($user->total_posts) }}</b> ({{ $stats['posts_per_day'] }} posts per day, {{ $stats['posts_percent'] }}% of total)<br>
+	Shoutbox Posts: <b>{{ number_format($stats['user_shouts']) }}</b> ({{ $stats['shouts_per_day'] }} per day, {{ $stats['shouts_percent'] }}% of total)
 	@if ( $me->id )<br><br>
 	<a href="/forum/search?u={{ $user->id }}">Find all posts by {{{ $user->name }}}</a><br>
 	<a href="/forum/search?u={{ $user->id }}&amp;mode=topics">Find all topics started by {{{ $user->name }}}</a>

@@ -19,18 +19,45 @@ class Topic extends Earlybird\Foundry
 		'pages',
 	);
 
+	/**
+	 * Forum this topic is in
+	 *
+	 * @return Relation
+	 */
 	public function forum()
 	{
 		return $this->belongsTo('Forum');
 	}
+
+	/**
+	 * User who started this topic
+	 *
+	 * @return Relation
+	 */
 	public function author()
 	{
 		return $this->belongsTo('User', 'user_id');
 	}
+
+	/**
+	 * Posts in this topic
+	 *
+	 * @return Relation
+	 */
 	public function posts()
 	{
 		return $this->hasMany('Post')
 			->orderBy('created_at', 'asc');
+	}
+
+	/**
+	 * Subscribed users
+	 *
+	 * @return Relation
+	 */
+	public function subscribers()
+	{
+		return $this->belongsToMany('User', 'topic_subs');
 	}
 
 	/**

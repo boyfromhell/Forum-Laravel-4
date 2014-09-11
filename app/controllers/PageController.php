@@ -125,6 +125,38 @@ class PageController extends BaseController
 	}
 
 	/**
+	 * Sitemap
+	 *
+	 * @return Response
+	 */
+	public function sitemap()
+	{
+		global $me;
+
+		$_PAGE = array(
+			'category' => 'home',
+			'section'  => 'sitemap',
+			'title'    => 'Sitemap',
+		);
+
+		// @todo
+		$access = 2;
+
+		$categories = ModuleCategory::where('permission', '<=', $access)
+			->orderBy('order', 'asc')
+			->get();
+
+		$categories->load(['modules' => function($query) use ($access)
+		{
+			$query->where('permission', '<=', $access);
+		}]);
+
+		return View::make('pages.sitemap')
+			->with('_PAGE', $_PAGE)
+			->with('categories', $categories);
+	}
+
+	/**
 	 * Show the chat popup
 	 *
 	 * @return Response

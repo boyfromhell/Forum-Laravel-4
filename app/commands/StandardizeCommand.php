@@ -112,6 +112,41 @@ class StandardizeCommand extends Command {
 			->update([
 				'created_at' => DB::raw('FROM_UNIXTIME(joined)'),
 				'updated_at' => DB::raw('FROM_UNIXTIME(last_view)'),
+			]);
+
+		// Groups
+		DB::table('groups')
+			->update([
+				'created_at' => DB::raw('FROM_UNIXTIME(date)'),
+				'updated_at' => DB::raw('FROM_UNIXTIME(date)'),
+			]);
+
+		// Shoutbox
+		DB::table('shoutbox')
+			->update([
+				'created_at' => DB::raw('FROM_UNIXTIME(time)'),
+				'updated_at' => DB::raw('FROM_UNIXTIME(time)'),
+			]);
+
+		// Applications
+		DB::table('applications')
+			->update([
+				'created_at' => DB::raw('FROM_UNIXTIME(date_applied)'),
+				'updated_at' => DB::raw('FROM_UNIXTIME(date_applied)'),
+			]);
+
+		// Avatars
+		DB::table('avatars')
+			->update([
+				'created_at' => DB::raw('FROM_UNIXTIME(date)'),
+				'updated_at' => DB::raw('FROM_UNIXTIME(date)'),
+			]);
+
+		// Messages
+		DB::table('messages')
+			->update([
+				'created_at' => DB::raw('FROM_UNIXTIME(date_sent)'),
+				'updated_at' => DB::raw('FROM_UNIXTIME(date_sent)'),
 			]);*/
 	}
 

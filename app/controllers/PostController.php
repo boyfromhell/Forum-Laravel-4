@@ -118,45 +118,32 @@ class PostController extends Earlybird\FoundryController
 	 */
 	public function createPost()
 	{
+		global $me;
+
 		$post = $this->post;
 		$topic = $this->topic;
 		$forum = $this->forum;
 
 		$subject = Input::get('subject', $this->subject);
 		$content = Input::get('content', $this->content);
-		// show_smileys = 1
-		// attach_sig = $me->attach_sig;
-
 		$hash = Input::get('hash', md5($me->name.time().rand(0,9999)));
 
-		// Check for existing subscription
-		/*$subscribed = $check_sub = false;
-		if( $topic->id ) {
-			list( $subscribed, $check_sub ) = $me->check_subscribe($topic->id);
+		// Permissions
+		if( ! $forum->check_permission('view') ) {
+			App::abort(404);
 		}
-		else {
-			if( $me->notify ) {
-				$check_sub = true;
-			}
-		}
-
-		// @todo support group view/read permission
-		if( $forum->id == 19 ) {
-			if( in_array(1, $mygroups) || $me->is_mod ) {
-				$access = $forum->read;
-			}
-			else {
-				$access = $forum->read-1;
-			}
-		}
-
-		if( $access < $forum->read ) {
+		else if( ! $forum->check_permission('read') ) {
 			App::abort(403);
-		}*/
+		}
 
-		//-----------------------------------------------------------------------------
+		// Check for existing subscription
+		$subscribed = false;
+		$check_sub = $me->notify;
+		if( $topic->id && $me->subscriptions->contains($topic->id) ) {
+			$subscribed = $check_sub = true;
+		}
+
 		// Form submitted
-
 		if( Input::has('preview') )
 		{
 			// Don't validate anything for a preview
@@ -171,7 +158,7 @@ class PostController extends Earlybird\FoundryController
 			}
 
 			// Upload attachments
-			$successful = $total = 0;
+			/*$successful = $total = 0;
 			if( count($_FILES['files']) > 0 ) {
 				for( $i = 0; $i < count($_FILES['files']['name']); $i++ ) {
 					$file_errors = array();
@@ -192,63 +179,85 @@ class PostController extends Earlybird\FoundryController
 						$total++;
 					}
 				}
+			}*/
+
+			$validator = Validator::make(Input::all(), $rules);
+
+			if( $validator->fails() )
+			{
+				return View::make('posts.create')
+					->withInput()
+					->withErrors($validator);
 			}
+			else 
+			{
+				$content = BBCode::prepare($content);
 
-			$content = BBCode::prepare($content);
+				// Only moderators can set type
+				$type = Input::get('type', 0);
+				$smiley = Input::get('smiley', 0);
 
-			// Only moderators can set type
-			if( !$me->is_mod ) {
-				if( $this->mode == 'newtopic' ) {
+				if( !$me->is_mod ) {
 					$type = 0;
-				} else {
-					$type = $topic->type;
 				}
-			}
 
-			if( !count($errors) ) {
-				if( $this->mode == 'newtopic' ) {
-					$topic = Topic::create([
-						'forum_id'  => $forum->id,
-						'title'     => $subject,
-						'poster'    => $me->id,
-						'views'     => 0,
-						'replies'   => 0,
-						'status'    => 0,
-						'type'      => $type,
-						'smiley'    => $smiley,
-						'spam'      => 0
+				// Editing a post is vastly different from the other modes
+				if( $this->mode == 'edit' ) {
+					if( $me->is_mod ) {
+						$topic->type = $type;
+					}
+
+					// If this is the first post in the topic, change the subject
+					if( $topic->posts()->first()->id == $post->id && $subject ) {
+						$topic->title = $subject;
+						$topic->smiley = $smiley;
+					}
+
+					$topic->save();
+
+					$post->increment('edit_count', [
+						'edit_user_id' => $me->id,
+						'smileys'      => Input::get('show_smileys'),
+						'signature'    => Input::get('attach_sig'),
 					]);
 
-					$forum->increment('total_topics');
+					$post->postText->update([
+						'post_subject' => $subject,
+						'post_text'    => $content,
+						'post_smiley'  => $smily
+					]);
 				}
 				else {
-					if( $this->mode == 'reply' || $this->mode == 'quote' ) {
+					// New topics
+					if( $this->mode == 'newtopic' ) {
+						$topic = Topic::create([
+							'forum_id'  => $forum->id,
+							'title'     => $subject,
+							'user_id'   => $me->id,
+							'type'      => $type,
+							'smiley'    => $smiley
+						]);
+
+						$forum->increment('total_topics');
+					}
+					// Replies
+					else if( $this->mode == 'reply' || $this->mode == 'quote' ) {
 						$topic->increment('replies');
 					}
-					else {
-						$topic->type = $type;
-						
-						// If this is the first post in the topic, update the smiley and title as well				
-						if( $first_post == $post->id && $subject ) {
-							$topic->title = $subject;
-							$topic->smiley = $smiley;
-						}
 
-						$topic->save();
-					}
-				}
-				
-				if( $this->mode != 'edit' ) {
 					$forum->increment('total_posts');
 					
 					$post = Post::create([
 						'topic_id'   => $topic->id,
 						'user_id'    => $me->id,
-						'ip'         => $ip,
-						'edit_count' => 0,
+						'ip'         => Request::getClientIp(),
 						'smileys'    => Input::get('show_smileys'),
 						'signature'  => Input::get('attach_sig'),
 					]);
+
+					if( $subject == 'Re: '.$topic->title || $subject == $topic->title ) {
+						$subject = '';
+					}
 
 					// Save post text
 					PostText::create([
@@ -260,7 +269,7 @@ class PostController extends Earlybird\FoundryController
 
 					// Create unread notices for users who are currently logged in
 					// and don't already have notices for this topic
-					$sql = "SELECT `user_id`
+					/*$sql = "SELECT `user_id`
 						FROM `session_users`
 						WHERE `expiration` >= {$gmt}
 							AND `user_id` != {$me->id}";
@@ -282,22 +291,9 @@ class PostController extends Earlybird\FoundryController
 								`session_post` = {$post->id}";
 							$_db->query($sql);
 						}
-					}
+					}*/
 
 					$me->increment('total_posts');
-				}
-				else {
-					$post->increment('edit_count', [
-						'edit_user_id' => $me->id,
-						'smileys'      => Input::get('show_smileys'),
-						'signature'    => Input::get('attach_sig'),
-					]);
-
-					$post->postText->update([
-						'post_subject' => $subject,
-						'post_text'    => $content,
-						'post_smiley'  => $smily
-					]);
 				}
 
 				// Update attachments with post ID
@@ -309,62 +305,53 @@ class PostController extends Earlybird\FoundryController
 						'post_id' => $post->id
 					]);
 
-				// (un)subscribe to topic
-				$post->generate_url();
-				$url = $post->url;
-				if( $subscribe && !$subscribed ) {
-					$url = str_replace('#', '?subscribe#', $url);
-				}
-				else if( !$subscribe && $subscribed ) {
-					$url = str_replace('#', '?unsubscribe#', $url);
-				}
-				
-				// Send topic subscribers an email notification
-				$sql = "SELECT *
-					FROM `topic_subs`
-						WHERE `topic_id` = {$topic->id}
-							AND `notified` = 1";
-				$exec = $_db->query($sql);
-				
-				while( $data = $exec->fetch_assoc() ) {
-					$user = new User($data['user_id']);
-					
-					if( $user->id != $me->id ) {
-					
-						$Smarty->assign('user', $me);
-						$Smarty->assign('topic', $topic);
-						$Smarty->assign('post', $post);
-						$Smarty->assign('content', $content);
-						$html = $Smarty->fetch('emails/post.tpl');
+				// Subscribe/unsubscribe
 
-						try {
-							queue_email( $user->id, 'Topic Reply Notification', $html );
-						}
-						catch( Exception $e ) { }
-						
-						$sql = "UPDATE `topic_subs` SET
-							`notified` = 0
-							WHERE `user_id` = {$user->id}
-								AND `topic_id` = {$topic->id}";
-						$_db->query($sql);
+				// Send topic subscribers an email notification
+				foreach( $topic->subscribers as $subscriber )
+				{
+					if( $subscriber->notified == 1 && $subscriber->id != $me->id )
+					{
+						$html = View::make('emails.topic_reply')
+							->with('user', $me)
+							->with('topic', $topic)
+							->with('post', $post)
+							->with('content', $content)
+							->render();
+
+						EmailQueue::create([
+							'user_id' => $subscriber->id,
+							'subject' => 'Topic Reply Notification',
+							'content' => $html,
+							'date_queued' => DB::raw('NOW()'),
+						]);
+
+						$topic->subscribers()->updateExistingPivot($subscriber->id, ['notified' => 0]);
 					}
 				}
 
-				header("Location: {$url}");
-				exit;
+				return Redirect::to($post->url);
 			}
 		}
 
 		// Load attachments, including pending
-		$attachments = Attachment::where('post_id', '=', $post->id)
-			->orWhere( function($query) use ($me, $hash)
-			{
-				$query->whereNull('post_id')
-					->where('user_id', '=', $me->id)
-					->where('hash', '=', $hash);
-			})
-			->orderBy('filetype', 'desc')
-			->orderBy('created_at', 'asc');
+		if( $post->id ) {
+			$attachments = Attachment::where('post_id', '=', $post->id)
+				->orWhere( function($query) use ($me, $hash)
+				{
+					$query->whereNull('post_id')
+						->where('user_id', '=', $me->id)
+						->where('hash', '=', $hash);
+				});
+		}
+		else {
+			$attachments = Attachment::whereNull('post_id')
+				->where('user_id', '=', $me->id)
+				->where('hash', '=', $hash);
+		}
+		$attachments = $attachments->orderBy('filetype', 'desc')
+			->orderBy('created_at', 'asc')
+			->get();
 
 		$_PAGE = array(
 			'category' => 'forums',
@@ -392,13 +379,18 @@ class PostController extends Earlybird\FoundryController
 			->with('subject', $subject)
 			->with('content', $content)
 
+			// Default settings
+			->with('show_smileys', 1)
+			->with('attach_sig', $me->attach_sig)
+			->with('check_sub', $check_sub)
+
 			->with('post_max_size', $post_max_size)
 			->with('max_total', $max_total)
 			->with('upload_max_filesize', $upload_max_filesize)
 			->with('max_bytes', $max_bytes)
-			->with('max_file_uploads', $max_file_uploads);
+			->with('max_file_uploads', $max_file_uploads)
 
-		//$Smarty->assign('check_sub', $check_sub);
+			->withInput();
 
 		/*
 			$sql = "
@@ -592,41 +584,15 @@ class PostController extends Earlybird\FoundryController
 	 */
 	public function delete()
 	{
-		global $_db;
-	
-		$sql = "SELECT `topics`.`replies`, `forums`.`id`
-			FROM `topics`
-				JOIN `forums`
-					ON `topics`.`forum_id` = `forums`.`id`
-			WHERE `topics`.`id` = {$this->topic_id}";
-		$exec = $_db->query($sql);
-		list( $replies, $forum_id ) = $exec->fetch_row();
-
 		// Decrement post counters
-		$sql = "UPDATE `topics`
-			SET `replies` = `replies` - 1
-			WHERE `id` = {$this->topic_id}";
-		$_db->query($sql);
-		$replies--;
+		$topic->decrement('replies');
+		$forum->decrement('total_posts');
+		$me->decrement('total_posts');
 
-		$sql = "UPDATE `forums`
-			SET `posts` = `posts` - 1
-			WHERE `id` = {$forum_id}";
-		$_db->query($sql);
-
-		$sql = "UPDATE `users`
-			SET `posts` = `posts` - 1
-			WHERE `id` = {$this->user_id}";
-		$_db->query($sql);
-
-		// Delete attachments
-		$sql = "UPDATE `attachments` SET
-			`post_id` = NULL,
-			`hash` = 'deleted'
-			WHERE `post_id` = {$this->id}";
-		$_db->query($sql);
-		
-		$topic = new Topic($this->topic_id);
+		$post->attachments()->update([
+			'post_id' => NULL,
+			'hash' => 'deleted'
+		]);
 
 		// Delete topic if this was the only post
 		if( $replies < 0 ) {
@@ -670,13 +636,9 @@ class PostController extends Earlybird\FoundryController
 			}
 		}
 
-		$sql = "DELETE FROM `posts`
-			WHERE `id` = {$this->id}";
-		$_db->query($sql);
-
-		$sql = "DELETE FROM `posts_text`
-			WHERE `post_id` = {$this->id}";
-		$_db->query($sql);
+		// @todo soft delete
+		$post->postText()->delete();
+		$post->delete();
 
 		return $result;
 	}

@@ -96,3 +96,5 @@ Route::get('donate', array('uses' => 'PageController@display', 'as' => 'donate')
 Route::get('privacy', array('uses' => 'PageController@display', 'as' => 'privacy'));
 Route::get('terms', array('uses' => 'PageController@display', 'as' => 'terms'));
 Route::get('community/chat', array('uses' => 'PageController@display', 'as' => 'chat'));
+Route::get('sitemap', array('uses' => 'PageController@sitemap'));
+
