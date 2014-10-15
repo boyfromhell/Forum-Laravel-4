@@ -81,6 +81,16 @@ class Topic extends Earlybird\Foundry
 	}
 
 	/**
+	 * Poll for this topic
+	 *
+	 * @return Relation
+	 */
+	public function poll()
+	{
+		return $this->hasOne('Poll');
+	}
+
+	/**
 	 * Permalink
 	 *
 	 * @return string
@@ -239,10 +249,7 @@ class Topic extends Earlybird\Foundry
 	 */
 	public function getHasPollAttribute()
 	{
-		$poll = Poll::where('poll_topic', '=', $this->id)
-			->first();
-
-		return ( $poll->id ? true : false );
+		return( $this->poll->id ? true : false );
 	}
 
 	/**

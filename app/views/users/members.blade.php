@@ -59,7 +59,7 @@
 		<a href="{{ $member->url }}">{{{ $member->name }}}</a>
 	</td>
 	@foreach ( $customs as $custom )
-		<td width="{{ $column_width }}%">{{{ $member->custom[$custom->id] }}}</td>
+		<td width="{{ $column_width }}%">{{{ $member->custom[$custom->id]->value }}}</td>
 	@endforeach
 	<td width="14%" class="date">{{ Helpers::local_date('M j, Y', $member->created_at) }}</td>
 	<td class="posts">{{ number_format($member->total_posts) }}</td>

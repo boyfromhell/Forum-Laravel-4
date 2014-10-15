@@ -94,6 +94,79 @@ class UserController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Edit profile
+	 *
+	 * @return Response
+	 */
+	public function editProfile()
+	{
+		global $me;
+
+		$_PAGE = array(
+			'category' => 'usercp',
+			'section'  => 'profile',
+			'title'    => 'Edit Profile',
+		);
+
+		// Custom fields
+		$customs = CustomField::leftJoin('custom_data', function($join) use ($me)
+			{
+				$join->on('custom_data.field_id', '=', 'custom_fields.id')
+					->where('custom_data.user_id', '=', $me->id);
+			})
+			->orderBy('order', 'asc')
+			->get(['custom_fields.*', 'custom_data.value']);
+
+		// Birthday
+		list( $year, $month, $day ) = explode('-', $me->birthday);
+
+		$years = [0 => 'Year'];
+		for( $i=date('Y')-100; $i<=date('Y'); $i++ ) {
+			$years[$i] = $i;
+		}
+		$months = [0 => 'Month'];
+		for( $i=1; $i<=12; $i++ ) {
+			$months[$i] = date('F', mktime(0, 0, 0, $i));
+		}
+
+		$days = [0 => 'Day'];
+		for( $i=1; $i<=31; $i++ ) {
+			$days[$i] = $i;
+		}
+
+		return View::make('users.edit')
+			->with('_PAGE', $_PAGE)
+			->with('customs', $customs)
+
+			->with('years', $years)
+			->with('year', $year)
+			->with('months', $months)
+			->with('month', $month)
+			->with('days', $days)
+			->with('day', $day);
+	}
+
+	/**
+	 * Personal settings
+	 *
+	 * @return Response
+	 */
+	public function settings()
+	{
+		$_PAGE = array(
+			'category' => 'usercp',
+			'section'  => 'settings',
+			'title'    => 'Settings',
+		);
+
+		$themes = Theme::orderBy('name', 'asc')->get();
+
+		return View::make('users.settings')
+			->with('_PAGE', $_PAGE)
+			->with('themes', $themes);
+	}
+
+	/**
 	 * Members list
 	 *
 	 * @return Response
