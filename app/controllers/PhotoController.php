@@ -126,30 +126,20 @@ class PhotoController extends Earlybird\FoundryController
 		
 		// Stop if we are only deleting the file (i.e. album deletion)
 		if( !$database ) { return; }
-		
-		$sql = "DELETE FROM `photos`
-			WHERE `id` = {$this->id}";
-		$_db->query($sql);
 
-		$sql = "SELECT `id`
-			FROM `photos`
-			WHERE `album_id` = {$this->album_id}
-			ORDER BY `date` ASC
-			LIMIT 1";
-		$exec = $_db->query($sql);
-		
-		if( $exec->num_rows ) {
-			list( $first_photo_id ) = $exec->fetch_row();
-		} else {
-			$first_photo_id = 'NULL';
-		}
-		
-		// Update album cover if this photo is the current cover
-		$sql = "UPDATE `albums` SET
-			`cover_id` = {$first_photo_id}
-			WHERE `id` = {$this->album_id}
-				AND `cover_id` = {$this->id}";
-		$_db->query($sql);
+		// Fetch first photo in this album
+		$first_photo = Photo::where('album_id', '=', $this->album_id)
+			->where('id', '!=', $this->id)
+			->orderBy('date', 'asc')
+			->first();
+
+		// Replace album covers
+		$this->album->where('cover_id', '=', $this->id)
+			->update([
+				'cover_id' => $first_photo->id
+			]);
+
+		parent::delete();
 	}
 	
 	public function push_to_s3($folder)
