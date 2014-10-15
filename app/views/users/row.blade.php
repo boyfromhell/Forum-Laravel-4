@@ -29,11 +29,11 @@
 	Location: {{{ $user->location }}}<br>
 	@endif
 	
-	@foreach ( $user->custom as $field )
-		{{{ $field->name }}}: {{{ $field->value }}}<br>
+	@foreach ( $user->custom as $custom )
+		{{{ $custom->field->name }}}: {{{ $custom->value }}}<br>
 	@endforeach
 	
-	Posts: {{ number_format($user->posts) }}<br>
+	Posts: {{ number_format($user->total_posts) }}<br>
 	
 	@if ( count($user->groups) > 0 )
 		@foreach ( $user->groups as $group )

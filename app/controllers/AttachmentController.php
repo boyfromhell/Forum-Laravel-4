@@ -220,46 +220,6 @@ class AttachmentController extends Earlybird\FoundryController
 		}
 		return false;
 	}
-	
-	/**
-	 * Delete this attachment
-	 */
-	public function delete()
-	{
-		global $_CONFIG, $_db, $me;
-		
-		list( $name, $ext ) = parse_file_name($this->filename);
-
-		if( $this->user_id == $me->id || $me->is_mod ) {
-			$sql = "DELETE FROM `attachments`
-				WHERE `id` = {$this->id}";
-			$_db->query($sql);
-
-			// Do not delete files for private message attachments because there might be duplicates
-			if( $_CONFIG['aws'] === null && $this->message_id === null ) {
-				unlink(ROOT . 'web' . $this->get_path() . $this->filename);
-				
-				if( $this->filetype == 0 ) {
-					unlink(ROOT . 'web' . $this->get_path('scale') . "{$name}.jpg");
-					unlink(ROOT . 'web' . $this->get_path('thumbs') . "{$name}.jpg");
-				}
-			}
-			else if( $this->message_id === null ) {
-				delete_from_s3(ltrim($this->get_path(), '/') . "{$name}.{$ext}");
-				
-				if( $this->filetype == 0 ) {
-					delete_from_s3(ltrim($this->get_path('scale'), '/') . "{$name}.jpg");
-					delete_from_s3(ltrim($this->get_path('thumbs'), '/') . "{$name}.jpg");
-				}
-			}
-			
-			// @todo remove cache
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
 
 	/**
 	 * Get a human readable file size
@@ -274,15 +234,4 @@ class AttachmentController extends Earlybird\FoundryController
 		}
 	}
 
-	/**
-	 * Increments download counter
-	 */
-	public function increment_download()
-	{
-		global $_db;
-		$sql = "UPDATE `attachments`
-			SET `downloads` = `downloads` + 1
-			WHERE `id` = {$this->id}";
-		$_db->query($sql);
-	}
 }

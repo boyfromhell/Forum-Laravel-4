@@ -118,5 +118,14 @@ class Album extends Earlybird\Foundry
 		return $this->photos()->count();
 	}
 
+	/**
+	 * Delete album
+	 */
+	public function delete()
+	{
+		$this->photos->delete();
+		parent::delete();
+	}
+
 }
 

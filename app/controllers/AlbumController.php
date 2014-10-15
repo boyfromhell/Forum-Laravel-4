@@ -159,48 +159,4 @@ class AlbumController extends Earlybird\FoundryController
 		/*$Smarty->assign('allow', $allow);*/
 	}
 	
-	/**
-	 * Delete album
-	 */
-	public function delete()
-	{
-		global $_CONFIG, $_db;
-		
-		$folder = ROOT . 'web/photos/' . $this->folder;
-		
-		if( $_CONFIG['aws'] === null ) {
-			foreach( glob("$folder/{*.jpg,*.png,*.gif}", GLOB_BRACE) as $photo ) {
-				@unlink($photo);
-			}
-			foreach( glob("$folder/scale/{*.jpg}", GLOB_BRACE) as $photo ) {
-				@unlink($photo);
-			}
-			foreach( glob("$folder/thumbs/{*.jpg}", GLOB_BRACE) as $photo ) {
-				@unlink($photo);
-			}
-
-			rmdir($folder . '/scale/');
-			rmdir($folder . '/thumbs/');
-			rmdir($folder . '/');
-		}
-		else {
-			$sql = "SELECT *
-				FROM `photos`
-				WHERE `album_id` = {$this->id}";
-			$exec = $_db->query($sql);
-
-			while( $data = $exec->fetch_assoc() ) {
-				$photo = new Photo($data['id'], $data);
-				$photo->delete($this->folder, false);
-			}
-		}
-
-		$sql = "DELETE FROM `photos`
-			WHERE `album_id` = {$this->id}";
-		$_db->query($sql);
-		
-		$sql = "DELETE FROM `albums`
-			WHERE `id` = {$this->id}";
-		$_db->query($sql);
-	}
 }
