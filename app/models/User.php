@@ -31,6 +31,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		'is_mod',
 	);
 
+	/**
+	 * Albums this user has created
+	 *
+	 * @return Relation
+	 */
 	public function albums()
 	{
 		return $this->hasMany('Album');

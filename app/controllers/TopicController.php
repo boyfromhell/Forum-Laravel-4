@@ -351,52 +351,5 @@ class TopicController extends Earlybird\FoundryController
 		return $this->display($id, $name, true);
 	}
 
-	/**
-	 * Delete this topic
-	 * This function should never be called - it is only called from inside the Post::delete() function
-	 */
-	public function delete()
-	{
-		global $_db;
-
-		$sql = "DELETE FROM `topics`
-			WHERE id = {$this->id}";
-		$_db->query($sql);
-
-		$sql = "DELETE FROM `topic_subs`
-			WHERE `topic_id` = {$this->id}";
-		$_db->query($sql);
-
-		$sql = "DELETE FROM `session_topics`
-			WHERE `topic_id` = {$this->id}";
-		$_db->query($sql);
-
-		$sql = "UPDATE `forums` SET
-			`topics` = `topics` - 1
-			WHERE `id` = {$this->forum_id}";
-		$_db->query($sql);
-
-		// Delete poll data
-		$sql = "SELECT `poll_id`
-			FROM `polls`
-			WHERE `poll_topic` = {$this->id}";
-		$exec = $_db->query($sql);
-
-		if( $exec->num_rows )
-		{
-			list( $poll_id ) = $exec->fetch_row();
-
-			$sql = "DELETE FROM `poll_options`
-				WHERE `option_poll` = {$poll_id}";
-			$_db->query($sql);
-
-			$sql = "DELETE FROM `poll_votes`
-				WHERE `vote_poll` = {$poll_id}";
-			$_db->query($sql);
-
-			$sql = "DELETE FROM `polls`
-				WHERE `poll_topic` = {$this->id}";
-			$_db->query($sql);
-		}
-	}
 }
+

@@ -59,7 +59,7 @@ class Attachment extends Earlybird\Foundry
 	 * @param  string  $size
 	 * @return string
 	 */
-	protected function getPhoto( $size )
+	protected function _getPhoto( $size )
 	{
 		list( $name, $ext ) = Helpers::parse_file_name($this->filename);
 
@@ -83,17 +83,35 @@ class Attachment extends Earlybird\Foundry
 		}
 	}
 
+	/**
+	 * Get the URL of the original size photo
+	 *
+	 * @return string
+	 */
 	public function getOriginalAttribute()
 	{
-		return $this->getPhoto('original');
+		return $this->_getPhoto('original');
 	}
+
+	/**
+	 * Get the URL of the scaled photo
+	 *
+	 * @return string
+	 */
 	public function getScaleAttribute()
 	{
-		return $this->getPhoto('scale');
+		return $this->_getPhoto('scale');
 	}
+
+	/**
+	 * Get the URL of the thumbnail
+	 *
+	 * @return string
+	 */
 	public function getThumbnailAttribute()
 	{
-		return $this->getPhoto('thumbnail');
+		return $this->_getPhoto('thumbnail');
 	}
 
 }
+

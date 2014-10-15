@@ -61,6 +61,26 @@ class Topic extends Earlybird\Foundry
 	}
 
 	/**
+	 * Subscriptions
+	 *
+	 * @return Relation
+	 */
+	public function subscriptions()
+	{
+		return $this->hasMany('TopicSubscription');
+	}
+
+	/**
+	 * Unread sessions for users
+	 *
+	 * @return Relation
+	 */
+	public function sessions()
+	{
+		return $this->hasMany('SessionTopic');
+	}
+
+	/**
 	 * Permalink
 	 *
 	 * @return string
@@ -235,4 +255,22 @@ class Topic extends Earlybird\Foundry
 		return ceil(($this->replies + 1) / 25);
 	}
 
+	/**
+	 * Delete this topic
+	 * This should never be called directly.
+	 * It is automatically triggered from a Post::delete if the post is the last in its topic
+	 * @todo soft delete
+	 */
+	public function delete()
+	{
+		$this->subscriptions->delete();
+		$this->sessions->delete();
+		$this->forum->decrement('topics');
+		// $this->poll->delete();
+		// This should trigger deleting: poll_options, poll_votes
+	
+		parent::delete();
+	}
+
 }
+

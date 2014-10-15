@@ -10,10 +10,21 @@ class Photo extends Earlybird\Foundry
 		'thumbnail',
 	);
 
+	/**
+	 * Album this photo is part of
+	 *
+	 * @return Relation
+	 */
 	public function album()
 	{
 		return $this->belongsTo('Album');
 	}
+
+	/**
+	 * User who uploaded this photo
+	 *
+	 * @return Relation
+	 */
 	public function user()
 	{
 		return $this->belongsTo('User');
@@ -35,7 +46,7 @@ class Photo extends Earlybird\Foundry
 	 * @param  string  $size
 	 * @return string
 	 */
-	protected function getPhoto( $size )
+	protected function _getPhoto( $size )
 	{
 		list( $name, $ext ) = Helpers::parse_file_name($this->file);
 
@@ -57,17 +68,34 @@ class Photo extends Earlybird\Foundry
 		}
 	}
 
+	/**
+	 * Get URL of original size photo
+	 *
+	 * @return string
+	 */
 	public function getOriginalAttribute()
 	{
-		return $this->getPhoto('original');
+		return $this->_getPhoto('original');
 	}
+
+	/**
+	 * Get URL of scaled photo
+	 *
+	 * @return string
+	 */
 	public function getScaleAttribute()
 	{
-		return $this->getPhoto('scale');
+		return $this->_getPhoto('scale');
 	}
+
+	/**
+	 * Get URL of thumbnail
+	 *
+	 * @return string
+	 */
 	public function getThumbnailAttribute()
 	{
-		return $this->getPhoto('thumbnail');
+		return $this->_getPhoto('thumbnail');
 	}
 
 }

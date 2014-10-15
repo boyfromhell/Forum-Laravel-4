@@ -95,5 +95,64 @@ class Post extends Earlybird\Foundry
 		return $this->postText->post_text;
 	}
 
+	/**
+     * Delete this post
+     *
+	 * @todo soft delete
+     * @return result array parameters with info about where I am redirecting you to
+     */
+    public function delete()
+    {
+        // Decrement post counters
+        $this->topic->decrement('replies');
+        $this->topic->forum->decrement('total_posts');
+        $this->user->decrement('total_posts');
+
+        $this->attachments()->update([
+            'post_id' => NULL,
+            'hash' => 'deleted'
+        ]);
+
+        // Delete topic if this was the only post
+        if( $this->topic->replies < 0 ) {
+            $forum = $this->topic->forum;
+			$this->topic->delete();
+
+            $result = array(
+                'where' => 'forum',
+                'url'   => $forum->url
+            );
+        }
+		// Otherwise check topic sessions
+        else {
+            $result = array(
+                'where' => 'topic',
+                'url'   => $this->topic->url
+            );
+
+			$new_post = Post::where('topic_id', '=', $this->topic_id)
+				->where('id', '>', $this->id)
+				->orderBy('id', 'asc')
+				->first();
+
+            // Update existing sessions with newer post ID
+            if( $new_post->id ) {
+				SessionTopic::where('session_post', '=', $this->id)
+					->update([
+						'session_post' => $new_post->id
+					]);
+            }
+            else {
+				SessionTopic::where('session_post', '=', $this->id)
+					->delete();
+            }
+        }
+
+        $this->postText()->delete();
+        parent::delete();
+
+        return $result;
+    }
+
 }
 

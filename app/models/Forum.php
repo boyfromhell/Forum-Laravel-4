@@ -13,20 +13,42 @@ class Forum extends Earlybird\Foundry
 		'latest_topic',
 	);
 
+	/**
+	 * Parent forum
+	 *
+	 * @return Relation
+	 */
 	public function parent()
 	{
 		return $this->belongsTo('Forum', 'parent_id');
 	}
 
+	/**
+	 * Child forums
+	 *
+	 * @return Relation
+	 */
 	public function children()
 	{
 		return $this->hasMany('Forum', 'parent_id')
 			->orderBy('order', 'asc');
 	}
+
+	/**
+	 * Category this forum belongs to
+	 *
+	 * @return Relation
+	 */
 	public function category()
 	{
 		return $this->belongsTo('Category');
 	}
+
+	/**
+	 * Topics in this forum
+	 *
+	 * @return Relation
+	 */
 	public function topics()
 	{
 		return $this->hasMany('Topic')
