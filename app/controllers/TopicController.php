@@ -10,7 +10,7 @@ class TopicController extends Earlybird\FoundryController
 	 * @param  string  $name  For SEO only
 	 * @return Response
 	 */
-	public function display( $id, $name = NULL )
+	public function display( $id, $name = NULL, $print = false )
 	{
 		global $me;
 
@@ -46,94 +46,59 @@ class TopicController extends Earlybird\FoundryController
 			'title'    => $topic->title
 		);
 
-		//-----------------------------------------------------------------------------
-		// Check permissions
-		// @todo support group view/read permission
-		/*if( $f == 19 ) {
-			if( in_array(1, $mygroups) || $me->is_mod ) {
-				$access = $forum->read;
-			}
-			else {
-				$access = $forum->read-1;
-			}
-		}*/
+		// Permissions
+		if( ! $forum->check_permission('view') ) {
+			App::abort(404);
+		}
+		else if( ! $forum->check_permission('read') ) {
+			App::abort(403);
+		}
 
-		//-----------------------------------------------------------------------------
-		// Mark topic read
+		$subscribed = false;
+		$check_sub = $me->notify;
 
 		if( $me->id ) {
+			// Mark topic read
 			SessionTopic::where('user_id', '=', $me->id)
 				->where('topic_id', '=', $topic->id)
 				->delete();
-		}
 
-		//-----------------------------------------------------------------------------
-		// Subscription
+			// Subscription
+			if( $me->subscriptions->contains($topic->id) ) {
+				$subscribed = $check_sub = true;
 
-		$subscribed = $check_sub = false;
-
-		/*if( $me->loggedin ) {
-			$sql = "SELECT `notified`
-				FROM `topic_subs`
-				WHERE `user_id` = {$me->id}
-					AND `topic_id` = {$topic->id}";
-			$exec = $_db->query($sql);
-			
-			if( $exec->num_rows ) {
-				$subscribed = true;
-				
+				// Remove a subscription
 				if( isset($_GET['unsubscribe']) ) {
-					// Unsubscribe
-					$sql = "DELETE FROM `topic_subs`
-						WHERE `user_id` = {$me->id}
-							AND `topic_id` = {$topic->id}";
-					$_db->query($sql);
-					
-					$notices[] = 'You have unsubscribed from this topic';
-					$subscribed = false;
+					$me->subscriptions()->detach($topic->id);
+
+					Session::push('notices', 'You have unsubscribed from this topic');
+
+					return Redirect::to($topic->url);
 				}
+				// Mark as notified so I'll get email alerts again
 				else {
-					// Mark as notified
-					$sql = "UPDATE `topic_subs` SET
-						`notified` = 1
-						WHERE `user_id` = {$me->id}
-							AND `topic_id` = {$topic->id}";
-					$_db->query($sql);
+					$me->subscriptions()->updateExistingPivot($topic->id, ['notified' => 1]);
 				}
 			}
 			else {
-				$subscribed = false;
-				
+				// Add a subscription
 				if( isset($_GET['subscribe']) ) {
-					// Subscribe
-					$sql = "INSERT IGNORE INTO `topic_subs` SET
-						`user_id` = {$me->id},
-						`topic_id` = {$topic->id},
-						`notified` = 1";
-					$_db->query($sql);
-					
-					$notices[] = 'You have subscribed to this topic';
-					$subscribed = true;
+					$me->subscriptions()->attach($topic->id, ['notified' => 1]);
+
+					Session::push('notices', 'You have subscribed to this topic');
+
+					return Redirect::to($topic->url);
 				}
 			}
-			
-			list( $subscribed, $check_sub ) = $me->check_subscribe($topic->id);
-		}*/
+		}
 
-		//-----------------------------------------------------------------------------
 		// Fetch all posts
-
 		$posts = $topic->posts()->paginate(25);
+		$posts->load('user');
 
 		/*
 		while( $data = $exec->fetch_assoc() )
 		{
-			$post = new Post($data['id']);
-			
-			// Post text data
-			$post->subject = $data['post_subject'];
-			$post->content = $data['post_text'];
-			$post->smiley = $data['post_smiley'];
 			$post->count = $count;
 
 			// Show subject line
@@ -168,16 +133,19 @@ class TopicController extends Earlybird\FoundryController
 			$user->custom = $user->load_custom_fields($access, 'topic');
 		}*/
 
-		return View::make('topics.display')
+		$template = $print ? 'topics.print' : 'topics.display';
+
+		return View::make($template)
 			->with('_PAGE', $_PAGE)
 			->with('forum', $forum)
 			->with('topic', $topic)
-			->with('posts', $posts);
+			->with('posts', $posts)
+
+			// Quick reply settings
+			->with('subscribed', $subscribed)
+			->with('check_sub', $check_sub);
 
 		/*$Smarty->assign('total_posts', count($posts));
-
-		$Smarty->assign('subscribed', $subscribed);
-		$Smarty->assign('check_sub', $check_sub);*/
 
 		/**
 		if( $_POST["voted"] && $me->loggedin ) {
@@ -369,6 +337,18 @@ class TopicController extends Earlybird\FoundryController
 			->with('_PAGE', $_PAGE)
 			->with('topic', $topic)
 			->with('posts', $posts);
+	}
+
+	/**
+	 * Print topic
+	 *
+	 * @param  int  $id
+	 * @param  string  $name  For SEO only
+	 * @return Response
+	 */
+	public function printTopic( $id, $name = NULL )
+	{
+		return $this->display($id, $name, true);
 	}
 
 	/**

@@ -380,8 +380,8 @@ class PostController extends Earlybird\FoundryController
 			->with('content', $content)
 
 			// Default settings
-			->with('show_smileys', 1)
-			->with('attach_sig', $me->attach_sig)
+			->with('show_smileys', $this->mode == 'edit' ? $post->smileys : 1)
+			->with('attach_sig', $this->mode == 'edit' ? $post->signature : $me->attach_sig)
 			->with('check_sub', $check_sub)
 
 			->with('post_max_size', $post_max_size)

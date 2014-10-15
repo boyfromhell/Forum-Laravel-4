@@ -65,7 +65,7 @@ Route::get('/', array('uses' => 'ForumController@home'));
 Route::get('forum', array('uses' => 'ForumController@index'));
 Route::get('forums/{id}/{name?}', array('uses' => 'ForumController@display'));
 Route::get('topics/{id}/{name?}', array('uses' => 'TopicController@display'));
-Route::get('print/{id}/{name?}', array('uses' => 'TopicController@print'));
+Route::get('print/{id}/{name?}', array('uses' => 'TopicController@printTopic'));
 Route::get('posts/{id}/{name?}', array('uses' => 'PostController@display'));
 
 // Community
