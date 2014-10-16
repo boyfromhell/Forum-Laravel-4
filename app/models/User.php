@@ -213,5 +213,24 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		return $group->allMembers->contains($this->id);*/
 	}
 
+	/**
+	 * Check if I voted in a poll
+	 * Fetch array of results if so, or false if not
+	 *
+	 * @return mixed
+	 */
+	public function votedIn( $poll_id )
+	{
+		$vote = PollVote::where('user_id', '=', $this->id)
+			->where('poll_id', '=', $poll_id)
+			->first();
+
+		if( $vote->id ) {
+			return explode(',', $vote->choices);
+		}
+
+		return false;
+	}
+
 }
 

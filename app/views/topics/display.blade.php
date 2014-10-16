@@ -29,6 +29,8 @@
 
 <div class="break"></div>
 
+@include ('topics.poll', ['poll' => $topic->poll])
+
 @foreach ( $posts as $post_key => $post )
 
 	@include ('posts.row')
