@@ -6,7 +6,7 @@
 	<h1><a href="/forum/">{{{ Config::get('app.forum_name') }}}</a></h1>
 </div>
 
-<div style="float:right; width:75%">
+<div class="col-md-9 col-md-push-3">
 	@if ( !$me->id && ! Config::get('app.registration_enabled'))
 	<div class="alert notice">
 		<span style="font-size:16pt">
@@ -70,7 +70,7 @@
 	</div>
 </div>
 
-<div style="float:left; width:25%; padding-right:15px">
+<div class="col-md-3 col-md-pull-9">
 
 @if ( count($birthdays) > 0 )
 	<div class="welcome small">

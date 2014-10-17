@@ -43,10 +43,10 @@ Route::group(array('before' => 'loggedin'), function()
 	Route::get('forum/attachments/{id}', array('uses' => 'AttachmentController@download'));
 
 	// Settings
-	Route::get('users/avatar', array('uses' => 'AvatarController@manage'));
-	Route::get('users/edit', array('uses' => 'UserController@editProfile'));
+	Route::any('users/avatar', array('uses' => 'AvatarController@manage'));
+	Route::any('users/edit', array('uses' => 'UserController@editProfile'));
 	Route::get('users/reset_password', array('uses' => 'UserController@resetPassword'));
-	Route::get('users/settings', array('uses' => 'UserController@settings'));
+	Route::any('users/settings', array('uses' => 'UserController@settings'));
 	Route::get('users/topics', array('uses' => 'UserController@subscriptions'));
 
 	// Community

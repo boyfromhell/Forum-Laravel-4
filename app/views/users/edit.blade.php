@@ -6,42 +6,51 @@
 
 <div class="break"></div>
 
-<form class="form2 unload-warning" method="post" action="/users/edit">
+<form class="form-horizontal unload-warning" method="post" action="/users/edit">
 <div class="welcome">
 
 	<div class="header">Account</div>
-	
-	<div class="body">
-		<label class="left">Username</label>
-		<span class="left"><b>{{{ $me->name }}}</b></span>
-		
-		<div class="break"></div>
 
-		<label class="left">E-mail</label>
-		<span id="email_text" class="left"><b>{{{ $me->email }}}</b> <a href="" onClick="$('#email_text').hide(); $('#email_input').show(); $('#email_input').focus(); $('#password_text').hide(); $('#password_input').show(); return false">change</a></span>
-		<input class="left" id="email_input" tabindex="1" type="text" name="email" maxlength="255" style="display:none" value="{{{ $me->email }}}">
-		
-		<div class="break"></div>
-
-		<label class="left">Current Password</label>
-		<span class="left" id="password_text"><b>********</b></span>
-		<input class="left" id="password_input" tabindex="1" type="password" name="old_password" style="display:none">
-		<span class="left"><a id="password_link" href="" onClick="$('#password_text').hide(); $('#password_link').hide(); $('#password_input').show(); $('#password_input').focus(); $('#new_password').show(); $('#confirm_password').show(); return false">change</a></span>
-		
-		<div class="break"></div>
-	
-		<div id="new_password" style="display:none">
-			<label class="left">New Password</label>
-			<input class="left" tabindex="1" type="password" name="password">
-			<div class="break"></div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Username</label>
+		<div class="col-sm-4">
+			<p class="form-control-static"><b>{{{ $me->name }}}</b></p>
 		</div>
+	</div>
 
-		<div id="confirm_password" style="display:none">
-			<label class="left">Confirm Password</label>
-			<input class="left" tabindex="1" type="password" name="confirm">
-			<div class="break"></div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">E-mail</label>
+		<div class="col-sm-4">
+			<p id="email_text" class="form-control-static"><b>{{{ $me->email }}}</b> <a href="" onClick="$('#email_text').hide(); $('#email_input').show(); $('#email_input').focus(); $('#password_text').hide(); $('#password_input').show(); return false">change</a></p>
+
+			{{ Form::email('email', $me->email, ['id' => 'email_input', 'tabindex' => 1, 'maxlength' => 255, 'style' => 'display:none', 'class' => 'form-control']) }}
 		</div>
+	</div>
 
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Current Password</label>
+		<div class="col-sm-4">
+			<p class="form-control-static" id="password_text"><b>********</b></p>
+
+			{{ Form::password('old_password', ['id' => 'password_input', 'class' => 'form-control', 'tabindex' => 1, 'style' => 'display:none']) }}
+		</div>
+		<div class="col-sm-4">
+			<p class="form-control-static"><a id="password_link" href="" onClick="$('#password_text').hide(); $('#password_link').hide(); $('#password_input').show(); $('#password_input').focus(); $('#new_password').show(); $('#confirm_password').show(); return false">change</a></p>
+		</div>
+	</div>
+
+	<div id="new_password" class="form-group" style="display:none">
+		<label class="col-sm-3 control-label">New Password</label>
+		<div class="col-sm-4">
+			{{ Form::password('password', ['class' => 'form-control', 'tabindex' => 1]) }}
+		</div>
+	</div>
+
+	<div id="confirm_password" class="form-group" style="display:none">
+		<label class="col-sm-3 control-label">Confirm Password</label>
+		<div class="col-sm-4">
+			{{ Form::password('confirm', ['class' => 'form-control', 'tabindex' => 1]) }}
+		</div>
 	</div>
 
 </div>
@@ -72,50 +81,49 @@
 	
 </div>
 
-<div class="welcome">
+<div class="row">
 
-	<div class="header">Contact</div>
+	<div class="col-sm-12">
+		<h3>Contact</h3>
+	</div>
 
-	<div class="body">
-		<label class="left">Website</label>
-		<input class="left" tabindex="1" type="text" name="website" maxlength="255" value="{{{ $me->website }}}">
-
-		<div class="break"></div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Website</label>
+		<div class="col-sm-5">
+		{{ Form::text('website', $me->website, ['class' => 'form-control', 'tabindex' => 1, 'maxlength' => 255]) }}
+		</div>
 	</div>
 
 </div>
 
-<div class="welcome no-margin">
+<div class="row">
 
-	<div class="header">Profile</div>
+	<div class="col-sm-12">
+		<h3>Profile</h3>
+	</div>
 	
-	<div class="body">
-		@foreach ( $customs as $field )
-		<label class="left">{{{ $field->name }}}</label>
-		<input class="left" tabindex="1" type="text" name="custom{{ $field->id }}"{{ $field->maxlength > 0 ? ' maxlength="'.$field->maxlength.'"' : '' }} value="{{{ $field->value }}}">
-		
-		<div class="break"></div>
-		@endforeach
+	@foreach ( $customs as $field )
+	<div class="form-group">
+		<label class="col-sm-3 control-label">{{{ $field->name }}}</label>
+		<div class="col-sm-5">
+		{{ Form::text('custom'.$field->id, $field->value, ['class' => 'form-control', 'tabindex' => 1, 'maxlength' => ( $field->maxlength ? $field->maxlength : 255 )]) }}
+		</div>
+	</div>
+	@endforeach
 
-		<div style="margin:20px 0 30px 0">
-		<label class="left">Signature</label>
-		<div style="float:left">
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Signature</label>
+		<div class="col-sm-5">
 			{{ BBCode::show_bbcode_controls() }}<br>
-			<textarea id="bbtext" tabindex="1" name="sig">{{ BBCode::undo_prepare($me->sig) }}</textarea><br>
+			{{ Form::textarea('sig', $me->sig, ['id' => 'bbtext', 'class' => 'form-control', 'tabindex' => 1]) }}
+			<br>
 			<small>512 character limit</small>
 		</div>
+	</div>
 
-		<div class="break"></div>
-		</div>
-
-		<center>
-	
-		<input class="primary" tabindex="1" name="update" type="submit" value="Save Profile">
-		<input type="reset" value="Reset">
-
-		<div class="break"></div>
-		
-		</center>
+	<div class="text-center">
+		<input class="btn btn-primary" tabindex="1" name="update" type="submit" value="Save Profile">
+		<input type="reset" class="btn btn-default" value="Reset">
 	</div>
 </div>
 </form>

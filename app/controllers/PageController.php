@@ -92,8 +92,11 @@ class PageController extends BaseController
 
 			if( $validator->fails() )
 			{
+				foreach( $validator->messages()->all() as $error ) {
+					Session::push('errors', $error);
+				}
+
 				return Redirect::to('contact')
-					->withErrors($validator)
 					->withInput();
 			}
 			else

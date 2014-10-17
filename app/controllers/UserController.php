@@ -108,6 +108,49 @@ class UserController extends Earlybird\FoundryController
 			'title'    => 'Edit Profile',
 		);
 
+		if( Request::isMethod('post') )
+		{
+			$rules = [
+				'confirm' => 'same:password',
+				'email' => 'email|unique:users,email,'.$me->id,
+				'website' => 'url',
+			];
+
+			// Do we need a password confirmation?
+			if( $me->email != Input::get('email') || Input::has('password') ) {
+				$rules['old_password'] = 'required';
+			}
+			if( strlen(Input::get('password')) > 0 ) {
+				$rules['password'] = 'required|min:6';
+			}
+
+			$validator = Validator::make(Input::all(), $rules);
+
+			if( $validator->fails() ) {
+				foreach( $validator->messages()->all() as $error ) {
+					Session::push('errors', $error);
+				}
+
+				return Redirect::to('users/edit')->withInput();
+			}
+			else {
+				$website = Input::get('website');
+				if( $website && ! str_contains($website, '://') ) {
+					$website = 'http://'.$website;
+				}
+
+				$me->bdaypref = Input::get('bdaypref');
+				$me->sig = substr(Input::get('sig'), 0, 512);
+				$me->website = $website;
+				$me->email = Input::get('email');
+				$me->save();
+
+				Session::push('messages', 'Profile updated');
+
+				return Redirect::to('users/edit')->withCookie($forever);
+			}
+		}
+
 		// Custom fields
 		$customs = CustomField::leftJoin('custom_data', function($join) use ($me)
 			{
