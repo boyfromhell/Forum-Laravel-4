@@ -52,16 +52,9 @@
 
 <body>
 
-<div id="main_beta" class="container">
+<div class="container-fluid">
 
 @include ('blocks.messages')
-
-@yield ('content')
-
-</div>
-
-@if ( ! $is_mobile )
-@include ('custom.header')
 
 <div id="babynav">
 	<ul class="nav nav-tabs">
@@ -69,16 +62,27 @@
 		<li class="{{ $_PAGE['section'] == $app->section ? 'active' : '' }}"><a href="{{ $app->url }}">{{{ $app->name }}}</a></li>
 	@endforeach
 	</ul>
-	
+
 	<div id="social-media">
 		@foreach ( Config::get('app.social') as $social => $url )
 		<a href="{{ $url }}" target="_blank"><img src="/images/social/{{ $social }}.png" alt="{{ $social }}" width="32" height="32"></a>
 		@endforeach
 		<div class="break"></div>
 	</div>
-	
+
 	<div class="break"></div>
 </div>
+
+<div id="main_beta">
+
+@yield ('content')
+
+</div>
+
+</div>
+
+@if ( ! $is_mobile )
+@include ('custom.header')
 @endif
 
 <footer>
@@ -102,6 +106,8 @@
 	<a class="static-page" href="/privacy">Privacy</a>
 	<a class="static-page" href="/terms">Terms of Use</a>
 </footer>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 </body>
 </html>

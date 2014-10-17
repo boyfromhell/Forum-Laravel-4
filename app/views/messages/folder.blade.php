@@ -69,7 +69,7 @@ function select_threads( critera, value ) {
 	<div class="subheading messages">
 		<div class="float_right">
 		@if ( $folder == 'inbox' )
-		<input type="submit" name="archive_messages" value="Archive" class="primary" tabindex="1">
+		<input type="submit" name="archive_messages" value="Archive" class="btn btn-default btn-md" tabindex="1">
 		@elseif ( $folder == 'archived' )
 		<input type="submit" name="unarchive_messages" class="btn btn-default btn-md" value="Move to Inbox">
 		@endif
