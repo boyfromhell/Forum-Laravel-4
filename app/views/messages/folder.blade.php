@@ -48,53 +48,45 @@ function select_threads( critera, value ) {
 
 <form method="post" action="/messages/{{ $folder }}{{ $page > 1 ? '?page='.$page : '' }}">
 
-<div class="welcome wide no-margin">
+<div class="panel panel-primary">
 
-	<div class="table-header">
-		<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
+	<div class="panel-heading">{{ ucwords($folder) }}</div>
+
+	<div class="panel-body">
+		<table class="table" cellpadding="0" cellspacing="0" border="0" width="100%">
+		<thead>
 		<tr>
-			<th class="icon">&nbsp;</th>
 			<th class="icon">&nbsp;</th>
 			<th class="icon">&nbsp;</th>
 			<th style="width:25%">{{ $folder == 'sent' ? 'To' : 'From' }}</th>
 			<th>Subject</th>
 			<th class="lastpost">Date</th>
-			<th style="width:10px">&nbsp;</th>
 		</tr>
-		</table>
-	</div>
+		</thead>
+		<tbody>
+		<tr class="subheading messages">
+			<td colspan="3">
+				Select:
+				<a href="" onclick="select_threads('all', 1); return false">All</a>,
+				<a href="" onclick="select_threads('all', 0); return false">None</a>@if ( $folder != 'sent' ),
+				<a href="" onclick="select_threads('read', 1); return false">Read</a>,
+				<a href="" onclick="select_threads('read', 0); return false">Unread</a> @endif
+			</td>
+			<td style="text-align:right" colspan="2">
 
-	<div class="header">{{ ucwords($folder) }}</div>
-	
-	<div class="subheading messages">
-		<div class="float_right">
-		@if ( $folder == 'inbox' )
-		<input type="submit" name="archive_messages" value="Archive" class="btn btn-default btn-md" tabindex="1">
-		@elseif ( $folder == 'archived' )
-		<input type="submit" name="unarchive_messages" class="btn btn-default btn-md" value="Move to Inbox">
-		@endif
-		<input id="delete-multiple" type="submit" name="delete_messages" class="btn btn-danger btn-md" value="Delete" data-item="thread" data-action="Delete">
+			@if ( $folder == 'inbox' )
+			<input type="submit" name="archive_messages" value="Archive" class="btn btn-default btn-md" tabindex="1">
+			@elseif ( $folder == 'archived' )
+			<input type="submit" name="unarchive_messages" class="btn btn-default btn-md" value="Move to Inbox">
+			@endif
+			<input id="delete-multiple" type="submit" name="delete_messages" class="btn btn-danger btn-md" value="Delete" data-item="thread" data-action="Delete">
 		
-		@if ( $folder != 'sent' )
-		<input type="submit" name="read_messages" value="Mark Read" class="btn btn-default btn-md" tabindex="1">
-		<input type="submit" name="unread_messages" value="Mark Unread" class="btn btn-default btn-md" tabindex="1">
-		@endif
-		</div>
-
-		<div class="float_left">
-		Select: 
-		<a href="" onclick="select_threads('all', 1); return false">All</a>, 
-		<a href="" onclick="select_threads('all', 0); return false">None</a>@if ( $folder != 'sent' ),
-		<a href="" onclick="select_threads('read', 1); return false">Read</a>, 
-		<a href="" onclick="select_threads('read', 0); return false">Unread</a> @endif
-		</div>
-		
-		<div class="break"></div>
-	</div>
-	
-	<div class="body">
-	
-	<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
+			@if ( $folder != 'sent' )
+			<input type="submit" name="read_messages" value="Mark Read" class="btn btn-default btn-md" tabindex="1">
+			<input type="submit" name="unread_messages" value="Mark Unread" class="btn btn-default btn-md" tabindex="1">
+			@endif
+			</td>
+		</tr>
 		@if ( count($threads) > 0 )
 		@foreach ( $threads as $thread )
 			@include ('messages.thread_row', ['thread_mode' => 'folder'])
@@ -104,6 +96,7 @@ function select_threads( critera, value ) {
 		You have no messages in this folder
 		</div>
 		@endif
+		</tbody>
 	</table>
 	
 	</div>

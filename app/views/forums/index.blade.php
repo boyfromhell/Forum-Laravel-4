@@ -3,12 +3,13 @@
 @section('content')
 
 @if ( $announcement->id )
-<div class="welcome">
-
-	<div class="header">{{{ $announcement->title }}}</div>
-
-	<div id="announcement_{{ $announcement->id }}" class="announcement body">{{ BBCode::parse($announcement->text) }}</div>
-	
+<div class="panel panel-info">
+	<div class="panel-heading">
+		{{{ $announcement->title }}}
+	</div>
+	<div id="announcement_{{ $announcement->id }}" class="panel-body">
+		{{ BBCode::parse($announcement->text) }}
+	</div>
 </div>
 @endif
 

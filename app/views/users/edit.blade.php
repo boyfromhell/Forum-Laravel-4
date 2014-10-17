@@ -7,9 +7,12 @@
 <div class="break"></div>
 
 <form class="form-horizontal unload-warning" method="post" action="/users/edit">
-<div class="welcome">
 
-	<div class="header">Account</div>
+<div class="panel panel-primary">
+
+	<div class="panel-heading">Account</div>
+
+	<div class="panel-body">
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Username</label>
@@ -53,13 +56,14 @@
 		</div>
 	</div>
 
+	</div>
 </div>
 
-<div class="row">
+<div class="panel panel-primary">
 
-	<div class="col-sm-12">
-		<h3>Personal</h3>
-	</div>
+	<div class="panel-heading">Personal</div>
+
+	<div class="panel-body">
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Birthday</label>
@@ -84,14 +88,15 @@
 		</select>
 		</div>
 	</div>
-	
+
+	</div>
 </div>
 
-<div class="row">
+<div class="panel panel-primary">
 
-	<div class="col-sm-12">
-		<h3>Contact</h3>
-	</div>
+	<div class="panel-heading">Contact</div>
+
+	<div class="panel-body">
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Website</label>
@@ -100,14 +105,15 @@
 		</div>
 	</div>
 
+	</div>
 </div>
 
-<div class="row">
+<div class="panel panel-primary">
 
-	<div class="col-sm-12">
-		<h3>Profile</h3>
-	</div>
-	
+	<div class="panel-heading">Profile</div>
+
+	<div class="panel-body">
+
 	@foreach ( $customs as $field )
 	<div class="form-group">
 		<label class="col-sm-3 control-label">{{{ $field->name }}}</label>
@@ -127,9 +133,17 @@
 		</div>
 	</div>
 
-	<div class="text-center">
-		<input class="btn btn-primary" tabindex="1" name="update" type="submit" value="Save Profile">
-		<input type="reset" class="btn btn-default" value="Reset">
+	</div>
+
+	<div class="panel-footer">
+
+	<div class="form-group">
+		<div class="col-sm-5 col-sm-offset-3">
+			<input class="btn btn-primary" tabindex="1" name="update" type="submit" value="Save Profile">
+			<input type="reset" class="btn btn-default" value="Reset">
+		</div>
+	</div>
+
 	</div>
 </div>
 </form>

@@ -3,13 +3,14 @@
 @section('content')
 
 <h1><a href="{{ $forum->url }}">{{{ $forum->name }}}</a></h1>
-<a href="/">{{{ Config::get('app.forum_name') }}}</a> &gt; <a href="/forum/">Forum</a>
 
+<ol class="breadcrumb">
+	<li><a href="/">{{{ Config::get('app.forum_name') }}}</a></li>
+	<li><a href="/forum/">Forum</a></li>
 @foreach ( $forum->parents as $parent )
-	&gt; <a href="{{ $parent->url }}">{{{ $parent->name }}}</a>
+	<li><a href="{{ $parent->url }}">{{{ $parent->name }}}</a></li>
 @endforeach
-
-<br><br>
+</ol>
 
 {{ $topics->links() }}
 

@@ -3,13 +3,13 @@
 @section('content')
 
 <h1><a href="{{ $album->url }}">{{{ $album->name }}}</a></h1>
-<a href="/">{{ Config::get('app.forum_name') }}</a>
 
+<ol class="breadcrumb">
+	<li><a href="/">{{ Config::get('app.forum_name') }}</a></li>
 @foreach ( $photo->album->parents as $parent )
-	&gt; <a href="{{ $parent->url }}">{{{ $parent->name }}}</a>
+	<li><a href="{{ $parent->url }}">{{{ $parent->name }}}</a></li>
 @endforeach
-
-<br><br>
+</ol>
 
 <div id="ajaxphoto">
 

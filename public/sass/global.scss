@@ -44,7 +44,6 @@ hr {
 
 body {
 	padding-top: 70px;
-	background: $main-bg;
 	position: relative;
 }
 img { border:0; }
@@ -54,9 +53,8 @@ ul, ol { margin:6px 20px; padding:0; }
 .float_right { float:right; }
 .v_top { vertical-align:top; }
 
-a { color:$link-color; text-decoration:none;
-	&:hover { color:$link-hover; }
-	&.light { color:#888; text-decoration:none; }
+a {
+	text-decoration:none;
 	&.admin, &.mod { font-weight:bold; }
 	&.admin { color:#00b4ff; }
 }
@@ -71,14 +69,6 @@ header {
 	
 	&.mwscc {
 		background:url('/images/custom/header_bg.png') 0 0 repeat-x;
-	}
-	
-	#welcome {
-		float:right; display:block; padding:8px 12px;
-		border:1px solid #000; margin-top:10px; background:$main-bg; color:#fff;
-		a { color:$welcome-color; &:hover { color:$link-hover; } }
-		img { float:left; margin-right:6px; }
-		div.text { float:left; padding:4px 0 0; }
 	}
 }
 
@@ -103,14 +93,10 @@ header {
 }
 
 #main_beta {
-	background: $maingray;
-	border: 1px solid #000;
-	color: $text-color;
 	position: relative;
 
 	.actions {
 		float: right;
-		margin: 13px 0;
 	}
 	.moderate {
 		padding:4px;
@@ -133,8 +119,8 @@ header {
 		@include vert-gradient;
 	}
 	.header {
-		background:$header-bg; padding:6px 10%; border-top:2px solid #333; font-size:14pt;
-		font-weight:bold; color:#fff; font-variant:small-caps;
+		padding:6px 10%; border-top:2px solid #333; font-size:14pt;
+		font-weight:bold; font-variant:small-caps;
 		&.soft { 
 			font-variant:normal; color:#888; font-size:11pt; padding-top:8px; padding-bottom:8px;
 			font-weight:normal;
@@ -160,7 +146,7 @@ header {
 	}
 	.body {
 		border-top:2px solid #333; border-bottom:2px solid #333; padding:15px 10%; font-size:11pt;
-		background:$body-bg; color:#000; word-wrap: break-word;
+		word-wrap: break-word;
 		
 		textarea { width:100%; height:66px; }
 		.empty { padding:30px 0; text-align:center; }
@@ -245,55 +231,60 @@ footer {
 	width:222px; height:172px;
 }
 
-table.table2 {
-	border:0; color:#000 !important; width:100%;
-	
-	th {
-		text-align:center; font-weight:bold; font-size:10pt; color:#fff; padding:7px 0;
-		&.soft { text-align:left; font-size:12pt; padding:8px 10px; }
-		a { color:$th-color; &:hover { color:$link-hover; } }
+table.table {
+	td {
+		&.icon {
+			padding: 6px 0 0;
+			text-align: center;
+			vertical-align: middle;
+
+			&.wide {
+				padding: 4px 0;
+			}
+		}
+		&.forum {
+			padding: 6px;
+			vertical-align: middle;
+
+			a {
+				font-weight:bold;
+			}
+		}
+		&.topic {
+			padding: 6px;
+
+			.thread_preview {
+				width: 100%;
+				height:1.2em;
+				overflow: hidden;
+			}
+		}
+		&.lastpost {
+			padding: 6px;
+			vertical-align: middle;
+
+			a { font-weight:bold; }
+			div a { font-weight:normal; }
+			&.topic { text-align:right; font-size:10pt; }
+			&.message { font-size:10pt; color:#999; }
+		}
+		&.score { padding:4px 0; }
+		&.ending { font-size:10pt; }
+		&.date { font-size:10pt; text-align:center; }
+		&.posts { font-size:10pt; text-align:center; color:$lighter-text; }
 	}
-	tr {
+	tr.unread {
 		td {
-			border:0; font-size:11pt;
-			&.icon { padding:6px 0 0; text-align:center; vertical-align:middle;
-				&.wide { padding:4px 0; }
-			}
-			&.forum { padding:6px; vertical-align:middle;
+			&.topic, &.from {
 				a { font-weight:bold; }
 			}
-			&.topic {
-				padding:6px;
-				.thread_preview {
-					width:100%; height:1.2em; overflow:hidden; color:#111;
-				}
-			}
-			&.lastpost { padding:6px; vertical-align:middle;
-				a { font-weight:bold; }
-				div a { font-weight:normal; }
-				&.topic { text-align:right; font-size:10pt; }
-				&.message { font-size:10pt; color:#999; }
-			}
-			&.score { padding:4px 0; }
-			&.ending { font-size:10pt; }
-			&.date { font-size:10pt; text-align:center; }
-			&.posts { font-size:10pt; text-align:center; color:$lighter-text; }
 		}
-		&.unread {
-			td {
-				&.topic, &.from {
-					a { font-weight:bold; }
-				}
-			}
-		}
-		&.selected {
-			td { background:$darker-bg !important; }
-		}
-		&:hover {
-			@include box-shadow;
-		}
-		.tiny { font-size:9pt; color:#000 !important; font-weight:normal !important; }
 	}
+	tr.selected {
+		td { background:$darker-bg !important; }
+	}
+	.tiny { font-size:9pt; color:#000 !important; font-weight:normal !important; }
+
 	th.icon,td.icon { width:50px;
 		&.wide { width:55px; }
 	}
@@ -489,14 +480,6 @@ body.mobile {
 		a { color:#fff; text-decoration:none;
 		}
 	}
-	#main_beta {
-		top: 0;	width:100%; min-width:0; border-left:0; border-right:0; margin-top:4px; min-height:0;
-
-		.welcome { margin:0 -10px 10px -10px;
-			&.no-margin { margin:0 -10px; }
-			.header, .body { padding-left:10px; padding-right:10px; }
-		}
-	}
 	.table2 {
 		th.icon,td.icon { width:30px;
 			&.wide { width:35px; }
@@ -531,7 +514,6 @@ body.mobile {
 		display:none;
 	}
 	header { height: auto; }
-	#main_beta { border:0; top:0; }
 	footer { top: 0; }
 	.welcome {
 		.table-header { border-top:1px solid #000; }

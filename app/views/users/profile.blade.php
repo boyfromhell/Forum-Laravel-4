@@ -2,11 +2,11 @@
 
 @section('content')
 
-<div class="welcome wide">
+<div class="panel panel-primary">
 
-	<div class="header">View Profile</div>
+	<div class="panel-heading">View Profile</div>
 
-	<div class="body row">
+	<div class="panel-body row">
 	
 	<div class="col-md-6">
 	<h1>{{{ $user->name }}} <img src="/images/{{ $online_text }}.png" alt="{{{ $user->name }}} is {{ $online_text }}" title="{{{ $user->name }}} is {{ $online_text }}"></h1>
@@ -45,11 +45,11 @@
 
 </div>
 
-<div class="welcome wide no-margin">
+<div class="panel panel-default">
 
-	<div class="header">Info</div>
+	<div class="panel-heading">Info</div>
 
-	<div class="body row">
+	<div class="panel-body row">
 	
 	<div class="col-md-6">
 	@if ( count($user->groups) > 0 )<b>Groups:</b><br>

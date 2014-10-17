@@ -2,11 +2,13 @@
 
 @section('content')
 
-<div class="welcome no-margin">
+<div class="panel panel-primary">
 
-	<div class="header">Settings</div>
+	<div class="panel-heading">Settings</div>
 
-	<form class="form-horizontal unload-warning form3" method="post" action="/users/settings">
+	<div class="panel-body">
+
+	<form class="form-horizontal unload-warning" method="post" action="/users/settings">
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Hide my online status</label>

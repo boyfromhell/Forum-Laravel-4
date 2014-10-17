@@ -3,15 +3,15 @@
 @section('content')
 
 <h1><a href="{{ $album->url }}">{{{ $album->name }}}</a></h1>
-@if ( $album->id != 1 )
-<a href="/">{{{ Config::get('app.forum_name') }}}</a>
 
+@if ( $album->id != 1 )
+<ol class="breadcrumb">
+	<li><a href="/">{{{ Config::get('app.forum_name') }}}</a></li>
 @foreach ( $album->parents as $parent )
-	&gt; <a href="{{ $parent->url }}">{{{ $parent->name }}}</a>
+	<li><a href="{{ $parent->url }}">{{{ $parent->name }}}</a></li>
 @endforeach
-<br>
+</ol>
 @endif
-<br>
 
 @if ( $allow || ( $album->parent_id == 1 && $me->id ))
 <a class="btn btn-primary" href="/albums/new?id={{ $album->id }}">New{{ !$is_mobile ? ' Album' : '' }}</a>
