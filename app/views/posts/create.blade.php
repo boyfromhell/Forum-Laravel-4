@@ -25,44 +25,45 @@
 
 	<div class="header">{{{ $_PAGE['title'] }}}</div>
 	
-	<div class="body">
+	{{ Form::hidden('hash', $hash) }}
 
-		{{ Form::hidden('hash', $hash) }}
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Subject</label>
+		<div class="col-sm-7">
+			{{ Form::text('subject', $subject, ['class' => 'form-control', 'maxlength' => 70, 'autofocus']) }}
+		</div>
+	</div>
 
-		<label class="left">Subject</label>
-		{{ Form::text('subject', $subject, ['class' => 'left', 'tabindex' => 1, 'maxlength' => 70]) }}
-		<div class="break"></div>
-		
-		@if ( $me->is_moderator )
-		<label class="left">Topic Type</label>
-		{{ Form::select('type', ['Normal', 'Sticky', 'Announcement'], $topic->type, ['class' => 'left', 'tabindex' => 1]) }}
-		<div class="break"></div>
-		@endif
+	@if ( $me->is_moderator )
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Topic Type</label>
+		<div class="col-sm-3">
+			{{ Form::select('type', ['Normal', 'Sticky', 'Announcement'], $topic->type, ['class' => 'form-control']) }}
+		</div>
+	</div>
+	@endif
 
-		<div style="margin:15px 0">
-		<label class="left">
+	<div class="form-group">
+		<label class="col-sm-3 control-label">
 			{{ BBCode::show_smiley_controls() }}
 		</label>
-		<div class="float_left">
+		<div class="col-sm-7">
 			{{ BBCode::show_bbcode_controls() }}
-			<div class="break"></div>
-			{{ Form::textarea('content', $content, ['id' => 'bbtext', 'tabindex' => 1]) }}
+			<br>
+			{{ Form::textarea('content', $content, ['id' => 'bbtext', 'class' => 'form-control']) }}
 		</div>
-		
-		<div class="break"></div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Options</label>
+		<div class="col-sm-7">
+			<label>{{ Form::checkbox('subscribe', 1, $check_sub) }} Notify me of replies</label><br>
+			<label>{{ Form::checkbox('show_smileys', 1, $show_smileys) }} Enable smileys</label><br>
+			<label>{{ Form::checkbox('attach_sig', 1, $attach_sig) }} Attach my signature to this post</label>
 		</div>
+	</div>
 
-		<label class="left">Options</label>
-		<div class="float_left">
-
-		<label>{{ Form::checkbox('subscribe', 1, $check_sub, ['tabindex' => 1]) }} Notify me of replies</label><br>
-		<label>{{ Form::checkbox('show_smileys', 1, $show_smileys, ['tabindex' => 1]) }} Enable smileys</label><br>
-		<label>{{ Form::checkbox('attach_sig', 1, $attach_sig, ['tabindex' => 1]) }} Attach my signature to this post</label>
-		</div>
-		
-		<div class="break"></div>
-
-		{{--
+	{{--
 		Post Icon
 		{for $i from 1 to 12}
 			if( $i == 7 ) { echo "<td width='10%'>&nbsp;</td>"; }
@@ -74,22 +75,21 @@
 			echo "</label></small></td>\n";
 			if( $i%7 == 6 ) { echo "</tr><tr>"; }
 		{/for}
-		--}}
-		
+	--}}
+
+	<div class="form-group">
 		<div class="attachment-box">
-		<label class="left">Attachments</label>
-		<div class="float_left" style="padding:7px 0">
+		<label class="col-sm-3 control-label">Attachments</label>
+		<div class="col-sm-8">
 		Select up to <b>{{ $max_file_uploads }}</b> files, <b>{{ $upload_max_filesize }} MB</b> each. Total limit is <b>{{ $post_max_size }} MB</b><br>
-		<input tabindex="1" type="file" id="files" name="files[]" multiple />
-		<output id="list"></output>
-		<div class="break"></div>
-		<input tabindex="1" name="attach" id="attach" type="submit" value="Attach Files" style="display:none">
+			<input type="file" id="files" name="files[]" multiple />
+			<output id="list"></output>
+			<input name="attach" id="attach" type="submit" value="Attach Files" style="display:none">
 		</div>
-		
-		<div class="break"></div>
 		</div>
-		
-		<script type="text/javascript">
+	</div>
+
+	<script type="text/javascript">
 		function handleFileSelect(evt) {
 			var total = 0, count = 0;
 			var files = evt.target.files; // FileList object
@@ -123,26 +123,20 @@
 		}
 
 		document.getElementById('files').addEventListener('change', handleFileSelect, false);
-		</script>
-		
-		<div class="form-box" style="margin:0 0 15px">
-		<label class="left">Poll</label>
-		<div class="float_left" style="padding:7px 0">
+	</script>
+	
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Poll</label>
+		<div class="col-sm-7" style="padding:7px 0">
 		<a href="" onClick="return false">Add a poll</a>
 		</div>
-		
-		<div class="break"></div>
-		</div>
-		
-		<center>
-	
-		<input class="btn btn-primary" tabindex="1" name="addpost" type="submit" accesskey="S" value="Submit">
-		<input class="btn btn-default preview" tabindex="1" name="preview" type="submit" accesskey="P" value="Preview">
+	</div>
 
-		<div class="break"></div>
-		
-		</center>
-		
+	<div class="form-group">
+		<div class="col-sm-7 col-sm-offset-4">
+			<input class="btn btn-primary" name="addpost" type="submit" accesskey="S" value="Submit">
+			<input class="btn btn-default preview" name="preview" type="submit" accesskey="P" value="Preview">
+		</div>
 	</div>
 </div>
 

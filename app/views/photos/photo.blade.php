@@ -45,7 +45,7 @@
 
 	<div class="header">Share this Photo</div>
 	
-	<div class="body form2">
+	<div class="body">
 	<script type='text/javascript'><!--
 	function copyToClipboard( id ) {
 		$('#'+id).focus();

@@ -1,9 +1,7 @@
 <nav>
-	<ul id="nav">
+<ul class="nav nav-tabs">
 	@foreach ( $menu as $toc )
-		<li><a href="{{ $toc->url }}" class="{{ $toc->class }}{{ $_PAGE['category'] == $toc->page ? ' active' : '' }}">{{{ $toc->name }}}</a></li>
+		<li class="{{ $_PAGE['category'] == $toc->page ? 'active' : '' }}"><a href="{{ $toc->url }}">{{{ $toc->name }}}</a></li>
 	@endforeach
-	</ul>
-
-	<div class="break"></div>
+</ul>
 </nav>

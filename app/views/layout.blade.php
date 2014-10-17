@@ -64,9 +64,9 @@
 @include ('custom.header')
 
 <div id="babynav">
-	<ul>
+	<ul class="nav nav-tabs">
 	@foreach ( $sub_menu as $app )
-		<li><a href="{{ $app->url }}"{{ $_PAGE['section'] == $app->section ? ' class="sub_active"' : '' }}>{{{ $app->name }}}</a></li>
+		<li class="{{ $_PAGE['section'] == $app->section ? 'active' : '' }}"><a href="{{ $app->url }}">{{{ $app->name }}}</a></li>
 	@endforeach
 	</ul>
 	

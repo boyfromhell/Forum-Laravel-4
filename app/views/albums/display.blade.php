@@ -14,13 +14,13 @@
 <br>
 
 @if ( $allow || ( $album->parent_id == 1 && $me->id ))
-<a class="button" href="/albums/new?id={{ $album->id }}">New{{ !$is_mobile ? ' Album' : '' }}</a>
+<a class="btn btn-primary" href="/albums/new?id={{ $album->id }}">New{{ !$is_mobile ? ' Album' : '' }}</a>
 @endif
 @if (( $me->is_admin || $album->user_id == $me->id ) && $album->id != 1)
-<a class="button" href="/albums/edit?id={{ $album->id }}">Edit{{ !$is_mobile ? ' Album' : '' }}</a>
+<a class="btn btn-default" href="/albums/edit?id={{ $album->id }}">Edit{{ !$is_mobile ? ' Album' : '' }}</a>
 @endif
 @if ( $allow )
-<a class="button" href="/media/upload?id={{ $album->id }}">Upload</a>
+<a class="btn btn-default" href="/media/upload?id={{ $album->id }}">Upload</a>
 @endif
 
 {{ $photos->links() }}
@@ -76,13 +76,13 @@
 @endif
 
 @if ( $allow || ( $album->parent_id == 1 && $me->id ))
-<a class="button" href="/albums/new?id={{ $album->id }}">New{{ !$is_mobile ? ' Album' : '' }}</a>
+<a class="btn btn-primary" href="/albums/new?id={{ $album->id }}">New{{ !$is_mobile ? ' Album' : '' }}</a>
 @endif
 @if (( $me->is_admin || $album->user_id == $me->id ) && $album->id != 1)
-<a class="button" href="/albums/edit?id={{ $album->id }}">Edit{{ !$is_mobile ? ' Album' : '' }}</a>
+<a class="btn btn-default" href="/albums/edit?id={{ $album->id }}">Edit{{ !$is_mobile ? ' Album' : '' }}</a>
 @endif
 @if ( $allow )
-<a class="button" href="/media/upload?id={{ $album->id }}">Upload</a>
+<a class="btn btn-default" href="/media/upload?id={{ $album->id }}">Upload</a>
 @endif
 
 {{ $photos->links() }}

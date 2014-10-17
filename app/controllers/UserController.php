@@ -196,16 +196,41 @@ class UserController extends Earlybird\FoundryController
 	 */
 	public function settings()
 	{
+		global $me;
+
 		$_PAGE = array(
 			'category' => 'usercp',
 			'section'  => 'settings',
 			'title'    => 'Settings',
 		);
 
+		if( Request::isMethod('post') ) {
+			$me->online = Input::get('online', 0);
+			$me->notify = Input::get('notify', 0);
+			$me->attach_sig = Input::get('attach_sig', 0);
+			$me->notify_pm = Input::get('notify_pm', 0);
+			$me->allow_email = Input::get('allow_email', 0);
+			$me->enable_smileys = Input::get('enable_smileys', 0);
+			$me->timezone = Input::get('timezone');
+			$me->style = Input::get('style');
+			$me->save();
+
+			Session::push('messages', 'Settings saved');
+
+			return Redirect::to('users/settings');
+		}
+
 		$themes = Theme::orderBy('name', 'asc')->get();
+
+		$tzs = array(
+			-12, -11, -10, -9, -8, -7, -6, -5, -4, -3.5,
+			-3, -2, -1, 0, 1, 2, 3, 3.5, 4, 4.5, 5, 5.5,
+			6, 6.5, 7, 8, 9, 9.5, 10, 11, 12, 13
+		);
 
 		return View::make('users.settings')
 			->with('_PAGE', $_PAGE)
+			->with('tzs', $tzs)
 			->with('themes', $themes);
 	}
 

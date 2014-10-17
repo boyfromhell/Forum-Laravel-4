@@ -15,7 +15,7 @@ class ForumController extends Earlybird\FoundryController
 		$me->access = $access = 2;
 
 		// Mark all forums read
-		if( Input::has('mark') && $me->id )
+		if( isset($_GET['mark']) && $me->id )
 		{
 			SessionTopic::where('user_id', '=', $me->id)->delete();
 
@@ -84,7 +84,7 @@ class ForumController extends Earlybird\FoundryController
 		global $me;
 
 		// Mark all forums read
-		if( Input::has('mark') && $me->id )
+		if( isset($_GET['mark']) && $me->id )
 		{
 			SessionTopic::where('user_id', '=', $me->id)->delete();
 
@@ -228,7 +228,7 @@ class ForumController extends Earlybird\FoundryController
 		);
 
 		// Mark all topics read
-		if( Input::has('mark') && $me->id )
+		if( isset($_GET['mark']) && $me->id )
 		{
 			SessionTopic::where('user_id', '=', $me->id)
 				->where('forum_id', '=', $forum->id)
