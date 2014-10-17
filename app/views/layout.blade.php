@@ -52,7 +52,7 @@
 
 <body>
 
-<div id="main_beta">
+<div id="main_beta" class="container">
 
 @include ('blocks.messages')
 

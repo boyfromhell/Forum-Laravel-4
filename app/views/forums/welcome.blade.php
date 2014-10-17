@@ -2,11 +2,10 @@
 
 @section('content')
 
-<div style="margin-bottom:6px">
-	<h1><a href="/forum/">{{{ Config::get('app.forum_name') }}}</a></h1>
-</div>
+<h1><a href="/forum/">{{{ Config::get('app.forum_name') }}}</a></h1>
 
-<div class="col-md-9 col-md-push-3">
+<div class="row">
+<div class="col-sm-9 col-sm-push-3">
 	@if ( !$me->id && ! Config::get('app.registration_enabled'))
 	<div class="alert notice">
 		<span style="font-size:16pt">
@@ -70,7 +69,7 @@
 	</div>
 </div>
 
-<div class="col-md-3 col-md-pull-9">
+<div class="col-sm-3 col-sm-pull-9">
 
 @if ( count($birthdays) > 0 )
 	<div class="welcome small">
@@ -131,8 +130,7 @@
 	</div>
 	
 </div>
-
-<div class="break"></div>
+</div>
 
 @if ( !$is_mobile && Module::isActive('shoutbox') )
 <iframe src="/community/shoutbox" width="100%" height="200" frameborder="no" scrolling="auto"></iframe>

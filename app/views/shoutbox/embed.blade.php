@@ -4,9 +4,9 @@
 
 <body class="shoutbox">
 
-<div style="width:20%; float:left;">
+<div class="row">
+<div class="col-sm-3 text-center">
 
-<div style="width:90%; text-align:center;">
 	<div class="welcome small" style="margin-bottom:3px">
 	
 		<div class="header">Shoutbox</div>
@@ -23,9 +23,9 @@
 	
 	<small><a href="/community/shoutlog" target="_top" style="text-decoration:none">History</a> - <a id="sb_toggle" href="" onClick="toggleShoutBox(); return false" style="text-decoration:none">Disable</a></small>
 	
-</div></div>
+</div>
 
-<div style="float:left; width:80%">
+<div class="col-sm-9">
 
 	<table class="shouts" cellpadding="0" cellspacing="0" border="0" width="100%" data-last-id="{{ $last_id }}" data-last-time="{{ $last_time }}">
 	@foreach ( $shouts as $shout )
@@ -37,7 +37,7 @@
 
 </div>
 
-<div class="break"></div>
+</div>
 
 </body>
 

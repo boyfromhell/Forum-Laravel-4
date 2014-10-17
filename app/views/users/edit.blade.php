@@ -55,28 +55,34 @@
 
 </div>
 
-<div class="welcome">
+<div class="row">
 
-	<div class="header">Personal</div>
+	<div class="col-sm-12">
+		<h3>Personal</h3>
+	</div>
 
-	<div class="body">
-		<label class="left">Birthday</label>
-		{{ Form::select('year', $years, $year, ['class' => 'left', 'tabindex' => 1, 'style' => 'width:100px']) }}
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Birthday</label>
+		<div class="col-sm-2">
+			{{ Form::select('year', $years, $year, ['class' => 'form-control', 'tabindex' => 1]) }}
+		</div>
+		<div class="col-sm-2">
+			{{ Form::select('month', $months, $month, ['class' => 'form-control', 'tabindex' => 1]) }}
+		</div>
+		<div class="col-sm-1">
+			{{ Form::select('day', $days, $day, ['class' => 'form-control', 'tabindex' => 1]) }}
+		</div>
+	</div>
 
-		{{ Form::select('month', $months, $month, ['class' => 'left', 'tabindex' => 1, 'style' => 'width:125px']) }}
-
-		{{ Form::select('day', $days, $day, ['class' => 'left', 'tabindex' => 1, 'style' => 'width:75px']) }}
-		
-		<div class="break"></div>
-
-		<label class="left">Show in profile</label>
-		<select class="left" name="bdaypref" tabindex="1" style="width:175px">
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Show in profile</label>
+		<div class="col-sm-3">
+		<select class="form-control" name="bdaypref" tabindex="1">
 			<option value="0"{{ $me->bdaypref == 0 ? ' selected' : '' }}>Full birthday</option>
 			<option value="1"{{ $me->bdaypref == 1 ? ' selected' : '' }}>Month and Day</option>
 			<option value="2"{{ $me->bdaypref == 2 ? ' selected' : '' }}>Nothing</option>
 		</select>
-
-		<div class="break"></div>
+		</div>
 	</div>
 	
 </div>

@@ -44,12 +44,10 @@
 
 	<div class="header">Albums</div>
 
-	<div class="body">
+	<div class="body row">
 		@foreach ( $album->children as $child )
 			@include ('albums.row')
 		@endforeach
-		
-		<div class="break"></div>
 	</div>
 </div>
 @endif

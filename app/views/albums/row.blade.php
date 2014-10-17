@@ -1,4 +1,4 @@
-<div class="album">
+<div class="album col-md-6">
 		
 	<div class="photo"><a class="thumb" href="{{ $child->url }}"><img src="{{ $cdn }}{{ $child->coverPhoto->thumbnail }}"></a></div>
 	

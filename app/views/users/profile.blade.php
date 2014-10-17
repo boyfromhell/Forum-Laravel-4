@@ -6,12 +6,9 @@
 
 	<div class="header">View Profile</div>
 
-	<div class="body">
+	<div class="body row">
 	
-	<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
-	<tr>
-
-	<td class="left v_top" style="width:50%; padding:10px 15px;">
+	<div class="col-md-6">
 	<h1>{{{ $user->name }}} <img src="/images/{{ $online_text }}.png" alt="{{{ $user->name }}} is {{ $online_text }}" title="{{{ $user->name }}} is {{ $online_text }}"></h1>
 	<small>
 	@if ( $user->level->image )
@@ -22,8 +19,9 @@
 	@if ( $user->avatar->id )<br><br>
 	<img id="profileavatar" src="{{ $cdn }}/images/avatars/{{ $user->avatar->file }}" alt="{{{ $user->name }}}'s avatar" title="{{{ $user->name }}}'s avatar">
 	@endif
-	</td>
-	<td class="right v_top" style="width:50%; padding:15px;">
+	</div>
+
+	<div class="col-md-6">
 	Last Visit: <b>{{ $user->last_online }}</b><br>
 	Viewed <b>{{ number_format($user->views) }}</b> time{{ $user->views != 1 ? 's' : '' }}<br><br>
 	@if ( $show_birthday )
@@ -41,10 +39,7 @@
 
 	@if ( $me->is_admin || $me->id == $user->id )<a href="{{ $edit_url }}" class="button small">Edit</a>@endif
 	@if ( $me->is_mod )<a href="/lookup.php?u={{ $user->id }}" class="button small">IP</a>@endif
-	<div class="break"></div>
-	</td>
-</tr>
-</table>
+	</div>
 
 	</div>
 
@@ -54,12 +49,9 @@
 
 	<div class="header">Info</div>
 
-	<div class="body">
+	<div class="body row">
 	
-	<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
-	<tr>
-
-	<td class="left v_top" style="width:50%; padding:10px 15px;">
+	<div class="col-md-6">
 	@if ( count($user->groups) > 0 )<b>Groups:</b><br>
 		@foreach ( $user->groups as $group )
 			<img src="{{ $group->badge ? '/images/groups/'.$group->badge : $skin.'icons/group.png' }}"> <a href="{{ $group->url }}">{{{ $group->name }}}</a><br>
@@ -70,8 +62,10 @@
 		<b>{{{ $field->name }}}:</b><br>
 		{{{ $field->value }}}<br><br>
 	@endforeach
-	</td>
-	<td class="right v_top" style="width:50%; padding:10px 15px;">@if ( $me->id )
+	</div>
+
+	<div class="col-md-6">
+	@if ( $me->id )
 	<b>Contact:</b><br>
 
 	@foreach ( $user->screennames as $im )
@@ -106,15 +100,13 @@
 			@endif
 		@endif
 	@endif
-	</td>
-	</tr>
+	</div>
 	
 	@if ( $user->sig )
-	<tr>
-		<td colspan="2"><div class="sig">{{ BBCode::parse($user->sig) }}</div></td>
-	</tr>
+	<div class="col-md-12">
+		<div class="sig">{{ BBCode::parse($user->sig) }}</div>
+	</div>
 	@endif
-	</table>
 	
 	</div>
 	
