@@ -15,6 +15,7 @@
 	<div class="panel-heading">{{{ $project->name }}}</div>
 
 	<table class="table">
+@if ( $i == 0 )
 	<thead>
 	<tr>
 		<th class="icon">
@@ -29,6 +30,7 @@
 	</tr>
 	</thead>
 	<tbody>
+@endif
 	<tr>
 		<td class="icon">
 			<img src="{{ $skin }}icons/project_{{{ $_PAGE['section'] }}}.png" alt="file">

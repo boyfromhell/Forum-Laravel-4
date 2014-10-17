@@ -2,11 +2,11 @@
 
 @section('content')
 
-<div class="welcome static wide no-margin">
+<div class="panel panel-primary">
 
-	<div class="header">Terms of Use</div>
+	<div class="panel-heading">Terms of Use</div>
 
-	<div class="body">
+	<div class="panel-body">
 	
 <h2>Introduction</h2>
 

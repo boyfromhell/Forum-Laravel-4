@@ -13,12 +13,12 @@
 @if ( $poll->id )
 
 <form method="post" action="">
-<table class="layout" cellpadding="0" cellspacing="0" border="0" width="100%">
+<table class="layout">
 <tr>
 	<td class="middle"><center><br>
 		<b>{{{ $poll->question }}}</b>
 	
-		<table class="layout" cellpadding="0" cellspacing="0" border="0" style="margin:10px 0px;">
+		<table class="layout">
 @if ( ! $me->id || Input::has('results') || $choices = $me->votedIn($poll->id) )
 
 @foreach( $poll->options as $option )

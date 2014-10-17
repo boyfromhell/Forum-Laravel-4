@@ -2,11 +2,11 @@
 
 @section('content')
 
-<div class="welcome wide">
+<div class="panel panel-primary">
 
-	<div class="header">Random Photos</div>
+	<div class="panel-heading">Random Photos</div>
 
-	<div class="body" style="overflow:hidden; height:205px;">
+	<div class="panel-body" style="overflow:hidden; height:205px;">
 	@foreach ( $photos as $photo )
 	
 	<div class="photo" style="height:205px">
@@ -19,11 +19,11 @@
 
 </div>
 
-<div class="welcome wide no-margin">
+<div class="panel panel-primary">
 
-	<div class="header">Recent Albums</div>
+	<div class="panel-heading">Recent Albums</div>
 
-	<div class="body" style="overflow:hidden; height:230px;">
+	<div class="panel-body" style="overflow:hidden; height:230px;">
 	@foreach ( $albums as $album )
 
 	<div class="photo" style="height:230px">

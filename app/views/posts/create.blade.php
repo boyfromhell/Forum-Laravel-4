@@ -8,23 +8,24 @@
 <h1><a href="{{ $topic->url }}">{{{ $topic->title }}}</a></h1>
 @endif
 
-<a href="/forum/">{{{ Config::get('app.forum_name') }}}</a>
-
+<ol class="breadcrumb">
+	<li><a href="/">{{{ Config::get('app.forum_name') }}}</a></li>
+	<li><a href="/forum">Forum</a></li>
 @foreach ( $forum->parents as $parent )
-	&nbsp;&gt;&nbsp;&nbsp;<a href="{{ $parent->url }}">{{{ $parent->name }}}</a>
+	<li><a href="{{ $parent->url }}">{{{ $parent->name }}}</a></li>
 @endforeach
 
 @if ( $mode != 'newtopic' )
-&nbsp;&gt;&nbsp;&nbsp;<a href="{{ $forum->url }}">{{{ $forum->name }}}</a>
+	<li><a href="{{ $forum->url }}">{{{ $forum->name }}}</a></li>
 @endif
-
-<br><br>
+</ol>
 
 <form class="form-horizontal unload-warning" method="post" action="" enctype="multipart/form-data"{{ count($attachments) > 0 ? ' data-changed="1"' : '' }}>
-<div class="welcome wide">
+<div class="panel panel-primary">
 
-	<div class="header">{{{ $_PAGE['title'] }}}</div>
-	
+	<div class="panel-heading">{{{ $_PAGE['title'] }}}</div>
+
+	<div class="panel-body">
 	{{ Form::hidden('hash', $hash) }}
 
 	<div class="form-group">
@@ -132,22 +133,28 @@
 		</div>
 	</div>
 
+	</div>
+
+	<div class="panel-footer">
+
 	<div class="form-group">
-		<div class="col-sm-7 col-sm-offset-4">
+		<div class="col-sm-7 col-sm-offset-3">
 			<input class="btn btn-primary" name="addpost" type="submit" accesskey="S" value="Submit">
 			<input class="btn btn-default preview" name="preview" type="submit" accesskey="P" value="Preview">
 		</div>
 	</div>
+
+	</div>
 </div>
 
-<div id="preview"></div>
+{{-- <div id="preview"></div> --}}
 
 @if ( count($attachments) > 0 )
-<div class="welcome wide">
+<div class="panel panel-default">
 
-	<div class="header">Attachments</div>
+	<div class="panel-heading">Attachments</div>
 	
-	<div class="body">
+	<div class="panel-body">
 		<?php $prev_type = 0; ?>
 		@foreach ( $attachments as $attachment )
 			@if ( $attachment->filetype == 1 )
@@ -172,11 +179,11 @@
 </form>
 
 @if ( $mode == 'reply' || $mode == 'quote' )
-<div class="welcome wide">
+<div class="panel panel-info">
 
-	<div class="header">Topic Review (Newest First)</div>
+	<div class="panel-heading">Topic Review (Newest First)</div>
 	
-	<div class="body">
+	<div class="panel-body">
 	
 	<iframe src="/topic-review/{{ $topic->id }}" width="100%" height="250" frameborder="no" scrolling="auto"></iframe>
 	

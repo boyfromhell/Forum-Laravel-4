@@ -6,9 +6,9 @@
 
 	<div class="panel-heading">Settings</div>
 
-	<div class="panel-body">
-
 	<form class="form-horizontal unload-warning" method="post" action="/users/settings">
+
+	<div class="panel-body">
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Hide my online status</label>
@@ -92,7 +92,11 @@
 		</select>
 		</div>
 	</div>
-		
+
+	</div>
+
+	<div class="panel-footer">
+
 	<div class="form-group">
 		<div class="col-sm-4 col-sm-offset-4">
 		<input class="btn btn-primary" type="submit" tabindex="1" name="update" value="Save Settings">
@@ -100,9 +104,9 @@
 		</div>
 	</div>
 
-	</form>
-	
 	</div>
+
+	</form>
 
 </div>
 

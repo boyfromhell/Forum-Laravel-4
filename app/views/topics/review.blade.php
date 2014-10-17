@@ -4,8 +4,8 @@
 
 <body style="background:none">
 
-<table class="table2" cellspacing="0" cellpadding="0" border="0" width="100%">
-
+<table class="table">
+<tbody>
 @foreach ( $posts as $i => $post )
 <tr>
 	<td width="25%" style="vertical-align:top">
@@ -18,12 +18,8 @@
 		</div>
 	</td>
 </tr>
-@if ( $i < count($posts)-1 )
-<tr>
-	<td class="cent" colspan="2"><hr></td>
-</tr>
-@endif
 @endforeach
+</tbody>
 </table>
 
 </body>

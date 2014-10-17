@@ -2,11 +2,11 @@
 
 @section('content')
 
-<div class="welcome wide no-margin">
+<div class="panel panel-primary">
 
-	<div class="header">Privacy Policy</div>
+	<div class="panel-heading">Privacy Policy</div>
 
-	<div class="body">
+	<div class="panel-body">
 	
 	<p>
 	<b>What information do we collect?</b>

@@ -19,7 +19,7 @@
 		@endif
 	</td>
 
-	<td class="lastpost" colspan="2">
+	<td class="lastpost">
 		@if ( $forum->external )
 			{{{ $forum->description }}}
 		@elseif ( false && !$forum->perm_read )

@@ -50,6 +50,10 @@
 			{{ Form::text('url', '', ['class' => 'form-control']) }}
 		</div>
 	</div>
+
+	</div>
+
+	<div class="panel-footer">
 		
 	<div class="form-group">
 		<div class="col-sm-5 col-sm-offset-4">

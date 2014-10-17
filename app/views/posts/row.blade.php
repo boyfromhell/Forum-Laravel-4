@@ -4,7 +4,7 @@
 
 	@if ( $post->showhr > 0 && !$post->ignored )
 	<div class="table-header">
-		<table class="table2" cellpadding="0" cellspacing="0" width="100%" border="0">
+		<table class="table">
 		<tr>
 			<th class="soft">
 			@if ( $post->smiley )

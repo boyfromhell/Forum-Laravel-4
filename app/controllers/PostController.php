@@ -28,7 +28,7 @@ class PostController extends Earlybird\FoundryController
 		$this->mode = 'reply';
 		$this->title = 'Post a reply';
 
-		if( $this->topic->status && !$me->is_mod ) {
+		if( $this->topic->status && !$me->is_moderator ) {
 			App::abort(403);
 		}
 
@@ -53,10 +53,10 @@ class PostController extends Earlybird\FoundryController
 		$this->mode = 'edit';
 		$this->title = 'Edit post';
 
-		if( $this->post->user_id != $me->id && !$me->is_mod ) {
+		if( $this->post->user_id != $me->id && !$me->is_moderator ) {
 			App::abort(403);
 		}
-		if( $this->topic->status && !$me->is_mod ) {
+		if( $this->topic->status && !$me->is_moderator ) {
 			App::abort(403);
 		}
 
@@ -82,7 +82,7 @@ class PostController extends Earlybird\FoundryController
 		$this->mode = 'quote';
 		$this->title = 'Post a reply';
 
-		if( $this->topic->status && !$me->is_mod ) {
+		if( $this->topic->status && !$me->is_moderator ) {
 			App::abort(403);
 		}
 
@@ -197,13 +197,13 @@ class PostController extends Earlybird\FoundryController
 				$type = Input::get('type', 0);
 				$smiley = Input::get('smiley', 0);
 
-				if( !$me->is_mod ) {
+				if( !$me->is_moderator ) {
 					$type = 0;
 				}
 
 				// Editing a post is vastly different from the other modes
 				if( $this->mode == 'edit' ) {
-					if( $me->is_mod ) {
+					if( $me->is_moderator ) {
 						$topic->type = $type;
 					}
 

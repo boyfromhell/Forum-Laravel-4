@@ -1,6 +1,6 @@
 <div class="smileys">
 
-<table cellspacing="0" cellpadding="0" border="0">
+<table>
 @foreach ( $smileys as $k => $smiley )
 	@if ( $k % 5 == 0 )
 		<tr>

@@ -14,9 +14,10 @@
 @endif
 
 @if ( $quote->id )
-<div id="quotebot">
+<div class="well well-sm">
 
-	<div style="float:left; width:95%;">{{{ $quote->text }}}
+	<div class="row">
+	<div class="col-xs-11">{{{ $quote->text }}}
 
 	@if ( $quote->author )
 	<br><i>&mdash; 
@@ -27,10 +28,12 @@
 	@endif
 	
 	</div>
-	<div style="text-align:right"><a class="light" href="{{ $quote->url }}">#{{ $quote->id }}</a></div>
-	<div class="break"></div>
+	<div class="col-xs-1 text-right">
+		<a class="light" href="{{ $quote->url }}">#{{ $quote->id }}</a>
+	</div>
+	</div>
 
-</div><br>
+</div>
 @endif
 
 <div style="float:left; margin-bottom:6px;">

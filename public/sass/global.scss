@@ -62,7 +62,6 @@ a {
 header {
 	position: absolute; top: 0; left: 0; width: 100%;
 	background:#222 url('/images/custom/grunge.jpg'); padding:10px 0 0 0; height:$header-height;
-	.center { width:90%; min-width:1000px; margin:0 auto; }
 
 	h1 { float:left; margin:0; padding:13px 0; }
 	.logo { float:left; position:relative; margin-right:20px; z-index:10; }
@@ -80,11 +79,11 @@ header {
 	}
 }
 
+ol.breadcrumb {
+	margin-left: 0;
+	margin-right: 0;
+}
 #babynav {
-	left: 5%;
-	padding: 10px 0 0 0;
-	width: 90%;
-
 	#social-media {
 		float: right; margin-right:20px; line-height: 0;
 		a { float:left; margin:0 3px; }
@@ -113,81 +112,35 @@ header {
 	a { color:#000; font-weight:bold; }
 }
 
-.welcome {
-	margin-bottom:20px;
-	.table-header {
-		@include vert-gradient;
-	}
-	.header {
-		padding:6px 10%; border-top:2px solid #333; font-size:14pt;
-		font-weight:bold; font-variant:small-caps;
-		&.soft { 
-			font-variant:normal; color:#888; font-size:11pt; padding-top:8px; padding-bottom:8px;
-			font-weight:normal;
+.subheading {
+	background:$subheader-bg; border-top:2px solid #333;
+	.details { float:right; width:40%; padding:10px; font-size:10pt; }
+	&.messages {
+		padding: 6px 10px;
+		input {
+			margin:0; padding: 4px 6px;
+			&.primary { font-weight: bold; }
 		}
-		.recipients {
-			padding-top: 6px;
-		}
-		a { color: #ddd;
-			&:hover { color: #fff; }
-		}
-	}
-	.subheading {
-		background:$subheader-bg; border-top:2px solid #333;
-		.details { float:right; width:40%; padding:10px; font-size:10pt; }
-		&.messages {
-			padding: 6px 10px;
-			input {
-				margin:0; padding: 4px 6px;
-				&.primary { font-weight: bold; }
-			}
-			.float_left { padding:5px 0; }
-		}
-	}
-	.body {
-		border-top:2px solid #333; border-bottom:2px solid #333; padding:15px 10%; font-size:11pt;
-		word-wrap: break-word;
-		
-		textarea { width:100%; height:66px; }
-		.empty { padding:30px 0; text-align:center; }
-		p {
-			&.photo-description {
-				background:$description-bg; border:1px solid #333; padding:8px; margin:0 0 10px 0;
-			}
-		}
-		
-		&.post-row {
-			background:$post-body-bg;
-			p { margin: 10px 0; padding: 0 10px; }
-		}
-	}
-	&.no-margin { margin:0; }
-	&.wide {
-		.header { padding:6px 10px; }
-		.body { padding:6px 10px; }
-	}
-	&.small {
-		margin-bottom:12px;
-		.header { padding:3px 6px; font-size:11pt; }
-		.body { padding:3px 6px;
-			input { margin:5px auto; }
-		}
-	}
-	&.calendar {
-		.header { padding:6px 10px; }
-		.body { padding:0; background:$maingray; border-bottom:0; }
-	}
-	&.static {
-		h1 { margin-top:8px; }
+		.float_left { padding:5px 0; }
 	}
 }
-
-#quotebot {
-	border: 1px dotted #999;
-	padding: 8px 16px;
-	font-size: 10pt;
+.panel-body {
+	word-wrap: break-word;
 }
 
+p {
+	&.empty {
+		padding: 30px 0;
+		text-align: center;
+	}
+	&.photo-description {
+		background: $description-bg;
+		border: 1px solid #333;
+		padding: 8px;
+		margin: 0 0 10px 0;
+	}
+}
+		
 #avatars {
 	height:160px; overflow:auto;
 	.avat {
@@ -200,12 +153,18 @@ header {
 	}
 }
 
+.panel-footer {
+	.form-group {
+		margin-bottom: 0;
+	}
+}
+
 footer {
 	position: relative;
 	padding:10px 10px 15px; text-align:center; font-size:8pt; color:#ccc; margin:0 auto; width:50%;
 	img { margin-left:13px; }
-	a { color:$footer-color; text-decoration:none; margin-left:13px;
-		&.static-page { color:#bbb; }
+	a {
+		margin-left: 13px;
 	}
 }
 
@@ -346,8 +305,8 @@ table.calendar {
 }
 
 .shoutbox {
-	padding:0; background:none; font-size:10pt;
-	a { color:$link-color;
+	padding:0; font-size:10pt;
+	a {
 		&.at_reply { color:#ccc; text-decoration:none; }
 	}
 	

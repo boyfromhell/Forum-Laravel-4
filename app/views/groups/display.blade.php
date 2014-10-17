@@ -2,11 +2,11 @@
 
 @section('content')
 
-<div class="welcome">
+<div class="panel panel-primary">
 
-	<div class="header">{{{ $group->name }}}</div>
+	<div class="panel-heading">{{{ $group->name }}}</div>
 
-	<div class="body">
+	<div class="panel-body">
 	
 	@if ( $group->badge )
 	<img src="/images/groups/{{ $group->badge }}"><br><br>
@@ -34,25 +34,19 @@
 @endif
 @endif
 
-<div class="welcome wide no-margin">
+<div class="panel panel-info">
 
-	<div class="table-header">
-		<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
-		<tr>
-			<th class="icon">&nbsp;</th>
-			<th>Username</th>
-			<th style="width:20%">Status</th>
-			<th style="width:10px">&nbsp;</th>
-		</tr>
-		</table>
-	</div>
+	<div class="panel-heading">Members</div>
 
-	<div class="header">Members</div>
-	
-	<div class="body">
-
-	<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
-	
+	<table class="table">
+	<thead>
+	<tr>
+		<th class="icon">&nbsp;</th>
+		<th>Username</th>
+		<th style="width:20%">Status</th>
+	</tr>
+	</thead>
+	<tbody>
 	@foreach ( $group->moderators as $member )
 		@include ('groups.members.row', ['role' => 'Moderator'])
 	@endforeach
@@ -60,7 +54,7 @@
 	@foreach ( $group->members as $member )
 		@include ('groups.members.row', ['role' => ''])
 	@endforeach
-
+	</tbody>
 	</table>
 
 	{{-- if $membership == 2}
@@ -76,8 +70,6 @@
 	</form>
 	{/if --}}
 
-	</div>
-
 </div>
 
 @if ( $me->id && !$group->allMembers->contains($me->id) )
@@ -87,7 +79,5 @@
 <a href="/groups/join?id={{ $group->id }}" class="btn btn-primary">Request to join</a>
 @endif
 @endif
-
-<div class="break"></div>
 
 @stop
