@@ -2,7 +2,7 @@
 
 @section('content')
 
-<a href="/profile" class="button">View Profile</a>
+<a href="/profile" class="btn btn-primary">View Profile</a>
 
 <div class="break"></div>
 
@@ -134,7 +134,7 @@
 </div>
 </form>
 
-<a href="/profile" class="button">View Profile</a>
+<a href="/profile" class="btn btn-primary">View Profile</a>
 
 <div class="break"></div>
 

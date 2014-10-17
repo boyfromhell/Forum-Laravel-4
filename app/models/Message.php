@@ -34,4 +34,13 @@ class Message extends Earlybird\Foundry
 		return $this->belongsTo('User', 'from_user_id');
 	}
 
+	/**
+	 * Owned by user
+	 */
+	public function scopeOwnedBy( $query, $user_id )
+	{
+		return $query->where('owner_user_id', '=', $user_id);
+	}
+
 }
+

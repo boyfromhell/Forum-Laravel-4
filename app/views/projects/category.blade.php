@@ -3,7 +3,7 @@
 @section('content')
 
 @if ( $me->is_admin )
-<a href="/admin/projects/create" class="button">New Project</a>
+<a href="/admin/projects/create" class="btn btn-primary">New Project</a>
 
 <div class="break"></div>
 @endif
@@ -89,7 +89,7 @@
 @endif
 
 @if ( $me->is_admin )
-<a href="/admin/projects/create" class="button">New Project</a>
+<a href="/admin/projects/create" class="btn btn-primary">New Project</a>
 
 <div class="break"></div>
 @endif

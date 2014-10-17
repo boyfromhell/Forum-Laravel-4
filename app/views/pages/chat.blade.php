@@ -19,7 +19,7 @@
 	@if ( !$is_mobile )
 	You may also use the Java chat applet embedded in this website:<br><br>
 	
-	<a href="/community/chat" class="button" onClick="window.open('/chat-popup', 'chat', 'width=800, height=575, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no, status=yes, menubar=no'); return false;">Java Chatroom</a><br><br>
+	<a href="/community/chat" class="btn btn-primary" onClick="window.open('/chat-popup', 'chat', 'width=800, height=575, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no, status=yes, menubar=no'); return false;">Java Chatroom</a><br><br>
 	@endif
 
 	<div class="break"></div>

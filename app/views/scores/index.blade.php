@@ -3,7 +3,7 @@
 @section('content')
 
 @if ( $me->id )
-<a href="/community/submit_score" class="button">Submit Score</a>
+<a href="/community/submit_score" class="btn btn-primary">Submit Score</a>
 
 <div class="break"></div>
 @endif
@@ -56,7 +56,7 @@
 @endforeach
 
 @if ( $me->id )
-<a href="/community/submit_score" class="button">Submit Score</a>
+<a href="/community/submit_score" class="btn btn-primary">Submit Score</a>
 
 <div class="break"></div>
 @endif

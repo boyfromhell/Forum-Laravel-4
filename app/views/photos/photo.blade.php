@@ -1,9 +1,9 @@
-<a class="button" href="{{ $album->url }}{{ $page > 1 ? '?page='.$page : '' }}">Return</a>
-<a class="button" href="/media/download/{{ $photo->id }}">Download</a>
+<a class="btn btn-primary" href="{{ $album->url }}{{ $page > 1 ? '?page='.$page : '' }}">Return</a>
+<a class="btn btn-success" href="/media/download/{{ $photo->id }}">Download</a>
 
 <div class="float_right">
-<a class="button ajax-photo" data-id="{{ $prev->id }}" href="{{ $prev->url }}">Previous</a>
-<a class="button ajax-photo" data-id="{{ $next->id }}" href="{{ $next->url }}">Next</a>
+<a class="btn btn-default ajax-photo" data-id="{{ $prev->id }}" href="{{ $prev->url }}">Previous</a>
+<a class="btn btn-default ajax-photo" data-id="{{ $next->id }}" href="{{ $next->url }}">Next</a>
 </div>
 
 <div class="break"></div>
@@ -70,7 +70,7 @@
 	@endif
 	
 	@if ( $photo->user_id == $me->id || $me->is_admin )
-	<a class="button small" href="/media/edit_photo/{{ $photo->id }}">Edit</a>
+	<a class="btn btn-primary btn-xs" href="/media/edit_photo/{{ $photo->id }}">Edit</a>
 	@endif
 	
 	<div class="break"></div>
@@ -93,12 +93,12 @@ $(document).ready(function() {
 </script>
 </div>
 
-<a class="button" href="{{ $album->url }}{{ $page > 1 ? '?page='.$page : '' }}">Return</a>
-<a class="button" href="/media/download/{{ $photo->id }}">Download</a>
+<a class="btn btn-primary" href="{{ $album->url }}{{ $page > 1 ? '?page='.$page : '' }}">Return</a>
+<a class="btn btn-success" href="/media/download/{{ $photo->id }}">Download</a>
 
 <div class="float_right">
-<a class="button ajax-photo" data-id="{{ $prev->id }}" href="{{ $prev->url }}">Previous</a>
-<a class="button ajax-photo" data-id="{{ $next->id }}" href="{{ $next->url }}">Next</a>
+<a class="btn btn-default ajax-photo" data-id="{{ $prev->id }}" href="{{ $prev->url }}">Previous</a>
+<a class="btn btn-default ajax-photo" data-id="{{ $next->id }}" href="{{ $next->url }}">Next</a>
 </div>
 
 <div class="break"></div>

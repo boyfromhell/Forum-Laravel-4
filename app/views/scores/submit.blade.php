@@ -2,52 +2,62 @@
 
 @section('content')
 
-<form class="form2 unload-warning wide" method="post" action="/community/submit_score">
+<form class="form-horizontal unload-warning" method="post" action="/community/submit_score">
 <div class="welcome wide">
 
 	<div class="header">Submit Score</div>
 	
-	<div class="body">
+	<div class="form-group">
+		<label class="col-sm-4 control-label">Character Name</label>
+		<div class="col-sm-5">
+			{{ Form::text('character', '', ['class' => 'form-control']) }}
+		</div>
+	</div>
+		
+	<div class="form-group">
+		<label class="col-sm-4 control-label">Score</label>
+		<div class="col-sm-2">
+			{{ Form::text('score', '', ['class' => 'form-control', 'maxlength' => 10]) }}
+		</div>
+	</div>
 
-		<label class="left">Character Name</label>
-		{{ Form::text('character', '', ['class' => 'left', 'tabindex' => 1]) }}
-		<div class="break"></div>
-		
-		<label class="left">Score</label>
-		{{ Form::text('score', '', ['class' => 'left', 'tabindex' => 1, 'maxlength' => 10]) }}
-		<div class="break"></div>
-		
-		<label class="left">Variant</label>
-		{{ Form::select('variant', ['0.50' => '0.50', 'CLIVAN' => 'CLIVAN', 'CVS' => 'CVS', 'IVANT' => 'IVANT', 'IVANtty' => 'IVANtty', 'IvanX' => 'IvanX', 'LIVAN' => 'LIVAN'], ['tabindex' => 1]) }}
-		<div class="break"></div>
+	<div class="form-group">
+		<label class="col-sm-4 control-label">Variant</label>
+		<div class="col-sm-2">
+			{{ Form::select('variant', ['0.50' => '0.50', 'CLIVAN' => 'CLIVAN', 'CVS' => 'CVS', 'IVANT' => 'IVANT', 'IVANtty' => 'IVANtty', 'IvanX' => 'IvanX', 'LIVAN' => 'LIVAN'], '', ['class' => 'form-control']) }}
+		</div>
+	</div>
 
-		<label class="left">Victory?</label>
-		{{ Form::select('victory', ['1' => 'Yes', '0' => 'No'], ['tabindex' => 1]) }}
-		<div class="break"></div>
-		
-		<label class="left">Ending</label>
-		<div class="float_left">
-			{{ Form::text('ending', '', ['tabindex' => 1]) }}<br>
+	<div class="form-group">
+		<label class="col-sm-4 control-label">Victory?</label>
+		<div class="col-sm-2">
+			{{ Form::select('victory', ['1' => 'Yes', '0' => 'No'], '', ['class' => 'form-control']) }}
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-4 control-label">Ending</label>
+		<div class="col-sm-5">
+			{{ Form::text('ending', '', ['class' => 'form-control']) }}<br>
 			<small>Begin with the text <b>after</b> the character name, i.e. "killed...", "defeated..."</small>
 		</div>
-		<div class="break"></div>
-		
-		<label class="left">URL with details</label>
-		{{ Form::text('url', '', ['class' => 'left', 'tabindex' => 1]) }}
-		<div class="break"></div>
-		
-		<center>
-	
-		<input class="primary" tabindex="1" name="submit" type="submit" accesskey="S" value="Submit">
-		<input type="reset" value="Reset">
-
-		<div class="break"></div>
-		
-		</center>
-
 	</div>
-</div>
 
+	<div class="form-group">
+		<label class="col-sm-4 control-label">URL with details</label>
+		<div class="col-sm-5">
+			{{ Form::text('url', '', ['class' => 'form-control']) }}
+		</div>
+	</div>
+		
+	<div class="form-group">
+		<div class="col-sm-5 col-sm-offset-4">
+			<input class="btn btn-primary" name="submit" type="submit" accesskey="S" value="Submit">
+			<input class="btn btn-default" type="reset" value="Reset">
+		</div>
+	</div>
+
+</div>
 </form>
 
 @stop

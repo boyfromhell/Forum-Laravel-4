@@ -16,8 +16,8 @@
 {{ $posts->links() }}
 
 @if ( $me->id )
-<a href="/new-topic/{{ $forum->id }}" class="button">New Topic</a>
-<a href="/reply-to-topic/{{ $topic->id }}" class="button">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
+<a href="/new-topic/{{ $forum->id }}" class="btn btn-default">New Topic</a>
+<a href="/reply-to-topic/{{ $topic->id }}" class="btn btn-primary">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
 @endif
 
 <div class="actions">
@@ -38,8 +38,8 @@
 @endforeach
 
 @if ( $me->id )
-<a href="/new-topic/{{ $forum->id }}" class="button">New Topic</a>
-<a href="/reply-to-topic/{{ $topic->id }}" class="button">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
+<a href="/new-topic/{{ $forum->id }}" class="btn btn-default">New Topic</a>
+<a href="/reply-to-topic/{{ $topic->id }}" class="btn btn-primary">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
 @endif
 
 {{ $posts->links() }}
@@ -54,7 +54,7 @@
 	@include ('topics.quick_reply')
 @endif
 
-@if ( $me->is_mod )
+@if ( $me->is_moderator )
 	@include ('topics.moderate')
 @endif
 

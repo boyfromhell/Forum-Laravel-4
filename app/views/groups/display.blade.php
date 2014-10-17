@@ -19,7 +19,7 @@
 	
 	@if ( $membership == 2 )
 	<br><br>
-	<a href="/groups/edit?id={{ $group->id }}" class="button small">Edit</a>
+	<a href="/groups/edit?id={{ $group->id }}" class="btn btn-primary btn-xs">Edit</a>
 	<div class="break"></div>
 	@endif
 	</div>
@@ -28,9 +28,9 @@
 
 @if ( $me->id && !$group->allMembers->contains($me->id) )
 @if ( $group->type == 'open' )
-<a href="/groups/join?id={{ $group->id }}" class="button">Join Group</a>
+<a href="/groups/join?id={{ $group->id }}" class="btn btn-primary">Join Group</a>
 @elseif ( $group->type == 'closed' )
-<a href="/groups/join?id={{ $group->id }}" class="button">Request to join</a>
+<a href="/groups/join?id={{ $group->id }}" class="btn btn-primary">Request to join</a>
 @endif
 @endif
 
@@ -82,9 +82,9 @@
 
 @if ( $me->id && !$group->allMembers->contains($me->id) )
 @if ( $group->type == 'open' )
-<a href="/groups/join?id={{ $group->id }}" class="button">Join Group</a>
+<a href="/groups/join?id={{ $group->id }}" class="btn btn-primary">Join Group</a>
 @elseif ( $group->type == 'closed' )
-<a href="/groups/join?id={{ $group->id }}" class="button">Request to join</a>
+<a href="/groups/join?id={{ $group->id }}" class="btn btn-primary">Request to join</a>
 @endif
 @endif
 

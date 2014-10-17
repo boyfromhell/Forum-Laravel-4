@@ -3,7 +3,7 @@
 @section('content')
 
 @if ( $me->id )
-<a href="/admin/groups/create" class="button">New Group</a>
+<a href="/admin/groups/create" class="btn btn-primary">New Group</a>
 
 <div class="break"></div>
 @endif
@@ -44,7 +44,7 @@
 </div>
 
 @if ( $me->id )
-<a href="/admin/groups/create" class="button">New Group</a>
+<a href="/admin/groups/create" class="btn btn-primary">New Group</a>
 
 <div class="break"></div>
 @endif

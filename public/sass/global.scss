@@ -59,14 +59,6 @@ a { color:$link-color; text-decoration:none;
 	&.light { color:#888; text-decoration:none; }
 	&.admin, &.mod { font-weight:bold; }
 	&.admin { color:#00b4ff; }
-	
-	&.button {
-		margin:7px 5px 7px 0; padding:6px 15px; background:$header-bg; border:1px solid #000; font-weight:bold;
-		color:$button-color; display:block; float:left; text-transform:uppercase; font-size:11pt;
-		
-		&.small { padding:2px 9px; font-size:10pt; }
-		&:hover { background:$button-hover; }
-	}
 }
 
 header {
@@ -221,38 +213,6 @@ nav {
 	}
 	&.static {
 		h1 { margin-top:8px; }
-	}
-}
-
-.form2 {
-	margin:0 auto; color:$form-span;
-	
-	label.left { float:left; text-align:right; margin:7px 15px 7px 0; width:30%; color:#000; }
-	span.left { float:left; margin:7px 0; color:$form-span; }
-	input { 
-		&:hover { background:$input-hover; }
-		&.left { float:left; width:200px; }
-		&[type=submit], &[type=reset] { padding:6px 20px; margin:15px 2px; font-size:11pt; text-transform:uppercase; }
-		&.primary { font-weight:bold; }
-		&[type=file] { background:none; border:0; padding:0; }
-	}
-	
-	input, select, textarea {
-		background:$input-bg; border:1px solid #000; color:$input-color; font-size:11pt; padding: 3px;
-		margin: 4px 0;
-	}
-	small { font-size:10pt; }
-	&.form3 {
-		label.left { width:50%; }
-	}
-	&.wide {
-		label.left { width: 25%; }
-		input[type=text], textarea { width: 506px; }
-		#bbtext { width: 550px; height: 250px; }
-	}
-	.quickedit {	
-		padding: 10px; border:1px solid #ccc; width: 100%;
-		#bbtext { width: 100%; height: 120px; }
 	}
 }
 
@@ -556,9 +516,6 @@ pre.code {
 #quick-links {
 	float: right;
 	margin-top: -10px;
-	a.button {
-		margin-top: 0; margin-bottom: 0;
-	}
 }
 
 body.mobile {
@@ -587,13 +544,6 @@ body.mobile {
 			&.wide { width:35px; }
 		}
 	}
-	.alert { width:90%;
-		&.fade { margin-left:-45%; }
-	}
-	.form2 {
-		label.left { width:40%; }
-		&.form3 { label.left { width:50%; } }
-	}
 	.album {
 		width:100%; height:97px;
 		.photo {
@@ -619,7 +569,7 @@ body.mobile {
 
 @media print {
 	a { color:#369 !important; text-decoration:none; }
-	nav, #babynav, header, footer, #quick-reply, .jumpbox, a.button {
+	nav, #babynav, header, footer, #quick-reply, .jumpbox, .btn {
 		display:none;
 	}
 	header { height: auto; }

@@ -40,7 +40,7 @@ function select_threads( critera, value ) {
 }
 </script>
 
-<a href="/messages/compose" class="button">Compose</a>
+<a href="/messages/compose" class="btn btn-primary">Compose</a>
 
 {{ $threads->links() }}
 
@@ -111,7 +111,7 @@ function select_threads( critera, value ) {
 
 </form>
 
-<a href="/messages/compose" class="button">Compose</a>
+<a href="/messages/compose" class="btn btn-primary">Compose</a>
 
 {{ $threads->links() }}
 

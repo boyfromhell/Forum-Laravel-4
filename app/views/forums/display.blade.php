@@ -18,7 +18,7 @@
 @endif
 
 @if ( $me->id )
-<a href="/new-topic/{{ $forum->id }}" class="button">New Topic</a>
+<a href="/new-topic/{{ $forum->id }}" class="btn btn-primary">New Topic</a>
 
 <div class="actions">
 	<a href="{{ $forum->url }}?mark">Mark all topics read</a>
@@ -58,7 +58,7 @@
 </div>
 
 @if ( $me->id )
-<a href="/new-topic/{{ $forum->id }}" class="button">New Topic</a>
+<a href="/new-topic/{{ $forum->id }}" class="btn btn-primary">New Topic</a>
 
 {{ $topics->links() }}
 

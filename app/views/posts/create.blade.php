@@ -20,7 +20,7 @@
 
 <br><br>
 
-<form class="form2 unload-warning wide" method="post" action="" enctype="multipart/form-data"{{ count($attachments) > 0 ? ' data-changed="1"' : '' }}>
+<form class="form-horizontal unload-warning" method="post" action="" enctype="multipart/form-data"{{ count($attachments) > 0 ? ' data-changed="1"' : '' }}>
 <div class="welcome wide">
 
 	<div class="header">{{{ $_PAGE['title'] }}}</div>
@@ -33,7 +33,7 @@
 		{{ Form::text('subject', $subject, ['class' => 'left', 'tabindex' => 1, 'maxlength' => 70]) }}
 		<div class="break"></div>
 		
-		@if ( $me->is_mod )
+		@if ( $me->is_moderator )
 		<label class="left">Topic Type</label>
 		{{ Form::select('type', ['Normal', 'Sticky', 'Announcement'], $topic->type, ['class' => 'left', 'tabindex' => 1]) }}
 		<div class="break"></div>
@@ -136,8 +136,8 @@
 		
 		<center>
 	
-		<input class="primary" tabindex="1" name="addpost" type="submit" accesskey="S" value="Submit">
-		<input class="preview" tabindex="1" name="preview" type="submit" accesskey="P" value="Preview">
+		<input class="btn btn-primary" tabindex="1" name="addpost" type="submit" accesskey="S" value="Submit">
+		<input class="btn btn-default preview" tabindex="1" name="preview" type="submit" accesskey="P" value="Preview">
 
 		<div class="break"></div>
 		

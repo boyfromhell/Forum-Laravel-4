@@ -9,9 +9,9 @@
 
 	<form method="GET" action="/community/members">
 	<div class="body">
-	
-	<input type="text" tabindex="1" maxlength="50" name="search" value="{{{ $search }}}" style="width:70%">
-	<input type="submit" value="Go">
+
+	{{ Form::text('search', $search, ['class' => 'form-control input-sm', 'maxlength' => 50]) }}
+	{{ Form::submit('Go', ['class' => 'btn btn-primary btn-sm']) }}
 
 	</div>
 	</form>

@@ -25,15 +25,15 @@
 		
 		{{-- @todo ideally link to the oldest unread message --}}
 		@if ( !$thread->read )
-			<a href="{{ $thread->url }}#{{ $thread->last_message->id }}"><img src="{{ $skin }}icons/newest_reply.png"></a>
+			<a href="{{ $thread->url }}#{{ $thread->last_message[0]->id }}"><img src="{{ $skin }}icons/newest_reply.png"></a>
 		@endif
 		
-		<a href="{{ $thread->url }}#{{ $thread->last_message->id }}">{{{ $thread->title }}}</a>
-		- {{ BBCode::simplify($thread->last_message->content) }}
+		<a href="{{ $thread->url }}#{{ $thread->last_message[0]->id }}">{{{ $thread->title }}}</a>
+		- {{ BBCode::simplify($thread->last_message[0]->content) }}
 		</div>
 	</td>
 
 	<td class="lastpost message">
-		{{-- datestring($thread->last_message->date_sent, 1) --}}
+		{{-- datestring($thread->last_message[0]->date_sent, 1) --}}
 	</td>
 </tr>

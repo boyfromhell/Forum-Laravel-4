@@ -14,9 +14,9 @@
 		<div class="body">
 
     <form id="shoutbox" method="POST" onsubmit="saveData(); return false;">
-		<input class="post" type="text" style="width:90%" name="message" maxlength="500" placeholder="type message here" autocomplete="off">
+		{{ Form::text('message', '', ['class' => 'form-control input-sm', 'placeholder' => 'type message here', 'autocomplete' => 'off']) }}
 		<br>
-		<input type="submit" name="submit" value="Send">
+		<input type="submit" class="btn btn-primary btn-sm" name="submit" value="Send">
     </form>
 
 	</div></div>
