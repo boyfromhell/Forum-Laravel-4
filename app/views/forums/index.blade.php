@@ -48,9 +48,9 @@
 
 @include ('forums.categories')
 
-<div class="welcome wide no-margin">
+<div class="panel panel-info">
 
-	<div class="header">
+	<div class="panel-heading">
 		@if ( $me->id )
 			<a href="/forum/stats">Forum Statistics</a>
 		@else
@@ -58,15 +58,13 @@
 		@endif
 	</div>
 
-	<div class="body">
+	<div class="panel-body row">
 	
-	<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
-	<tr>
-	<td style="width:55px" class="icon">
+	<div class="col-xs-1">
 		<img src="{{ $skin }}icons/stats.png" alt="Statistics" title="Statistics">
-	</td>
-	<td>
-	
+	</div>
+
+	<div class="col-xs-11">
 	Topics: <b>{{ $stats['total_topics'] }}</b>&nbsp;&nbsp;
 	Posts: <b>{{ $stats['total_posts'] }}</b>&nbsp;&nbsp;
 	Members: <b>{{ $stats['total_users'] }}</b><br>
@@ -75,10 +73,8 @@
 	<div id="online">
 	{{ $online_stats }}
 	</div>
-	</td>
-	</tr>
-	</table>
-	
+	</div>
+
 	</div>
 
 </div>

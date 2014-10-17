@@ -29,22 +29,24 @@
 
 @if ( $album->description )
 
-<div class="welcome wide">
+<div class="panel panel-primary">
 
-	<div class="header">{{{ $album->name }}}</div>
+	<div class="panel-heading">{{{ $album->name }}}</div>
 	
-	<div class="body"><p>
+	<div class="panel-body">
+		<p>
 		{{ BBCode::parse($album->description) }}
-	</p></div>
+		</p>
+	</div>
 </div>
 @endif
 
 @if ( count($album->children) > 0 )
-<div class="welcome wide{{ !count($photos) ? ' no-margin' : '' }}">
+<div class="panel panel-default">
 
-	<div class="header">Albums</div>
+	<div class="panel-heading">Albums</div>
 
-	<div class="body row">
+	<div class="panel-body row">
 		@foreach ( $album->children as $child )
 			@include ('albums.row')
 		@endforeach
@@ -53,11 +55,11 @@
 @endif
 
 @if ( count($photos) > 0 || !count($album->children) )
-<div class="welcome wide no-margin">
+<div class="panel panel-default">
 
-	<div class="header">Photos</div>
+	<div class="panel-heading">Photos</div>
 
-	<div class="body">
+	<div class="panel-body">
 		@if ( count($photos) )
 		@foreach ( $photos as $photo )
 			<div class="photo"><a class="thumb" href="{{ $photo->url }}"><img src="{{ $cdn }}{{ $photo->thumbnail }}"></a></div>

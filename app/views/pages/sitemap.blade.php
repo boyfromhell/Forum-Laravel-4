@@ -4,11 +4,11 @@
 
 @foreach ( $categories as $count => $category )
 @if ( count($category->modules) > 0 )
-<div class="welcome{{ $count == count($categories)-1 ? ' no-margin' : '' }}">
+<div class="panel panel-primary">
 
-	<div class="header">{{{ $category->name }}}</div>
+	<div class="panel-heading">{{{ $category->name }}}</div>
 
-	<div class="body">
+	<div class="panel-body">
 
 	<ul>
 		@foreach ( $category->modules as $app )

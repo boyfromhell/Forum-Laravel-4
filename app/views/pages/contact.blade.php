@@ -5,11 +5,11 @@
 @include ('blocks.social')
 
 <form class="form-horizontal unload-warning" method="post" action="/contact">
-<div class="welcome wide no-margin">
+<div class="panel panel-primary">
 
-	<div class="header">Contact</div>
+	<div class="panel-heading">Contact</div>
 	
-	<div class="body">
+	<div class="panel-body">
 	
 		Contact me about registration issues, advertising information, and any other feedback<br><br>
 

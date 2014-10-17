@@ -8,6 +8,9 @@ class Photo extends Earlybird\Foundry
 		'original',
 		'scale',
 		'thumbnail',
+
+		'width',
+		'height',
 	);
 
 	/**
@@ -96,6 +99,30 @@ class Photo extends Earlybird\Foundry
 	public function getThumbnailAttribute()
 	{
 		return $this->_getPhoto('thumbnail');
+	}
+
+	/**
+	 * Get width of photo
+	 *
+	 * @return int
+	 */
+	public function getWidthAttribute()
+	{
+		list( $width, $height ) = getimagesize(Config::get('app.cdn').$this->scale);
+
+		return $width;
+	}
+
+	/**
+	 * Get height of photo
+	 *
+	 * @return int
+	 */
+	public function getHeightAttribute()
+	{
+		list( $width, $height ) = getimagesize(Config::get('app.cdn').$this->scale);
+
+		return $height;
 	}
 
 }

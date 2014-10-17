@@ -44,26 +44,23 @@
 
 		<div class="panel-heading">Latest Topics</div>
 	
-		<div class="panel-body">
-			<table class="table" cellpadding="0" cellspacing="0" border="0" width="100%">
-			<thead>
-			<tr>
-				<th class="icon">&nbsp;</th>
-				<th class="icon">&nbsp;</th>
-				<th style="width:50%">Topics</th>
-				<th>Last Post</th>
-				<th class="posts">Replies</th>
-				<th class="posts">Views</th>
-			</tr>
-			</thead>
-			<tbody>
-			@foreach ( $topics as $topic )
-				@include ('topics.row', ['topic_mode' => 'last_post'])
-			@endforeach
-			</tbody>
+		<table class="table" cellpadding="0" cellspacing="0" border="0" width="100%">
+		<thead>
+		<tr>
+			<th class="icon">&nbsp;</th>
+			<th class="icon">&nbsp;</th>
+			<th style="width:50%">Topics</th>
+			<th>Last Post</th>
+			<th class="posts">Replies</th>
+			<th class="posts">Views</th>
+		</tr>
+		</thead>
+		<tbody>
+		@foreach ( $topics as $topic )
+			@include ('topics.row', ['topic_mode' => 'last_post'])
+		@endforeach
+		</tbody>
 		</table>
-		
-		</div>
 	</div>
 </div>
 

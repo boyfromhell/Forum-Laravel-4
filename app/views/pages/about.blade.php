@@ -4,11 +4,11 @@
 
 @include ('blocks.social')
 
-<div class="welcome no-margin">
+<div class="panel panel-primary">
 
-	<div class="header">{{{ $_PAGE['title'] }}}</div>
+	<div class="panel-heading">{{{ $_PAGE['title'] }}}</div>
 
-	<div class="body">
+	<div class="panel-body">
 
 	@include ('custom.welcome')
 

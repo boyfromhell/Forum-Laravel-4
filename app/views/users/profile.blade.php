@@ -45,7 +45,7 @@
 
 </div>
 
-<div class="panel panel-default">
+<div class="panel panel-info">
 
 	<div class="panel-heading">Info</div>
 

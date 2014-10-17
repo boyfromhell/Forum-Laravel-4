@@ -2,11 +2,11 @@
 
 @section('content')
 
-<div class="welcome ">
+<div class="panel panel-primary">
 
-	<div class="header">IRC Chat</div>
+	<div class="panel-heading">IRC Chat</div>
 
-	<div class="body">
+	<div class="panel-body">
 
 	Join your fellow IVANers in IRC chat:<br><br>
 
@@ -22,8 +22,6 @@
 	<a href="/community/chat" class="btn btn-primary" onClick="window.open('/chat-popup', 'chat', 'width=800, height=575, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no, status=yes, menubar=no'); return false;">Java Chatroom</a><br><br>
 	@endif
 
-	<div class="break"></div>
-	
 	</div>
 
 </div>

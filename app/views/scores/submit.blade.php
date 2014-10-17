@@ -3,10 +3,11 @@
 @section('content')
 
 <form class="form-horizontal unload-warning" method="post" action="/community/submit_score">
-<div class="welcome wide">
+<div class="panel panel-primary">
 
-	<div class="header">Submit Score</div>
-	
+	<div class="panel-heading">Submit Score</div>
+
+	<div class="panel-body">
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Character Name</label>
 		<div class="col-sm-5">
@@ -55,6 +56,7 @@
 			<input class="btn btn-primary" name="submit" type="submit" accesskey="S" value="Submit">
 			<input class="btn btn-default" type="reset" value="Reset">
 		</div>
+	</div>
 	</div>
 
 </div>

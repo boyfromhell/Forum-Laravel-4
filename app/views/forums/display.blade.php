@@ -12,7 +12,10 @@
 @endforeach
 </ol>
 
-{{ $topics->links() }}
+<div class="pull-right">
+	{{ $topics->links() }}
+</div>
+<div class="clearfix"></div>
 
 @if ( count($children) > 0 )
 	@include ('forums.list', ['forums' => $children])
@@ -27,43 +30,36 @@
 <div class="break"></div>
 @endif
 
-<div class="welcome wide no-margin">
-	<div class="table-header">
-		<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
-		<tr>
-			<th class="icon">&nbsp;</th>
-			<th class="icon">&nbsp;</th>
-			<th style="width:50%">Topics</th>
-			<th>Last Post</th>
-			<th class="posts">Replies</th>
-			<th class="posts">Views</th>
-			<th style="width:10px">&nbsp;</th>
-		</tr>
-		</table>
-	</div>
-</div>
+<div class="panel panel-primary">
 
-<div class="welcome wide{{ $me->id ? ' no-margin' : '' }}">
+	<div class="panel-heading">Topics</div>
 
-	<div class="header">Topics</div>
-	
-	<div class="body">
-
-	<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
-		@foreach ( $topics as $topic )
-			@include ('topics.row', ['topic_mode' => 'last_post'])
-		@endforeach
+	<table class="table">
+	<thead>
+	<tr>
+		<th class="icon">&nbsp;</th>
+		<th class="icon">&nbsp;</th>
+		<th style="width:50%">Topics</th>
+		<th>Last Post</th>
+		<th class="posts">Replies</th>
+		<th class="posts">Views</th>
+	</tr>
+	</thead>
+	<tbody>
+	@foreach ( $topics as $topic )
+		@include ('topics.row', ['topic_mode' => 'last_post'])
+	@endforeach
+	</tbody>
 	</table>
-	
-	</div>
+
 </div>
 
 @if ( $me->id )
 <a href="/new-topic/{{ $forum->id }}" class="btn btn-primary">New Topic</a>
 
-{{ $topics->links() }}
-
-<div class="break"></div>
+<div class="pull-right">
+	{{ $topics->links() }}
+</div>
 @endif
 
 @stop

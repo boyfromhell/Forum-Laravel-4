@@ -4,39 +4,31 @@
 
 @if ( $me->is_admin )
 <a href="/admin/projects/create" class="btn btn-primary">New Project</a>
-
-<div class="break"></div>
 @endif
 
 @if ( count($projects) > 0 )
-<div class="welcome wide no-margin">
-	<div class="table-header">
-		<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
-		<tr>
-			<th class="icon">
-			<th>Project</th>
-			<th style="width:15%">Latest Version</th>
-			<th class="posts">Files</th>
-			<th class="posts">Views</th>
-			<th class="posts">Downloads</th>
-			@if ( $_PAGE['section'] != 'official' )
-			<th style="width:15%">Author</th>
-			@endif
-			<th style="width:10px">&nbsp;</th>
-		</tr>
-		</table>
-	</div>
-</div>
 
 @foreach ( $projects as $i => $project )
 
-<div class="welcome wide{{ $i == count($projects)-1 ? ' no-margin' : '' }}">
-	
-	<div class="header">{{{ $project->name }}}</div>
-	
-	<div class="body">
-	
-	<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
+<div class="panel panel-primary">
+
+	<div class="panel-heading">{{{ $project->name }}}</div>
+
+	<table class="table">
+	<thead>
+	<tr>
+		<th class="icon">
+		<th>Project</th>
+		<th style="width:15%">Latest Version</th>
+		<th class="posts">Files</th>
+		<th class="posts">Views</th>
+		<th class="posts">Downloads</th>
+		@if ( $_PAGE['section'] != 'official' )
+		<th style="width:15%">Author</th>
+		@endif
+	</tr>
+	</thead>
+	<tbody>
 	<tr>
 		<td class="icon">
 			<img src="{{ $skin }}icons/project_{{{ $_PAGE['section'] }}}.png" alt="file">
@@ -64,19 +56,18 @@
 		{{ BBCode::parse($project->description) }}
 		</td>
 	</tr>
+	</tbody>
 	</table>
-	
-	</div>
 
 </div>
 @endforeach
 @else
 
-<div class="welcome wide no-margin">
+<div class="panel panel-primary">
 
-	<div class="header">Projects</div>
+	<div class="panel-heading">Projects</div>
 	
-	<div class="body">
+	<div class="panel-body">
 
 	<div class="empty">
 		There are no projects in this category
@@ -90,8 +81,6 @@
 
 @if ( $me->is_admin )
 <a href="/admin/projects/create" class="btn btn-primary">New Project</a>
-
-<div class="break"></div>
 @endif
 
 @stop

@@ -7,11 +7,11 @@
 <div class="row">
 <div class="col-sm-3 text-center">
 
-	<div class="welcome small" style="margin-bottom:3px">
+	<div class="panel panel-info">
 	
-		<div class="header">Shoutbox</div>
+		<div class="panel-heading">Shoutbox</div>
 		
-		<div class="body">
+		<div class="panel-body">
 
     <form id="shoutbox" method="POST" onsubmit="saveData(); return false;">
 		{{ Form::text('message', '', ['class' => 'form-control input-sm', 'placeholder' => 'type message here', 'autocomplete' => 'off']) }}
@@ -26,12 +26,14 @@
 
 <div class="col-sm-9">
 
-	<table class="shouts" cellpadding="0" cellspacing="0" border="0" width="100%" data-last-id="{{ $last_id }}" data-last-time="{{ $last_time }}">
+	<table class="table table-condensed" data-last-id="{{ $last_id }}" data-last-time="{{ $last_time }}">
+	<tbody>
 	@foreach ( $shouts as $shout )
 	
 		@include ('shoutbox.row')
 	
 	@endforeach
+	</tbody>
 	</table>
 
 </div>

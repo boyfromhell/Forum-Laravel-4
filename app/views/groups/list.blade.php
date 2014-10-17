@@ -4,30 +4,23 @@
 
 @if ( $me->id )
 <a href="/admin/groups/create" class="btn btn-primary">New Group</a>
-
-<div class="break"></div>
 @endif
 
-<div class="welcome wide no-margin">
+<div class="panel panel-primary">
 
-	<div class="table-header">
-		<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
-		<tr>
-			<th class="icon">&nbsp;</th>
-			<th style="width:15%">Name</th>
-			<th class="posts" style="width:15%">Members</th>
-			<th style="width:15%">Type</th>
-			<th>Description</th>
-			<th style="width:10px">&nbsp;</th>
-		</tr>
-		</table>
-	</div>
+	<div class="panel-heading">Groups</div>
 
-	<div class="header">Groups</div>
-
-	<div class="body">
-	<table class="table2" cellpadding="0" cellspacing="0" border="0" width="100%">
-	
+	<table class="table">
+	<thead>
+	<tr>
+		<th class="icon">&nbsp;</th>
+		<th style="width:15%">Name</th>
+		<th class="posts" style="width:15%">Members</th>
+		<th style="width:15%">Type</th>
+		<th>Description</th>
+	</tr>
+	</thead>
+	<tbody>
 	@foreach ( $groups as $group )
 	<tr>
 		<td class="icon"><img src="{{ $group->badge ? '/images/groups/'.$group->badge : $skin.'icons/group.png' }}"></td>
@@ -37,16 +30,13 @@
 		<td>{{ BBCode::parse($group->description) }}</a></td>
 	</tr>
 	@endforeach
-
+	</tbody>
 	</table>
-	</div>
-	
+
 </div>
 
 @if ( $me->id )
 <a href="/admin/groups/create" class="btn btn-primary">New Group</a>
-
-<div class="break"></div>
 @endif
 
 @stop
