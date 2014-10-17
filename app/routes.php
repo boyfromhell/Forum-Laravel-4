@@ -42,6 +42,10 @@ Route::group(array('before' => 'loggedin'), function()
 	// Attachments
 	Route::get('forum/attachments/{id}', array('uses' => 'AttachmentController@download'));
 
+	// Messages
+	Route::get('messages', array('uses' => 'MessageController@inbox'));
+	Route::get('messages/{folder}', array('uses' => 'MessageController@inbox'));
+
 	// Settings
 	Route::any('users/avatar', array('uses' => 'AvatarController@manage'));
 	Route::any('users/edit', array('uses' => 'UserController@editProfile'));

@@ -1,19 +1,72 @@
 <?php
-class MessageModel extends Model_W
-{
-	protected static $_table = 'messages';
-	protected static $_instance = null;
-}
 
-class Message extends Controller_W 
+class MessageController extends BaseController
 {
-	protected static $_table = 'messages';
 
-	public function __construct( $pri = null, $data = null )
+	/**
+	 * View inbox or other folder
+	 *
+	 * @return Response
+	 */
+	public function inbox( $folder = 'inbox' )
 	{
-		parent::__construct($pri, $data);
+		global $me;
+
+		$sort = Input::get('sort', 'date');
+		$order = Input::get('order', 'desc');
+
+		$_PAGE = array(
+			'category' => 'messages',
+			'section'  => $folder,
+			'title'    => ucwords($folder)
+		);
+
+		switch( $sort ) {
+			case 'name':
+				$orderby = 'users.name';
+				break;
+
+			case 'subject':
+				$orderby = 'message_threads.title';
+				break;
+
+			default:
+				$sort = 'date';
+				$orderby = 'message_threads.date_updated';
+				break;
+		}
+
+		$threads = MessageThread::join('messages', 'messages.thread_id', '=', 'message_threads.id')
+			->where('messages.owner_user_id', '=', $me->id)
+			->groupBy('messages.thread_id');
+
+		switch( $folder ) {
+			case 'sent':
+				$threads = $threads->having(DB::raw('( MAX(from_user_id) = '.$me->id.' )'), '=', 1);
+				break;
+
+			case 'archived':
+				$threads = $threads->having(DB::raw('MIN(messages.archived)'), '=', 1);
+				break;
+
+			case 'inbox':
+			default:
+				$folder = 'inbox';
+				$threads = $threads->having(DB::raw('MIN(messages.archived)'), '=', 0)
+					->having(DB::raw('( MIN(from_user_id) = '.$me->id.' )'), '=', 0);
+				break;
+		}
+
+		$threads = $threads->orderBy($orderby, $sort)
+			->orderBy('message_threads.date_updated', 'desc')
+			->paginate(25, ['message_threads.*', DB::raw('MIN(messages.read) AS `read`')]);
+
+		return View::make('messages.folder')
+			->with('_PAGE', $_PAGE)
+			->with('folder', $folder)
+			->with('threads', $threads);
 	}
-	
+
 	/**
 	 * Loads all users who are involved (from or to) a message, excluding me
 	 */

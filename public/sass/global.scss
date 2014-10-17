@@ -129,15 +129,22 @@ nav {
 }
 
 #main_beta {
-	background:$maingray;
-	border:1px solid #000; color:$text-color;
-	position: relative; top: ($header-height+50);
-	
-	.actions { float:right; margin:13px 0; }
-	
+	background: $maingray;
+	border: 1px solid #000;
+	color: $text-color;
+	position: relative;
+	top: ($header-height+50);
+
+	.actions {
+		float: right;
+		margin: 13px 0;
+	}
 	.moderate {
 		padding:4px;
-		a { float:left; margin:0 3px; }
+		a {
+			float: left;
+			margin: 0 3px;
+		}
 	}
 }
 
@@ -249,7 +256,11 @@ nav {
 	}
 }
 
-#quotebot { border: 1px dotted #999; padding:8px 16px; font-size:10pt; }
+#quotebot {
+	border: 1px dotted #999;
+	padding: 8px 16px;
+	font-size: 10pt;
+}
 
 #avatars {
 	height:160px; overflow:auto;
