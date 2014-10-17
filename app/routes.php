@@ -28,7 +28,7 @@ Route::group(array('before' => 'moderator'), function()
 });
 
 // Logged-in users
-Route::group(array('before' => 'loggedin'), function()
+Route::group(array('before' => 'auth'), function()
 {
 	Route::get('profile', array('uses' => 'UserController@myProfile'));
 
@@ -61,7 +61,21 @@ Route::group(array('before' => 'loggedin'), function()
 	Route::get('community/shoutbox', array('uses' => 'ShoutboxController@embed'));
 
 	// Account
-	Route::get('logout', array('uses' => 'UserController@logout'));
+	Route::get('signout', array('uses' => 'UserController@signout'));
+});
+
+/**
+ * Guests only
+ */
+Route::group(array('before' => 'guest'), function()
+{
+	Route::any('signin', array('uses' => 'UserController@signin'));
+	Route::any('signup', array('uses' => 'UserController@signup'));
+
+	Route::get('lost-password', array('uses' => 'RemindersController@getRemind'));
+	Route::post('lost-password', array('uses' => 'RemindersController@postRemind'));
+	Route::get('reset-password/{token?}', array('uses' => 'RemindersController@getReset'));
+	Route::post('reset-password', array('uses' => 'RemindersController@postReset'));
 });
 
 // All users

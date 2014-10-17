@@ -52,6 +52,8 @@
 
 <body>
 
+@yield ('jumbotron')
+
 <div class="container-fluid">
 
 @include ('blocks.messages')

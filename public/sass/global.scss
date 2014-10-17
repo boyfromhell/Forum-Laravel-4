@@ -43,7 +43,7 @@ hr {
 }
 
 body {
-	padding-top: 70px;
+	padding-top: 50px;
 	position: relative;
 }
 img { border:0; }
@@ -113,8 +113,6 @@ ol.breadcrumb {
 }
 
 .subheading {
-	background:$subheader-bg; border-top:2px solid #333;
-	.details { float:right; width:40%; padding:10px; font-size:10pt; }
 	&.messages {
 		padding: 6px 10px;
 		input {
@@ -153,15 +151,6 @@ p {
 	}
 }
 
-.vote-bar {
-	border: 1px solid #555;
-	border-radius: 3px;
-	float: left;
-	background: #ccc;
-	min-width: 10px;
-	height: 16px;
-	margin: 5px 0;
-}
 .progress {
 	margin: 10px 0;
 }
@@ -244,6 +233,11 @@ table.table {
 		&.ending { font-size:10pt; }
 		&.date { font-size:10pt; text-align:center; }
 		&.posts { font-size:10pt; text-align:center; color:$lighter-text; }
+	}
+	th {
+		&.date, &.posts {
+			text-align: center;
+		}
 	}
 	tr.unread {
 		td {
@@ -444,15 +438,12 @@ pre.code {
 }
 
 body.mobile {
-	color:#fff;
-	
-	header { height: auto; }
 	h2 {
 		font-size: 16pt; font-variant:small-caps; margin:2px 0 4px 0;
 		a { color:#fff; text-decoration:none;
 		}
 	}
-	.table2 {
+	.table {
 		th.icon,td.icon { width:30px;
 			&.wide { width:35px; }
 		}

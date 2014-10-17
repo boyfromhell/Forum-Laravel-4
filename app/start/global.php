@@ -4,7 +4,21 @@ ini_set('error_reporting', 'E_ALL & ~E_NOTICE & ~E_STRICT & ~E_WARNING');
 
 global $me;
 
-$me = User::find(2);
+/*
+|--------------------------------------------------------------------------
+| Authorization
+|--------------------------------------------------------------------------
+|
+*/
+
+$me = new User();
+
+if( Auth::check() || Auth::viaRemember() ) {
+	$me = Auth::user();
+}
+else {
+	$me->name = 'Guest';
+}
 
 View::share('me', $me);
 View::share('cdn', Config::get('app.cdn'));

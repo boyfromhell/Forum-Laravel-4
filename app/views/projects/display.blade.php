@@ -47,7 +47,7 @@
 		<th class="posts">Platform</th>
 		<th class="posts">Type</th>
 		<th class="posts">Downloads</th>
-		<th style="width:15%">Date</th>
+		<th class="date" style="width:15%">Date</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -64,7 +64,7 @@
 		<td class="posts">{{{ $download->platform }}}</td>
 		<td class="posts">{{{ $download->type }}}</td>
 		<td class="posts">{{ number_format($download->views) }}</td>
-		<td style="width:15%; text-align:center">{{ Helpers::local_date('M j, Y', $download->created_at) }}</td>
+		<td class="date">{{ Helpers::local_date('M j, Y', $download->created_at) }}</td>
 	</tr>
 @endforeach
 	</tbody>

@@ -24,9 +24,12 @@
 	<div class="form-group">
 		<label class="col-sm-3 control-label">E-mail</label>
 		<div class="col-sm-4">
-			<p id="email_text" class="form-control-static"><b>{{{ $me->email }}}</b> <a href="" onClick="$('#email_text').hide(); $('#email_input').show(); $('#email_input').focus(); $('#password_text').hide(); $('#password_input').show(); return false">change</a></p>
+			<p class="form-control-static email-text"><b>{{{ $me->email }}}</b></p>
 
 			{{ Form::email('email', $me->email, ['id' => 'email_input', 'tabindex' => 1, 'maxlength' => 255, 'style' => 'display:none', 'class' => 'form-control']) }}
+		</div>
+		<div class="col-sm-4">
+			<p class="form-control-static email-text"><a href="" onClick="$('.email-text').hide(); $('#email_input').show(); $('#email_input').focus(); $('#password_text').hide(); $('#password_input').show(); return false">change</a></p>
 		</div>
 	</div>
 

@@ -39,7 +39,7 @@
 		@foreach ( $customs as $custom )
 		<th width="{{ $column_width }}%">{{{ $custom->name }}}</th>
 		@endforeach
-		<th width="14%"><a href="{{ $sort_url }}sort=joined&amp;order={{ $orderby == 'created_at' && $order == 'asc' ? 'desc' : 'asc' }}">Joined</a></th>
+		<th class="date" width="14%"><a href="{{ $sort_url }}sort=joined&amp;order={{ $orderby == 'created_at' && $order == 'asc' ? 'desc' : 'asc' }}">Joined</a></th>
 		<th class="posts"><a href="{{ $sort_url }}sort=posts&amp;order={{ $orderby == 'posts' && $order == 'desc' ? 'asc' : 'desc' }}">Posts</a></th>
 	</tr>
 	</thead>

@@ -1,34 +1,34 @@
 @extends('layout')
 
+@section('jumbotron')
+
+@if ( ! $me->id )
+<div class="jumbotron">
+	<div class="container">
+
+	<h1>Welcome to {{ Config::get('app.forum_name') }}</h1>
+
+    @include ('custom.welcome')
+
+	</div>
+</div>
+@endif
+
+@stop
+
 @section('content')
 
 <h1><a href="/forum/">{{{ Config::get('app.forum_name') }}}</a></h1>
 
 <div class="row">
 <div class="col-sm-9 col-sm-push-3">
-	@if ( !$me->id && ! Config::get('app.registration_enabled'))
-	<div class="alert notice">
-		<span style="font-size:16pt">
-		<b>MEMBERSHIP APPLICATIONS ARE BACK UP!</b><br>
-		Sorry for the inconvenience.<br><br>
-
-		Join MidwestSCC here: <a href="/apply">Apply for membership</a>
-	</div>
-	@endif
-
-	@if ( !$me->id || $announcement->id )
+	@if ( $announcement->id )
 	<div class="panel panel-info">
 
-		<div class="panel-heading">{{{ $me->id ? $announcement->title : 'Welcome to the '.Config::get('app.forum_name') }}}</div>
+		<div class="panel-heading">{{{ $announcement->title }}}</div>
 
-		@if ( $me->id )
 		<div id="announcement_{{ $announcement->id }}" class="panel-body">{{ BBCode::parse($announcement->text) }}</div>
-		@else
-		<div class="panel-body">
-			@include ('custom.welcome')
-		</div>
-		@endif
-		
+
 	</div>
 	@endif
 
@@ -128,7 +128,7 @@
 </div>
 </div>
 
-@if ( !$is_mobile && Module::isActive('shoutbox') )
+@if ( $me->id && !$is_mobile && Module::isActive('shoutbox') )
 <iframe src="/community/shoutbox" width="100%" height="200" frameborder="no" scrolling="auto"></iframe>
 @endif
 

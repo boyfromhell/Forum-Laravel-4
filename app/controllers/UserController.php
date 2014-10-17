@@ -440,7 +440,7 @@ class UserController extends Earlybird\FoundryController
 	/**
 	 * Validate a field 
 	 */
-	public static function validate($field, $value, $value2 = null)
+	/*public static function validate($field, $value, $value2 = null)
 	{
 		global $_CONFIG, $_db;
 	
@@ -469,9 +469,6 @@ class UserController extends Earlybird\FoundryController
 
 			// Email error checking
 			case 'email':
-				if( !filter_var($value, FILTER_VALIDATE_EMAIL) ) {
-					throw new Exception('Email is not valid');
-				}
 				else {
 					$sql = "SELECT `id`
 						FROM `users`
@@ -511,15 +508,147 @@ class UserController extends Earlybird\FoundryController
 		}
 		
 		return true;
+	}*/
+
+	/**
+	 * Old encryption method
+	 *
+	 * @return string
+	 */
+	public function encrypt( $text, $reset = false )
+	{
+		$salt = Config::get('app.old_salt');
+
+		if( !$reset ) {
+			$text = md5($text); // So that the old passwords don't have to be changed
+		}
+
+		for( $i=0; $i<10; $i++ ) {
+			$text = sha1($salt.$text);
+			$text = sha1($text.salt);
+		}
+		return $text;
 	}
 
 	/**
-	 * Log me out
+	 * Displays the signin page or processes user/pass signin
 	 *
 	 * @return Response
 	 */
-	public function logout()
+	public function signin()
 	{
+		$_PAGE = array(
+			'category' => 'forums',
+			'section'  => 'signin',
+			'title'    => 'Sign in',
+		);
+
+		if( Request::isMethod('post') ) {
+			$email = Input::get('email');
+			$password = Input::get('password');
+
+			$field = filter_var($email, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
+			if (Auth::attempt(array($field => $email, 'password' => $password), true))
+			{
+				return Redirect::intended('/');
+			}
+			else {
+				// Legacy method
+				// Log them in, then encrypt their password in the new method
+				$hash = UserController::encrypt($password);
+
+				$old_user = User::where($field, '=', $email)
+					->where('old_pass', '=', $hash)
+					->first();
+
+				if( $old_user->id ) {
+
+					$old_user->password = Hash::make($password);
+					$old_user->old_pass = NULL;
+					$old_user->save();
+
+					Auth::login($old_user);
+
+					return Redirect::intended('/');
+
+				}
+				else {
+					// Error
+					Session::push('errors', 'Username or password is incorrect');
+				}
+			}
+		}
+
+		return View::make('users.signin')
+			->with('_PAGE', $_PAGE);
+	}
+
+	/**
+	 * Sign up form
+	 *
+	 * @return Response
+	 */
+	public function signup()
+	{
+		$_PAGE = array(
+			'category' => 'forums',
+			'section'  => 'signup',
+			'title'    => 'Sign up',
+		);
+
+		if( Request::isMethod('post') ) {
+			$email       = trim(Input::get('email'));
+			$first_name  = trim(Input::get('first_name'));
+			$last_name   = trim(Input::get('last_name'));
+			$password    = Input::get('password');
+
+			$rules = [
+				'first_name' => 'required',
+				'last_name'  => 'required',
+				'email'      => 'required|email|unique:users',
+				'password'   => 'required|min:6',
+			];
+
+			// Run validation
+			$validator = Validator::make(Input::all(), $rules);
+
+			if( $validator->fails() ) {
+				foreach( $validator->messages()->all() as $error ) {
+					Session::push('errors', $error);
+				}
+
+				return Redirect::to('signup')->withInput(Input::except('password'));
+			}
+			else {
+				$user = User::create([
+					'email'      => $email,
+					'password'   => Hash::make($password),
+					'first_name' => $first_name,
+					'last_name'  => $last_name,
+				]);
+
+				UserController::join($user);
+
+				Auth::login($user);
+
+				return Redirect::to('/');
+			}
+		}
+
+		return View::make('users.signup')
+			->with('_PAGE', $_PAGE);
+	}
+
+	/**
+	 * De-authorize the user
+	 *
+	 * @return Response
+	 */
+	public function signout()
+	{
+		global $me;
+
 		$me->last_visit = gmmktime();
 		$me->save();
 

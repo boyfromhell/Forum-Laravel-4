@@ -108,6 +108,23 @@ App::after(function($request, $response)
 |
 */
 
+Route::filter('superuser', function()
+{
+	$user = Auth::user();
+
+	if( ! $user->is_superuser )
+	{
+		if (Request::ajax())
+		{
+			return Response::make('Unauthorized', 401);
+		}
+		else
+		{
+			App::abort(403);
+		}
+	}
+});
+
 Route::filter('auth', function()
 {
 	if (Auth::guest())
@@ -118,7 +135,7 @@ Route::filter('auth', function()
 		}
 		else
 		{
-			return Redirect::guest('login');
+			return Redirect::guest('signin');
 		}
 	}
 });
@@ -142,7 +159,7 @@ Route::filter('auth.basic', function()
 
 Route::filter('guest', function()
 {
-	if (Auth::check()) return Redirect::to('/');
+	if (Auth::check() || Auth::viaRemember()) return Redirect::to('/');
 });
 
 /*
