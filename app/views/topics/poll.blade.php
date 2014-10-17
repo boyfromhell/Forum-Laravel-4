@@ -1,51 +1,45 @@
-<style type="text/css">
-.vote-bar {
-	border: 1px solid #555;
-	border-radius: 3px;
-	float: left;
-	background: #ccc;
-	min-width: 10px;
-	height: 16px;
-	margin: 5px 0;
-}
-</style>
-
 @if ( $poll->id )
 
-<form method="post" action="">
-<table class="layout">
-<tr>
-	<td class="middle"><center><br>
-		<b>{{{ $poll->question }}}</b>
-	
-		<table class="layout">
+<div class="well text-center">
+
+	<form method="post" action="">
+
+	<b>{{{ $poll->question }}}</b>
+
+	<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+	<table>
 @if ( ! $me->id || Input::has('results') || $choices = $me->votedIn($poll->id) )
 
 @foreach( $poll->options as $option )
-		<tr>
-			<td>
+	<tr>
+		<td>
 	@if( in_array($option->id, $choices) )
 		<b>{{{ $option->content }}}</b>
 	@else
 		{{{ $option->content }}}
 	@endif
-			</td>
-			<td style="padding:1px 0 1px 10px">
-				<div class="vote-bar" style="width:{{ $option->width }}px"></div>
-			</td>
-			<td style="padding-left:10px">
-				<b>{{ $option->percent }}%</b>
-			</td>
-			<td style="padding-left:10px">
+		</td>
+		<td style="padding:1px 0 1px 10px" width="70%">
+			<div class="progress" style="width:{{ $option->width }}%">
+				<div class="progress-bar" style="width:100%">
+			</div>
+		</td>
+		<td style="padding-left:10px">
+			<b>{{ $option->percent }}%</b>
+		</td>
+		<td style="padding-left:10px">
 	@if (( $me->id && $poll->is_public ) || $me->is_moderator )
-				[ <a href="/poll-results/{{ $poll->id }}">{{ $option->total_votes }}</a> ]
+			[ <a href="/poll-results/{{ $poll->id }}">{{ $option->total_votes }}</a> ]
 	@else
-				[ {{ $option->total_votes }} ]
+			[ {{ $option->total_votes }} ]
 	@endif
-			</td>
-		</tr>
+		</td>
+	</tr>
 @endforeach
-		</table>
+	</table>
+	</div>
+	</div>
 
 	<b>Total Votes: {{ $poll->total_votes }}</b><br>
 	<small><a href="{{ $topic->url }}">Place vote</a></small>
@@ -53,29 +47,29 @@
 @else
 
 @foreach( $poll->options as $option )
-		<tr>
-			<td>
-			<label><input tabindex="3" type="{{ $poll->type }}" name="voteopt[]" value="{{ $option->id }}" style="margin-right:10px">
-			{{{ $option->content }}}</label>
-			</td>
-		</tr>
+	<tr>
+		<td>
+		<label><input tabindex="3" type="{{ $poll->type }}" name="voteopt[]" value="{{ $option->id }}" style="margin-right:10px">
+		{{{ $option->content }}}</label>
+		</td>
+	</tr>
 @endforeach
-		</table>
+	</table>
+	</div>
+	</div>
 
-		@if( $poll->max_options > 1 )
-		<small><i>Select up to {{ $poll->max_options }} options</i></small><br>
-		@endif
+	@if( $poll->max_options > 1 )
+	<small><i>Select up to {{ $poll->max_options }} options</i></small><br>
+	@endif
 
-		<input tabindex="3" type="submit" name="voted" value="Submit Vote"><br>
-		<small><a href="?results">View results</a></small>
+	<input tabindex="3" type="submit" name="voted" value="Submit Vote"><br>
+	<small><a href="?results">View results</a></small>
 
-		<br><br>
+	<br><br>
 
 @endif
-	</center></td>
-</tr>
-
-</table>
 </form>
+
+</div>
 
 @endif

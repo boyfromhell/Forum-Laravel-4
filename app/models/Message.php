@@ -3,6 +3,10 @@
 class Message extends Earlybird\Foundry
 {
 
+	protected $appends = array(
+		'date',
+	);
+
 	/**
 	 * Message thread this is a part of
 	 *
@@ -40,6 +44,16 @@ class Message extends Earlybird\Foundry
 	public function scopeOwnedBy( $query, $user_id )
 	{
 		return $query->where('owner_user_id', '=', $user_id);
+	}
+
+	/**
+	 * Date, formatted and in my local timezone
+	 *
+	 * @return string
+	 */
+	public function getDateAttribute()
+	{
+		return Helpers::date_string(strtotime($this->created_at), 1);
 	}
 
 }

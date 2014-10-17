@@ -70,11 +70,9 @@
 	<div class="panel-heading">Projects</div>
 	
 	<div class="panel-body">
-
-	<div class="empty">
+		<p class="empty">
 		There are no projects in this category
-	</div>
-	
+		</p>
 	</div>
 	
 </div>

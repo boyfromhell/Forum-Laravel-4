@@ -10,6 +10,7 @@
 
 	<div class="panel-heading">Groups</div>
 
+@if ( count($groups) > 0 )
 	<table class="table">
 	<thead>
 	<tr>
@@ -32,6 +33,13 @@
 	@endforeach
 	</tbody>
 	</table>
+@else
+
+	<div class="panel-body">
+		<p class="empty">No groups found</p>
+	</div>
+
+@endif
 
 </div>
 

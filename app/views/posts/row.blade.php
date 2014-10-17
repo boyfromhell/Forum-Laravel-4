@@ -1,6 +1,6 @@
 @include ('users.menu', ['content_id' => $post->id, 'user' => $post->user])
 
-<div class="welcome wide{{ $post_key == $total_posts-1 ? ' no-margin' : '' }}">
+<div class="panel panel-primary">
 
 	@if ( $post->showhr > 0 && !$post->ignored )
 	<div class="table-header">
@@ -19,23 +19,26 @@
 	</div>
 	@endif
 
-	<div class="header soft">
-		<div style="float:left"><a name="{{ $post->id }}"></a>{{ $post->date }}</div>
-		
-		<div style="float:right"><a href="{{ $post->url }}" style="color:#888">#{{ $post->count }}</a>
+	<div class="panel-heading">
+		<div class="pull-left">
+			<a name="{{ $post->id }}"></a>{{ $post->date }}
+		</div>
+		<div class="pull-right">
+			<a href="{{ $post->url }}">#{{ $post->count }}</a>
 		@if ( $me->is_moderator )
 			<a href="/lookup.php?p={{ $post->id }}">IP</a>
 		@endif
-		<a href="/forum/report?p={{ $post->id }}"><img src="{{ $skin }}icons/report.png" alt="!" title="Report post" style="vertical-align:top"></a></div>
+			<a href="/forum/report?p={{ $post->id }}"><img src="{{ $skin }}icons/report.png" alt="!" title="Report post" style="vertical-align:top"></a>
+		</div>
 		
-		<div class="break"></div>
+		<div class="clearfix"></div>
 	</div>
-	
+
 	@if ( !$post->ignored )
 	@include ('users.row', ['content_id' => $post->id, 'user' => $post->user])
 	@endif
 	
-	<div class="body post-row" id="pt{{ $post->id }}">
+	<div class="panel-body" id="pt{{ $post->id }}">
 	
 @if ( $post->ignored )
 	<div id="post{{ $post->id }}" style="padding:10px 0; text-align:center">
@@ -49,7 +52,7 @@
 
 	</div>
 	
-	<div style="float:right">
+	<div class="pull-right">
 	@if ( $me->id )
 		@if ( !$topic->status )
 			<a href="/quote-post/{{ $post->id }}" class="btn btn-primary btn-xs">Quote</a>
@@ -80,14 +83,17 @@
 		</div> --}}
 	@endif
 	
+	</div>
+
 	@if ( $post->user->sig && $post->user->attach_sig && $post->signature )
-		<div class='sig'>{{ BBCode::parse($post->user->sig) }}</div>
+	<div class="panel-footer sig">
+		{{ BBCode::parse($post->user->sig) }}
+	</div>
 	@endif
 	
 	@include ('posts.attachments')
 
 @endif
-	</div>
 
 </div>
 

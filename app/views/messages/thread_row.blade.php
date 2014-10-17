@@ -34,6 +34,6 @@
 	</td>
 
 	<td class="lastpost message">
-		{{-- datestring($thread->last_message[0]->date_sent, 1) --}}
+		{{ $thread->last_message[0]->date }}
 	</td>
 </tr>

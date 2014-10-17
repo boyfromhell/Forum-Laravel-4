@@ -153,6 +153,19 @@ p {
 	}
 }
 
+.vote-bar {
+	border: 1px solid #555;
+	border-radius: 3px;
+	float: left;
+	background: #ccc;
+	min-width: 10px;
+	height: 16px;
+	margin: 5px 0;
+}
+.progress {
+	margin: 10px 0;
+}
+
 .panel-footer {
 	.form-group {
 		margin-bottom: 0;
@@ -385,10 +398,10 @@ pre.code {
 }
 
 .sig {
-	background:$body-bg; border-top:1px dotted $sig-color; color:$sig-color; font-size:10pt; padding:10px;
-	margin-top:5px;
+	border-top: 1px dotted $sig-color;
+	color: $sig-color;
+	font-size: 10pt;
 	object { display:none; }
-	.post-row & { background:$body-bg; }
 }
 
 .thumbnail-selector {

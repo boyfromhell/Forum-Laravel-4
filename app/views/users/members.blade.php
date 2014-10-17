@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="row">
-<div class="col-md-3 col-sm-6">
+<div class="col-md-4 col-sm-6">
 <div class="panel panel-info">
 
 	<div class="panel-heading">Search Members</div>
@@ -11,8 +11,12 @@
 	<form method="GET" action="/community/members">
 	<div class="panel-body">
 
+	<div class="input-group">
 	{{ Form::text('search', $search, ['class' => 'form-control input-sm', 'maxlength' => 50]) }}
+	<div class="input-group-btn">
 	{{ Form::submit('Go', ['class' => 'btn btn-primary btn-sm']) }}
+	</div>
+	</div>
 
 	</div>
 	</form>
@@ -26,6 +30,7 @@
 
 	<div class="panel-heading">Members</div>
 
+@if ( count($users) > 0 )
 	<table class="table table-hover">
 	<thead>
 	<tr>
@@ -39,7 +44,6 @@
 	</tr>
 	</thead>
 	<tbody>
-@if ( count($users) > 0 )
 @foreach ( $users as $member )
 	<tr class="trhov">
 		<td class="icon">
@@ -62,7 +66,11 @@
 	</tbody>
 </table>
 @else
-	<div class="empty">No members found</div>
+
+	<div class="panel-body">
+		<p class="empty">No members found</p>
+	</div>
+
 @endif
 
 </div>

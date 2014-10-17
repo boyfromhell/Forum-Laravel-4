@@ -25,7 +25,7 @@ class PollOption extends Eloquent
 	 */
 	public function getWidthAttribute()
 	{
-		$proportion = 200 / $this->poll->max_percent;
+		$proportion = 100 / $this->poll->max_percent;
 
 		return round($this->percent * $proportion);
 	}

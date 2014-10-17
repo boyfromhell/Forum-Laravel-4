@@ -326,10 +326,11 @@ class UserController extends Earlybird\FoundryController
 			->with('_PAGE', $_PAGE)
 			->with('users', $users)
 			->with('customs', $customs)
-			->with('column_width', $column_width);
+			->with('column_width', $column_width)
 
-		/*$Smarty->assign('search', $search);
-		$Smarty->assign('orderby', $orderby);
+			->with('search', $search);
+
+		/*$Smarty->assign('orderby', $orderby);
 		$Smarty->assign('order', $order);
 		$Smarty->assign('sort_url', $sort_url);*/
 	}

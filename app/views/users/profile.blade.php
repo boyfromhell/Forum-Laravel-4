@@ -101,15 +101,15 @@
 		@endif
 	@endif
 	</div>
-	
+
+	</div>
+
 	@if ( $user->sig )
-	<div class="col-md-12">
-		<div class="sig">{{ BBCode::parse($user->sig) }}</div>
+	<div class="panel-footer sig">
+		{{ BBCode::parse($user->sig) }}
 	</div>
 	@endif
-	
-	</div>
-	
+
 </div>
 
 @stop

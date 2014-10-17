@@ -1,4 +1,7 @@
 <div class="subheading">
+	<div class="row">
+	<div class="col-sm-8">
+
 	<div class="avatar" style="float:left; margin:10px">
 	@if ( $user->avatar->id )
 	<a href="{{ $user->url }}"><img src="{{ $cdn }}/images/avatars/{{ $user->avatar->file }}" alt="{{{ $user->name }}}'s avatar" title="{{{ $user->name }}}'s avatar"></a>
@@ -22,8 +25,9 @@
 	<br><br>
 	</div>
 	</div>
-	
-	<div class="details">
+
+	</div>	
+	<div class="col-sm-4">
 	Joined: {{ Helpers::local_date("M j, Y", $user->created_at) }}<br>
 	@if ( $user->location )
 	Location: {{{ $user->location }}}<br>
@@ -42,7 +46,7 @@
 			@endif
 		@endforeach
 	@endif
-	
+
 	</div>
-	<div class="break"></div>
+	</div>
 </div>

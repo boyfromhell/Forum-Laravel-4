@@ -17,7 +17,7 @@
 
 @if ( $me->id )
 <a href="/new-topic/{{ $forum->id }}" class="btn btn-default">New Topic</a>
-<a href="/reply-to-topic/{{ $topic->id }}" class="btn btn-primary">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
+<a href="/reply-to-topic/{{ $topic->id }}" class="btn btn-{{ $topic->status ? 'danger' : 'primary' }}">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
 @endif
 
 <div class="actions">
@@ -39,7 +39,7 @@
 
 @if ( $me->id )
 <a href="/new-topic/{{ $forum->id }}" class="btn btn-default">New Topic</a>
-<a href="/reply-to-topic/{{ $topic->id }}" class="btn btn-primary">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
+<a href="/reply-to-topic/{{ $topic->id }}" class="btn btn-{{ $topic->status ? 'danger' : 'primary' }}">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
 @endif
 
 {{ $posts->links() }}

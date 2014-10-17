@@ -4,6 +4,7 @@
 
 <body class="shoutbox">
 
+<div class="container-fluid">
 <div class="row">
 <div class="col-sm-3 text-center">
 
@@ -14,8 +15,12 @@
 		<div class="panel-body">
 
     <form id="shoutbox" method="POST" onsubmit="saveData(); return false;">
+	<div class="input-group">
 		{{ Form::text('message', '', ['class' => 'form-control input-sm', 'placeholder' => 'type message here', 'autocomplete' => 'off']) }}
+		<div class="input-group-btn">
 		<input type="submit" class="btn btn-primary btn-sm" name="submit" value="Send">
+		</div>
+	</div>
     </form>
 
 	</div></div>
@@ -37,7 +42,7 @@
 	</table>
 
 </div>
-
+</div>
 </div>
 
 </body>
