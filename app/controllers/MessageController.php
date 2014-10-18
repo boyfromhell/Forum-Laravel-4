@@ -42,7 +42,7 @@ class MessageController extends BaseController
 
 		switch( $folder ) {
 			case 'sent':
-				$threads = $threads->having(DB::raw('( MAX(from_user_id) = '.$me->id.' )'), '=', 1);
+				$threads = $threads->having(DB::raw('MAX(from_user_id = '.$me->id.' )'), '=', 1);
 				break;
 
 			case 'archived':
@@ -53,13 +53,20 @@ class MessageController extends BaseController
 			default:
 				$folder = 'inbox';
 				$threads = $threads->having(DB::raw('MIN(messages.archived)'), '=', 0)
-					->having(DB::raw('( MIN(from_user_id) = '.$me->id.' )'), '=', 0);
+					->having(DB::raw('MIN(from_user_id = '.$me->id.' )'), '=', 0);
 				break;
 		}
 
 		$threads = $threads->orderBy($orderby, $sort)
 			->orderBy('message_threads.date_updated', 'desc')
 			->paginate(25, ['message_threads.*', DB::raw('MIN(messages.read) AS `read`')]);
+
+		if( count($threads) > 0 ) {
+			$threads->load([
+				'from',
+				'lastMessage'
+			]);
+		}
 
 		return View::make('messages.folder')
 			->with('_PAGE', $_PAGE)

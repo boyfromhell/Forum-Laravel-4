@@ -6,6 +6,7 @@ class MessageThread extends Earlybird\Foundry
 	protected $appends = array(
 		'url',
 		'users',
+		'replies',
 	);
 
 	/**
@@ -42,10 +43,13 @@ class MessageThread extends Earlybird\Foundry
 	}
 
 	/**
-	 * All users involved in this thread
+	 * Total number of messages in this thread
+	 *
+	 * @return int
 	 */
-	public function getUsersAttribute()
+	public function getRepliesAttribute()
 	{
+		return $this->messages()->count();
 	}
 
 }

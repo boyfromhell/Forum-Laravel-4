@@ -21,10 +21,12 @@
 	<td style="width:{{ $topic_mode == 'subscription' ? '30%' : '50%' }}" class="topic">
 		@if ( $topic->has_attachments )<img src="{{ $skin }}icons/attachment.png" alt="att">@endif
 		
-		@if ( $topic->has_poll )<b>[ Poll ]</b>@endif
-	
 		@if ( $topic->unread_post->id )<a href="{{ $topic->unread_post->url }}"><img src="{{ $skin }}icons/newest_reply.png" title="Go to first unread post"></a> @endif
-	
+
+		@if ( $topic->has_poll )
+		<span class="badge">Poll</span>
+		@endif
+
 		{{{ $topic->prefix }}}
 		<a href="{{ $topic->url }}" title="Go to topic">{{{ $topic->short_title }}}</a>
 	

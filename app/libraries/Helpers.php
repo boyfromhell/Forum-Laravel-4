@@ -110,4 +110,62 @@ class Helpers
 		return $datestr;
 	}
 
+	/**
+	 * Upload a file to S3
+	 *
+	 * @param  string  $local_path  Absolute path to file
+	 * @param  string  $s3_path  Remote path including folder and filename
+	 * @param  bool  $public  ACL setting
+	 * @return bool  Success
+	 */
+	public static function push_to_s3( $local_path, $s3_path, $public = false )
+	{
+		if( ! Config::get('services.aws.enabled') ) {
+			return false;
+		}
+
+		$s3 = new S3(
+			Config::get('services.aws.access_key'),
+			Config::get('services.aws.secret_key')
+		);
+
+		$acl = ( $public ? S3::ACL_PUBLIC_READ : S3::ACL_AUTHENTICATED_READ );
+		$headers = array(
+			'Cache-Control' => 'public, max-age=31536000'
+		);
+
+		return $s3->putObjectFile(
+			$local_path,                        // path on server
+			Config::get('services.aws.bucket'), // bucket
+			$s3_path,                           // path on S3
+			$acl,                               // ACL settings
+			array(),                            // meta headers
+			$headers                            // request headers
+		);
+	}
+
+	/**
+	 * Delete a file from S3
+	 *
+	 * @param  string  $s3_path  Remote path
+	 * @return bool  Success
+	 */
+	public function delete_from_s3( $s3_path )
+	{
+		if( ! Config::get('services.aws.enabled') ) {
+			return false;
+		}
+
+		$s3 = new S3(
+			Config::get('services.aws.access_key'),
+			Config::get('services.aws.secret_key')
+		);
+
+		return $s3->deleteObject(
+			Config::get('services.aws.bucket'), // bucket
+			$s3_path                            // path on S3
+		);
+	}
+
 }
+

@@ -24,12 +24,12 @@
 	<tr>
 		<th class="icon">
 		<th>Project</th>
-		<th style="width:15%">Latest Version</th>
+		<th class="date" style="width:15%">Latest Version</th>
 		<th class="posts">Files</th>
 		<th class="posts">Views</th>
 		<th class="posts">Downloads</th>
 		@if ( $_PAGE['section'] != 'official' )
-		<th style="width:15%">Author</th>
+		<th class="date" style="width:15%">Author</th>
 		@endif
 	</tr>
 	</thead>
@@ -58,7 +58,7 @@
 	</tr>
 	<tr>
 		<td class="icon">&nbsp;</td>
-		<td colspan="6" style="padding:5px 0">
+		<td colspan="6">
 		{{ BBCode::parse($project->description) }}
 		</td>
 	</tr>
