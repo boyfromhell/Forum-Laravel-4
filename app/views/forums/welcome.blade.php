@@ -129,7 +129,9 @@
 </div>
 
 @if ( $me->id && !$is_mobile && Module::isActive('shoutbox') )
-<iframe src="/community/shoutbox" width="100%" height="200" frameborder="no" scrolling="auto"></iframe>
+<div id="embed">
+@include ('shoutbox.embed', ['mini' => true])
+</div>
 @endif
 
 @stop

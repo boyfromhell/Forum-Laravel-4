@@ -64,7 +64,11 @@ Route::group(array('before' => 'auth'), function()
 	/*Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));
 	Route::any('groups/new', array('uses' => 'GroupController@add'));*/
 	Route::any('honor-rolls/submit', array('uses' => 'ScoreController@submit'));
-	Route::get('community/shoutbox', array('uses' => 'ShoutboxController@embed'));
+
+	// Shoutbox
+	Route::get('shoutbox/history', array('uses' => 'ShoutboxController@history'));
+	Route::get('shoutbox/fetch', array('uses' => 'ShoutboxController@fetch'));
+	Route::post('shoutbox/post', array('uses' => 'ShoutboxController@post'));
 
 	// Account
 	Route::get('signout', array('uses' => 'UserController@signout'));

@@ -2,6 +2,8 @@ jQuery.fn.exists = function() {
 	return this.length > 0;
 }
 
+var sending = false, active = 1;
+
 var parangi = {
 
 	/**
@@ -11,17 +13,20 @@ var parangi = {
 	
 		parangi.cfg = cfg;
 
+		var sb_reload = setInterval("showData()", 10000);
+		setInterval("showOnline()", 20000);
+
 		$('.announcement').dblclick( function() {
 			var id = $(this).attr('id').match(/[\d]+/g)[0];
 			
-			$.get('/admin/ajax/edit_announcement.php', { id: id }, function( data ) {
+			$.get('/admin/edit-announcement', { id: id }, function( data ) {
 				json = $.parseJSON(data);
 				if( json.success ) {
 					$('#announcement_'+id).html( json.html );
 					$('#announcement_'+id+' textarea').focus();
 					
 					$('#announcement_'+id+' textarea').blur( function() {
-						$.post('/admin/ajax/edit_announcement.php', $(this).closest('form').serialize(), function( data ) {
+						$.post('/admin/edit-announcement', $(this).closest('form').serialize(), function( data ) {
 							json = $.parseJSON(data);
 							if( json.success ) {
 								$('#announcement_'+id).html( json.html );
@@ -31,10 +36,6 @@ var parangi = {
 				}
 			});
 		});
-		
-		$('.alert_box.fade').delay(2000).fadeOut('slow');
-		
-		$('.focus').focus();
 
 		/**
 		 * Toggle spoiler alert blocks
@@ -73,7 +74,7 @@ var parangi = {
 			var send_data = {
 				'content' : $('#bbtext').val()
 			};
-			$.post('/messages/preview.php', send_data, function(data) {
+			$.post('/messages/preview', send_data, function(data) {
 				$('#preview').html(data.html);
 			}, 'json');
 		});
@@ -88,7 +89,7 @@ var parangi = {
 				'id' : $(this).data('id')
 			};
 			if( confirm('Delete this attachment?') ) {
-				$.post('/ajax/delete_attachment.php', send_data, function(data) {
+				$.post('/delete-attachment', send_data, function(data) {
 					$attachment.fadeOut('fast');
 				});
 			} else {
@@ -149,7 +150,27 @@ var parangi = {
 			var id = $(this).data('id');
 			parangi.quickEdit(id, 'cancel');
 		});
-		
+
+		/**
+		 * Shoutbox
+		 */
+		$('#sb-toggle').on('click', function(e) {
+			e.preventDefault();
+
+			if( active == 1 ) {
+				$('#shoutbox input').attr('disabled', 'disabled');
+				$('#sb-toggle').html('Enable');
+				active = 0;
+				clearInterval(sb_reload);
+			} else {
+				showData();
+				$('#shoutbox input').removeAttr('disabled');
+				$('#sb_toggle').html('Disable');
+				active = 1;
+				sb_reload = setInterval("showData()", 10000);
+			}
+		});
+
 		/**
 		 * Photo AJAX
 		 */
@@ -177,7 +198,7 @@ var parangi = {
 	 * Handle quick edit processing
 	 */
 	quickEdit: function(id, button) {
-		url = '/forum/quick_edit.php?p=' + id;
+		url = '/posts/quick-edit/' + id;
 
 		if( button == 'edit' ) {
 			$.get(url, function( data ) {
@@ -237,7 +258,7 @@ function deleteMember( group_id, user_id ) {
 		id: group_id,
 		user_id: user_id
 	}
-	$.post('/community/delete_member.php', args, function(data) {
+	$.post('/groups/delete-member', args, function(data) {
 		json = $.parseJSON(data);
 		if( json.success ) {
 			$('#member'+user_id).hide();
@@ -482,4 +503,34 @@ function showOnline() {
 	}, 'json');
 }
 
-setInterval("showOnline()", 20000);
+function showData() 
+{
+	if( sending == true ) return;
+
+	sending = true;
+	var send_data = {
+		last_id: $('#shoutbox').data('lastId'),
+		last_time: $('#shoutbox').data('lastTime')
+	};
+	$.get('/shoutbox/fetch', send_data, function( data ) {
+		if( $('[name='+data.group+']').exists() ) {
+			$('[name='+data.group+']').closest('tr').after(data.html);
+		} else {
+			$('#shoutbox tbody').prepend(data.html);
+		}
+		$('#shoutbox').data('lastId', data.last_id);
+		$('#shoutbox').data('lastTime', data.last_time);
+		sending = false;
+	}, 'json');
+}
+
+function saveData()
+{
+	$.post('/shoutbox/post', {message: $('input[name=message]').val()}, function( data ) {
+		if( data.success ) {
+			$('#shoutbox input[type="text"]').val('');
+			$('#shoutbox input[type="text"]').focus();
+			showData();
+		}
+	}, 'json');
+}

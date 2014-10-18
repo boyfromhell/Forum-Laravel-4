@@ -59,6 +59,12 @@ class ForumController extends Earlybird\FoundryController
 			->orderBy('updated_at', 'desc')
 			->first();
 
+		// Fetch most recent shouts
+		$shouts = Shout::orderBy('id', 'desc')
+			->take(30)
+			->get();
+		$shouts = ShoutboxController::format($shouts, -1);
+
 		return View::make('forums.welcome')
 			->with('_PAGE', $_PAGE)
 			->with('announcement', $announcement)
@@ -70,7 +76,9 @@ class ForumController extends Earlybird\FoundryController
 
 			->with('stats', $stats)
 			->with('newest_user', $newest_user)
-			->with('online_stats', $this->getOnline(false));
+			->with('online_stats', $this->getOnline(false))
+
+			->with('shouts', $shouts);
 	}
 
 	/**
