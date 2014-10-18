@@ -59,11 +59,13 @@
 @include ('blocks.messages')
 
 <div id="babynav">
+	@if ( count($sub_menu) > 0 )
 	<ul class="nav nav-tabs">
 	@foreach ( $sub_menu as $app )
 		<li class="{{ $_PAGE['section'] == $app->section ? 'active' : '' }}"><a href="{{ $app->url }}">{{{ $app->name }}}</a></li>
 	@endforeach
 	</ul>
+	@endif
 
 	<div id="social-media">
 		@foreach ( Config::get('app.social') as $social => $url )

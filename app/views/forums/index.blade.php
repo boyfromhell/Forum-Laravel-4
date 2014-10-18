@@ -51,6 +51,8 @@
 
 @include ('forums.categories')
 
+@include ('blocks.jumpbox', ['jump_categories' => $categories])
+
 <div class="panel panel-info">
 
 	<div class="panel-heading">

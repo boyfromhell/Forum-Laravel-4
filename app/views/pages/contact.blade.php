@@ -16,14 +16,14 @@
 	<div class="form-group">	
 		<label class="col-sm-4 control-label">Your Name *</label>
 		<div class="col-sm-5">
-			{{ Form::text('name', $me->name, ['class' => 'form-control']) }}
+			{{ Form::text('name', $me->name, ['class' => 'form-control', 'required']) }}
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Your Email *</label>
 		<div class="col-sm-5">
-			{{ Form::text('email', $me->email, ['class' => 'form-control']) }}
+			{{ Form::text('email', $me->email, ['class' => 'form-control', 'required']) }}
 		</div>
 	</div>
 
@@ -35,23 +35,23 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-4 control-label">Anti-spam: {{{ Config::get('app.captcha_question') }}}?</label>
+		<label class="col-sm-4 control-label">Anti-spam: {{{ Config::get('app.captcha_question') }}}? *</label>
 		<div class="col-sm-5">
-			{{ Form::text('no_spam', '', ['class' => 'form-control']) }}
+			{{ Form::text('no_spam', '', ['class' => 'form-control', 'required']) }}
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Subject *</label>
 		<div class="col-sm-5">
-			{{ Form::text('subject', '', ['class' => 'form-control']) }}
+			{{ Form::text('subject', '', ['class' => 'form-control', 'required']) }}
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Message *</label>
 		<div class="col-sm-5">
-			{{ Form::textarea('message', '', ['id' => 'bbtext', 'class' => 'form-control']) }}
+			{{ Form::textarea('message', '', ['id' => 'bbtext', 'class' => 'form-control', 'required']) }}
 		</div>
 	</div>
 

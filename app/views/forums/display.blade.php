@@ -59,3 +59,7 @@
 </div>
 
 @stop
+
+@section('footer')
+@include('blocks.jumpbox', ['selected' => $forum->id])
+@stop

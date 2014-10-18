@@ -110,3 +110,8 @@ require app_path().'/filters.php';
 View::addLocation(base_path().'/vendor/earlybirdmvp/foundry/views');
 View::addNamespace('foundry', base_path().'/vendor/earlybirdmvp/foundry/views');
 
+App::missing(function($exception)
+{
+	return Response::view('errors.missing', array(), 404);
+});
+

@@ -250,9 +250,9 @@ header.mwscc {
 
 /* line 75, ../sass/global.scss */
 .navbar .avatar {
-  max-width: 48px;
-  max-height: 48px;
-  margin: -14px 10px -14px 0;
+  max-width: 40px;
+  max-height: 40px;
+  margin: -11px 10px -11px 0;
 }
 
 /* line 82, ../sass/global.scss */

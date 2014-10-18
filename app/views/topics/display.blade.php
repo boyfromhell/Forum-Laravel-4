@@ -48,6 +48,8 @@
 @stop
 
 @section('footer')
+@include('blocks.jumpbox', ['selected' => $forum->id])
+
 <ol class="breadcrumb">
 	<li><a href="/">{{{ Config::get('app.forum_name') }}}</a></li>
 	<li><a href="/forum/">Forum</a></li>

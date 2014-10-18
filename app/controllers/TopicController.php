@@ -147,7 +147,9 @@ class TopicController extends Earlybird\FoundryController
 
 			// Quick reply settings
 			->with('subscribed', $subscribed)
-			->with('check_sub', $check_sub);
+			->with('check_sub', $check_sub)
+
+			->with('jump_categories', Category::orderBy('order', 'asc')->get());
 
 		/*$Smarty->assign('total_posts', count($posts));
 

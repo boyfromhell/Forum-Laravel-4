@@ -11,6 +11,7 @@ class Category extends Earlybird\Foundry
 	public function forums()
 	{
 		// @todo should be just whereNull
+		// @todo should check for permissions based on Auth::user
 		return $this->hasMany('Forum')
 			->where('parent_id', '=', 0)
 			->orWhereNull('parent_id')

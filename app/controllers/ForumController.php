@@ -270,7 +270,8 @@ class ForumController extends Earlybird\FoundryController
 			->with('_PAGE', $_PAGE)
 			->with('forum', $forum)
 			->with('children', $children)
-			->with('topics', $topics);
+			->with('topics', $topics)
+			->with('jump_categories', Category::orderBy('order', 'asc')->get());
 	}
 
 }

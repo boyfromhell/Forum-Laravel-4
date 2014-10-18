@@ -50,6 +50,7 @@ Route::group(array('before' => 'auth'), function()
 
 	// Settings
 	Route::any('users/avatar', array('uses' => 'AvatarController@manage'));
+	Route::post('upload-avatar', array('uses' => 'AvatarController@upload'));
 	Route::any('users/edit', array('uses' => 'UserController@editProfile'));
 	Route::get('users/reset_password', array('uses' => 'UserController@resetPassword'));
 	Route::any('users/settings', array('uses' => 'UserController@settings'));
@@ -83,6 +84,7 @@ Route::group(array('before' => 'guest'), function()
 // All users
 Route::get('/', array('uses' => 'ForumController@home'));
 Route::get('forum', array('uses' => 'ForumController@index'));
+Route::get('forums', function() { return Redirect::to('forum'); });
 Route::get('forums/{id}/{name?}', array('uses' => 'ForumController@display'));
 Route::get('topics/{id}/{name?}', array('uses' => 'TopicController@display'));
 Route::get('print/{id}/{name?}', array('uses' => 'TopicController@printTopic'));
