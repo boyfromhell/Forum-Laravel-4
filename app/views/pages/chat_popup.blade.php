@@ -2,7 +2,7 @@
 
 @section('content')
 
-<body>
+<body class="minimal">
 
 <applet code="IRCApplet.class" archive="irc.jar,pixx.jar" codebase="/pjirc/" width="100%" height="550">
 <param name="CABINETS" value="irc.cab, securedirc.cab, pixx.cab">

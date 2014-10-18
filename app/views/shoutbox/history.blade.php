@@ -26,7 +26,7 @@
 
 @section('buttons')
 <div class="pull-right">
-	{{ $shouts->links() }}
+	{{ $shouts->appends(['search' => $search])->links() }}
 </div>
 @stop
 

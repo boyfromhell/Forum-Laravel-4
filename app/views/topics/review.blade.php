@@ -2,7 +2,7 @@
 
 @section('content')
 
-<body style="background:none">
+<body class="minimal">
 
 <table class="table">
 <tbody>

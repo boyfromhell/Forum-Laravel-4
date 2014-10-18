@@ -39,6 +39,8 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('new-topic/{id}', array('uses' => 'PostController@newTopic'));
 	Route::get('topic-review/{id}', array('uses' => 'TopicController@review'));
 
+	Route::get('forum/smileys', array('uses' => 'PostController@smileys'));
+
 	// Search
 	Route::any('search/{id?}', array('uses' => 'SearchController@index'));
 

@@ -577,5 +577,23 @@ class PostController extends Earlybird\FoundryController
 		*/
 	}
 
+	/**
+	 * Choose smileys
+	 *
+	 * @return Response
+	 */
+	public function smileys()
+	{
+		$_PAGE['title'] = 'Smileys';
+
+		$smileys = Smiley::where('show', '>', 0)
+			->orderBy('order', 'asc')
+			->get();
+
+		return View::make('posts.smileys')
+			->with('_PAGE', $_PAGE)
+			->with('smileys', $smileys);
+	}
+
 }
 
