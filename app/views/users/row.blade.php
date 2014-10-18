@@ -1,3 +1,5 @@
+@include ('users.menu')
+
 <div class="bg-info">
 	<div class="row">
 	<div class="col-sm-8">

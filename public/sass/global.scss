@@ -356,7 +356,7 @@ legend { background:$body-bg; padding:0 10px; color:#333; }
 
 .usermenu, .userhov, .usersel {
 	padding:3px 10px; height:28px; font-size:11pt; font-weight:bold;
-	background:$subheader-bg; float:left; cursor:default; position:relative; z-index:10;
+	float:left; cursor:default; position:relative; z-index:10;
 }
 .usermenu { border:1px solid $subheader-bg; }
 .userhov, .usermenu:hover { background:$menu-hover; border:1px solid #333; }

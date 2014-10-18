@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('content')
+@section('header')
 
 <h1><a href="{{ $album->url }}">{{{ $album->name }}}</a></h1>
 
@@ -13,6 +13,10 @@
 </ol>
 @endif
 
+@stop
+
+@section('buttons')
+<div class="pull-left">
 @if ( $allow || ( $album->parent_id == 1 && $me->id ))
 <a class="btn btn-primary" href="/albums/new?id={{ $album->id }}">New{{ !$is_mobile ? ' Album' : '' }}</a>
 @endif
@@ -22,10 +26,14 @@
 @if ( $allow )
 <a class="btn btn-default" href="/media/upload?id={{ $album->id }}">Upload</a>
 @endif
+</div>
 
-{{ $photos->links() }}
+<div class="pull-right">
+	{{ $photos->links() }}
+</div>
+@stop
 
-<div class="break"></div>
+@section('content')
 
 @if ( $album->description )
 
@@ -76,19 +84,5 @@
 	</div>
 </div>
 @endif
-
-@if ( $allow || ( $album->parent_id == 1 && $me->id ))
-<a class="btn btn-primary" href="/albums/new?id={{ $album->id }}">New{{ !$is_mobile ? ' Album' : '' }}</a>
-@endif
-@if (( $me->is_admin || $album->user_id == $me->id ) && $album->id != 1)
-<a class="btn btn-default" href="/albums/edit?id={{ $album->id }}">Edit{{ !$is_mobile ? ' Album' : '' }}</a>
-@endif
-@if ( $allow )
-<a class="btn btn-default" href="/media/upload?id={{ $album->id }}">Upload</a>
-@endif
-
-{{ $photos->links() }}
-
-<div class="break"></div>
 
 @stop

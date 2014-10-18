@@ -11,8 +11,8 @@
 	</td>
 	
 	<td class="from" style="width:25%">
-		@foreach ( $thread->users as $count => $user )
-			<a href="{{ $user->url }}">{{{ $user->name }}}</a>{{ $count < count($thread->users)-1 ? ', ' : '' }}
+		@foreach ( $thread->last_message[0]->users as $count => $user )
+			<a href="{{ $user->url }}">{{{ $user->name }}}</a>{{ $count < count($thread->last_message[0]->users)-1 ? ', ' : '' }}
 		@endforeach
 		@if ( $thread->replies > 1 ) ({{ $thread->replies }}) @endif
 	</td>

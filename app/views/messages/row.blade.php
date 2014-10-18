@@ -1,25 +1,23 @@
-{if !$is_mobile}
-{include file='blocks/user_menu.tpl' content_id=$message->id user=$message->from}
-{/if}
-
 <div class="panel panel-primary">
 
 	<div class="panel-heading">
-
-		<div style="float:left">{datestring($message->date_sent, 1)}<a name="{$message->id}"></a></div>
-		
-		<div style="float:right">#{$message->count}</div>
-
+		<div class="pull-left">
+			{{ $message->date }}<a name="{{ $message->id }}"></a>
+		</div>
+		<div class="pull-right">
+			#{{ $message->count }}
+		</div>
+		<div class="clearfix"></div>
 	</div>
 
 	<div class="recipients">
 		To: 
-		{foreach $message->users as $count => $user}
-			<a href="{$user->url}">{htmlspecialchars($user->name)}</a>{if $count < count($message->users)-1}, {/if}
-		{/foreach}
+		@foreach ( $message->to as $count => $user )
+			<a href="{{ $user->url }}">{{{ $user->name }}}</a>{{ $count < count($message->users)-1 ? ', ' : '' }}
+		@endforeach
 	</div>
 
-	@include ('users.row', ['content_id' => $message->id, 'user' => $message->from]) }}
+	@include ('users.row', ['content_id' => $message->id, 'user' => $message->from])
 
 	<div class="panel-body" id="pt{$message->id}">
 
@@ -43,7 +41,6 @@
 	@endif
 
 	@include ('posts.attachments', ['post' => $message])
-	</div>
-	
+
 </div>
 

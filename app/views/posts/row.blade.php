@@ -1,5 +1,3 @@
-@include ('users.menu', ['content_id' => $post->id, 'user' => $post->user])
-
 <div class="panel panel-primary">
 
 	@if ( $post->showhr > 0 && !$post->ignored )

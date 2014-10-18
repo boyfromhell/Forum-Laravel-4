@@ -1,13 +1,3 @@
-<a class="btn btn-primary" href="{{ $album->url }}{{ $page > 1 ? '?page='.$page : '' }}">Return</a>
-<a class="btn btn-success" href="/media/download/{{ $photo->id }}">Download</a>
-
-<div class="float_right">
-<a class="btn btn-default ajax-photo" data-id="{{ $prev->id }}" href="{{ $prev->url }}">Previous</a>
-<a class="btn btn-default ajax-photo" data-id="{{ $next->id }}" href="{{ $next->url }}">Next</a>
-</div>
-
-<div class="break"></div>
-
 <div class="panel panel-primary">
 
 	<div class="panel-heading">Photo {{ $photo->counter }} of {{ $album->total }}</div>
@@ -108,12 +98,3 @@ $(document).ready(function() {
 </script>
 </div>
 
-<a class="btn btn-primary" href="{{ $album->url }}{{ $page > 1 ? '?page='.$page : '' }}">Return</a>
-<a class="btn btn-success" href="/media/download/{{ $photo->id }}">Download</a>
-
-<div class="float_right">
-<a class="btn btn-default ajax-photo" data-id="{{ $prev->id }}" href="{{ $prev->url }}">Previous</a>
-<a class="btn btn-default ajax-photo" data-id="{{ $next->id }}" href="{{ $next->url }}">Next</a>
-</div>
-
-<div class="break"></div>
