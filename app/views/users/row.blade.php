@@ -15,7 +15,7 @@
 	<div id="user{{ $content_id }}" class="usermenu" name="uname" onMouseOver="userover({{ $content_id }});" onMouseOut="userout({{ $content_id }});" onClick="showuser({{ $content_id }});">{{{ $user->name }}}</div>
 	
 	<img src="/images/{{ $user->online_text }}.png" style="padding:7px 0px" title="{{{ $user->name }}} is {{ $user->online_text }}">
-	<div class="break"></div>
+	<div class="clearfix"></div>
 	
 	<div style="padding-left:11px; font-size:8pt; margin-top:-8px;">
 

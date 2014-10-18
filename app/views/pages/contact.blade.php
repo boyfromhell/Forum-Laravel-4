@@ -55,6 +55,10 @@
 		</div>
 	</div>
 
+</div>
+
+<div class="panel-footer">
+
 	<div class="form-group">
 		<div class="col-sm-5 col-sm-offset-4">
 			{{ Form::submit('Send Message', ['class' => 'btn btn-primary']) }}

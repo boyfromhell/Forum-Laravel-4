@@ -16,7 +16,7 @@
 
 	<div class="panel-heading">{{ $name }}</div>
 
-	<table class="table">
+	<table class="table table-hover">
 	<thead>
 	<tr>
 		<th class="icon">&nbsp;</th>

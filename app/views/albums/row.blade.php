@@ -21,10 +21,10 @@
 	@endif
 	</div>
 	
-	<div class="break"></div>
+	<div class="clearfix"></div>
 	
 </div>
 
 @if ( $is_mobile )
-	<div class="break"></div>
+	<div class="clearfix"></div>
 @endif

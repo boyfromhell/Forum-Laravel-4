@@ -161,7 +161,7 @@
 				@if ( $prev_type == 0 )<div style="padding:0 5px">@endif
 				<div><a href="{{ $attachment->url }}">{{{ $attachment->origfilename }}}</a> ({{ $attachment->size }}) -
 				<a href="" class="delete-attachment" data-id="{{ $attachment->id }}">Remove</a></div>
-				<div class="break"></div>
+				<div class="clearfix"></div>
 			@else
 				@if ( $prev_type == 1 )</div><br>@endif
 				<div class="photo" style="height:192px">
@@ -172,7 +172,7 @@
 			<?php $prev_type = $attachment->filetype; ?>
 		@endforeach
 		
-		<div class="break"></div>
+		<div class="clearfix"></div>
 	</div>
 </div>
 @endif

@@ -35,6 +35,10 @@ function selectAvatar( id ) {
 		<div id="avtext"><br><br><br>No avatar</div></div></div>
 	</div>
 
+	</div>
+
+	<div class="panel-footer">
+
 	<div class="text-center">
 		{{ Form::submit('Select', ['name' => 'select', 'class' => 'btn btn-primary']) }}
 		{{ Form::submit('Delete', ['name' => 'delete', 'class' => 'btn btn-danger']) }}
@@ -58,6 +62,10 @@ function selectAvatar( id ) {
 
 	{{ Form::file('avatar') }}
 	<small>GIF, JPG, and PNG files only. Size limit: 150x150 pixels, 32 KB</small><br><br>
+
+	</div>
+
+	<div class="panel-footer">
 
 	<div class="text-center">
 		{{ Form::submit('Upload', ['name' => 'upload', 'class' => 'btn btn-primary']) }}

@@ -20,7 +20,7 @@
 	@if ( $membership == 2 )
 	<br><br>
 	<a href="/groups/edit?id={{ $group->id }}" class="btn btn-primary btn-xs">Edit</a>
-	<div class="break"></div>
+	<div class="clearfix"></div>
 	@endif
 	</div>
 
@@ -38,7 +38,7 @@
 
 	<div class="panel-heading">Members</div>
 
-	<table class="table">
+	<table class="table table-hover">
 	<thead>
 	<tr>
 		<th class="icon">&nbsp;</th>

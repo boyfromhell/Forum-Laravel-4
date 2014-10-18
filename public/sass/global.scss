@@ -38,9 +38,6 @@ small { font-size:8pt; }
 * {
 	@include border-box;
 }
-hr {
-	height:1px; width:100%; margin:5px 0; border:0; color:#ccc; background:#999;
-}
 
 body {
 	padding-top: 50px;
@@ -48,9 +45,6 @@ body {
 }
 img { border:0; }
 ul, ol { margin:6px 20px; padding:0; }
-.break { width:100%; height:1px; margin:0 0 -1px; clear:both; }
-.float_left { float:left; }
-.float_right { float:right; }
 .v_top { vertical-align:top; }
 
 a {
@@ -94,9 +88,6 @@ ol.breadcrumb {
 #main_beta {
 	position: relative;
 
-	.actions {
-		float: right;
-	}
 	.moderate {
 		padding:4px;
 		a {
@@ -166,9 +157,10 @@ p {
 }
 
 footer {
-	position: relative;
-	padding:10px 10px 15px; text-align:center; font-size:8pt; color:#ccc; margin:0 auto; width:50%;
-	img { margin-left:13px; }
+	margin-bottom: 20px;
+	text-align: center;
+	font-size: 8pt;
+	color: #ccc;
 	a {
 		margin-left: 13px;
 	}
@@ -261,12 +253,17 @@ table.table {
 	.posts { width:80px; }
 }
 .smileys {
-	border: 1px solid #888; padding: 6px; margin: 19px 0 0 auto;
-	text-align: center; float: right; font-size: 10pt;
+	border: 1px solid #eee;
+	padding: 6px;
+	margin: 19px 0 0 auto;
+	text-align: center;
+	float: right;
+	font-size: 10pt;
 }
 .emote {
-	padding: 4px 6px 2px 6px; float:left;
-	border: 1px solid $body-bg; background:$body-bg;
+	padding: 4px 6px 2px 6px;
+	float: left;
+	border: 1px solid transparent;
 	&:hover { background:$input-hover; border: 1px solid $main-bg; }
 	&:active { background: #444; border: 1px solid #222; }
 }
@@ -326,7 +323,6 @@ table.calendar {
 			background:$header-bg; color:#eee; text-align:right; padding:3px 8px;
 			font-variant:small-caps; border-top:1px solid #333; border-bottom:1px solid #333;
 		}
-		td { background:$body-bg; padding:3px 8px; }
 	}
 }
 
@@ -334,11 +330,6 @@ table.calendar {
 	margin:15px 0 0; padding:8px 0; 
 	border-top:1px solid #999; border-bottom:1px solid #999
 }
-.form-box {
-	padding:8px 0; border-bottom:1px solid #999;
-}
-fieldset { border:1px grooved #ccc; margin-bottom:6px; padding:6px 10px 10px; }
-legend { background:$body-bg; padding:0 10px; color:#333; }
 
 .userbox {
 	padding:0; position:absolute; top:-400px; left:-400px; z-index:10; 
@@ -361,10 +352,6 @@ legend { background:$body-bg; padding:0 10px; color:#333; }
 .usermenu { border:1px solid $subheader-bg; }
 .userhov, .usermenu:hover { background:$menu-hover; border:1px solid #333; }
 .usersel, .usermenu:active { background:$menu-bg; border:1px solid #333; }
-
-.jumpbox {
-	border:2px solid #333; background:$body-bg; padding:8px 10px; float:left; color:#000;
-}
 
 a.scaled {
 	text-decoration:none; display:block; padding:4px 6px; border:1px solid #000; 
@@ -412,33 +399,6 @@ pre.code {
 			&.sel { padding:0; border:2px solid #00f; }
 		}
 	}
-}
-
-#menu-button {
-	display: block;
-	background: $button-hover;
-	color: $button-color;
-	padding: 4px 8px;
-	margin: -10px 0 10px 0;
-	float: left;
-}
-#mobile-menu {
-	margin-bottom: 10px;
-	font-size: 12pt;
-	a {
-		display: block;
-		padding: 4px 0;
-	}
-	#sub-menu {
-		margin-left: 20px;
-		a {
-			display: block;
-		}
-	}
-}
-#quick-links {
-	float: right;
-	margin-top: -10px;
 }
 
 body.mobile {

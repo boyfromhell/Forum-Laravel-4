@@ -43,7 +43,7 @@
 	$(document).ready(function() {
 		parangi.init({
 			'category' : "{{{ $_PAGE['category'] }}}",
-			'section'  : "{{{  $_PAGE['section'] }}}",
+			'section'  : "{{{ $_PAGE['section'] }}}",
 			'id'       : "{{{ $_PAGE['id'] }}}"
 		});
 	});
@@ -107,18 +107,12 @@
 		@foreach ( Config::get('app.social') as $social => $url )
 		<a href="{{ $url }}" target="_blank"><img src="/images/social/{{ $social }}.png" alt="{{ $social }}" width="32" height="32"></a>
 		@endforeach
-		<div class="break"></div>
+		<div class="clearfix"></div>
 	</div>
 	@endif
 
 	&copy; {{ date('Y') }} {{{ Config::get('app.short_name') }}}
 
-	@if ( $is_mobile )
-	<a href="{$mobile_url}no_mobile" rel="nofollow">Full site</a><br>
-	@else
-	<a href="{$mobile_url}mobile" rel="nofollow">Mobile site</a>
-	@endif
-	
 	<a class="static-page" href="/privacy">Privacy</a>
 	<a class="static-page" href="/terms">Terms of Use</a>
 </footer>

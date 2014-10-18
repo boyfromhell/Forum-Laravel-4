@@ -55,7 +55,7 @@ function select_threads( critera, value ) {
 
 	<div class="panel-heading">{{ ucwords($folder) }}</div>
 
-	<table class="table">
+	<table class="table table-hover">
 	<thead>
 	<tr>
 		<th class="icon">&nbsp;</th>
@@ -64,8 +64,6 @@ function select_threads( critera, value ) {
 		<th>Subject</th>
 		<th class="lastpost">Date</th>
 	</tr>
-	</thead>
-	<tbody>
 	<tr class="subheading messages">
 		<td colspan="3">
 			Select:
@@ -88,6 +86,8 @@ function select_threads( critera, value ) {
 		@endif
 		</td>
 	</tr>
+	</thead>
+	<tbody>
 	@if ( count($threads) > 0 )
 	@foreach ( $threads as $thread )
 		@include ('messages.thread_row', ['thread_mode' => 'folder'])

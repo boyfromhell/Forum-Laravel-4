@@ -41,13 +41,13 @@
 </div>
 
 @if ( $me->id )
-<div class="actions">
+<div class="pull-right">
 	View new <a href="/forum/search?show=new">posts</a> - <a href="/forum/search?show=newtopics">topics</a><br>
 	<a href="/forum/?mark=forums">Mark all forums read</a>
 </div>
 @endif
 
-<div class="break"></div>
+<div class="clearfix"></div>
 
 @include ('forums.categories')
 

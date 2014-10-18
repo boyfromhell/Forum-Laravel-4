@@ -14,7 +14,7 @@
 @endforeach
 </table>
 
-<div class="break"></div>
+<div class="clearfix"></div>
 
 <a href="" onclick="window.open('/forum/smileys', 'smileys', 'width=300, height=300, resizable=yes, scrollbars=yes, toolbar=no, location=no, directories=no, status=yes, menubar=no'); return false;">more</a>
 

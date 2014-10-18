@@ -28,14 +28,14 @@
 
 @section('content')
 
-<div class="actions">
+<div class="pull-right">
 	@if ( $me->id )
 	<a href="{{ $topic->url }}?{{ $page > 1 ? 'page='.$page.'&amp;' : '' }}{{ $subscribed ? 'un' : '' }}subscribe">{{ $subscribed ? 'Unsubscribe' : 'Subscribe' }}</a> - 
 	@endif
 	<a href="{{ str_replace('topics/', 'print/', $topic->url) }}" rel="nofollow">Print</a>
 </div>
 
-<div class="break"></div>
+<div class="clearfix"></div>
 
 @include ('topics.poll', ['poll' => $topic->poll])
 

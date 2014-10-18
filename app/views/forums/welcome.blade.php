@@ -33,7 +33,7 @@
 	@endif
 
 	@if ( $me->id )
-	<div class="actions">
+	<div class="pull-right">
 		<a href="/?mark">Mark all topics read</a>
 	</div>
 
@@ -83,7 +83,7 @@
 				by <a href="{{ $photo->user->url }}">{{{ $photo->user->name }}}</a>
 			</div>
 
-			<div class="break"></div>
+			<div class="clearfix"></div>
 		</div>
 	</div>
 	
@@ -96,7 +96,7 @@
 				<div style="height:18px; overflow:hidden">{{{ $album->name }}}</div>
 				by <a href="{{ $album->user->url }}">{{{ $album->user->name }}}</a>
 			</div>
-			<div class="break"></div>
+			<div class="clearfix"></div>
 		</div>
 	</div>
 	

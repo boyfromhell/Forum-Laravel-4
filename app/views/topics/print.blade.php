@@ -12,7 +12,7 @@
 
 <label><input type="checkbox" checked tabindex="1" onChange="$('fieldset').toggle()">Display attachments</label>
 <label><input type="checkbox" checked tabindex="1" onChange="$('img.post-image').toggle()">Display images</label>
-<div class="break"></div>
+<div class="clearfix"></div>
 </div>
 
 @foreach ( $posts as $post )
@@ -27,11 +27,11 @@
 		<h2><a href="{{ $post->user->url }}">{{{ $post->user->name }}}</a></h2>
 	</div>
 	
-	<div class="break"></div>
+	<div class="clearfix"></div>
 
 	{{ BBCode::parse($post->text, $post->smileys) }}
 
-	<div class="break"></div>
+	<div class="clearfix"></div>
 	
 	@include ('posts.attachments')
 </div>

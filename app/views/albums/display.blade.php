@@ -73,7 +73,7 @@
 			<div class="photo"><a class="thumb" href="{{ $photo->url }}"><img src="{{ $cdn }}{{ $photo->thumbnail }}"></a></div>
 		@endforeach
 
-		<div class="break"></div>
+		<div class="clearfix"></div>
 		@else
 		<center>
 		<br>

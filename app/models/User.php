@@ -25,6 +25,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $appends = array(
 		'url',
 		'level',
+		'access',
 		'custom',
 
 		'is_admin',
@@ -185,6 +186,21 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		}
 
 		return ( $level ? $level : $post_level );
+	}
+
+	/**
+	 * Get user's access level
+	 *
+	 * @return int
+	 */
+	public function getAccessAttribute()
+	{
+		$access = 0;
+		//if( $this->id ) { $access++; }
+		if( $this->is_moderator ) { $access++; }
+		if( $this->is_admin ) { $access++; }
+
+		return $access;
 	}
 
 	/**

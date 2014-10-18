@@ -20,6 +20,39 @@ class SearchController extends BaseController
 {
 
 	/**
+	 * New or edit search
+	 *
+	 * @return Response
+	 */
+	public function index( $id = NULL )
+	{
+		if( $id ) {
+			$query = Query::find($id);
+		}
+		if( ! $query->id || $query->type != 'forum' ) {
+			$query = new Query();
+
+			// Defaults
+			$query->match = MATCH_ALL;
+			$query->where = WHERE_BOTH;
+			$query->show  = SHOW_POSTS;
+		}
+
+		$_PAGE = array(
+			'category' => 'forums',
+			'section'  => 'search',
+			'title'    => 'Search',
+		);
+
+		$categories = Category::orderBy('order', 'asc')->get();
+
+		return View::make('forums.search')
+			->with('_PAGE', $_PAGE)
+			->with('query', $query)
+			->with('categories', $categories);
+	}
+
+	/**
 	 * Piece together a MySQL statement for this query
 	 */
 	public function get_database_query()

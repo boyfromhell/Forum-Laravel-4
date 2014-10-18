@@ -8,7 +8,7 @@
 
 		<div class="quickedit">
 		{{ BBCode::show_bbcode_controls() }}
-		<div class="break"></div>
+		<div class="clearfix"></div>
 
 		{{ Form::textarea('content', '', ['id' => 'bbtext', 'class' => 'form-control', 'tabindex' => 1]) }}
 
@@ -17,9 +17,13 @@
 		{{ Form::hidden('show_smileys', 1) }}
 		</div>
 
+	</div>
+
+	<div class="panel-footer">
+
 		<div class="text-center">
-			<input class="btn btn-primary" tabindex="1" name="addpost" type="submit" accesskey="S" value="Post Reply">
-			<input class="btn btn-default" tabindex="1" name="preview" type="submit" accesskey="P" value="Advanced">
+			{{ Form::submit('Post Reply', ['name' => 'addpost', 'class' => 'btn btn-primary', 'accesskey' => 'S']) }}
+			{{ Form::submit('Advanced', ['name' => 'preview', 'class' => 'btn btn-default', 'accesskey' => 'P']) }}
 		</div>
 
 	</div>

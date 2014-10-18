@@ -12,8 +12,6 @@ class ForumController extends Earlybird\FoundryController
 	{
 		global $me;
 
-		$me->access = $access = 2;
-
 		// Mark all forums read
 		if( isset($_GET['mark']) && $me->id )
 		{
@@ -53,11 +51,11 @@ class ForumController extends Earlybird\FoundryController
 
 		// Random photo and recent album
 		$photo = Photo::join('albums', 'photos.album_id', '=', 'albums.id')
-			->where('permission_view', '<=', $access)
+			->where('permission_view', '<=', $me->access)
 			->orderBy(DB::raw('RAND()'), 'asc')
 			->first(['photos.*']);
 
-		$album = Album::where('permission_view', '<=', $access)
+		$album = Album::where('permission_view', '<=', $me->access)
 			->orderBy('updated_at', 'desc')
 			->first();
 
@@ -71,7 +69,8 @@ class ForumController extends Earlybird\FoundryController
 			->with('album', $album)
 
 			->with('stats', $stats)
-			->with('newest_user', $newest_user);
+			->with('newest_user', $newest_user)
+			->with('online_stats', $this->getOnline(false));
 	}
 
 	/**
@@ -191,9 +190,8 @@ class ForumController extends Earlybird\FoundryController
 			->with('categories', $categories)
 
 			->with('stats', $stats)
-			->with('newest_user', $newest_user);
-
-		//$Smarty->assign('online_stats', $online_stats);
+			->with('newest_user', $newest_user)
+			->with('online_stats', $this->getOnline(false));
 	}
 
 	/**
@@ -274,4 +272,66 @@ class ForumController extends Earlybird\FoundryController
 			->with('jump_categories', Category::orderBy('order', 'asc')->get());
 	}
 
+	/**
+	 * Check who's online
+	 *
+	 * @return Response
+	 */
+	public function getOnline( $ajax = true )
+	{
+		global $me;
+
+		$online_record = BoardConfig::where('config_name', '=', 'online_record')->first();
+		$online_when = BoardConfig::where('config_name', '=', 'online_when')->first();
+
+		// Track that I'm online
+		if( $me->id ) {
+			$me->touch();
+		}
+
+		$fivemin = time() - 300;
+
+		// Fetch visitors who are online
+		$visitors = Visitor::where('last_view', '>', $fivemin)->count();
+
+		// Fetch members who are online and not hidden
+		$members = User::where('updated_at', '>', DB::raw('DATE_SUB(NOW(), INTERVAL 5 MINUTE)'));
+
+		if( ! $me->is_admin ) {
+			$members = $members->where('online', '=', 0);
+		}
+
+		$members = $members->orderBy('name')
+			->get();
+
+		$total = count($members);
+
+		// New record is reached
+		if( $visitors + $total > $online_record->config_value ) {
+			$online_record->config_value = ( $visitors + $total );
+			$online_record->save();
+
+			$online_when->config_value = time();
+			$online_when->save();
+		}
+
+		$html = View::make('forums.online')
+			->with('visitors', $visitors)
+			->with('members', $members)
+			->with('total', $total)
+			->with('record', $online_record->config_value)
+			->with('record_date', Helpers::local_date('M j, Y, g:i a', $online_when->config_value))
+			->render();
+
+		if( ! $ajax ) {
+			return $html;
+		}
+
+		//if( $user->level == 2 ) { $user->class = 'admin'; }
+		//elseif( $user->level == 1 ) { $user->class = 'mod'; }
+
+		return Response::json(['html' => $html]);
+	}
+
 }
+

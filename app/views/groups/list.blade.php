@@ -15,7 +15,7 @@
 	<div class="panel-heading">Groups</div>
 
 @if ( count($groups) > 0 )
-	<table class="table">
+	<table class="table table-hover">
 	<thead>
 	<tr>
 		<th class="icon">&nbsp;</th>

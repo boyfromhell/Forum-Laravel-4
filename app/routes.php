@@ -39,6 +39,9 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('new-topic/{id}', array('uses' => 'PostController@newTopic'));
 	Route::get('topic-review/{id}', array('uses' => 'TopicController@review'));
 
+	// Search
+	Route::any('search/{id?}', array('uses' => 'SearchController@index'));
+
 	// Attachments
 	Route::get('forum/attachments/{id}', array('uses' => 'AttachmentController@download'));
 
@@ -119,4 +122,7 @@ Route::get('privacy', array('uses' => 'PageController@display', 'as' => 'privacy
 Route::get('terms', array('uses' => 'PageController@display', 'as' => 'terms'));
 Route::get('community/chat', array('uses' => 'PageController@display', 'as' => 'chat'));
 Route::get('sitemap', array('uses' => 'PageController@sitemap'));
+
+// Stats
+Route::get('whos-online', array('uses' => 'ForumController@getOnline'));
 

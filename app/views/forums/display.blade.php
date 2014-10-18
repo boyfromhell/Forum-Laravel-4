@@ -28,7 +28,7 @@
 @endif
 
 @if ( $me->id )
-<div class="actions">
+<div class="pull-right">
 	<a href="{{ $forum->url }}?mark">Mark all topics read</a>
 </div>
 <div class="clearfix"></div>

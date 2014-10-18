@@ -153,7 +153,7 @@ var parangi = {
 		/**
 		 * Photo AJAX
 		 */
-		if( parangi.cfg.id == 'viewphoto' ) {
+		/*if( parangi.cfg.id == 'viewphoto' ) {
 			// Clicks
 			$('body').on('click', 'a.ajax-photo', function(e) {
 				e.preventDefault();
@@ -170,7 +170,7 @@ var parangi = {
 				var parts = location.search.split('=');
 				parangi.loadPhoto(parts[1], false);
 			});
-		}
+		}*/
 	},
 
 	/**
@@ -476,3 +476,10 @@ function anchor( p ) {
 	window.scroll(0, offset.top);
 }
 
+function showOnline() {
+	$.get('/whos-online', function( data ) {
+		$('#online').html(data.html);
+	}, 'json');
+}
+
+setInterval("showOnline()", 20000);

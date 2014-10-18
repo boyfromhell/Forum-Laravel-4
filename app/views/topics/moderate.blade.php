@@ -8,6 +8,6 @@
 @endif
 {{-- <a href="/admin/topics.php?mode=split&t={$topic->id}"><img src="/images/buttons/split.png" alt="Split Topic"></a> --}}
 
-<div class="break"></div>
+<div class="clearfix"></div>
 </div>
 

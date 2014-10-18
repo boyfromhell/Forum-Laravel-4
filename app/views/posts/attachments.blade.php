@@ -10,7 +10,7 @@
 			<div style="padding:0 5px">
 		@endif
 		<a href="{{ $attachment->url }}">{{{ $attachment->origfilename }}}</a> ({{{ $attachment->size }}})
-		<div class="break"></div>
+		<div class="clearfix"></div>
 	@else
 		@if ( $prev_type == 1 )
 			</div><br>

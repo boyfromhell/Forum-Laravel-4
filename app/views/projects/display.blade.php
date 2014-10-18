@@ -4,8 +4,6 @@
 
 @if ( $project->user_id == $me->id || $me->is_admin )
 <a href="/projects/upload?id={{ $project->id }}" class="btn btn-primary">Upload</a>
-
-<div class="break"></div>
 @endif
 
 @stop
@@ -31,7 +29,7 @@
 	@if ( $project->user_id == $me->id || $me->is_admin )
 	<br><br>
 	<a href="/admin/projects/{{ $project->id }}/edit" class="btn btn-primary btn-xs">Edit</a>
-	<div class="break"></div>
+	<div class="clearfix"></div>
 	@endif
 	</div>
 
@@ -41,7 +39,7 @@
 
 	<div class="panel-heading">Files</div>
 
-	<table class="table">
+	<table class="table table-hover">
 	<thead>
 	<tr>
 		<th class="icon">&nbsp;</th>
