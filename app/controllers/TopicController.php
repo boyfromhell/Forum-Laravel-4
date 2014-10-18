@@ -94,7 +94,11 @@ class TopicController extends Earlybird\FoundryController
 
 		// Fetch all posts
 		$posts = $topic->posts()->paginate(25);
-		$posts->load('user');
+		$posts->load([
+			'user',
+			'user.avatar',
+			'user.groups',
+		]);
 
 		/*
 		while( $data = $exec->fetch_assoc() )

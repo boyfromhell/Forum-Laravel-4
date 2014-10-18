@@ -1,12 +1,16 @@
 @extends('layout')
 
-@section('content')
+@section('buttons')
 
 @if ( $project->user_id == $me->id || $me->is_admin )
 <a href="/projects/upload?id={{ $project->id }}" class="btn btn-primary">Upload</a>
 
 <div class="break"></div>
 @endif
+
+@stop
+
+@section('content')
 
 <div class="panel panel-primary">
 
@@ -71,11 +75,5 @@
 	</table>
 
 </div>
-
-@if ( $project->user_id == $me->id || $me->is_admin )
-<a href="/projects/upload?id={{ $project->id }}" class="btn btn-primary">Upload</a>
-
-<div class="break"></div>
-@endif
 
 @stop

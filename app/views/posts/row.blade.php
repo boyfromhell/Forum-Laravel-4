@@ -41,12 +41,12 @@
 	<div class="panel-body" id="pt{{ $post->id }}">
 	
 @if ( $post->ignored )
-	<div id="post{{ $post->id }}" style="padding:10px 0; text-align:center">
-	<a href="{{ $post->user->url }}">{{{ $post->user->name }}}</a> is on your ignore list
+	<div id="post{{ $post->id }}" class="text-center">
+		<a href="{{ $post->user->url }}">{{{ $post->user->name }}}</a> is on your ignore list
 	</div>
 @else
 
-	<div id="post{{ $post->id }}" style="padding:0px">
+	<div id="post{{ $post->id }}">
 	
 	@include ('posts.body')
 
@@ -66,8 +66,7 @@
 	@endif
 	
 	</div>
-	<div class="break"></div>	
-	
+
 	{{-- @todo edits --}}
 	@if ( $post->edit_count > 0 && $post->edit_time > $post->time+300 && $post->edit_user_id != 2 )
 		{{-- <div class='editmsg'>

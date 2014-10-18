@@ -44,6 +44,8 @@ Route::group(array('before' => 'auth'), function()
 
 	// Messages
 	Route::get('messages', array('uses' => 'MessageController@inbox'));
+	Route::any('messages/compose', array('uses' => 'MessageController@compose'));
+	Route::get('messages/{id}', array('uses' => 'MessageController@displayThread'));
 	Route::get('messages/{folder}', array('uses' => 'MessageController@inbox'));
 
 	// Settings

@@ -68,6 +68,42 @@ class MessageController extends BaseController
 	}
 
 	/**
+	 * Compose a new message
+	 *
+	 * @return Response
+	 */
+	public function compose()
+	{
+		
+	}
+
+	/**
+	 * Display a thread
+	 *
+	 * @param  int  $id  MessageThread id
+	 * @return Response
+	 */
+	public function displayThread( $id )
+	{
+		$thread = MessageThread::findOrFail($id);
+
+		// If no messages are found (filtered by owner)
+		// then this is not my thread, or I deleted them all
+		if( ! count($thread->messages) ) {
+			App::abort(404);
+		}
+
+		$thread->messages->load([
+			'from',
+			'from.avatar',
+			'from.groups',
+		]);
+
+		return View::make('messages.thread')
+			->with('thread', $thread);
+	}
+
+	/**
 	 * Loads all users who are involved (from or to) a message, excluding me
 	 */
 	public function load_all_users()

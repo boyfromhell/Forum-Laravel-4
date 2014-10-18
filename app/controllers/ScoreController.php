@@ -67,8 +67,11 @@ class ScoreController extends Earlybird\FoundryController
 
 			if( $validator->fails() )
 			{
+				foreach( $validator->messages()->all() as $error ) {
+					Session::push('errors', $error);
+				}
+
 				return Redirect::to('community/submit_score')
-					->withErrors($validator)
 					->withInput();
 			}
 			else

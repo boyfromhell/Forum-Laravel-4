@@ -1,11 +1,10 @@
 @extends('layout')
 
-@section('content')
-
+@section('buttons')
 <a href="/profile" class="btn btn-primary">View Profile</a>
+@stop
 
-<div class="break"></div>
-
+@section('content')
 <form class="form-horizontal unload-warning" method="post" action="/users/edit">
 
 <div class="panel panel-primary">
@@ -150,9 +149,5 @@
 	</div>
 </div>
 </form>
-
-<a href="/profile" class="btn btn-primary">View Profile</a>
-
-<div class="break"></div>
 
 @stop

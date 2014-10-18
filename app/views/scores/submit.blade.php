@@ -9,37 +9,37 @@
 
 	<div class="panel-body">
 	<div class="form-group">
-		<label class="col-sm-4 control-label">Character Name</label>
+		<label class="col-sm-4 control-label">Character Name *</label>
 		<div class="col-sm-5">
-			{{ Form::text('character', '', ['class' => 'form-control']) }}
+			{{ Form::text('character', '', ['class' => 'form-control', 'required']) }}
 		</div>
 	</div>
 		
 	<div class="form-group">
-		<label class="col-sm-4 control-label">Score</label>
+		<label class="col-sm-4 control-label">Score *</label>
 		<div class="col-sm-2">
-			{{ Form::text('score', '', ['class' => 'form-control', 'maxlength' => 10]) }}
+			{{ Form::text('score', '', ['class' => 'form-control', 'maxlength' => 10, 'required']) }}
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-4 control-label">Variant</label>
+		<label class="col-sm-4 control-label">Variant *</label>
 		<div class="col-sm-2">
 			{{ Form::select('variant', ['0.50' => '0.50', 'CLIVAN' => 'CLIVAN', 'CVS' => 'CVS', 'IVANT' => 'IVANT', 'IVANtty' => 'IVANtty', 'IvanX' => 'IvanX', 'LIVAN' => 'LIVAN'], '', ['class' => 'form-control']) }}
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-4 control-label">Victory?</label>
+		<label class="col-sm-4 control-label">Victory? *</label>
 		<div class="col-sm-2">
 			{{ Form::select('victory', ['1' => 'Yes', '0' => 'No'], '', ['class' => 'form-control']) }}
 		</div>
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-4 control-label">Ending</label>
+		<label class="col-sm-4 control-label">Ending *</label>
 		<div class="col-sm-5">
-			{{ Form::text('ending', '', ['class' => 'form-control']) }}<br>
+			{{ Form::text('ending', '', ['class' => 'form-control', 'required']) }}
 			<small>Begin with the text <b>after</b> the character name, i.e. "killed...", "defeated..."</small>
 		</div>
 	</div>
@@ -47,7 +47,7 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">URL with details</label>
 		<div class="col-sm-5">
-			{{ Form::text('url', '', ['class' => 'form-control']) }}
+			{{ Form::text('url', '', ['class' => 'form-control', 'placeholder' => 'http://']) }}
 		</div>
 	</div>
 

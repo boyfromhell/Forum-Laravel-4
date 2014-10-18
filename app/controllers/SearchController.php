@@ -16,28 +16,9 @@ define('FOLDER_INBOX', 1);
 define('FOLDER_SENT', 2);
 define('FOLDER_ARCHIVED', 3);
 
-class QueryModel extends Model_W
+class SearchController extends BaseController
 {
-	protected static $_table = 'queries';
-	protected static $_instance = null;
-}
 
-class Query extends Controller_W 
-{
-	protected static $_table = 'queries';
-
-	public function __construct( $pri = null, $data = null )
-	{
-		parent::__construct($pri, $data);
-		
-		$this->generate_url();
-	}
-	
-	public function generate_url()
-	{
-		$this->url = '/' . $this->type . '/results?id=' . $this->id;
-	}
-	
 	/**
 	 * Piece together a MySQL statement for this query
 	 */

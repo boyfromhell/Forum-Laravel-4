@@ -46,7 +46,7 @@ View::creator(array('layout'), function($view)
 		$_PAGE['og_title'] = $_PAGE['title'];
 	}
 	if( ! $_PAGE['description'] ) {
-		$_PAGE['description'] = 'Roundown: buy stuff and save!';
+		$_PAGE['description'] = 'Laravel powered forum and community hub';
 	}
 
 	// If no canonical URL is specified, just use the request URI

@@ -1,10 +1,10 @@
 <form class="form unload-warning" method="post" action="/reply-to-topic/{{ $topic->id }}">
 
-<div id="quick-reply" class="welcome">
+<div id="quick-reply" class="panel panel-info">
 
-	<div class="header">Quick Reply</div>
+	<div class="panel-heading">Quick Reply</div>
 	
-	<div class="body">
+	<div class="panel-body">
 
 		<div class="quickedit">
 		{{ BBCode::show_bbcode_controls() }}
@@ -17,14 +17,10 @@
 		{{ Form::hidden('show_smileys', 1) }}
 		</div>
 
-		<center>
-	
-		<input class="btn btn-primary" tabindex="1" name="addpost" type="submit" accesskey="S" value="Post Reply">
-		<input class="btn btn-default" tabindex="1" name="preview" type="submit" accesskey="P" value="Advanced">
-
-		<div class="break"></div>
-		
-		</center>
+		<div class="text-center">
+			<input class="btn btn-primary" tabindex="1" name="addpost" type="submit" accesskey="S" value="Post Reply">
+			<input class="btn btn-default" tabindex="1" name="preview" type="submit" accesskey="P" value="Advanced">
+		</div>
 
 	</div>
 </div>

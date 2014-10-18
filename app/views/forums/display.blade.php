@@ -1,7 +1,6 @@
 @extends('layout')
 
-@section('content')
-
+@section('header')
 <h1><a href="{{ $forum->url }}">{{{ $forum->name }}}</a></h1>
 
 <ol class="breadcrumb">
@@ -11,23 +10,28 @@
 	<li><a href="{{ $parent->url }}">{{{ $parent->name }}}</a></li>
 @endforeach
 </ol>
+@stop
 
+@section('buttons')
+<div class="pull-left">
+	<a href="/new-topic/{{ $forum->id }}" class="btn btn-primary">New Topic</a>
+</div>
 <div class="pull-right">
 	{{ $topics->links() }}
 </div>
-<div class="clearfix"></div>
+@stop
+
+@section('content')
 
 @if ( count($children) > 0 )
 	@include ('forums.list', ['forums' => $children])
 @endif
 
 @if ( $me->id )
-<a href="/new-topic/{{ $forum->id }}" class="btn btn-primary">New Topic</a>
-
 <div class="actions">
 	<a href="{{ $forum->url }}?mark">Mark all topics read</a>
 </div>
-<div class="break"></div>
+<div class="clearfix"></div>
 @endif
 
 <div class="panel panel-primary">
@@ -53,13 +57,5 @@
 	</table>
 
 </div>
-
-@if ( $me->id )
-<a href="/new-topic/{{ $forum->id }}" class="btn btn-primary">New Topic</a>
-
-<div class="pull-right">
-	{{ $topics->links() }}
-</div>
-@endif
 
 @stop

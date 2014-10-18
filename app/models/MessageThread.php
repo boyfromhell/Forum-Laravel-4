@@ -4,6 +4,7 @@ class MessageThread extends Earlybird\Foundry
 {
 
 	protected $appends = array(
+		'url',
 		'users',
 	);
 
@@ -15,6 +16,7 @@ class MessageThread extends Earlybird\Foundry
 	public function messages()
 	{
 		return $this->hasMany('Message', 'thread_id')
+			->ownedBy(Auth::id())
 			->orderBy('created_at', 'asc');
 	}
 
@@ -25,12 +27,18 @@ class MessageThread extends Earlybird\Foundry
 	 */
 	public function lastMessage()
 	{
-		global $me;
-
-		return $this->hasMany('Message', 'thread_id')
-			->ownedBy($me->id)
-			->orderBy('created_at', 'desc')
+		return $this->messages()
 			->take(1);
+	}
+
+	/**
+	 * Permalink
+	 *
+	 * @return string
+	 */
+	public function getUrlAttribute()
+	{
+		return '/messages/'.$this->id;
 	}
 
 	/**

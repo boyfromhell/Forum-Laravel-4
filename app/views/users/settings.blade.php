@@ -13,40 +13,40 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Hide my online status</label>
 		<div class="col-sm-5">
-			<label><input type="radio" tabindex="1" name="online" value="1"{{ $me->online ? ' checked' : '' }}>&nbsp;Yes&nbsp;&nbsp;</label>
-			<label><input type="radio" tabindex="1" name="online" value="0"{{ !$me->online ? ' checked' : '' }}>&nbsp;No&nbsp;&nbsp;</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="online" value="1"{{ $me->online ? ' checked' : '' }}>Yes</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="online" value="0"{{ !$me->online ? ' checked' : '' }}>No</label>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Always notify me of replies</label>
 		<div class="col-sm-5">
-			<label><input type="radio" tabindex="1" name="notify" value="1"{{ $me->notify ? ' checked' : '' }}>&nbsp;Yes&nbsp;&nbsp;</label>
-			<label><input type="radio" tabindex="1" name="notify" value="0"{{ !$me->notify ? ' checked' : '' }}>&nbsp;No&nbsp;&nbsp;</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="notify" value="1"{{ $me->notify ? ' checked' : '' }}>Yes</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="notify" value="0"{{ !$me->notify ? ' checked' : '' }}>No</label>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Always attach my signature</label>
 		<div class="col-sm-5">
-			<label><input type="radio" tabindex="1" name="attach_sig" value="1"{{ $me->attach_sig ? ' checked' : '' }}>&nbsp;Yes&nbsp;&nbsp;</label>
-			<label><input type="radio" tabindex="1" name="attach_sig" value="0"{{ !$me->attach_sig ? ' checked' : '' }}>&nbsp;No&nbsp;&nbsp;</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="attach_sig" value="1"{{ $me->attach_sig ? ' checked' : '' }}>Yes</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="attach_sig" value="0"{{ !$me->attach_sig ? ' checked' : '' }}>No</label>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Notify on new Private Message</label>
 		<div class="col-sm-5">
-			<label><input type="radio" tabindex="1" name="notify_pm" value="1"{{ $me->notify_pm ? ' checked' : '' }}>&nbsp;Yes&nbsp;&nbsp;</label>
-			<label><input type="radio" tabindex="1" name="notify_pm" value="0"{{ !$me->notify_pm ? ' checked' : '' }}>&nbsp;No&nbsp;&nbsp;</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="notify_pm" value="1"{{ $me->notify_pm ? ' checked' : '' }}>Yes</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="notify_pm" value="0"{{ !$me->notify_pm ? ' checked' : '' }}>No</label>
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Allow email from other members</label>
 		<div class="col-sm-5">
-			<label><input type="radio" tabindex="1" name="allow_email" value="1"{{ $me->allow_email ? ' checked' : '' }}>&nbsp;Yes&nbsp;&nbsp;</label>
-			<label><input type="radio" tabindex="1" name="allow_email" value="0"{{ !$me->allow_email ? ' checked' : '' }}>&nbsp;No&nbsp;&nbsp;</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="allow_email" value="1"{{ $me->allow_email ? ' checked' : '' }}>Yes</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="allow_email" value="0"{{ !$me->allow_email ? ' checked' : '' }}>No</label>
 		</div>
 	</div>
 
@@ -54,8 +54,8 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Display attachments as</label>
 		<div class="col-sm-5">
-			<label><input type="radio" tabindex="1" name="attach_disp" value="1"{if $me->attach_disp} checked{/if}>&nbsp;Larger Images&nbsp;&nbsp;</label>
-			<label><input type="radio" tabindex="1" name="attach_disp" value="0"{if !$me->attach_disp} checked{/if}>&nbsp;Thumbnails&nbsp;&nbsp;</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="attach_disp" value="1"{if $me->attach_disp} checked{/if}>Larger Images</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="attach_disp" value="0"{if !$me->attach_disp} checked{/if}>Thumbnails</label>
 		</div>
 	</div>
 	--}}
@@ -63,8 +63,8 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Enable Smileys</label>
 		<div class="col-sm-5">
-			<label><input type="radio" tabindex="1" name="enable_smileys" value="1"{{ $me->enable_smileys ? ' checked' : '' }}>&nbsp;Yes&nbsp;&nbsp;</label>
-			<label><input type="radio" tabindex="1" name="enable_smileys" value="0"{{ !$me->enable_smileys ? ' checked' : '' }}>&nbsp;No&nbsp;&nbsp;</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="enable_smileys" value="1"{{ $me->enable_smileys ? ' checked' : '' }}>Yes</label>
+			<label class="radio-inline"><input type="radio" tabindex="1" name="enable_smileys" value="0"{{ !$me->enable_smileys ? ' checked' : '' }}>No</label>
 		</div>
 	</div>
 

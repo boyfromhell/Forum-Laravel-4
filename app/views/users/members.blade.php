@@ -1,7 +1,6 @@
 @extends('layout')
 
-@section('content')
-
+@section('header')
 <div class="row">
 <div class="col-md-4 col-sm-6">
 <div class="panel panel-info">
@@ -23,8 +22,15 @@
 </div>
 </div>
 </div>
+@stop
 
-{{ $users->links() }}
+@section('buttons')
+<div class="pull-right">
+	{{ $users->links() }}
+</div>
+@stop
+
+@section('content')
 
 <div class="panel panel-primary">
 
@@ -74,7 +80,5 @@
 @endif
 
 </div>
-
-{{ $users->links() }}
 
 @stop

@@ -2,13 +2,13 @@
 	<div class="row">
 	<div class="col-sm-8">
 
-	<div class="avatar" style="float:left; margin:10px">
+	<div class="avatar pull-left" style="margin:10px">
 	@if ( $user->avatar->id )
 	<a href="{{ $user->url }}"><img src="{{ $cdn }}/images/avatars/{{ $user->avatar->file }}" alt="{{{ $user->name }}}'s avatar" title="{{{ $user->name }}}'s avatar"></a>
 	@endif
 
 	</div>
-	<div style="float:left; padding:10px">
+	<div class="pull-left" style="padding:10px">
 
 	<div id="user{{ $content_id }}" class="usermenu" name="uname" onMouseOver="userover({{ $content_id }});" onMouseOut="userout({{ $content_id }});" onClick="showuser({{ $content_id }});">{{{ $user->name }}}</div>
 	

@@ -1,7 +1,6 @@
 @extends('layout')
 
-@section('content')
-
+@section('header')
 <h1><a href="{{ $topic->url }}">{{{ $topic->title }}}</a></h1>
 
 <ol class="breadcrumb">
@@ -12,13 +11,22 @@
 @endforeach
 	<li><a href="{{ $forum->url }}">{{{ $forum->name }}}</a></li>
 </ol>
+@stop
 
-{{ $posts->links() }}
-
+@section('buttons')
 @if ( $me->id )
+<div class="pull-left">
 <a href="/new-topic/{{ $forum->id }}" class="btn btn-default">New Topic</a>
 <a href="/reply-to-topic/{{ $topic->id }}" class="btn btn-{{ $topic->status ? 'danger' : 'primary' }}">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
+</div>
 @endif
+
+<div class="pull-right">
+	{{ $posts->links() }}
+</div>
+@stop
+
+@section('content')
 
 <div class="actions">
 	@if ( $me->id )
@@ -37,18 +45,15 @@
 
 @endforeach
 
-@if ( $me->id )
-<a href="/new-topic/{{ $forum->id }}" class="btn btn-default">New Topic</a>
-<a href="/reply-to-topic/{{ $topic->id }}" class="btn btn-{{ $topic->status ? 'danger' : 'primary' }}">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
-@endif
+@stop
 
-{{ $posts->links() }}
-
-<div class="break"></div>
-
-<br>
-<a href="/" style="text-decoration:none;">{{{ Config::get('app.forum_name') }}}</a> &gt; <a href="/forum/">Forum</a> &gt; <a href="{{ $forum->url }}" style="text-decoration:none;">{{{ $forum->name }}}</a> &gt; <a href="{{ $topic->url }}" style="text-decoration:none;">{{{ $topic->title }}}</a>
-<br><br>
+@section('footer')
+<ol class="breadcrumb">
+	<li><a href="/">{{{ Config::get('app.forum_name') }}}</a></li>
+	<li><a href="/forum/">Forum</a></li>
+	<li><a href="{{ $forum->url }}">{{{ $forum->name }}}</a></li>
+	<li><a href="{{ $topic->url }}">{{{ $topic->title }}}</a></li>
+</ol>
 
 @if ( $me->id && !$topic->status )
 	@include ('topics.quick_reply')

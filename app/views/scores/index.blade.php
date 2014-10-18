@@ -1,10 +1,14 @@
 @extends('layout')
 
-@section('content')
+@section('buttons')
 
 @if ( $me->id )
 <a href="/community/submit_score" class="btn btn-primary">Submit Score</a>
 @endif
+
+@stop
+
+@section('content')
 
 @foreach ( $categories as $name => $scores )
 
@@ -45,10 +49,6 @@
 
 </div>
 @endforeach
-
-@if ( $me->id )
-<a href="/community/submit_score" class="btn btn-primary">Submit Score</a>
-@endif
 
 @stop
 

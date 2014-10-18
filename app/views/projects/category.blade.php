@@ -1,10 +1,14 @@
 @extends('layout')
 
-@section('content')
+@section('buttons')
 
 @if ( $me->is_admin )
 <a href="/admin/projects/create" class="btn btn-primary">New Project</a>
 @endif
+
+@stop
+
+@section('content')
 
 @if ( count($projects) > 0 )
 
@@ -77,10 +81,6 @@
 	
 </div>
 
-@endif
-
-@if ( $me->is_admin )
-<a href="/admin/projects/create" class="btn btn-primary">New Project</a>
 @endif
 
 @stop

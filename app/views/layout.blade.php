@@ -69,15 +69,27 @@
 		@foreach ( Config::get('app.social') as $social => $url )
 		<a href="{{ $url }}" target="_blank"><img src="/images/social/{{ $social }}.png" alt="{{ $social }}" width="32" height="32"></a>
 		@endforeach
-		<div class="break"></div>
+		<div class="clearfix"></div>
 	</div>
 
-	<div class="break"></div>
+	<div class="clearfix"></div>
 </div>
 
 <div id="main_beta">
 
+@yield ('header')
+
+<div style="margin:20px 0">
+@yield ('buttons')
+<div class="clearfix"></div>
+</div>
+
 @yield ('content')
+
+@yield ('buttons')
+<div class="clearfix"></div>
+
+@yield ('footer')
 
 </div>
 

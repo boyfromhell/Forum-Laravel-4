@@ -1,5 +1,14 @@
 @extends('layout')
 
+@section('buttons')
+<div class="pull-left">
+	<a href="/messages/compose" class="btn btn-primary">Compose</a>
+</div>
+<div class="pull-right">
+	{{ $threads->links() }}
+</div>
+@stop
+
 @section('content')
 
 <script type="text/javascript">
@@ -39,10 +48,6 @@ function select_threads( critera, value ) {
 	});
 }
 </script>
-
-<a href="/messages/compose" class="btn btn-primary">Compose</a>
-
-{{ $threads->links() }}
 
 <form method="post" action="/messages/{{ $folder }}{{ $page > 1 ? '?page='.$page : '' }}">
 
@@ -98,9 +103,5 @@ function select_threads( critera, value ) {
 </div>
 
 </form>
-
-<a href="/messages/compose" class="btn btn-primary">Compose</a>
-
-{{ $threads->links() }}
 
 @stop

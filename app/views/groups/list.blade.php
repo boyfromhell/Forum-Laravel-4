@@ -1,10 +1,14 @@
 @extends('layout')
 
-@section('content')
+@section('buttons')
 
 @if ( $me->id )
 <a href="/admin/groups/create" class="btn btn-primary">New Group</a>
 @endif
+
+@stop
+
+@section('content')
 
 <div class="panel panel-primary">
 
@@ -42,9 +46,5 @@
 @endif
 
 </div>
-
-@if ( $me->id )
-<a href="/admin/groups/create" class="btn btn-primary">New Group</a>
-@endif
 
 @stop
