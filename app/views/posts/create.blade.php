@@ -39,7 +39,7 @@
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Topic Type</label>
 		<div class="col-sm-3">
-			{{ Form::select('type', ['Normal', 'Sticky', 'Announcement'], $topic->type, ['class' => 'form-control']) }}
+			{{ Helpers::radioGroup('type', ['Normal', 'Sticky', 'Announcement'], $topic->type) }}
 		</div>
 	</div>
 	@endif

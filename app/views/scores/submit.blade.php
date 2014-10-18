@@ -2,7 +2,7 @@
 
 @section('content')
 
-<form class="form-horizontal unload-warning" method="post" action="/community/submit_score">
+<form class="form-horizontal unload-warning" method="post" action="/honor-rolls/submit">
 <div class="panel panel-primary">
 
 	<div class="panel-heading">Submit Score</div>
@@ -32,7 +32,7 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Victory? *</label>
 		<div class="col-sm-2">
-			{{ Form::select('victory', ['1' => 'Yes', '0' => 'No'], '', ['class' => 'form-control']) }}
+			{{ Helpers::radioGroup('victory', ['1' => 'Yes', '0' => 'No'], 1) }}
 		</div>
 	</div>
 

@@ -12,59 +12,52 @@
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Hide my online status</label>
-		<div class="col-sm-5">
-			<label class="radio-inline"><input type="radio" tabindex="1" name="online" value="1"{{ $me->online ? ' checked' : '' }}>Yes</label>
-			<label class="radio-inline"><input type="radio" tabindex="1" name="online" value="0"{{ !$me->online ? ' checked' : '' }}>No</label>
+		<div class="col-sm-8">
+		{{ Helpers::radioGroup('online', ['1' => 'Yes', '0' => 'No'], $me->online) }}
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Always notify me of replies</label>
-		<div class="col-sm-5">
-			<label class="radio-inline"><input type="radio" tabindex="1" name="notify" value="1"{{ $me->notify ? ' checked' : '' }}>Yes</label>
-			<label class="radio-inline"><input type="radio" tabindex="1" name="notify" value="0"{{ !$me->notify ? ' checked' : '' }}>No</label>
+		<div class="col-sm-8">
+		{{ Helpers::radioGroup('notify', ['1' => 'Yes', '0' => 'No'], $me->notify) }}
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Always attach my signature</label>
-		<div class="col-sm-5">
-			<label class="radio-inline"><input type="radio" tabindex="1" name="attach_sig" value="1"{{ $me->attach_sig ? ' checked' : '' }}>Yes</label>
-			<label class="radio-inline"><input type="radio" tabindex="1" name="attach_sig" value="0"{{ !$me->attach_sig ? ' checked' : '' }}>No</label>
+		<div class="col-sm-8">
+		{{ Helpers::radioGroup('attach_sig', ['1' => 'Yes', '0' => 'No'], $me->attach_sig) }}
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Notify on new Private Message</label>
-		<div class="col-sm-5">
-			<label class="radio-inline"><input type="radio" tabindex="1" name="notify_pm" value="1"{{ $me->notify_pm ? ' checked' : '' }}>Yes</label>
-			<label class="radio-inline"><input type="radio" tabindex="1" name="notify_pm" value="0"{{ !$me->notify_pm ? ' checked' : '' }}>No</label>
+		<div class="col-sm-8">
+		{{ Helpers::radioGroup('notify_pm', ['1' => 'Yes', '0' => 'No'], $me->notify_pm) }}
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Allow email from other members</label>
-		<div class="col-sm-5">
-			<label class="radio-inline"><input type="radio" tabindex="1" name="allow_email" value="1"{{ $me->allow_email ? ' checked' : '' }}>Yes</label>
-			<label class="radio-inline"><input type="radio" tabindex="1" name="allow_email" value="0"{{ !$me->allow_email ? ' checked' : '' }}>No</label>
+		<div class="col-sm-8">
+		{{ Helpers::radioGroup('allow_email', ['1' => 'Yes', '0' => 'No'], $me->allow_email) }}
 		</div>
 	</div>
 
 	{{-- 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Display attachments as</label>
-		<div class="col-sm-5">
-			<label class="radio-inline"><input type="radio" tabindex="1" name="attach_disp" value="1"{if $me->attach_disp} checked{/if}>Larger Images</label>
-			<label class="radio-inline"><input type="radio" tabindex="1" name="attach_disp" value="0"{if !$me->attach_disp} checked{/if}>Thumbnails</label>
+		<div class="col-sm-8">
+		{{ Helpers::radioGroup('attach_disp', ['1' => 'Larger Images', '0' => 'Thumbnails'], $me->attach_disp) }}
 		</div>
 	</div>
 	--}}
 
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Enable Smileys</label>
-		<div class="col-sm-5">
-			<label class="radio-inline"><input type="radio" tabindex="1" name="enable_smileys" value="1"{{ $me->enable_smileys ? ' checked' : '' }}>Yes</label>
-			<label class="radio-inline"><input type="radio" tabindex="1" name="enable_smileys" value="0"{{ !$me->enable_smileys ? ' checked' : '' }}>No</label>
+		<div class="col-sm-8">
+		{{ Helpers::radioGroup('enable_smileys', ['1' => 'Yes', '0' => 'No'], $me->enable_smileys) }}
 		</div>
 	</div>
 

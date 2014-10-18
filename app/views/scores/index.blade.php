@@ -3,7 +3,7 @@
 @section('buttons')
 
 @if ( $me->id )
-<a href="/community/submit_score" class="btn btn-primary">Submit Score</a>
+<a href="/honor-rolls/submit" class="btn btn-primary">Submit Score</a>
 @endif
 
 @stop

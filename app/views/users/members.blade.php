@@ -7,7 +7,7 @@
 
 	<div class="panel-heading">Search Members</div>
 
-	<form method="GET" action="/community/members">
+	<form method="GET" action="/members">
 	<div class="panel-body">
 
 	<div class="input-group">

@@ -17,14 +17,16 @@
 	</div>
 
 	<div class="form-group">
-		<div class="col-sm-6 col-md-3 col-sm-offset-3">
-		{{ Form::select('match', ['Match ANY keyword', 'Match ALL keywords'], $query->match, ['class' => 'form-control']) }}
+		<label class="control-label col-sm-3">Match</label>
+		<div class="col-sm-9">
+		{{ Helpers::radioGroup('match', ['ANY keyword', 'ALL keywords'], $query->match) }}
 		</div>
 	</div>
 
 	<div class="form-group">
-		<div class="col-sm-6 col-md-3 col-sm-offset-3">
-		{{ Form::select('where', ['Search topic titles', 'Search message text', 'Search titles and text'], $query->where, ['class' => 'form-control']) }}
+		<label class="control-label col-sm-3">Search</label>
+		<div class="col-sm-9">
+		{{ Helpers::radioGroup('where', ['Topic titles', 'Message text', 'Titles and text'], $query->where) }}
 		</div>
 	</div>
 
@@ -36,8 +38,9 @@
 	</div>
 
 	<div class="form-group">
-		<div class="col-sm-6 col-md-3 col-sm-offset-3">
-		{{ Form::select('starter', ['Find all posts by user', 'Find topics started by user'], $query->starter, ['class' => 'form-control']) }}
+		<label class="control-label col-sm-3">Find</label>
+		<div class="col-sm-9">
+		{{ Helpers::radioGroup('starter', ['Posts by user', 'Topics started by user'], $query->starter) }}
 		</div>
 	</div>
 
@@ -63,7 +66,7 @@
 	<div class="form-group">
 		<label class="control-label col-sm-3">Display Results as</label>
 		<div class="col-sm-6 col-md-3">
-		{{ Form::select('show', ['Posts', 'Topics'], $query->show, ['class' => 'form-control']) }}
+		{{ Helpers::radioGroup('show', ['Posts', 'Topics'], $query->show) }}
 		</div>
 	</div>
 

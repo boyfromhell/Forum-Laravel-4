@@ -167,5 +167,31 @@ class Helpers
 		);
 	}
 
+	/**
+	 * Generate a group of radio buttons
+	 *
+	 * @return string
+	 */
+	public function radioGroup( $name, $options, $default = NULL )
+	{
+		$html = '<div class="btn-group" data-toggle="buttons">';
+
+		foreach( $options as $value => $label )
+		{
+			$html .= '<label class="btn btn-default';
+			if( $default == $value ) { $html .= ' active'; }
+			$html .= '">'."\n";
+
+			$html .= Form::radio($name, $value, ( $default == $value )) . "\n";
+			$html .= $label."\n";
+
+			$html .= '</label>'."\n";
+		}
+
+		$html .= '</div>'."\n";
+
+		return $html;
+	}
+
 }
 

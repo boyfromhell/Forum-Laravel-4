@@ -4,7 +4,7 @@
 <title>{{{ $_PAGE['title'] }}}</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
 
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/css/global.css?v={{ $versions['css'] }}">
 	
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

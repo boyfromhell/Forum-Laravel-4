@@ -134,11 +134,6 @@ class UserController extends Earlybird\FoundryController
 				return Redirect::to('users/edit')->withInput();
 			}
 			else {
-				$website = Input::get('website');
-				if( $website && ! str_contains($website, '://') ) {
-					$website = 'http://'.$website;
-				}
-
 				$me->bdaypref = Input::get('bdaypref');
 				$me->sig = substr(Input::get('sig'), 0, 512);
 				$me->website = $website;
@@ -147,7 +142,7 @@ class UserController extends Earlybird\FoundryController
 
 				Session::push('messages', 'Profile updated');
 
-				return Redirect::to('users/edit')->withCookie($forever);
+				return Redirect::to('users/edit');
 			}
 		}
 
@@ -163,16 +158,16 @@ class UserController extends Earlybird\FoundryController
 		// Birthday
 		list( $year, $month, $day ) = explode('-', $me->birthday);
 
-		$years = [0 => 'Year'];
+		$years = [0 => '&ndash;'];
 		for( $i=date('Y')-100; $i<=date('Y'); $i++ ) {
 			$years[$i] = $i;
 		}
-		$months = [0 => 'Month'];
+		$months = [0 => '&ndash;'];
 		for( $i=1; $i<=12; $i++ ) {
 			$months[$i] = date('F', mktime(0, 0, 0, $i));
 		}
 
-		$days = [0 => 'Day'];
+		$days = [0 => '&ndash;'];
 		for( $i=1; $i<=31; $i++ ) {
 			$days[$i] = $i;
 		}
@@ -288,8 +283,8 @@ class UserController extends Earlybird\FoundryController
 			$params['order'] = $order;
 		}
 		$query_string = http_build_query($params);
-		$url = "/community/members" . ( $query_string ? '?' . $query_string : '' );
-		$sort_url = "/community/members?" . ( $search ? "search={$search}&amp;" : '' );*/
+		$url = "/members" . ( $query_string ? '?' . $query_string : '' );
+		$sort_url = "/members?" . ( $search ? "search={$search}&amp;" : '' );*/
 
 		// Load the custom fields
 		$customs = CustomField::where('memberlist', '=', 1)

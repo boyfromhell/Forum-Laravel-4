@@ -25,7 +25,7 @@
 		<div class="col-sm-4">
 			<p class="form-control-static email-text"><b>{{{ $me->email }}}</b></p>
 
-			{{ Form::email('email', $me->email, ['id' => 'email_input', 'tabindex' => 1, 'maxlength' => 255, 'style' => 'display:none', 'class' => 'form-control']) }}
+			{{ Form::email('email', $me->email, ['id' => 'email_input', 'maxlength' => 255, 'style' => 'display:none', 'class' => 'form-control']) }}
 		</div>
 		<div class="col-sm-4">
 			<p class="form-control-static email-text"><a href="" onClick="$('.email-text').hide(); $('#email_input').show(); $('#email_input').focus(); $('#password_text').hide(); $('#password_input').show(); return false">change</a></p>
@@ -37,7 +37,7 @@
 		<div class="col-sm-4">
 			<p class="form-control-static" id="password_text"><b>********</b></p>
 
-			{{ Form::password('old_password', ['id' => 'password_input', 'class' => 'form-control', 'tabindex' => 1, 'style' => 'display:none']) }}
+			{{ Form::password('old_password', ['id' => 'password_input', 'class' => 'form-control', 'style' => 'display:none']) }}
 		</div>
 		<div class="col-sm-4">
 			<p class="form-control-static"><a id="password_link" href="" onClick="$('#password_text').hide(); $('#password_link').hide(); $('#password_input').show(); $('#password_input').focus(); $('#new_password').show(); $('#confirm_password').show(); return false">change</a></p>
@@ -47,14 +47,14 @@
 	<div id="new_password" class="form-group" style="display:none">
 		<label class="col-sm-3 control-label">New Password</label>
 		<div class="col-sm-4">
-			{{ Form::password('password', ['class' => 'form-control', 'tabindex' => 1]) }}
+			{{ Form::password('password', ['class' => 'form-control']) }}
 		</div>
 	</div>
 
 	<div id="confirm_password" class="form-group" style="display:none">
 		<label class="col-sm-3 control-label">Confirm Password</label>
 		<div class="col-sm-4">
-			{{ Form::password('confirm', ['class' => 'form-control', 'tabindex' => 1]) }}
+			{{ Form::password('confirm', ['class' => 'form-control']) }}
 		</div>
 	</div>
 
@@ -69,25 +69,22 @@
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Birthday</label>
-		<div class="col-sm-2">
-			{{ Form::select('year', $years, $year, ['class' => 'form-control', 'tabindex' => 1]) }}
+		<div class="col-sm-9 col-md-7 col-lg-5">
+		<div class="input-group">
+			<span class="input-group-addon">Year</span>
+			{{ Form::select('year', $years, $year, ['class' => 'form-control']) }}
+			<span class="input-group-addon">Month</span>
+			{{ Form::select('month', $months, $month, ['class' => 'form-control']) }}
+			<span class="input-group-addon">Day</span>
+			{{ Form::select('day', $days, $day, ['class' => 'form-control']) }}
 		</div>
-		<div class="col-sm-2">
-			{{ Form::select('month', $months, $month, ['class' => 'form-control', 'tabindex' => 1]) }}
-		</div>
-		<div class="col-sm-1">
-			{{ Form::select('day', $days, $day, ['class' => 'form-control', 'tabindex' => 1]) }}
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Show in profile</label>
-		<div class="col-sm-3">
-		<select class="form-control" name="bdaypref" tabindex="1">
-			<option value="0"{{ $me->bdaypref == 0 ? ' selected' : '' }}>Full birthday</option>
-			<option value="1"{{ $me->bdaypref == 1 ? ' selected' : '' }}>Month and Day</option>
-			<option value="2"{{ $me->bdaypref == 2 ? ' selected' : '' }}>Nothing</option>
-		</select>
+		<div class="col-sm-9">
+		{{ Helpers::radioGroup('bdaypref', ['Full birthday', 'Month and Day', 'Nothing'], $me->bdaypref) }}
 		</div>
 	</div>
 
@@ -103,7 +100,7 @@
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Website</label>
 		<div class="col-sm-5">
-		{{ Form::text('website', $me->website, ['class' => 'form-control', 'tabindex' => 1, 'maxlength' => 255]) }}
+		{{ Form::text('website', $me->website, ['class' => 'form-control', 'maxlength' => 255]) }}
 		</div>
 	</div>
 
@@ -120,7 +117,7 @@
 	<div class="form-group">
 		<label class="col-sm-3 control-label">{{{ $field->name }}}</label>
 		<div class="col-sm-5">
-		{{ Form::text('custom'.$field->id, $field->value, ['class' => 'form-control', 'tabindex' => 1, 'maxlength' => ( $field->maxlength ? $field->maxlength : 255 )]) }}
+		{{ Form::text('custom'.$field->id, $field->value, ['class' => 'form-control', 'maxlength' => ( $field->maxlength ? $field->maxlength : 255 )]) }}
 		</div>
 	</div>
 	@endforeach
@@ -129,7 +126,7 @@
 		<label class="col-sm-3 control-label">Signature</label>
 		<div class="col-sm-5">
 			{{ BBCode::show_bbcode_controls() }}<br>
-			{{ Form::textarea('sig', $me->sig, ['id' => 'bbtext', 'class' => 'form-control', 'tabindex' => 1]) }}
+			{{ Form::textarea('sig', $me->sig, ['id' => 'bbtext', 'class' => 'form-control']) }}
 			<br>
 			<small>512 character limit</small>
 		</div>
@@ -141,7 +138,7 @@
 
 	<div class="form-group">
 		<div class="col-sm-5 col-sm-offset-3">
-			<input class="btn btn-primary" tabindex="1" name="update" type="submit" value="Save Profile">
+			<input class="btn btn-primary" name="update" type="submit" value="Save Profile">
 			<input type="reset" class="btn btn-default" value="Reset">
 		</div>
 	</div>

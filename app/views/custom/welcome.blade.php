@@ -4,7 +4,7 @@ Fellow adventurer, <b>turn back while you can</b>! For here begins the roguelike
 Don't say we didn't warn you.
 <br><br>
 
-This is the unofficial homepage of <a href="http://ivan.sourceforge.net">IVAN</a>, as unfortunately the game itself has not been updated since 2005. Here you will find a <a href="/wiki/">wiki</a> with spoilers, a <a href="/forum/">forum</a> for discussion and tips, a <a href="/media/">gallery</a> with screenshots, <a href="/downloads/">downloads</a> including <a href="/downloads/variants">variants</a> developed by fans, and <a href="/sitemap">much more</a>. Be sure to <a href="/register">register</a> for the website so that you can fully enjoy these resources!
+This is the unofficial homepage of <a href="http://ivan.sourceforge.net">IVAN</a>, as unfortunately the game itself has not been updated since 2005. Here you will find a <a href="/wiki/">wiki</a> with spoilers, a <a href="/forum">forum</a> for discussion and tips, a <a href="/media">gallery</a> with screenshots, <a href="/downloads">downloads</a> including <a href="/downloads/variants">variants</a> developed by fans, and <a href="/sitemap">much more</a>. Be sure to <a href="/signup">register</a> for the website so that you can fully enjoy these resources!
 
 @if ( $rand )
 <br><br>

@@ -76,6 +76,10 @@ header {
 ol.breadcrumb {
 	margin-left: 0;
 	margin-right: 0;
+
+	>li+li:before {
+		content: "\203a\00a0";
+	}
 }
 #babynav {
 	#social-media {
@@ -103,16 +107,6 @@ ol.breadcrumb {
 	a { color:#000; font-weight:bold; }
 }
 
-.subheading {
-	&.messages {
-		padding: 6px 10px;
-		input {
-			margin:0; padding: 4px 6px;
-			&.primary { font-weight: bold; }
-		}
-		.float_left { padding:5px 0; }
-	}
-}
 .panel-body {
 	word-wrap: break-word;
 }

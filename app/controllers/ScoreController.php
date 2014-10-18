@@ -71,7 +71,7 @@ class ScoreController extends Earlybird\FoundryController
 					Session::push('errors', $error);
 				}
 
-				return Redirect::to('community/submit_score')
+				return Redirect::to('honor-rolls/submit')
 					->withInput();
 			}
 			else
@@ -89,7 +89,7 @@ class ScoreController extends Earlybird\FoundryController
 
 				Session::push('messages', 'Score added');
 
-				return Redirect::to('community/honor_rolls');
+				return Redirect::to('honor-rolls');
 			}
 		}
 
