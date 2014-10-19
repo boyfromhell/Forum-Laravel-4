@@ -22,7 +22,7 @@
 </div>
 
 <div class="btn-group btn-group-sm">
-	<button type="button" id="sizebb" class="btn btn-default dropdown-toggle" title="Font Size" data-toggle="dropdown">
+	<button type="button" class="btn btn-default dropdown-toggle" title="Font Size" data-toggle="dropdown">
 		<span class="glyphicon glyphicon-text-height"></span>
 		<span class="caret"></span>
 	</button>
@@ -34,7 +34,7 @@
 </div>
 
 <div class="btn-group btn-group-sm">
-	<button type="button" id="colorbb" onClick="showcolors();" class="btn btn-default dropdown-toggle" title="Font Color" data-toggle="dropdown">
+	<button type="button" class="btn btn-default dropdown-toggle" title="Font Color" data-toggle="dropdown">
 		<span class="glyphicon glyphicon-tint"></span>
 		<span class="caret"></span>
 	</button>

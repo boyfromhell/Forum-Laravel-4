@@ -373,8 +373,10 @@ function anchor_to( id ) {
 	// @todo use jquery
 	var cury = typeof window.pageYOffset != 'undefined' ? window.pageYOffset : document.documentElement.scrollTop;
 	var offset = $('#post' + id).offset();
-	if( cury > offset.top ) {
-		window.scroll(0, offset.top);
+	var jumpto = offset.top-70;
+
+	if( cury > jumpto ) {
+		window.scroll(0, jumpto);
 	}
 }
 

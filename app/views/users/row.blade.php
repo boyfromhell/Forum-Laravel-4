@@ -1,5 +1,3 @@
-@include ('users.menu')
-
 <div class="bg-info">
 	<div class="row">
 	<div class="col-sm-8">
@@ -12,12 +10,18 @@
 	</div>
 	<div class="pull-left" style="padding:10px">
 
-	<div id="user{{ $content_id }}" class="usermenu" name="uname" onMouseOver="userover({{ $content_id }});" onMouseOut="userout({{ $content_id }});" onClick="showuser({{ $content_id }});">{{{ $user->name }}}</div>
-	
+	<div class="btn-group btn-group-md">
+		<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+			{{{ $user->name }}}
+			<span class="caret"></span>
+		</button>
+		@include ('users.menu')
+	</div>
+
 	<img src="/images/{{ $user->online_text }}.png" style="padding:7px 0px" title="{{{ $user->name }}} is {{ $user->online_text }}">
 	<div class="clearfix"></div>
 	
-	<div style="padding-left:11px; font-size:8pt; margin-top:-8px;">
+	<div style="font-size:8pt; margin-top:3px">
 
 	@if ( $user->level->image )
 	<img src="/images/titles/{{ $user->level->image }}" style="vertical-align:middle; padding-right:6px;">

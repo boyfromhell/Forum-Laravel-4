@@ -18,7 +18,7 @@
 @endif
 	
 	<td width="17" valign="top">
-@if ( $shout->user_id == $me->id && strtotime($shout->created_at) > gmmktime()+(($me->tz-1)*3600) )
+@if ( $shout->user_id == $me->id && strtotime($shout->created_at) > gmmktime()+(($me->timezone-1)*3600) )
 	<a href="" onclick="deleteShout({{ $shout->id }}); return false"><img src="{{ $skin }}icons/tinyx.png" alt="x"></a>
 @else
 	&nbsp;

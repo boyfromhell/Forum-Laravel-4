@@ -18,7 +18,7 @@ class Helpers
 			$time = strtotime($time);
 		}
 
-		$time += ($me->tz*3600);
+		$time += ($me->timezone*3600);
 
 		return date($format, $time);
 	}
@@ -88,8 +88,8 @@ class Helpers
 
 		$gmt = gmmktime();
 
-		$time += ( $me->tz * 3600 );
-		$gmt  += ( $me->tz * 3600 );
+		$time += ( $me->timezone * 3600 );
+		$gmt  += ( $me->timezone * 3600 );
 
 		$datestr = date('M&\n\b\s\p;j,&\n\b\s\p;Y',$time);
 
