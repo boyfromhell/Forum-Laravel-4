@@ -4,7 +4,7 @@
 
 <body class="minimal">
 
-<div class="panel panel-primary">
+<div class="panel panel-primary panel-sm">
 
 	<div class="panel-heading">Emoticons</div>
 	

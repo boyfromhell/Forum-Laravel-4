@@ -137,10 +137,7 @@ class Forum extends Earlybird\Foundry
 	 */
 	public function check_permission( $type )
 	{
-		global $me;
-
-		// @todo
-		return true;
+		$me = Auth::user();
 
 		$group_type = 'group_' . $type;
 

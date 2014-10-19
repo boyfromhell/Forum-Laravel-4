@@ -16,6 +16,8 @@ Route::pattern('id', '[0-9]+');
 // Admin only
 Route::group(array('before' => 'admin'), function()
 {
+	Route::get('admin', array('uses' => 'AdminController@dashboard'));
+	Route::post('admin/reset-counters', array('uses' => 'AdminController@resetCounters'));
 	Route::get('admin/messages/{id}', array('uses' => 'AdminController@viewMessage'));
 
 	Route::resource('admin/groups', 'GroupController');

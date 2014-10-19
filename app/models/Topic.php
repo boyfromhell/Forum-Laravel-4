@@ -256,6 +256,8 @@ class Topic extends Earlybird\Foundry
 
 		// If this is triggered from a Post::delete, do not delete posts!
 		if( $recursive ) {
+			$this->forum->decrement('total_posts', count($this->posts));
+
 			foreach( $this->posts as $post ) {
 				$post->delete();
 			}

@@ -2,21 +2,6 @@
 
 class Newsletter extends Controller_W 
 {
-	/**
-	 * Count number of subscribers
-	 */
-	public function count_subscribers()
-	{
-		global $_db;
-		
-		$sql = "SELECT COUNT(1)
-			FROM `newsletter_users`
-			WHERE `newsletter_id` = {$this->id}";
-		$exec = $_db->query($sql);
-		list( $count ) = $exec->fetch_row();
-		
-		return $count;
-	}
 
 	/**
 	 * Subscribe to this newsletter

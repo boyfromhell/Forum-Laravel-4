@@ -145,7 +145,7 @@ class Post extends Earlybird\Foundry
             }
         }
 
-        $this->postText()->delete();
+        $this->postText->delete();
         parent::delete();
 
         return $redirect;

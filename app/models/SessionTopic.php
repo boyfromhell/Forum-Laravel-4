@@ -4,6 +4,7 @@ class SessionTopic extends Eloquent
 {
 
 	public $timestamps = false;
+	protected $primaryKey = 'session_id';
 
 	/**
 	 * Topic

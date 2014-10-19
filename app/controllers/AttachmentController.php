@@ -75,7 +75,7 @@ class AttachmentController extends Earlybird\FoundryController
 	 */
 	public static function upload( $files, $i, $hash )
 	{
-		global $me, $gmt, $board_config;
+		global $me;
 	
 		// Determine the final, legal name and extension
 		list( $name, $ext ) = parse_file_name($files['name'][$i], true);

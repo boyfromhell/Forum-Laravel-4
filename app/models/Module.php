@@ -23,7 +23,9 @@ class Module extends Earlybird\Foundry
 	 */
 	public static function isActive( $name )
 	{
-		//return( $board_apps[$appname]["enabled"] && $board_apps[$appname]["permission"] <= $access );
+		$me = Auth::user();
+
+		//return( $board_apps[$appname]["enabled"] && $board_apps[$appname]["permission"] <= $me->access );
 
 		return true;
 	}
