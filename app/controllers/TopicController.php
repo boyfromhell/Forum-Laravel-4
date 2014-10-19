@@ -134,7 +134,7 @@ class TopicController extends Earlybird\FoundryController
 			$user->online_text = $user->online ? 'online' : 'offline';
 			
 			// Custom Fields
-			$user->custom = $user->load_custom_fields($access, 'topic');
+			$user->custom = $user->load_custom_fields($me->access, 'topic');
 		}*/
 
 		$template = $print ? 'topics.print' : 'topics.display';
@@ -228,6 +228,44 @@ class TopicController extends Earlybird\FoundryController
 	public function printTopic( $id, $name = NULL )
 	{
 		return $this->display($id, $name, true);
+	}
+
+	/**
+	 * Confirm deletion of a topic
+	 *
+	 * @param  int  $id  Topic ID
+	 * @return Response
+	 */
+	public function delete( $id )
+	{
+		global $me;
+
+		$_PAGE = array(
+			'category' => 'forums',
+			'section'  => 'forums',
+			'title'    => 'Delete Topic'
+		);
+
+		$topic = Topic::findOrFail($id);
+
+		if( Request::isMethod('post') )
+		{
+			if( isset($_POST['cancel']) ) {
+				return Redirect::to($topic->url);
+			}
+			elseif( isset($_POST['confirm']) ) {
+				$forum = $topic->forum;
+				$topic->delete();
+
+				Session::push('messages', 'The topic has been successfully deleted');
+
+				return Redirect::to($forum->url);
+			}
+		}
+
+		return View::make('topics.delete')
+			->with('_PAGE', $_PAGE)
+			->with('topic', $topic);
 	}
 
 }

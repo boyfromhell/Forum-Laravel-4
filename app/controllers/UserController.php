@@ -25,9 +25,6 @@ class UserController extends Earlybird\FoundryController
 	{
 		global $me;
 
-		// @todo
-		$access = 2;
-
 		$user = User::findOrFail($id);
 
 		$_PAGE = array(
@@ -53,7 +50,7 @@ class UserController extends Earlybird\FoundryController
 		$custom = $user->custom()
 			->join('custom_fields', 'custom_data.field_id', '=', 'custom_fields.id')
 			->where('profile', '=', 1)
-			->where('permission', '<=', $access)
+			->where('permission', '<=', $me->access)
 			->orderBy('order', 'asc')
 			->get(['custom_fields.name', 'custom_data.value']);
 
@@ -237,8 +234,7 @@ class UserController extends Earlybird\FoundryController
 	 */
 	public function members()
 	{
-		// @todo
-		$access = 2;
+		global $me;
 
 		$_PAGE = array(
 			'category' => 'community',
@@ -289,7 +285,7 @@ class UserController extends Earlybird\FoundryController
 
 		// Load the custom fields
 		$customs = CustomField::where('memberlist', '=', 1)
-			->where('permission', '<=', $access)
+			->where('permission', '<=', $me->access)
 			->orderBy('order', 'asc')
 			->get();
 

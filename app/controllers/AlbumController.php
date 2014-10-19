@@ -10,8 +10,7 @@ class AlbumController extends Earlybird\FoundryController
 	 */
 	public function gallery()
 	{
-		// @todo
-		$access = 2;
+		global $me;
 
 		$_PAGE = array(
 			'category' => 'gallery',
@@ -23,7 +22,7 @@ class AlbumController extends Earlybird\FoundryController
 
 		// Get random photos
 		$photos = Photo::join('albums', 'photos.album_id', '=', 'albums.id')
-			->where('albums.permission_view', '<=', $access)
+			->where('albums.permission_view', '<=', $me->access)
 			->orderBy(DB::raw('RAND()'), 'asc')
 			->take($limit)
 			->get(['photos.*']);
@@ -32,7 +31,7 @@ class AlbumController extends Earlybird\FoundryController
 		}
 
 		// Get recent albums
-		$albums = Album::where('permission_view', '<=', $access)
+		$albums = Album::where('permission_view', '<=', $me->access)
 			->whereHas('photos')
 			->orderBy('updated_at', 'desc')
 			->take($limit)
@@ -48,7 +47,7 @@ class AlbumController extends Earlybird\FoundryController
 
 		/**
 		<?php 
-		if( $board_apps["videos"]["enabled"] && $board_apps["videos"]["permission"] <= $access ) {
+		if( $board_apps["videos"]["enabled"] && $board_apps["videos"]["permission"] <= $me->access ) {
 		?>
 		<tr>
 			<th>Videos</th>
@@ -63,7 +62,7 @@ class AlbumController extends Earlybird\FoundryController
 			$sql = "SELECT video_id, users.id, users.name, video_filename, video_name
 			FROM videos, users, video_albums
 			WHERE video_approved = 1 AND video_owner = users.id 
-				AND video_album = album_id AND permission_view <= '$access'
+				AND video_album = album_id AND permission_view <= '$me->access'
 			ORDER BY video_date DESC LIMIT 6";
 			$res = query($sql, __FILE__, __LINE__);
 			while( $vid = mysql_fetch_array($res)) {
@@ -91,6 +90,8 @@ class AlbumController extends Earlybird\FoundryController
 	 */
 	public function display( $id = 1, $name = NULL )
 	{
+		global $me;
+
 		$album = Album::findOrFail($id);
 
 		/*if( isset($_GET['gallery']) ) {
@@ -103,9 +104,7 @@ class AlbumController extends Earlybird\FoundryController
 		}*/
 
 		// @todo
-		$access = 2;
-
-		if( $album->permission_view > $access ) {
+		if( $album->permission_view > $me->access ) {
 			App::abort(403);
 		}
 
@@ -127,7 +126,7 @@ class AlbumController extends Earlybird\FoundryController
 				JOIN `users`
 					ON `albums`.`user_id` = `users`.`id`
 			WHERE `parent_id` = {$album->id}
-				AND `albums`.`permission_view` <= {$access}
+				AND `albums`.`permission_view` <= {$me->access}
 			ORDER BY `albums`.`name` ASC";
 		$exec = $_db->query($sql);
 
@@ -136,7 +135,7 @@ class AlbumController extends Earlybird\FoundryController
 			$sql = "SELECT COUNT(1)
 				FROM `albums`
 				WHERE `parent_id` = {$child->id}
-					AND `permission_view` <= {$access}";
+					AND `permission_view` <= {$me->access}";
 			$exec2 = $_db->query($sql);
 			list( $total_albums ) = $exec2->fetch_row();
 			

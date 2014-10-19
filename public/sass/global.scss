@@ -152,10 +152,6 @@ p {
 	margin: 0;
 }
 
-.progress {
-	margin: 10px 0;
-}
-
 .panel-footer {
 	.form-group {
 		margin-bottom: 0;
@@ -235,6 +231,7 @@ table.table {
 		&.ending { font-size:10pt; }
 		&.date { font-size:10pt; text-align:center; }
 		&.posts { font-size:10pt; text-align:center; color:$lighter-text; }
+		&.nowrap { white-space: nowrap; }
 	}
 	th {
 		&.date, &.posts {
@@ -258,6 +255,16 @@ table.table {
 	}
 	.posts { width:80px; }
 }
+.table.no-border {
+	background: none;
+
+	> tbody > tr {
+		th, td {
+			border-top: none;
+		}
+	}
+}
+
 .smileys {
 	border: 1px solid #666;
 	padding: 6px;

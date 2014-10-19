@@ -241,18 +241,28 @@ class Topic extends Earlybird\Foundry
 
 	/**
 	 * Delete this topic
-	 * This should never be called directly.
-	 * It is automatically triggered from a Post::delete if the post is the last in its topic
+	 * This is automatically triggered from a Post::delete if the post is the last in its topic
 	 * @todo soft delete
 	 */
-	public function delete()
+	public function delete( $recursive = true )
 	{
-		$this->subscriptions()->delete();
-		$this->sessions()->delete();
+		foreach( $this->subscriptions as $subscription ) {
+			$subscription->delete();
+		}
+		foreach( $this->sessions as $session ) {
+			$session->delete();
+		}
 		$this->forum->decrement('total_topics');
+
+		// If this is triggered from a Post::delete, do not delete posts!
+		if( $recursive ) {
+			foreach( $this->posts as $post ) {
+				$post->delete();
+			}
+		}
 		// $this->poll->delete();
 		// This should trigger deleting: poll_options, poll_votes
-	
+
 		return parent::delete();
 	}
 

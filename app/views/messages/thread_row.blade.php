@@ -2,7 +2,7 @@
 
 	@if ( $thread_mode != 'search' )
 	<td class="icon">
-		<input type="checkbox" name="threads[]" value="{{ $thread->id }}" tabindex="1">
+		<input type="checkbox" name="threads[]" value="{{ $thread->id }}">
 	</td>
 	@endif
 	

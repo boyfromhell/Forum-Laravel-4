@@ -75,7 +75,7 @@
 	<div class="form-group">
 		<label class="control-label col-sm-3">Forum</label>
 		<div class="col-sm-6 col-md-4">
-		{{--<select class="left" multiple tabindex="1" name="forums[]" size="8" style="width:300px">
+		{{--<select class="left" multiple name="forums[]" size="8" style="width:300px">
 			<option value="0"{if count($query->forum_array) == 0} selected{/if}>All Forums</option>
 			{foreach $categories as $category}
 			<option value="0" style="background:#333; color:#999" disabled>{$category['name']}</option>

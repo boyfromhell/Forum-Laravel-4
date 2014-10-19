@@ -81,7 +81,14 @@ class MessageController extends BaseController
 	 */
 	public function compose()
 	{
-		
+		$_PAGE = array(
+			'category' => 'messages',
+			'section'  => 'compose',
+			'title'    => 'Compose Message'
+		);
+
+		return View::make('messages.compose')
+			->with('_PAGE', $_PAGE);
 	}
 
 	/**
@@ -108,31 +115,6 @@ class MessageController extends BaseController
 
 		return View::make('messages.thread')
 			->with('thread', $thread);
-	}
-
-	/**
-	 * Loads all users who are involved (from or to) a message, excluding me
-	 */
-	public function load_all_users()
-	{
-		global $me;
-	
-		$user_array = explode(',', $this->to_users);
-		$user_array[] = $this->from_user_id;
-		$users = array();
-
-		foreach( $user_array as $user_id ) {
-			if( $user_id != $me->id ) {
-				try {
-					$user = new User($user_id);
-					$users[] = $user;
-				}
-				catch( Exception $e ) {
-				}
-			}
-		}
-
-		return $users;
 	}
 
 	/**
@@ -190,25 +172,5 @@ class MessageController extends BaseController
 			->with('_PAGE', $_PAGE)
 			->with('message', $message);
 	}
-	
-	public function load_attachments()
-	{
-		global $_db;
 
-		$sql = "SELECT *
-			FROM `attachments`
-			WHERE `message_id` = {$this->id}
-			ORDER BY `filetype` DESC, `date` ASC";
-		$exec = $_db->query($sql);
-
-		$attachments = array();
-		while( $data = $exec->fetch_assoc() ) {
-			$attachment = new Attachment($data['id'], $data);
-			$attachment->thumb = substr($attachment->filename, 0, -4) . '.jpg';
-			
-			$attachments[] = $attachment;
-		}
-		
-		return $attachments;
-	}
 }

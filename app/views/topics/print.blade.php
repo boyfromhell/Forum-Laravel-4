@@ -10,8 +10,8 @@
 <div class="print-hide">
 <div style="float:right"><a href="" onClick="$('.post').show(); return false">Show all posts</a></div>
 
-<label><input type="checkbox" checked tabindex="1" onChange="$('fieldset').toggle()">Display attachments</label>
-<label><input type="checkbox" checked tabindex="1" onChange="$('img.post-image').toggle()">Display images</label>
+<label><input type="checkbox" checked onChange="$('fieldset').toggle()">Display attachments</label>
+<label><input type="checkbox" checked onChange="$('img.post-image').toggle()">Display images</label>
 <div class="clearfix"></div>
 </div>
 

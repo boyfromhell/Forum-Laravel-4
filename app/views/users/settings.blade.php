@@ -64,7 +64,7 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Timezone</label>
 		<div class="col-sm-3">
-		<select name="timezone" class="form-control" tabindex="1">
+		<select name="timezone" class="form-control">
 		@foreach ( $tzs as $tz )
 			<option value="{{ $tz }}"{{ $me->timezone == $tz ? ' selected' : '' }}>GMT 
 			@if( $tz < 0 )- @elseif( $tz > 0 )+ @endif
@@ -78,7 +78,7 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Style</label>
 		<div class="col-sm-3">
-		<select name="style" class="form-control" tabindex="1">
+		<select name="style" class="form-control">
 		@foreach ( $themes as $theme )
 			<option value="{{ $theme->id }}"{{ $theme->id == $me->style ? ' selected' : '' }}>{{{ $theme->name }}}</option>
 		@endforeach
@@ -92,8 +92,8 @@
 
 	<div class="form-group">
 		<div class="col-sm-4 col-sm-offset-4">
-		<input class="btn btn-primary" type="submit" tabindex="1" name="update" value="Save Settings">
-		<input type="reset" class="btn btn-default" value="Reset" tabindex="1">
+		<input class="btn btn-primary" type="submit" name="update" value="Save Settings">
+		<input type="reset" class="btn btn-default" value="Reset">
 		</div>
 	</div>
 

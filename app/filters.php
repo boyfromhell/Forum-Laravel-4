@@ -108,11 +108,28 @@ App::after(function($request, $response)
 |
 */
 
-Route::filter('superuser', function()
+Route::filter('admin', function()
 {
 	$user = Auth::user();
 
-	if( ! $user->is_superuser )
+	if( ! $user->is_admin )
+	{
+		if (Request::ajax())
+		{
+			return Response::make('Unauthorized', 401);
+		}
+		else
+		{
+			App::abort(403);
+		}
+	}
+});
+
+Route::filter('moderator', function()
+{
+	$user = Auth::user();
+
+	if( ! $user->is_moderator )
 	{
 		if (Request::ajax())
 		{

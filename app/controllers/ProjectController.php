@@ -11,11 +11,13 @@ class ProjectController extends Earlybird\FoundryController
 	 */
 	public function category( $category = 'official' )
 	{
+		global $me;
+
 		if( ! Module::isActive('downloads') ) {
 			App::abort(404);
 		}
 		/*else {
-			if( $board_apps['downloads']['permission'] > $access ) {
+			if( $board_apps['downloads']['permission'] > $me->access ) {
 				require_once(ROOT . 'web/login.php');
 				exit;
 			}
@@ -70,11 +72,13 @@ class ProjectController extends Earlybird\FoundryController
 	 */
 	public function display( $id, $name = NULL )
 	{
+		global $me;
+
 		if( ! Module::isActive('downloads') ) {
 			App::abort(404);
 		}
 		/*else {
-			if( $board_apps['downloads']['permission'] > $access ) {
+			if( $board_apps['downloads']['permission'] > $me->access ) {
 				require_once(ROOT . 'web/login.php');
 				exit;
 			}

@@ -25,6 +25,10 @@ Route::group(array('before' => 'admin'), function()
 // Moderators
 Route::group(array('before' => 'moderator'), function()
 {
+	Route::get('move-topic/{id}', array('uses' => 'TopicController@move'));
+	Route::get('lock-topic/{id}', array('uses' => 'TopicController@lock'));
+	Route::get('unlock-topic/{id}', array('uses' => 'TopicController@unlock'));
+	Route::any('delete-topic/{id}', array('uses' => 'TopicController@delete'));
 });
 
 // Logged-in users
@@ -36,6 +40,7 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('reply-to-topic/{id}', array('uses' => 'PostController@reply'));
 	Route::any('quote-post/{id}', array('uses' => 'PostController@quote'));
 	Route::any('edit-post/{id}', array('uses' => 'PostController@edit'));
+	Route::any('quick-edit/{id}', array('uses' => 'PostController@quickEdit'));
 	Route::any('delete-post/{id}', array('uses' => 'PostController@delete'));
 	Route::any('new-topic/{id}', array('uses' => 'PostController@newTopic'));
 	Route::get('topic-review/{id}', array('uses' => 'TopicController@review'));

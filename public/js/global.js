@@ -142,12 +142,12 @@ var parangi = {
 		
 		$('body').on('click', '#quickedit input.btn-primary', function(e) {
 			e.preventDefault();
-			var id = $(this).data('id');
+			var id = $('#quickedit').data('id');
 			parangi.quickEdit(id, 'save');
 		});
 		$('body').on('click', '#quickedit input.cancel', function(e) {
 			e.preventDefault();
-			var id = $(this).data('id');
+			var id = $('#quickedit').data('id');
 			parangi.quickEdit(id, 'cancel');
 		});
 
@@ -198,21 +198,20 @@ var parangi = {
 	 * Handle quick edit processing
 	 */
 	quickEdit: function(id, button) {
-		url = '/posts/quick-edit/' + id;
+		url = '/quick-edit/' + id;
 
 		if( button == 'edit' ) {
 			$.get(url, function( data ) {
-				$('#post'+id).html( data );
+				$('#post'+id).html( data.html );
 				anchor_to(id);
-				$('#post'+id+' pre.code').each(function(i, e) { hljs.highlightBlock(e) });
-			});
+			}, 'json');
 		}
 		else {
 			$.post(url, $('#quickedit').serialize() + '&' + button + '=1', function( data ) {
-				$('#post'+id).html( data );
+				$('#post'+id).html( data.html );
 				anchor_to(id);
 				$('#post'+id+' pre.code').each(function(i, e) { hljs.highlightBlock(e) });
-			});
+			}, 'json');
 		}
 	},
 	

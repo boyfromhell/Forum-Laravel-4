@@ -67,6 +67,64 @@ class PostController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Quick edit a post
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function quickEdit( $id )
+	{
+		global $me;
+
+		$post = Post::findOrFail($id);
+		$topic = $post->topic;
+
+		if( $post->user_id != $me->id && !$me->is_moderator ) {
+			App::abort(403);
+		}
+		if( $topic->status && !$me->is_moderator ) {
+			App::abort(403);
+		}
+
+		if( Request::isMethod('post') )
+		{
+			if( isset($_POST['save']) ) {
+				$content = Input::get('content');
+				$content = BBCode::prepare($content);
+
+				// Track edit
+				DB::table('posts')->where('id', '=', $post->id)
+					->increment('edit_count', 1, [
+						'edit_user_id' => $me->id
+					]);
+
+				// Update post text
+				// @todo store revision
+				$post->postText()->update([
+					'post_text' => $content
+				]);
+			}
+
+			$html = View::make('posts.body')
+				->with('post', $post)
+				->render();
+		}
+		else {
+			$check_sub = $me->notify;
+			if( $topic->id && $me->subscriptions->contains($topic->id) ) {
+				$check_sub = true;
+			}
+
+			$html = View::make('posts.quick_edit')
+				->with('post', $post)
+				->with('check_sub', $check_sub)
+				->render();
+		}
+
+		return Response::json(['html' => $html]);
+	}
+
+	/**
 	 * Quote a post
 	 *
 	 * @return Response

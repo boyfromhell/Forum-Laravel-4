@@ -7,8 +7,8 @@
 	<b>{{{ $poll->question }}}</b>
 
 	<div class="row">
-	<div class="col-md-6 col-md-offset-3">
-	<table>
+	<div class="col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+	<table class="table no-border">
 @if ( ! $me->id || Input::has('results') || $choices = $me->votedIn($poll->id) )
 
 @foreach( $poll->options as $option )
@@ -20,15 +20,15 @@
 		{{{ $option->content }}}
 	@endif
 		</td>
-		<td style="padding:1px 0 1px 10px" width="70%">
+		<td width="60%">
 			<div class="progress" style="width:{{ $option->width }}%">
 				<div class="progress-bar" style="width:100%">
 			</div>
 		</td>
-		<td style="padding-left:10px">
+		<td>
 			<b>{{ $option->percent }}%</b>
 		</td>
-		<td style="padding-left:10px">
+		<td class="nowrap">
 	@if (( $me->id && $poll->is_public ) || $me->is_moderator )
 			[ <a href="/poll-results/{{ $poll->id }}">{{ $option->total_votes }}</a> ]
 	@else
@@ -49,7 +49,8 @@
 @foreach( $poll->options as $option )
 	<tr>
 		<td>
-		<label><input tabindex="3" type="{{ $poll->type }}" name="voteopt[]" value="{{ $option->id }}" style="margin-right:10px">
+		<label class="{{ $poll->type }}-inline">
+		<input type="{{ $poll->type }}" name="voteopt[]" value="{{ $option->id }}">
 		{{{ $option->content }}}</label>
 		</td>
 	</tr>
@@ -62,7 +63,7 @@
 	<small><i>Select up to {{ $poll->max_options }} options</i></small><br>
 	@endif
 
-	<input tabindex="3" type="submit" name="voted" value="Submit Vote"><br>
+	<input type="submit" name="voted" value="Submit Vote"><br>
 	<small><a href="?results">View results</a></small>
 
 	<br><br>

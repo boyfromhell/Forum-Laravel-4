@@ -146,7 +146,7 @@ class SearchController extends BaseController
 	 */
 	protected function _get_forum_database_query()
 	{
-		global $_db, $gmt, $me;
+		global $me;
 	
 		$total = count($this->words);
 

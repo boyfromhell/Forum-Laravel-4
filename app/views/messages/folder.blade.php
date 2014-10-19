@@ -86,8 +86,8 @@ function select_threads( critera, value ) {
 			<input id="delete-multiple" type="submit" name="delete_messages" class="btn btn-danger" value="Delete" data-item="thread" data-action="Delete">
 		
 		@if ( $folder != 'sent' )
-			<input type="submit" name="read_messages" value="Mark Read" class="btn btn-default" tabindex="1">
-			<input type="submit" name="unread_messages" value="Mark Unread" class="btn btn-default" tabindex="1">
+			<input type="submit" name="read_messages" value="Mark Read" class="btn btn-default">
+			<input type="submit" name="unread_messages" value="Mark Unread" class="btn btn-default">
 		@endif
 		</div>
 		<div class="clearfix"></div>

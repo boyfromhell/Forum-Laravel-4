@@ -59,12 +59,12 @@
 	{{-- if $membership == 2}
 	<form method="post" action="{{ $group->url }}">
 	<div>
-		<input type="text" name="username" tabindex="1" placeholder="Username">
-		<select name="type" tabindex="1">
+		<input type="text" name="username" placeholder="Username">
+		<select name="type">
 			<option value="0" selected>Member</option>
 			<option value="1">Moderator</option>
 		</select>
-		<input type="submit" name="add_member" tabindex="1" value="Add">
+		<input type="submit" name="add_member" value="Add">
 	</div>
 	</form>
 	{/if --}}

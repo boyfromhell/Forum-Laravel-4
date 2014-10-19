@@ -8,7 +8,7 @@
 
 		<div class="quickedit">
 		{{ BBCode::show_bbcode_controls() }}
-		{{ Form::textarea('content', '', ['id' => 'bbtext', 'class' => 'form-control', 'tabindex' => 1]) }}
+		{{ Form::textarea('content', '', ['id' => 'bbtext', 'class' => 'form-control']) }}
 
 		{{ Form::hidden('subscribe', $check_sub ? 1 : 0) }}
 		{{ Form::hidden('attach_sig', $me->attach_sig) }}

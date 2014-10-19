@@ -10,12 +10,11 @@ class PhotoController extends Earlybird\FoundryController
 	 */
 	public function display( $id )
 	{
+		global $me;
+
 		$photo = Photo::findOrFail($id);
 		
-		// @todo
-		$access = 2;
-
-		if( $photo->album->permission_view > $access ) {
+		if( $photo->album->permission_view > $me->access ) {
 			App::abort(403);
 		}
 
@@ -26,18 +25,7 @@ class PhotoController extends Earlybird\FoundryController
 			'title'    => $photo->album->name
 		);
 
-		/*if( $_CONFIG['aws'] === null ) {
-			list($width, $height, $type, $attr) = getimagesize(ROOT . 'web' . $photo->image);
-		}
-		else {
-			list($width, $height, $type, $attr) = getimagesize($_CONFIG['cdn'] . $photo->image);
-		}*/
-
-		$_PAGE['og_image'] = array($_CONFIG['cdn'] . $photo->image);
-
-		$photo->width = $width;
-		$photo->height = $height;
-		$photo->attr = $attr;
+		$_PAGE['og_image'] = array(Config::get('app.cdn').$photo->image);
 
 		$photo->increment('views');
 
@@ -45,24 +33,17 @@ class PhotoController extends Earlybird\FoundryController
 			->with('_PAGE', $_PAGE)
 			->with('photo', $photo);
 
-		$Smarty->assign('prev', $prev);
+		/*$Smarty->assign('prev', $prev);
 		$Smarty->assign('next', $next);
 		$Smarty->assign('page', $page);
 
 		$Smarty->assign('next_photo', $next_photo);
 
 		if( isset($_GET['ajax']) ) {
-			header("Cache-control: no-store, no-cache, must-revalidate");
-			header("Expires: Mon, 26 Jun 1997 05:00:00 GMT");
-			header("Pragma: no-cache");
-			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+			$html = View::make('photos.photo')->render()
 
-			$json = array(
-				'html' => View::make('photos.photo')->render()
-			);
-			
-			echo json_encode($json);
-		}
+			return Response::json(['html' => $html]);
+		}*/
 
 		/*
 		if( function_exists(exif_read_data)) {

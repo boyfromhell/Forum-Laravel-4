@@ -45,7 +45,7 @@
 	@endif
 
 	<div class="form-group">
-		<label class="col-sm-3 control-label">
+		<label class="col-sm-3 control-label hidden-xs">
 			{{ BBCode::show_smiley_controls() }}
 		</label>
 		<div class="col-sm-7">

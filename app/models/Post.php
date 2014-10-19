@@ -119,7 +119,7 @@ class Post extends Earlybird\Foundry
 		// Checking before this post is deleted, so it should be 1 not 0
         if( $this->topic->posts()->count() == 1 ) {
             $forum = $this->topic->forum;
-			$this->topic->delete();
+			$this->topic->delete($recursive = false);
 
             $redirect = $forum->url;
         }
