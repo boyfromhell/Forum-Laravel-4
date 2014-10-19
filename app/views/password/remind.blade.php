@@ -12,11 +12,11 @@
 <div class="col-md-4">
 
 <div class="form-group">
-	<input type="email" name="email" class="form-control" placeholder="Username / Email">
+	{{ Form::email('email', '', ['class' => 'form-control', 'placeholder' => 'Username / Email']) }}
 </div>
 
 <div class="form-group">
-	<input type="submit" value="Reset my password" class="btn btn-default">
+	{{ Form::submit('Reset my password', ['class' => 'btn btn-primary']) }}
 </div>
 
 </div>

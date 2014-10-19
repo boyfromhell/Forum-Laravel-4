@@ -4,10 +4,10 @@
 	{{ BBCode::show_bbcode_controls() }}
 	{{ Form::textarea('content', $post->text, ['id' => 'bbtext', 'class' => 'form-control']) }}
 
-	<input type="hidden" name="subject" value="{{{ $post->subject }}}">
-	<input type="hidden" name="subscribe" value="{{ $check_sub ? 1 : 0 }}">
-	<input type="hidden" name="show_smileys" value="{{ $post->smileys }}">
-	<input type="hidden" name="attach_sig" value="{{ $post->signature }}">
+	{{ Form::hidden('subject', $post->subject) }}
+	{{ Form::hidden('subscribe', ( $check_sub ? 1 : 0 )) }}
+	{{ Form::hidden('show_smileys', $post->smileys) }}
+	{{ Form::hidden('attach_sig', $post->signature) }}
 	</div>
 	
 	<div class="text-center">

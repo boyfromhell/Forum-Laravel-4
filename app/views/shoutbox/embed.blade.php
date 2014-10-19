@@ -11,7 +11,7 @@
 	<div class="input-group">
 		{{ Form::text('message', '', ['class' => 'form-control input-sm', 'placeholder' => 'type message here', 'autocomplete' => 'off']) }}
 		<div class="input-group-btn">
-		<input type="submit" class="btn btn-primary btn-sm" name="submit" value="Send">
+		{{ Form::submit('Send', ['class' => 'btn btn-primary btn-sm']) }}
 		</div>
 	</div>
     </form>

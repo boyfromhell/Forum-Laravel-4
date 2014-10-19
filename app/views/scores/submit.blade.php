@@ -57,8 +57,8 @@
 		
 	<div class="form-group">
 		<div class="col-sm-5 col-sm-offset-4">
-			<input class="btn btn-primary" name="submit" type="submit" accesskey="S" value="Submit">
-			<input class="btn btn-default" type="reset" value="Reset">
+			{{ Form::submit('Submit', ['class' => 'btn btn-primary', 'accesskey' => 'S']) }}
+			{{ Form::reset('Reset', ['class' => 'btn btn-default']) }}
 		</div>
 	</div>
 	</div>

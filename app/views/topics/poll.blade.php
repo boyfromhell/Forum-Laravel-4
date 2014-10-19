@@ -63,7 +63,8 @@
 	<small><i>Select up to {{ $poll->max_options }} options</i></small><br>
 	@endif
 
-	<input type="submit" name="voted" value="Submit Vote"><br>
+	{{ Form::submit('Submit Vote', ['class' => 'btn btn-primary btn-sm']) }}
+	<br>
 	<small><a href="?results">View results</a></small>
 
 	<br><br>

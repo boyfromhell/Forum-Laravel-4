@@ -76,6 +76,13 @@
 	</div>
 
 	<div class="form-group">
+		<label class="col-sm-4 control-label">Language</label>
+		<div class="col-sm-3">
+		{{ Form::select('lang', $languages, $me->lang, ['class' => 'form-control']) }}
+		</div>
+	</div>
+
+	<div class="form-group">
 		<label class="col-sm-4 control-label">Style</label>
 		<div class="col-sm-3">
 		<select name="style" class="form-control">
@@ -92,8 +99,8 @@
 
 	<div class="form-group">
 		<div class="col-sm-4 col-sm-offset-4">
-		<input class="btn btn-primary" type="submit" name="update" value="Save Settings">
-		<input type="reset" class="btn btn-default" value="Reset">
+		{{ Form::submit('Save Settings', ['class' => 'btn btn-primary']) }}
+		{{ Form::reset('Reset', ['class' => 'btn btn-default']) }}
 		</div>
 	</div>
 

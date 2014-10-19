@@ -198,6 +198,7 @@ class UserController extends Earlybird\FoundryController
 		);
 
 		if( Request::isMethod('post') ) {
+			$me->lang = Input::get('lang', 'en');
 			$me->online = Input::get('online', 0);
 			$me->notify = Input::get('notify', 0);
 			$me->attach_sig = Input::get('attach_sig', 0);
@@ -220,10 +221,19 @@ class UserController extends Earlybird\FoundryController
 			-3, -2, -1, 0, 1, 2, 3, 3.5, 4, 4.5, 5, 5.5,
 			6, 6.5, 7, 8, 9, 9.5, 10, 11, 12, 13
 		);
+		$languages = array(
+			'english' => 'English',
+			'finnish' => 'Finnish',
+			'french'  => 'French',
+			'german'  => 'German',
+			'italian' => 'Italian',
+			'polish'  => 'Polish',
+		);
 
 		return View::make('users.settings')
 			->with('_PAGE', $_PAGE)
 			->with('tzs', $tzs)
+			->with('languages', $languages)
 			->with('themes', $themes);
 	}
 

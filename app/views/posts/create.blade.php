@@ -150,8 +150,8 @@
 
 	<div class="form-group">
 		<div class="col-sm-7 col-sm-offset-3">
-			<input class="btn btn-primary" name="addpost" type="submit" accesskey="S" value="Submit">
-			<input class="btn btn-default preview" name="preview" type="submit" accesskey="P" value="Preview">
+			{{ Form::submit('Submit', ['name' => 'addpost', 'class' => 'btn btn-primary', 'accesskey' => 'S']) }}
+			{{ Form::submit('Preview', ['name' => 'preview', 'class' => 'btn btn-default preview', 'accesskey' => 'P']) }}
 		</div>
 	</div>
 

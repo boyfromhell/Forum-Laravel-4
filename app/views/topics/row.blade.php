@@ -2,7 +2,7 @@
 
 	@if ( $topic_mode == 'subscription' )
 	<td class="icon">
-		<input type="checkbox" name="topics[]" value="{{ $topic->id }}">
+		{{ Form::checkbox('topics[]', $topic->id) }}
 	</td>
 	@endif
 

@@ -11,32 +11,32 @@
 <form class="form-horizontal" action="{{ action('RemindersController@postReset') }}" method="POST">
 <div>
 
-    <input type="hidden" name="token" value="{{ $token }}">
+	{{ Form::hidden('token', $token) }}
 
 <div class="form-group">
 	<label class="col-sm-2 control-label">Email</label>
 	<div class="col-sm-4">
-	    <input type="email" name="email" class="form-control">
+		{{ Form::email('email', '', ['class' => 'form-control']) }}
 	</div>
 </div>
 
 <div class="form-group">
 	<label class="col-sm-2 control-label">New Password</label>
 	<div class="col-sm-4">
-	    <input type="password" name="password" class="form-control">
+		{{ Form::password('password', ['class' => 'form-control']) }}
 	</div>
 </div>
 
 <div class="form-group">
 	<label class="col-sm-2 control-label">Password (Again)</label>
 	<div class="col-sm-4">
-	    <input type="password" name="password_confirmation" class="form-control">
+		{{ Form::password('password_confirmation', ['class' => 'form-control']) }}
 	</div>
 </div>
 
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-4">
-	    <input type="submit" value="Reset Password" class="btn btn-main">
+		{{ Form::submit('Reset Password', ['class' => 'btn btn-primary']) }}
 	</div>
 </div>
 
