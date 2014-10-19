@@ -3,6 +3,8 @@
 class SessionTopic extends Eloquent
 {
 
+	public $timestamps = false;
+
 	/**
 	 * Topic
 	 *

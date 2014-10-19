@@ -123,8 +123,9 @@ class Album extends Earlybird\Foundry
 	 */
 	public function delete()
 	{
-		$this->photos->delete();
-		parent::delete();
+		$this->photos()->delete();
+
+		return parent::delete();
 	}
 
 }

@@ -24,7 +24,7 @@ class Avatar extends Eloquent
 			Helpers::delete_from_s3("images/avatars/".$this->file);
 		}
 
-		parent::delete();
+		return parent::delete();
 	}
 
 	/**

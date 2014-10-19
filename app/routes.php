@@ -36,6 +36,7 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('reply-to-topic/{id}', array('uses' => 'PostController@reply'));
 	Route::any('quote-post/{id}', array('uses' => 'PostController@quote'));
 	Route::any('edit-post/{id}', array('uses' => 'PostController@edit'));
+	Route::any('delete-post/{id}', array('uses' => 'PostController@delete'));
 	Route::any('new-topic/{id}', array('uses' => 'PostController@newTopic'));
 	Route::get('topic-review/{id}', array('uses' => 'TopicController@review'));
 
@@ -52,6 +53,7 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('messages/compose', array('uses' => 'MessageController@compose'));
 	Route::get('messages/{id}', array('uses' => 'MessageController@displayThread'));
 	Route::get('messages/{folder}', array('uses' => 'MessageController@inbox'));
+	Route::any('delete-message/{id}', array('uses' => 'MessageController@delete'));
 
 	// Settings
 	Route::any('users/avatar', array('uses' => 'AvatarController@manage'));

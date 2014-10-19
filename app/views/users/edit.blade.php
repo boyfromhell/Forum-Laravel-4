@@ -144,12 +144,6 @@
 		</div>
 	</div>
 
-	<script type="text/javascript">
-	var RecaptchaOptions = {
-		theme : 'white'
-	};
-	</script>
-
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Anti-spam *</label>
 		<div class="col-sm-9">

@@ -247,13 +247,13 @@ class Topic extends Earlybird\Foundry
 	 */
 	public function delete()
 	{
-		$this->subscriptions->delete();
-		$this->sessions->delete();
-		$this->forum->decrement('topics');
+		$this->subscriptions()->delete();
+		$this->sessions()->delete();
+		$this->forum->decrement('total_topics');
 		// $this->poll->delete();
 		// This should trigger deleting: poll_options, poll_votes
 	
-		parent::delete();
+		return parent::delete();
 	}
 
 }

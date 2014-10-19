@@ -134,50 +134,61 @@ class MessageController extends BaseController
 
 		return $users;
 	}
-	
+
 	/**
-	 * Delete this post
+	 * Confirm deletion of a message
 	 *
-	 * @param  $section  the folder that they are currently in 
-	 * @return result array parameters with info about where I am redirecting you to
+	 * @return Response
 	 */
-	public function delete( $section )
+	public function delete( $id )
 	{
-		global $_db, $me;
+		global $me;
 
-		$sql = "DELETE FROM `messages`
-			WHERE `id` = {$this->id}";
-		$_db->query($sql);
-		
-		// Delete attachments
-		$sql = "UPDATE `attachments` SET
-			`message_id` = NULL,
-			`hash` = 'deleted'
-			WHERE `message_id` = {$this->id}";
-		$_db->query($sql);
+		$_PAGE = array(
+			'category' => 'messages',
+			'title'    => 'Delete Private Message'
+		);
 
-		$sql = "SELECT COUNT(1)
-			FROM `messages`
-			WHERE `thread_id` = {$this->thread_id}
-				AND `owner_user_id` = {$me->id}";
-		$exec = $_db->query($sql);
+		$message = Message::findOrFail($id);
 
-		list( $total_messages ) = $exec->fetch_row();
+		if( $message->owner_user_id != $me->id ) {
+			App::abort(403);
+		}
 
-		if( $total_messages ) {
-			$result = array(
-				'url'   => "/messages/{$this->thread_id}",
-				'where' => 'private message thread'
-			);
+		if( $message->archived ) {
+			$folder = 'archived';
+		}
+		else if( $message->from_user_id == $me->id ) {
+			$folder = 'sent';
 		}
 		else {
-			$result = array(
-				'url'   => "/messages/{$section}",
-				'where' => 'private messages'
-			);
+			$folder = 'inbox';
 		}
-		
-		return $result;
+
+		$_PAGE['section'] = $folder;
+
+		if( Request::isMethod('post') )
+		{
+			if( isset($_POST['cancel']) ) {
+				return Redirect::to($message->url);
+			}
+			// Redirect to thread, or folder if thread has no more messages
+			elseif( isset($_POST['confirm']) ) {
+				$redirect = $message->delete();
+
+				if( ! $redirect ) {
+					$redirect = '/messages/'.$folder;
+				}
+
+				Session::push('messages', 'The private message has been successfully deleted');
+
+				return Redirect::to($redirect);
+			}
+		}
+
+		return View::make('messages.delete')
+			->with('_PAGE', $_PAGE)
+			->with('message', $message);
 	}
 	
 	public function load_attachments()

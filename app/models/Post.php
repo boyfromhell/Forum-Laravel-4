@@ -104,7 +104,9 @@ class Post extends Earlybird\Foundry
     public function delete()
     {
         // Decrement post counters
-        $this->topic->decrement('replies');
+		if( $this->topic->replies > 0 ) {
+	        $this->topic->decrement('replies');
+		}
         $this->topic->forum->decrement('total_posts');
         $this->user->decrement('total_posts');
 
@@ -114,21 +116,16 @@ class Post extends Earlybird\Foundry
         ]);
 
         // Delete topic if this was the only post
-        if( $this->topic->replies < 0 ) {
+		// Checking before this post is deleted, so it should be 1 not 0
+        if( $this->topic->posts()->count() == 1 ) {
             $forum = $this->topic->forum;
 			$this->topic->delete();
 
-            $result = array(
-                'where' => 'forum',
-                'url'   => $forum->url
-            );
+            $redirect = $forum->url;
         }
 		// Otherwise check topic sessions
         else {
-            $result = array(
-                'where' => 'topic',
-                'url'   => $this->topic->url
-            );
+            $redirect = $this->topic->url;
 
 			$new_post = Post::where('topic_id', '=', $this->topic_id)
 				->where('id', '>', $this->id)
@@ -151,7 +148,7 @@ class Post extends Earlybird\Foundry
         $this->postText()->delete();
         parent::delete();
 
-        return $result;
+        return $redirect;
     }
 
 }

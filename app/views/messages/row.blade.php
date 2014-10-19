@@ -29,7 +29,7 @@
 	
 		<div class="btn-group btn-group-sm pull-right">
 			<a href="/messages/compose?p={{ $message->id }}" class="btn btn-default">Quote</a>
-			<a href="/delete.php?pm={{ $message->id }}" class="btn btn-danger" title="Delete message"><span class="glyphicon glyphicon-remove"></span></a>
+			<a href="/delete-message/{{ $message->id }}" class="btn btn-danger" title="Delete message"><span class="glyphicon glyphicon-remove"></span></a>
 		</div>
 
 	</div>

@@ -4,6 +4,7 @@ class Message extends Earlybird\Foundry
 {
 
 	protected $appends = array(
+		'url',
 		'date',
 		'to',
 		'users',
@@ -41,11 +42,33 @@ class Message extends Earlybird\Foundry
 	}
 
 	/**
+	 * All attachments for this message
+	 *
+	 * @return Relation
+	 */
+	public function attachments()
+	{
+		return $this->hasMany('Attachment')
+			->orderBy('filetype', 'desc')
+			->orderBy('created_at', 'asc');
+	}
+
+	/**
 	 * Owned by user
 	 */
 	public function scopeOwnedBy( $query, $user_id )
 	{
 		return $query->where('owner_user_id', '=', $user_id);
+	}
+
+	/**
+	 * Permalink
+	 *
+	 * @return string
+	 */
+	public function getUrlAttribute()
+	{
+		return $this->thread->url.'#'.$this->id;
 	}
 
 	/**
@@ -98,6 +121,27 @@ class Message extends Earlybird\Foundry
 		}
 
 		return array();
+	}
+
+	/**
+	 * Delete message
+	 */
+	public function delete()
+	{
+		$this->attachments()->update([
+			'message_id' => NULL,
+			'hash' => 'deleted'
+		]);
+
+		$thread = $this->thread;
+
+		parent::delete();
+
+		if( $thread->replies > 0 ) {
+			return $thread->url;
+		}
+
+		return false;
 	}
 
 }

@@ -578,6 +578,50 @@ class PostController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Confirm deletion of a post
+	 *
+	 * @return Response
+	 */
+	public function delete( $id )
+	{
+		global $me;
+
+		$_PAGE = array(
+			'category' => 'forums',
+			'section'  => 'forums',
+			'title'    => 'Delete Post'
+		);
+
+		$post = Post::findOrFail($id);
+
+		if( $post->user_id != $me->id && !$me->is_moderator ) {
+			App::abort(403);
+		}
+		if( $topic->status && !$me->is_moderator ) {
+			App::abort(403);
+		}
+
+		if( Request::isMethod('post') )
+		{
+			if( isset($_POST['cancel']) ) {
+				return Redirect::to($post->url);
+			}
+			// Redirect to topic, or forum if topic has no more posts
+			elseif( isset($_POST['confirm']) ) {
+				$redirect = $post->delete();
+
+				Session::push('messages', 'The post has been successfully deleted');
+
+				return Redirect::to($redirect);
+			}
+		}
+
+		return View::make('posts.delete')
+			->with('_PAGE', $_PAGE)
+			->with('post', $post);
+	}
+
+	/**
 	 * Choose smileys
 	 *
 	 * @return Response
