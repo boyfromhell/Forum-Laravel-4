@@ -76,6 +76,11 @@ header {
 		margin: -11px 10px -11px 0;
 	}
 }
+.navbar-nav {
+	.glyphicon {
+		margin-right: 6px;
+	}
+}
 
 ol.breadcrumb {
 	margin-left: 0;
@@ -251,9 +256,9 @@ table.table {
 	.posts { width:80px; }
 }
 .smileys {
-	border: 1px solid #eee;
+	border: 1px solid #666;
 	padding: 6px;
-	margin: 19px 0 0 auto;
+	margin: 22px 0 0 auto;
 	text-align: center;
 	float: right;
 	font-size: 10pt;
@@ -265,36 +270,64 @@ table.table {
 	&:hover { background:$input-hover; border: 1px solid $main-bg; }
 	&:active { background: #444; border: 1px solid #222; }
 }
+ul.dropdown-menu {
+	&.bbcode-menu {
+		cursor: default;
 
-.bbsep {	
-	margin:0; padding:0; width:6px; height:20px; float:left;
-	background:url("images/bbcode/separator.gif") center no-repeat;
+		li {
+			&:hover { background:$input-hover; }
+		}
+	}
+	&.bbcode-size {
+		min-width: 100px;
+
+		li { padding: 2px 8px; }
+	}
+	&.bbcode-color {
+		min-width: 152px;
+		width: 152px;
+		padding-left: 3px;
+
+		li {
+			display: block;
+			float: left;
+			padding: 3px;
+			font-size: 0;
+
+			span {
+				display: block;
+				border: 1px solid #aca899;
+				height: 12px;
+				width: 12px;
+			}
+		}
+	}
 }
-.bbcode,.bbsel,.bbhov {
-	padding:0; float:left; width:25px; height:22px
-}
-.bbcode {
-	border:1px solid #efefef; background-color:#eee;
-}
-.bbhov,.bbcode:hover {
-	background-color:#c1d2ee; border:1px solid #316ac5;
-}	
-.bbsel,.bbcode:active {
-	background-color:#98b5e2; border:1px solid #316ac5;
-}
-.colorbox {
-	padding: 3px;
-	position: absolute;
-	top: -5000px;
-	left: -5000px;
-	z-index: 10; 
-	background: #fff;
-	border:1px solid #0b198c;
-}
-.bbcolor {
-	float:left; margin:0; padding:2px; background:#fff; border:1px solid #fff; 
-	cursor:default; color:#000;
-	&:hover { background:#c1d2ee; border:1px solid #316ac5; color:#316ac5; }
+.btn.btn-bbcode {
+	min-width: 32px;
+	height: 30px;
+	overflow: hidden;
+
+	.bbcode-quote {
+		font-size: 36px;
+		line-height: 1;
+		display: block;
+	}
+	.bbcode-underline {
+		text-decoration: underline;
+		font-size: 15px;
+		line-height: 12px;
+	}
+	.bbcode-strikethrough {
+		text-decoration: line-through;
+		font-size: 15px;
+		line-height: 12px;
+	}
+	.bbcode-ol {
+		font-size: 9px;
+		line-height: 10px;
+		display: block;
+	}
 }
 
 table.calendar {

@@ -21,7 +21,7 @@
 	<td style="width:{{ $topic_mode == 'subscription' ? '30%' : '50%' }}" class="topic">
 		@if ( $topic->has_attachments )<span class="glyphicon glyphicon-paperclip"></span>@endif
 		
-		@if ( $topic->unread_post->id )<a href="{{ $topic->unread_post->url }}"><img src="{{ $skin }}icons/newest_reply.png" title="Go to first unread post"></a> @endif
+		@if ( $topic->unread_post->id )<a href="{{ $topic->unread_post->url }}" title="Go to first unread post"><span class="glyphicon glyphicon-arrow-right"></span><span class="glyphicon glyphicon-file"></span></a> @endif
 
 		@if ( $topic->has_poll )
 		<span class="badge">Poll</span>
@@ -31,7 +31,7 @@
 		<a href="{{ $topic->url }}" title="Go to topic">{{{ $topic->short_title }}}</a>
 	
 		@if ( $topic->pages > 1 )
-			<small> ( <img src="{{ $skin }}icons/multi_page.png" alt="+"> 
+			<small> ( <span class="glyphicon glyphicon-file"></span> 
 	
 			@for ( $page=1; $page<=$topic->pages; $page++ )
 				@if ( $page < 4 || $page > $topic->pages-3 )

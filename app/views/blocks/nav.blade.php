@@ -27,10 +27,10 @@
 </a>
 			<ul class="dropdown-menu" role="menu">
 			@if ( $me->id )
-				<li><a href="/profile">My profile</a></li>
-				<li><a href="/users/edit">Edit profile</a></li>
-				<li><a href="/users/settings">Settings</a></li>
-				<li><a href="/signout">Sign out</a></li>
+				<li><a href="/profile"><span class="glyphicon glyphicon-user"></span> My profile</a></li>
+				<li><a href="/users/edit"><span class="glyphicon glyphicon-pencil"></span> Edit profile</a></li>
+				<li><a href="/users/settings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+				<li><a href="/signout"><span class="glyphicon glyphicon-off"></span> Sign out</a></li>
 			@else
 				<li><a href="/signin">Sign in</a></li>
 				<li><a href="/signup">Register</a></li>

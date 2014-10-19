@@ -277,118 +277,6 @@ function deleteMember( group_id, user_id ) {
 
 
 
-function colorover() {
-	if( $('#colorbb').hasClass('bbcode')) {
-		$('#colorbb').removeClass('bbcode');
-		$('#colorbb').addClass('bbhov');
-	}
-}
-
-function colorout() {
-	if( $('#colorbb').hasClass('bbhov')) {
-		$('#colorbb').removeClass('bbhov');
-		$('#colorbb').addClass('bbcode');
-	}
-}
-
-function userover(pid) {
-	if( $('#user'+pid).hasClass('usermenu')) {
-		$('#user'+pid).removeClass('usermenu');
-		$('#user'+pid).addClass('userhov');
-	}
-}
-
-function userout(pid) {
-	if( $('#user'+pid).hasClass('userhov')) {
-		$('#user'+pid).removeClass('userhov');
-		$('#user'+pid).addClass('usermenu');
-	}
-}
-
-function sizeover() {
-	if( $('#sizebb').hasClass('bbcode')) {
-		$('#sizebb').removeClass('bbcode');
-		$('#sizebb').addClass('bbhov');
-	}
-}
-
-function sizeout() {
-	if( $('#sizebb').hasClass('bbhov')) {
-		$('#sizebb').removeClass('bbhov');
-		$('#sizebb').addClass('bbcode');
-	}
-}
-
-function showcolors() {
-	var cbb = $('#colorbb');
-	var cbox = document.getElementById("colorBox");
-	if( cbb != null ) {
-		var offset = $('#colorbb').offset();
-
-		var cy = offset.top;
-		var cx = offset.left;
-		cbb.className = "bbsel";
-	}
-	if( cbox != null ) {
-		cbox.style.top = cy+22+"px"; cbox.style.left = cx+"px";
-	}
-}
-
-function showuser(pid) {
-	var $ubb = $('#user'+pid);
-	var $ubox = $('#ubox'+pid);
-
-	var offset = $ubb.offset();
-	var uy = offset.top;
-	var ux = offset.left;
-
-	$ubox.css({top: uy+27+"px", left: ux+"px"});
-	$ubb.addClass('usersel');
-}
-
-function showsizes() {
-	var sbb = document.getElementById("sizebb");
-	var sbox = document.getElementById("sizeBox");
-
-	var offset = $('#sizebb').offset();
-	var sy = offset.top;
-	var sx = offset.left;
-
-	if( sbox != null ) {
-		sbox.style.top = sy+22+"px"; sbox.style.left = sx+"px";
-		$('#sizebb').addClass('bbsel');
-	}
-}
-
-function hideboxes(e) {
-	var target=e?e.target:event.srcElement;
-	var cbb = document.getElementById("colorbb");
-	var cimg = document.getElementById("colorimg");
-	var sbb = document.getElementById("sizebb");
-	var simg = document.getElementById("sizeimg");
-	var cbox = document.getElementById("colorBox");
-	var sbox = document.getElementById("sizeBox");
-	
-	var unames=document.getElementsByName("uname");
-	var uboxes=document.getElementsByName("ubox");
-	for(var i=0; i<unames.length; i++) {
-		if( target!=unames[i] && target!=uboxes[i] ) {
-			unames[i].className = "usermenu";	
-			uboxes[i].style.top = "-500px";
-			uboxes[i].style.left = "-500px";
-		}
-	}
-	
-	if( target!=cbb && target!=cimg && cbox != null ) {
-		cbox.style.top = "-500px"; cbox.style.left = "-500px";
-		cbb.className = "bbcode";
-	}
-	if( target!=sbb && target!=simg && sbox != null ) {
-		sbox.style.top = "-500px"; sbox.style.left = "-500px";
-		sbb.className = "bbcode";
-	}
-}
-
 function stripbbtags() {
 	myField = document.getElementById("bbtext");
 	var text = myField.value;
@@ -439,7 +327,6 @@ function addtext(head,tail,popup) {
 	}
 }
 
-document.onclick=hideboxes
 document.onkeydown=function(e) {
 	if(e.which == 66 && e.ctrlKey ) { 
 		addtext("[b]","[/b]",0); return false;

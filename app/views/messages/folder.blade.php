@@ -79,7 +79,9 @@ function select_threads( critera, value ) {
 				<span class="glyphicon glyphicon-save"></span> Archive
 			</button>
 		@elseif ( $folder == 'archived' )
-			<input type="submit" name="unarchive_messages" class="btn btn-default" value="Move to Inbox">
+			<button type="submit" name="unarchive_messages" class="btn btn-default">
+				<span class="glyphicon glyphicon-inbox"></span> Move to Inbox
+			</button>
 		@endif
 			<input id="delete-multiple" type="submit" name="delete_messages" class="btn btn-danger" value="Delete" data-item="thread" data-action="Delete">
 		

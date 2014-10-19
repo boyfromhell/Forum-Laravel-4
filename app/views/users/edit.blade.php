@@ -125,7 +125,7 @@
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Signature</label>
 		<div class="col-sm-5">
-			{{ BBCode::show_bbcode_controls() }}<br>
+			{{ BBCode::show_bbcode_controls() }}
 			{{ Form::textarea('sig', $me->sig, ['id' => 'bbtext', 'class' => 'form-control']) }}
 			<br>
 			<small>512 character limit</small>

@@ -50,7 +50,6 @@
 		</label>
 		<div class="col-sm-7">
 			{{ BBCode::show_bbcode_controls() }}
-			<br>
 			{{ Form::textarea('content', $content, ['id' => 'bbtext', 'class' => 'form-control']) }}
 		</div>
 	</div>

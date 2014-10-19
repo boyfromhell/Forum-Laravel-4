@@ -8,8 +8,6 @@
 
 		<div class="quickedit">
 		{{ BBCode::show_bbcode_controls() }}
-		<div class="clearfix"></div>
-
 		{{ Form::textarea('content', '', ['id' => 'bbtext', 'class' => 'form-control', 'tabindex' => 1]) }}
 
 		{{ Form::hidden('subscribe', $check_sub ? 1 : 0) }}
