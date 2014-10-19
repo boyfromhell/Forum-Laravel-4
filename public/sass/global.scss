@@ -119,6 +119,9 @@ ol.breadcrumb {
 .panel-body {
 	word-wrap: break-word;
 }
+.panel-sm {
+	margin-bottom: 8px;
+}
 
 p {
 	&.empty {
@@ -348,11 +351,9 @@ table.calendar {
 		&.at_reply { color:#ccc; text-decoration:none; }
 	}
 	th.date {
-		background: $header-bg;
+		background: #3e444c;
 		color: #eee;
 		text-align: right;
-		padding: 3px 8px;
-		font-variant: small-caps;
 	}
 }
 #embed #shoutbox {

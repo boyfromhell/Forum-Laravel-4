@@ -10,7 +10,7 @@
 		<div class="icon {{{ $topic->image }}}" title="{{{ $topic->alt_text }}}"></div>
 	</td>
 
-	<td class="icon">
+	<td class="icon hidden-xs">
 		@if ( $topic->smiley )
 			<img src="{{{ $topic->smiley_img }}}" alt="{{{ $topic->smiley_alt }}}">
 		@else
@@ -18,13 +18,19 @@
 		@endif
 	</td>
 
-	<td style="width:{{ $topic_mode == 'subscription' ? '30%' : '50%' }}" class="topic">
-		@if ( $topic->has_attachments )<span class="glyphicon glyphicon-paperclip"></span>@endif
+	<td style="min-width:{{ $topic_mode == 'subscription' ? '30%' : '50%' }}" class="topic">
+		@if ( $topic->has_attachments )
+		<span class="glyphicon glyphicon-paperclip"></span>
+		@endif
 		
 		@if ( $topic->unread_post->id )<a href="{{ $topic->unread_post->url }}" title="Go to first unread post"><span class="glyphicon glyphicon-arrow-right"></span><span class="glyphicon glyphicon-file"></span></a> @endif
 
-		@if ( $topic->has_poll )
-		<span class="badge">Poll</span>
+		@if ( $topic->type == 2 )
+		<span class="label label-danger">Announcement</span>
+		@elseif ( $topic->type == 1 )
+		<span class="label label-default">Sticky</span>
+		@elseif ( $topic->has_poll )
+		<span class="label label-primary">Poll</span>
 		@endif
 
 		{{{ $topic->prefix }}}
@@ -54,7 +60,7 @@
 	@endif
 	
 	@if ( $topic_mode != 'forum' )
-	<td class="lastpost topic">
+	<td class="lastpost topic hidden-xs">
 		{{ $topic->latest_post->date }}
 		<br>
 	
@@ -63,11 +69,11 @@
 	</td>
 	@endif
 
-	<td class="posts">
+	<td class="posts hidden-xs">
 		{{ number_format($topic->replies) }}
 	</td>
 
-	<td class="posts">
+	<td class="posts hidden-xs">
 		{{ number_format($topic->views) }}
 	</td>
 

@@ -12,15 +12,18 @@ Don't say we didn't warn you.
 This is the unofficial homepage of <a href="http://ivan.sourceforge.net">IVAN</a>, as unfortunately the game itself has not been updated since 2005. Here you will find a <a href="/wiki/">wiki</a> with spoilers, a <a href="/forum">forum</a> for discussion and tips, a <a href="/media">gallery</a> with screenshots, <a href="/downloads">downloads</a> including <a href="/downloads/variants">variants</a> developed by fans, and <a href="/sitemap">much more</a>. Be sure to <a href="/signup">register</a> for the website so that you can fully enjoy these resources!
 </p>
 
+<p>
 <a href="/signup" class="btn btn-success btn-lg">Join Now</a>
+</p>
 
 @if ( $rand )
 
-<div style="text-align:center; font-style:italic">
-Welcome to the Cathedral of Attnam
-<br><br>
+<div class="text-center">
+	<p>
+	<em>Welcome to the Cathedral of Attnam</em>
+	</p>
 
-	<img src="/images/custom/cathedral-large.png" alt="The Cathedral of Attnam" title="The Cathedral of Attnam">
+	<img src="/images/custom/cathedral-large.png" alt="The Cathedral of Attnam" title="The Cathedral of Attnam" class="img-responsive center-block">
 </div>
 @endif
 

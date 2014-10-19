@@ -8,7 +8,7 @@
 
 	<div class="panel-body row">
 	
-	<div class="col-md-6">
+	<div class="col-sm-6">
 	<h1>{{{ $user->name }}} <img src="/images/{{ $online_text }}.png" alt="{{{ $user->name }}} is {{ $online_text }}" title="{{{ $user->name }}} is {{ $online_text }}"></h1>
 	<small>
 	@if ( $user->level->image )
@@ -19,9 +19,11 @@
 	@if ( $user->avatar->id )<br><br>
 	<img id="profileavatar" src="{{ $cdn }}/images/avatars/{{ $user->avatar->file }}" alt="{{{ $user->name }}}'s avatar" title="{{{ $user->name }}}'s avatar">
 	@endif
+	<br><br>
+
 	</div>
 
-	<div class="col-md-6">
+	<div class="col-sm-6">
 	Last Visit: <b>{{ $user->last_online }}</b><br>
 	Viewed <b>{{ number_format($user->views) }}</b> time{{ $user->views != 1 ? 's' : '' }}<br><br>
 	@if ( $show_birthday )
@@ -54,7 +56,7 @@
 
 	<div class="panel-body row">
 	
-	<div class="col-md-6">
+	<div class="col-sm-6">
 	@if ( count($user->groups) > 0 )<b>Groups:</b><br>
 		@foreach ( $user->groups as $group )
 			<img src="{{ $group->badge ? '/images/groups/'.$group->badge : $skin.'icons/group.png' }}"> <a href="{{ $group->url }}">{{{ $group->name }}}</a><br>
@@ -67,7 +69,7 @@
 	@endforeach
 	</div>
 
-	<div class="col-md-6">
+	<div class="col-sm-6">
 	@if ( $me->id )
 	<b>Contact:</b><br>
 

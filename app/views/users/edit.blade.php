@@ -1,11 +1,13 @@
 @extends('layout')
 
+@if ( $mode != 'signup' )
 @section('buttons')
 <a href="/profile" class="btn btn-primary">View Profile</a>
 @stop
+@endif
 
 @section('content')
-<form class="form-horizontal unload-warning" method="post" action="/users/edit">
+<form class="form-horizontal unload-warning" method="post" action="/users/{{ $mode }}">
 
 <div class="panel panel-primary">
 
@@ -16,22 +18,33 @@
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Username</label>
 		<div class="col-sm-4">
+			@if ( $mode == 'signup' )
+			{{ Form::text('name', '', ['class' => 'form-control', 'maxlength' => 25]) }}
+			@else
 			<p class="form-control-static"><b>{{{ $me->name }}}</b></p>
+			@endif
 		</div>
 	</div>
 
 	<div class="form-group">
 		<label class="col-sm-3 control-label">E-mail</label>
 		<div class="col-sm-4">
+			@if ( $mode == 'signup' )
+			{{ Form::email('email', '', ['maxlength' => 255, 'class' => 'form-control']) }}
+			@else
 			<p class="form-control-static email-text"><b>{{{ $me->email }}}</b></p>
 
 			{{ Form::email('email', $me->email, ['id' => 'email_input', 'maxlength' => 255, 'style' => 'display:none', 'class' => 'form-control']) }}
+			@endif
 		</div>
+		@if ( $mode != 'signup' )
 		<div class="col-sm-4">
 			<p class="form-control-static email-text"><a href="" onClick="$('.email-text').hide(); $('#email_input').show(); $('#email_input').focus(); $('#password_text').hide(); $('#password_input').show(); return false">change</a></p>
 		</div>
+		@endif
 	</div>
 
+	@if ( $mode != 'signup' )
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Current Password</label>
 		<div class="col-sm-4">
@@ -43,15 +56,16 @@
 			<p class="form-control-static"><a id="password_link" href="" onClick="$('#password_text').hide(); $('#password_link').hide(); $('#password_input').show(); $('#password_input').focus(); $('#new_password').show(); $('#confirm_password').show(); return false">change</a></p>
 		</div>
 	</div>
+	@endif
 
-	<div id="new_password" class="form-group" style="display:none">
-		<label class="col-sm-3 control-label">New Password</label>
+	<div id="new_password" class="form-group"{{ $mode == 'signup' ? '' : ' style="display:none"' }}>
+		<label class="col-sm-3 control-label">{{ $mode == 'signup' ? '' : 'New ' }}Password</label>
 		<div class="col-sm-4">
 			{{ Form::password('password', ['class' => 'form-control']) }}
 		</div>
 	</div>
 
-	<div id="confirm_password" class="form-group" style="display:none">
+	<div id="confirm_password" class="form-group"{{ $mode == 'signup' ? '' : ' style="display:none"' }}>
 		<label class="col-sm-3 control-label">Confirm Password</label>
 		<div class="col-sm-4">
 			{{ Form::password('confirm', ['class' => 'form-control']) }}
@@ -122,6 +136,28 @@
 	</div>
 	@endforeach
 
+	@if ( $mode == 'signup' )
+	<div class="form-group">
+		<label class="col-sm-3 control-label">I agree to the <a href="/terms">Terms of Use</a> and <a href="/privacy">Privacy Policy</a> *</label>
+		<div class="col-sm-9">
+			{{ Helpers::radioGroup('agree', ['No', 'Yes'], 0) }}
+		</div>
+	</div>
+
+	<script type="text/javascript">
+	var RecaptchaOptions = {
+		theme : 'white'
+	};
+	</script>
+
+	<div class="form-group">
+		<label class="col-sm-3 control-label">Anti-spam *</label>
+		<div class="col-sm-9">
+			{{ Form::captcha() }}
+		</div>
+	</div>
+
+	@else
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Signature</label>
 		<div class="col-sm-5">
@@ -131,6 +167,7 @@
 			<small>512 character limit</small>
 		</div>
 	</div>
+	@endif
 
 	</div>
 
@@ -138,8 +175,12 @@
 
 	<div class="form-group">
 		<div class="col-sm-5 col-sm-offset-3">
-			<input class="btn btn-primary" name="update" type="submit" value="Save Profile">
-			<input type="reset" class="btn btn-default" value="Reset">
+		@if ( $mode == 'signup' )
+			{{ Form::submit('Create Account', ['class' => 'btn btn-primary']) }}
+		@else
+			{{ Form::submit('Save Profile', ['class' => 'btn btn-primary']) }}
+			{{ Form::reset('Reset', ['class' => 'btn btn-default']) }}
+		@endif
 		</div>
 	</div>
 

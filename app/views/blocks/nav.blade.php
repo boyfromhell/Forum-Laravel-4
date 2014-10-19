@@ -7,7 +7,10 @@
 			<span class="icon-bar"></span>
 		</button>
 
-		<a class="navbar-brand" href="/">{{{ Config::get('app.forum_name') }}}</a>
+		<a class="navbar-brand" href="/">
+			<span class="hidden-xs">{{{ Config::get('app.forum_name') }}}</span>
+			<span class="visible-xs">{{{ Config::get('app.short_name') }}}</span>
+		</a>
 	</div>
 
 	<div class="collapse navbar-collapse" id="nav">
@@ -25,7 +28,7 @@
 @endif
 {{{ $me->name }}} <span class="caret"></span>
 </a>
-			<ul class="dropdown-menu" role="menu">
+			<ul class="dropdown-menu no-collapse" role="menu">
 			@if ( $me->id )
 				<li><a href="/profile"><span class="glyphicon glyphicon-user"></span> My profile</a></li>
 				<li><a href="/users/edit"><span class="glyphicon glyphicon-pencil"></span> Edit profile</a></li>
@@ -38,6 +41,5 @@
 			</ul>
 		</li>
 	</ul>
-	</div>
 </div>
 </nav>

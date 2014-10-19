@@ -1,7 +1,7 @@
 <div id="shoutbox" class="row" data-last-id="{{ $shouts[0]->id }}" data-last-time="{{ $shouts[0]->created_at }}">
 <div class="col-sm-3 text-center">
 
-	<div class="panel panel-info">
+	<div class="panel panel-info panel-sm">
 	
 		<div class="panel-heading">Shoutbox</div>
 		

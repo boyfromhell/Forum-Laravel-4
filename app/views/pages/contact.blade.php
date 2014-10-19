@@ -35,13 +35,6 @@
 	</div>
 
 	<div class="form-group">
-		<label class="col-sm-4 control-label">Anti-spam: {{{ Config::get('app.captcha_question') }}}? *</label>
-		<div class="col-sm-5">
-			{{ Form::text('no_spam', '', ['class' => 'form-control', 'required']) }}
-		</div>
-	</div>
-
-	<div class="form-group">
 		<label class="col-sm-4 control-label">Subject *</label>
 		<div class="col-sm-5">
 			{{ Form::text('subject', '', ['class' => 'form-control', 'required']) }}
@@ -52,6 +45,13 @@
 		<label class="col-sm-4 control-label">Message *</label>
 		<div class="col-sm-5">
 			{{ Form::textarea('message', '', ['id' => 'bbtext', 'class' => 'form-control', 'required']) }}
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-4 control-label">Anti-spam *</label>
+		<div class="col-sm-5">
+			{{ Form::captcha() }}
 		</div>
 	</div>
 

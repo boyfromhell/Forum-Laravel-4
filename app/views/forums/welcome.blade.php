@@ -48,11 +48,11 @@
 		<thead>
 		<tr>
 			<th class="icon">&nbsp;</th>
-			<th class="icon">&nbsp;</th>
-			<th style="width:50%">Topics</th>
-			<th>Last Post</th>
-			<th class="posts">Replies</th>
-			<th class="posts">Views</th>
+			<th class="icon hidden-xs">&nbsp;</th>
+			<th style="min-width:50%">Topics</th>
+			<th class="hidden-xs">Last Post</th>
+			<th class="posts hidden-xs">Replies</th>
+			<th class="posts hidden-xs">Views</th>
 		</tr>
 		</thead>
 		<tbody>

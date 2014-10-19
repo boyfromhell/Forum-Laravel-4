@@ -174,6 +174,7 @@ class UserController extends Earlybird\FoundryController
 
 		return View::make('users.edit')
 			->with('_PAGE', $_PAGE)
+			->with('mode', 'edit')
 			->with('customs', $customs)
 
 			->with('years', $years)
@@ -294,29 +295,6 @@ class UserController extends Earlybird\FoundryController
 
 		$column_width = round(55/count($customs));
 
-		/*$counter = $start;
-		while( $data = $exec->fetch_assoc() )
-		{
-			$member = new User($data['id'], $data);
-			$member_custom = array();
-
-			if( !$is_mobile ) {
-				foreach( $customs as $custom ) {
-					$sql = "SELECT `value`
-						FROM `custom_data`
-						WHERE `user_id` = {$member->id}
-							AND `field_id` = {$custom['id']}
-						LIMIT 1";
-					$exec2 = $_db->query($sql);
-					list( $c_value ) = $exec2->fetch_row();
-					$member_custom[$custom['id']] = $c_value;
-				}
-			}
-			
-			$member->custom = $member_custom;
-			$member->counter = ++$counter;
-		}*/
-
 		return View::make('users.members')
 			->with('_PAGE', $_PAGE)
 			->with('users', $users)
@@ -433,79 +411,6 @@ class UserController extends Earlybird\FoundryController
 	}
 
 	/**
-	 * Validate a field 
-	 */
-	/*public static function validate($field, $value, $value2 = null)
-	{
-		global $_CONFIG, $_db;
-	
-		switch( $field ) {
-			// Username error checking
-			case 'username':
-				$protected = array('admin', 'administrator', 'moderator', 'guest');
-				if( strlen($value) < 2 ) {
-					throw new Exception('Username is too short');
-				}
-				else if( in_array(strtolower($value), $protected) ) {
-					throw new Exception('Sorry, that username is forbidden');
-				}
-				else {
-					$sql = "SELECT `id`
-						FROM `users`
-						WHERE `name` = '" . $_db->escape($value) . "'
-						LIMIT 1";
-					$exec = $_db->query($sql);
-					
-					if( $exec->num_rows > 0 ) {
-						throw new Exception('That username is taken. Did you <a href="/users/reset_password">forget your password</a>?');
-					}
-				}
-				break;
-
-			// Email error checking
-			case 'email':
-				else {
-					$sql = "SELECT `id`
-						FROM `users`
-						WHERE `email` = '" . $_db->escape($value) . "'
-						LIMIT 1";
-					$exec = $_db->query($sql);
-					
-					if( $exec->num_rows > 0 ) {
-						throw new Exception('That email is already registered. Did you <a href="/users/reset_password">forget your password</a>?');
-					}
-				}
-				break;
-
-			// Password error checking
-			case 'password':
-				if( $value !== $value2 ) {
-					throw new Exception('The passwords you entered did not match');
-				}
-				if( strlen($value) < 6 ) {
-					throw new Exception('Your password must be at least 6 characters');
-				}
-				break;
-
-			// CAPTCHA (allows for multiple correct answers)
-			case 'captcha':
-				$answer = $_CONFIG['captcha_answer'];
-				if( is_array($answer) && !in_array($value, $answer) ) {
-					throw new Exception("You're probably a spam bot");
-				}
-				else if( !is_array($answer) && $value !== $answer ) {
-					throw new Exception("You're probably a spam bot");
-				}
-				break;
-				
-			default:
-				break;
-		}
-		
-		return true;
-	}*/
-
-	/**
 	 * Old encryption method
 	 *
 	 * @return string
@@ -592,17 +497,18 @@ class UserController extends Earlybird\FoundryController
 			'title'    => 'Sign up',
 		);
 
-		if( Request::isMethod('post') ) {
-			$email       = trim(Input::get('email'));
-			$first_name  = trim(Input::get('first_name'));
-			$last_name   = trim(Input::get('last_name'));
-			$password    = Input::get('password');
+		if( Request::isMethod('post') )
+		{
+			$unencrypted = Input::get('password');
 
 			$rules = [
-				'first_name' => 'required',
-				'last_name'  => 'required',
+				'name'       => 'required|alpha_dash|max:25|unique:users',
 				'email'      => 'required|email|unique:users',
 				'password'   => 'required|min:6',
+				'confirm'    => 'required|same:password',
+				'recaptcha_response_field' => 'required|recaptcha',
+				'website'    => 'url',
+				'agree'      => 'in:1',
 			];
 
 			// Run validation
@@ -617,22 +523,30 @@ class UserController extends Earlybird\FoundryController
 			}
 			else {
 				$user = User::create([
-					'email'      => $email,
-					'password'   => Hash::make($password),
-					'first_name' => $first_name,
-					'last_name'  => $last_name,
+					'name'       => Input::get('name'),
+					'email'      => Input::get('email'),
+					'password'   => Hash::make($unencrypted),
+					'user_type'  => 0,
+					'active'     => 1,
+					'lang'       => 'english',
 				]);
 
-				UserController::join($user);
+				//UserController::join($user);
 
 				Auth::login($user);
 
-				return Redirect::to('/');
+				return Redirect::to('/user/settings');
 			}
 		}
 
-		return View::make('users.signup')
-			->with('_PAGE', $_PAGE);
+		$customs = CustomField::orderBy('order', 'asc')
+			->get();
+
+		return View::make('users.edit')
+			->with('_PAGE', $_PAGE)
+			->with('mode', 'signup')
+
+			->with('customs', $customs);
 	}
 
 	/**

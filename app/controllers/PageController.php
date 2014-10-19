@@ -75,17 +75,12 @@ class PageController extends BaseController
 
 		if( Request::isMethod('post') )
 		{
-			/*$no_spam = strtolower(trim($_POST['no_spam']));
-
-			try {
-				User::validate('captcha', $no_spam);
-			}*/
-
 			$rules = [
 				'name' => 'required',
 				'email' => 'required|email',
 				'subject' => 'required',
 				'message' => 'required',
+				'recaptcha_response_field' => 'required|recaptcha',
 			];
 
 			$validator = Validator::make(Input::all(), $rules);

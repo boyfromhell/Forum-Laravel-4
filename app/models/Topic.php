@@ -6,7 +6,6 @@ class Topic extends Earlybird\Foundry
 	protected $appends = array(
 		'url',
 
-		'prefix',
 		'image',
 		'alt_text',
 		'short_title',
@@ -100,28 +99,6 @@ class Topic extends Earlybird\Foundry
 		$url = preg_replace('/[^A-Za-z0-9]/', '_', $this->title);
 		$url = trim(preg_replace('/(_)+/', '_', $url), '_');
 		return '/topics/' . $this->id . '/' . $url;
-	}
-
-	/**
-	 * Get the topic prefix based on type
-	 *
-	 * @return string
-	 */
-	public function getPrefixAttribute()
-	{
-		switch( $this->type ) {
-			case 2:
-				return 'Announcement: ';
-				break;
-
-			case 1:
-				return 'Sticky: ';
-				break;
-
-			default:
-				return '';
-				break;
-		}
 	}
 
 	/**
