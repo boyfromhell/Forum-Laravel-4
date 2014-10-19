@@ -81,10 +81,12 @@
 
 @yield ('header')
 
-<div style="margin:20px 0">
+@if (trim($__env->yieldContent('buttons')))
+<div style="margin-bottom:20px">
 @yield ('buttons')
 <div class="clearfix"></div>
 </div>
+@endif
 
 @yield ('content')
 

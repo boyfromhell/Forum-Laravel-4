@@ -12,13 +12,13 @@
 @stop
 
 @section('buttons')
-<div class="pull-left">
-	<a class="btn btn-primary" href="{{ $photo->album->url }}{{ $page > 1 ? '?page='.$page : '' }}">Return</a>
-	<a class="btn btn-success" href="/media/download/{{ $photo->id }}">Download</a>
+<div class="btn-group pull-left">
+	<a class="btn btn-primary" href="{{ $photo->album->url }}{{ $page > 1 ? '?page='.$page : '' }}">Back to Album</a>
+	<a class="btn btn-success" href="/media/download/{{ $photo->id }}"><span class="glyphicon glyphicon-save"></span> Download</a>
 </div>
-<div class="pull-right">
-	<a class="btn btn-default ajax-photo" data-id="{{ $prev->id }}" href="{{ $prev->url }}">Previous</a>
-	<a class="btn btn-default ajax-photo" data-id="{{ $next->id }}" href="{{ $next->url }}">Next</a>
+<div class="btn-group pull-right">
+	<a class="btn btn-default ajax-photo" data-id="{{ $prev->id }}" href="{{ $prev->url }}"><span class="glyphicon glyphicon-chevron-left"></span> Previous</a>
+	<a class="btn btn-default ajax-photo" data-id="{{ $next->id }}" href="{{ $next->url }}">Next <span class="glyphicon glyphicon-chevron-right"></span></a>
 </div>
 @stop
 

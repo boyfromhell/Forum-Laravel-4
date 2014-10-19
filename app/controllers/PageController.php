@@ -142,16 +142,13 @@ class PageController extends BaseController
 			'title'    => 'Sitemap',
 		);
 
-		// @todo
-		$access = 2;
-
-		$categories = ModuleCategory::where('permission', '<=', $access)
+		$categories = ModuleCategory::where('permission', '<=', $me->access)
 			->orderBy('order', 'asc')
 			->get();
 
-		$categories->load(['modules' => function($query) use ($access)
+		$categories->load(['modules' => function($query) use ($me)
 		{
-			$query->where('permission', '<=', $access);
+			$query->where('permission', '<=', $me->access);
 		}]);
 
 		return View::make('pages.sitemap')

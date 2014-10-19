@@ -21,22 +21,42 @@
 <div class="bbcode" onClick="stripbbtags();"><img src="/images/bbcode/clear.gif" title="Clear Formatting"></div>
 <div class="bbsep"></div>
 	
+<div class="btn-group btn-group-sm">
+	<button type="button" onClick="addtext('[b]','[/b]',0);" class="btn btn-default" title="Bold">
+		<span class="glyphicon glyphicon-bold"></span>
+	</button>
+	<button type="button" onClick="addtext('[i]','[/i]',0);" class="btn btn-default" title="Italic">
+		<span class="glyphicon glyphicon-italic"></span>
+	</button>
+	<button type="button" onClick="addtext('[u]','[/u]',0);" class="btn btn-default" title="Underline">
+		<img src="/images/bbcode/underline.gif">
+	</button>
+	<button type="button" onClick="addtext('[strike]','[/strike]',0);" class="btn btn-default" title="Strike">
+		<img src="/images/bbcode/strike.gif">
+	</button>
+</div>
 
-<div class="bbcode" onClick="addtext('[b]','[/b]',0);"><img src="/images/bbcode/bold.gif" title="Bold"></div>
-<div class="bbcode" onClick="addtext('[i]','[/i]',0);"><img src="/images/bbcode/italic.gif" title="Italic"></div>
-<div class="bbcode" onClick="addtext('[u]','[/u]',0);"><img src="/images/bbcode/underline.gif" title="Underline"></div>
-<div class="bbcode" onClick="addtext('[strike]','[/strike]',0);"><img src="/images/bbcode/strike.gif" title="Strikethrough"></div>
-<div class="bbsep"></div>
+<div class="btn-group btn-group-sm">
+	<button type="button" id="sizebb" onMouseOver="sizeover();" onMouseOut="sizeout();" onClick="showsizes();" class="btn btn-default" title="Font Size">
+		<span class="glyphicon glyphicon-text-height"></span>
+	</button>
+	<button type="button" id="colorbb" onMouseOver="colorover();" onMouseOut="colorout();" onClick="showcolors();" class="btn btn-default" title="Font Color">
+		<span class="glyphicon glyphicon-tint"></span>
+	</button>
+</div>
 
-<div id="sizebb" class="bbcode" onMouseOver="sizeover();" onMouseOut="sizeout();" onClick="showsizes();"><img id="sizeimg" src="/images/bbcode/size.gif" title="Font Size" onClick="showsizes();"></div>
-<div id="colorbb" class="bbcode" onMouseOver="colorover();" onMouseOut="colorout();" onClick="showcolors();"><img id="colorimg" src="/images/bbcode/color.gif" title="Font Color" onClick="showcolors();"></div>
-<div class="bbsep"></div>
-	
-<div class="bbcode" onClick="addtext('[left]','[/left]',0);"><img src="/images/bbcode/left.gif" title="Left Align"></div>
-<div class="bbcode" onClick="addtext('[center]','[/center]',0);"><img src="/images/bbcode/center.gif" title="Center Align"></div>
-<div class="bbcode" onClick="addtext('[right]','[/right]',0);"><img src="/images/bbcode/right.gif" title="Right Align"></div>
-<div class="bbsep"></div>
-	
+<div class="btn-group btn-group-sm">
+	<button type="button" onClick="addtext('[left]','[/left]',0);" class="btn btn-default" title="Left Align">
+		<span class="glyphicon glyphicon-align-left"></span>
+	</button>
+	<button type="button" onClick="addtext('[center]','[/center]',0);" class="btn btn-default" title="Center Align">
+		<span class="glyphicon glyphicon-align-center"></span>
+	</button>
+	<button type="button" onClick="addtext('[right]','[/right]',0);" class="btn btn-default" title="Right Aligh">
+		<span class="glyphicon glyphicon-align-right"></span>
+	</button>
+</div>
+
 <div class="bbcode" onClick="addtext('[quote]','[/quote]',0);"><img src="/images/bbcode/bbquote.gif" title="Quote"></div>
 <div class="bbcode" onClick="addtext('[code]','[/code]',0);"><img src="/images/bbcode/code.gif" title="Code"></div>
 <div class="bbcode" onClick="addtext('[img]','[/img]',0);"><img src="/images/bbcode/img.gif" title="Image"></div>

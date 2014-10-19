@@ -16,15 +16,15 @@
 @stop
 
 @section('buttons')
-<div class="pull-left">
+<div class="btn-group pull-left">
 @if ( $allow || ( $album->parent_id == 1 && $me->id ))
-<a class="btn btn-primary" href="/albums/new?id={{ $album->id }}">New{{ !$is_mobile ? ' Album' : '' }}</a>
+<a class="btn btn-primary" href="/albums/new?id={{ $album->id }}">New Album</a>
 @endif
 @if (( $me->is_admin || $album->user_id == $me->id ) && $album->id != 1)
-<a class="btn btn-default" href="/albums/edit?id={{ $album->id }}">Edit{{ !$is_mobile ? ' Album' : '' }}</a>
+<a class="btn btn-default" href="/albums/edit?id={{ $album->id }}"><span class="glyphicon glyphicon-pencil"></span> Edit Album</a>
 @endif
 @if ( $allow )
-<a class="btn btn-default" href="/media/upload?id={{ $album->id }}">Upload</a>
+<a class="btn btn-default" href="/media/upload?id={{ $album->id }}"><span class="glyphicon glyphicon-open"></span> Upload</a>
 @endif
 </div>
 

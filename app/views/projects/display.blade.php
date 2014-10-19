@@ -3,7 +3,7 @@
 @section('buttons')
 
 @if ( $project->user_id == $me->id || $me->is_admin )
-<a href="/projects/upload?id={{ $project->id }}" class="btn btn-primary">Upload</a>
+<a href="/projects/upload?id={{ $project->id }}" class="btn btn-primary"><span class="glyphicon glyphicon-open"></span> Upload</a>
 @endif
 
 @stop
@@ -28,8 +28,7 @@
 
 	@if ( $project->user_id == $me->id || $me->is_admin )
 	<br><br>
-	<a href="/admin/projects/{{ $project->id }}/edit" class="btn btn-primary btn-xs">Edit</a>
-	<div class="clearfix"></div>
+	<a href="/admin/projects/{{ $project->id }}/edit" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
 	@endif
 	</div>
 

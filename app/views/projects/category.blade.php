@@ -10,16 +10,13 @@
 
 @section('content')
 
-@if ( count($projects) > 0 )
-
-@foreach ( $projects as $i => $project )
-
 <div class="panel panel-primary">
 
-	<div class="panel-heading">{{{ $project->name }}}</div>
+	<div class="panel-heading">{{{ $_PAGE['title'] }}}</div>
+
+@if ( count($projects) > 0 )
 
 	<table class="table">
-@if ( $i == 0 )
 	<thead>
 	<tr>
 		<th class="icon">
@@ -34,7 +31,8 @@
 	</tr>
 	</thead>
 	<tbody>
-@endif
+
+@foreach ( $projects as $project )
 	<tr>
 		<td class="icon">
 			<img src="{{ $skin }}icons/project_{{{ $_PAGE['section'] }}}.png" alt="file">
@@ -62,25 +60,21 @@
 		{{ BBCode::parse($project->description) }}
 		</td>
 	</tr>
+@endforeach
 	</tbody>
 	</table>
 
 </div>
-@endforeach
 @else
 
-<div class="panel panel-primary">
-
-	<div class="panel-heading">Projects</div>
-	
 	<div class="panel-body">
 		<p class="empty">
 		There are no projects in this category
 		</p>
 	</div>
-	
-</div>
 
 @endif
+
+</div>
 
 @stop

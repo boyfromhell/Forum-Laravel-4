@@ -32,7 +32,7 @@ class ProjectController extends Earlybird\FoundryController
 
 			case 'official': 
 			case NULL:
-				$section = 'official'; $title = 'Downloads'; $category_id = 1;
+				$section = 'official'; $title = 'Official'; $category_id = 1;
 				break;
 
 			default:

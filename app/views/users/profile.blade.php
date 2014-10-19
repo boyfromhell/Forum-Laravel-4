@@ -37,8 +37,11 @@
 	@endif
 	<br><br>
 
-	@if ( $me->is_admin || $me->id == $user->id )<a href="{{ $edit_url }}" class="btn btn-primary btn-xs">Edit</a>@endif
-	@if ( $me->is_moderator )<a href="/lookup.php?u={{ $user->id }}" class="btn btn-danger btn-xs">IP</a>@endif
+	<div class="btn-group btn-group-sm">
+	@if ( $me->is_admin || $me->id == $user->id )<a href="{{ $edit_url }}" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Edit</a>@endif
+	@if ( $me->is_moderator )<a href="/lookup.php?u={{ $user->id }}" class="btn btn-danger">IP</a>@endif
+	</div>
+
 	</div>
 
 	</div>

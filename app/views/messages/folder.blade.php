@@ -65,25 +65,30 @@ function select_threads( critera, value ) {
 		<th class="lastpost">Date</th>
 	</tr>
 	<tr class="subheading messages">
-		<td colspan="3">
+		<td colspan="5">
+		<div class="pull-left">
 			Select:
 			<a href="" onclick="select_threads('all', 1); return false">All</a>,
 			<a href="" onclick="select_threads('all', 0); return false">None</a>@if ( $folder != 'sent' ),
 			<a href="" onclick="select_threads('read', 1); return false">Read</a>,
 			<a href="" onclick="select_threads('read', 0); return false">Unread</a> @endif
-		</td>
-		<td style="text-align:right" colspan="2">
+		</div>
+		<div class="btn-group btn-group-md pull-right">
 		@if ( $folder == 'inbox' )
-			<input type="submit" name="archive_messages" value="Archive" class="btn btn-default btn-md" tabindex="1">
+			<button type="submit" name="archive_messages" class="btn btn-default">
+				<span class="glyphicon glyphicon-save"></span> Archive
+			</button>
 		@elseif ( $folder == 'archived' )
-			<input type="submit" name="unarchive_messages" class="btn btn-default btn-md" value="Move to Inbox">
+			<input type="submit" name="unarchive_messages" class="btn btn-default" value="Move to Inbox">
 		@endif
-			<input id="delete-multiple" type="submit" name="delete_messages" class="btn btn-danger btn-md" value="Delete" data-item="thread" data-action="Delete">
+			<input id="delete-multiple" type="submit" name="delete_messages" class="btn btn-danger" value="Delete" data-item="thread" data-action="Delete">
 		
 		@if ( $folder != 'sent' )
-			<input type="submit" name="read_messages" value="Mark Read" class="btn btn-default btn-md" tabindex="1">
-			<input type="submit" name="unread_messages" value="Mark Unread" class="btn btn-default btn-md" tabindex="1">
+			<input type="submit" name="read_messages" value="Mark Read" class="btn btn-default" tabindex="1">
+			<input type="submit" name="unread_messages" value="Mark Unread" class="btn btn-default" tabindex="1">
 		@endif
+		</div>
+		<div class="clearfix"></div>
 		</td>
 	</tr>
 	</thead>

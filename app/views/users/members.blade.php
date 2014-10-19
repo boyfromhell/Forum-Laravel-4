@@ -10,10 +10,10 @@
 	<form method="GET" action="/members">
 	<div class="panel-body">
 
-	<div class="input-group">
-	{{ Form::text('search', $search, ['class' => 'form-control input-sm', 'maxlength' => 50]) }}
+	<div class="input-group input-group-sm">
+	{{ Form::text('search', $search, ['class' => 'form-control', 'maxlength' => 50]) }}
 	<div class="input-group-btn">
-	{{ Form::submit('Go', ['class' => 'btn btn-primary btn-sm']) }}
+	{{ Form::button('<span class="glyphicon glyphicon-search"></span>', ['class' => 'btn btn-primary']) }}
 	</div>
 	</div>
 

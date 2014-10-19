@@ -73,7 +73,7 @@
 	@if ( $photo->user_id == $me->id || $me->is_admin )
 	<div class="form-group">
 		<div class="col-sm-5 col-sm-offset-4">
-		<a class="btn btn-primary btn-xs" href="/media/edit_photo/{{ $photo->id }}">Edit</a>
+		<a class="btn btn-primary btn-sm" href="/media/edit_photo/{{ $photo->id }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
 		</div>
 	</div>
 	@endif

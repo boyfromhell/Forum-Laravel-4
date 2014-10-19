@@ -19,8 +19,7 @@
 	
 	@if ( $membership == 2 )
 	<br><br>
-	<a href="/groups/edit?id={{ $group->id }}" class="btn btn-primary btn-xs">Edit</a>
-	<div class="clearfix"></div>
+	<a href="/groups/edit?id={{ $group->id }}" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
 	@endif
 	</div>
 
@@ -43,7 +42,7 @@
 	<tr>
 		<th class="icon">&nbsp;</th>
 		<th>Username</th>
-		<th style="width:20%">Status</th>
+		<th class="date" style="width:20%">Status</th>
 	</tr>
 	</thead>
 	<tbody>

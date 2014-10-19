@@ -19,7 +19,7 @@
 	</td>
 
 	<td style="width:{{ $topic_mode == 'subscription' ? '30%' : '50%' }}" class="topic">
-		@if ( $topic->has_attachments )<img src="{{ $skin }}icons/attachment.png" alt="att">@endif
+		@if ( $topic->has_attachments )<span class="glyphicon glyphicon-paperclip"></span>@endif
 		
 		@if ( $topic->unread_post->id )<a href="{{ $topic->unread_post->url }}"><img src="{{ $skin }}icons/newest_reply.png" title="Go to first unread post"></a> @endif
 

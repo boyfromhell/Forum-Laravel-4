@@ -26,9 +26,8 @@
 		@if ( $me->is_moderator )
 			<a href="/lookup.php?p={{ $post->id }}">IP</a>
 		@endif
-			<a href="/forum/report?p={{ $post->id }}"><img src="{{ $skin }}icons/report.png" alt="!" title="Report post" style="vertical-align:top"></a>
 		</div>
-		
+
 		<div class="clearfix"></div>
 	</div>
 
@@ -50,19 +49,18 @@
 
 	</div>
 	
-	<div class="pull-right">
+	<div class="btn-group btn-group-sm pull-right">
 	@if ( $me->id )
 		@if ( !$topic->status )
-			<a href="/quote-post/{{ $post->id }}" class="btn btn-primary btn-xs">Quote</a>
+			<a href="/quote-post/{{ $post->id }}" class="btn btn-primary">Quote</a>
+		@endif
+		@if (( $me->id == $post->user_id && !$topic->status ) || $me->is_moderator )
+			<a href="/edit-post/{{ $post->id }}" onClick="parangi.quickEdit({{ $post->id }}, 'edit'); return false" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+			<a href="/delete-post/{{ $post->id }}" class="btn btn-danger" title="Delete post"><span class="glyphicon glyphicon-remove"></span></a>
+		@else
+			<a href="/forum/report?p={{ $post->id }}" class="btn btn-danger" title="Flag post"><span class="glyphicon glyphicon-flag"></span></a>
 		@endif
 	@endif
-	@if ( $me->id && ( $me->id == $post->user_id || $me->is_moderator ) )
-		@if ( !$topic->status || $me->is_moderator )
-			<a href="/edit-post/{{ $post->id }}" onClick="parangi.quickEdit({{ $post->id }}, 'edit'); return false" class="btn btn-default btn-xs">Edit</a>
-			<a href="/delete-post/{{ $post->id }}" class="btn btn-danger btn-xs">x</a>
-		@endif
-	@endif
-	
 	</div>
 
 	{{-- @todo edits --}}
