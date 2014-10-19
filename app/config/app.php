@@ -11,6 +11,8 @@ return array(
 	'domain' => 'beta.attnam.com',
 	'cdn' => 'http://s3.attnam.com',
 
+	'admin_email' => 'capristo@attnam.com',
+
 	/*
 	|--------------------------------------------------------------------------
 	| Application Debug Mode

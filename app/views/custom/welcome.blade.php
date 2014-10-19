@@ -13,7 +13,8 @@ This is the unofficial homepage of <a href="http://ivan.sourceforge.net">IVAN</a
 </p>
 
 <p>
-<a href="/signup" class="btn btn-success btn-lg">Join Now</a>
+<a href="/signup" class="btn btn-success btn-lg">Register</a>
+<a href="/signin" class="btn btn-info btn-lg">Sign in</a>
 </p>
 
 @if ( $rand )

@@ -12,7 +12,7 @@
 <div class="col-md-4">
 
 <div class="form-group">
-	{{ Form::email('email', '', ['class' => 'form-control', 'placeholder' => 'Username / Email']) }}
+	{{ Form::email('email', '', ['class' => 'form-control', 'placeholder' => 'Email']) }}
 </div>
 
 <div class="form-group">

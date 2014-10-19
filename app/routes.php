@@ -66,12 +66,10 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('users/avatar', array('uses' => 'AvatarController@manage'));
 	Route::post('upload-avatar', array('uses' => 'AvatarController@upload'));
 	Route::any('users/edit', array('uses' => 'UserController@editProfile'));
-	Route::get('users/reset_password', array('uses' => 'UserController@resetPassword'));
 	Route::any('users/settings', array('uses' => 'UserController@settings'));
 	Route::get('users/topics', array('uses' => 'UserController@subscriptions'));
 
 	// Community
-	Route::any('members', array('uses' => 'UserController@members'));
 	/*Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));
 	Route::any('groups/new', array('uses' => 'GroupController@add'));*/
 	Route::any('honor-rolls/submit', array('uses' => 'ScoreController@submit'));
@@ -109,6 +107,7 @@ Route::get('print/{id}/{name?}', array('uses' => 'TopicController@printTopic'));
 Route::get('posts/{id}/{name?}', array('uses' => 'PostController@display'));
 
 // Community
+Route::any('members', array('uses' => 'UserController@members'));
 Route::get('groups', array('uses' => 'GroupController@showAll'));
 Route::get('groups/{id}/{name?}', array('uses' => 'GroupController@display'));
 Route::get('users/{id}/{name?}', array('uses' => 'UserController@display'));

@@ -150,6 +150,22 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	}
 
 	/**
+	 * Unread Messages
+	 * Check where at least one message in the thread is unread (MIN(read) = 0)
+	 * and at least one message isn't archived (MIN(archived) = 0)
+	 * So an archived thread will ignore unread messages
+	 *
+	 * @return Relation
+	 */
+	public function unreadMessages()
+	{
+		return $this->hasMany('Message', 'owner_user_id')
+			->groupBy('thread_id')
+			->having(DB::raw('MIN(`read`)'), '=', 0)
+			->having(DB::raw('MIN(`archived`)'), '=', 0);
+	}
+
+	/**
 	 * Permalink
 	 *
 	 * @return string
@@ -196,7 +212,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	public function getAccessAttribute()
 	{
 		$access = 0;
-		//if( $this->id ) { $access++; }
+		if( $this->id ) { $access++; }
 		if( $this->is_moderator ) { $access++; }
 		if( $this->is_admin ) { $access++; }
 

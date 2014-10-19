@@ -107,11 +107,20 @@ App::down(function()
 
 require app_path().'/filters.php';
 
+// @todo move the following lines to a Service Provider
+
 View::addLocation(base_path().'/vendor/earlybirdmvp/foundry/views');
 View::addNamespace('foundry', base_path().'/vendor/earlybirdmvp/foundry/views');
 
-App::missing(function($exception)
+App::error( function(Exception $exception, $code )
 {
-	return Response::view('errors.missing', array(), 404);
-});
+	if ( ! in_array($code, [401, 403, 404, 500]) ) {
+	   return;
+	}
 
+	$data = array(
+		'code' => $code
+	);
+
+	return Response::view('errors.'.$code, $data, $code);
+});

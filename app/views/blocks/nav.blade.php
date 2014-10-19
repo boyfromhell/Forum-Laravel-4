@@ -16,7 +16,7 @@
 	<div class="collapse navbar-collapse" id="nav">
 	<ul class="nav navbar-nav">
 	@foreach ( $menu as $toc )
-		<li class="{{ $_PAGE['category'] == $toc->page ? 'active' : '' }}"><a href="{{ $toc->url }}">{{{ $toc->name }}}</a></li>
+		<li class="{{ $_PAGE['category'] == $toc->page ? 'active' : '' }} {{ $toc->class }}"><a href="{{ $toc->url }}">{{ $toc->name }}</a></li>
 	@endforeach
 	</ul>
 

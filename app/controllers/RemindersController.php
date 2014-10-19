@@ -21,6 +21,7 @@ class RemindersController extends Controller {
 
 	/**
 	 * Handle a POST request to remind a user of their password.
+	 * @todo allow username reminders as well as email
 	 *
 	 * @return Response
 	 */

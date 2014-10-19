@@ -2,34 +2,47 @@
 
 View::creator(array('layout'), function($view)
 {
-	// @todo
-	$access = 2;
+	global $me;
 
 	// Menu
-	$menu = ModuleCategory::where('permission', '<=', $access)
+	$menu = ModuleCategory::where('permission', '<=', $me->access)
 		->orderBy('order', 'asc')
 		->get();
 
 	$messages = Session::get('messages');
+	$notices = Session::get('notices');
 	$errors = Session::get('errors');
 	$ga_events = Session::get('ga_events');
 	Session::forget('messages');
+	Session::forget('notices');
 	Session::forget('errors');
 	Session::forget('ga_events');
 
 	$_PAGE = $view->_PAGE;
 
+	if( $me->id ) {
+		$total_unread = $me->unreadMessages()->count();
+	}
+
 	// Sub menu
 	foreach( $menu as $menu_item ) {
 		if( $menu_item->page == $_PAGE['category'] ) {
 			$sub_nav = $menu_item->id;
-			break;
+		}
+
+		// Show unread badge for message tab
+		if( $menu_item->page == 'messages' && $total_unread > 0 ) {
+			$menu_item->name .= ' <span class="badge">'.$total_unread.'</span>';
+			//$menu_item->class = 'btn-danger';
 		}
 	}
 
 	if( $sub_nav ) {
-		$sub_menu = Module::where('permission', '<=', $access)
-			->where('enabled', '=', 1)
+		$sub_menu = Module::where('permission', '<=', $me->access);
+
+		if( $me->id ) { $sub_menu = $sub_menu->where('permission', '>=', 0); }
+
+		$sub_menu = $sub_menu->where('enabled', '=', 1)
 			->where('category_id', '=', $sub_nav)
 			->orderBy('order', 'asc')
 			->get();
@@ -51,14 +64,14 @@ View::creator(array('layout'), function($view)
 
 	// If no canonical URL is specified, just use the request URI
 	if( isset($_PAGE['url']) ) {
-		$_PAGE['url'] = 'http://' . Config::get('app.domain') . $_PAGE['url'];
+		$_PAGE['url'] = Config::get('app.url') . $_PAGE['url'];
 	}
 	else {
-		$_PAGE['url'] = 'http://' . Config::get('app.domain') . '/' . Request::path();
+		$_PAGE['url'] = Config::get('app.url') . '/' . Request::path();
 	}
 
 	if( !isset($_PAGE['og_image']) || empty($_PAGE['og_image']) ) {
-		$_PAGE['og_image'] = array('http://' . Config::get('app.domain') . '/images/facebook.png');
+		$_PAGE['og_image'] = array(Config::get('app.url') . '/images/facebook.png');
 	}
 	else if( !is_array($_PAGE['og_image']) ) {
 		$_PAGE['og_image'] = array($_PAGE['og_image']);
@@ -70,6 +83,7 @@ View::creator(array('layout'), function($view)
 		->with('menu', $menu)
 		->with('sub_menu', $sub_menu)
 		->with('messages', $messages)
+		->with('notices', $notices)
 		->with('errors', $errors)
 		->with('ga_events', $ga_events)
 		->with('resources', $resources);
@@ -152,6 +166,8 @@ Route::filter('auth', function()
 		}
 		else
 		{
+			Session::push('notices', 'You must sign in to view this page');
+
 			return Redirect::guest('signin');
 		}
 	}

@@ -2,11 +2,11 @@
 
 @section('content')
 
-<div class="row content-container">
-    <div class="content-header">
-        <h2>I forgot my password</h2>
-    </div>
-    <div class="content-middle">
+<div class="panel panel-primary">
+
+    <div class="panel-heading">I forgot my password</div>
+
+    <div class="panel-body">
 
 <form class="form-horizontal" action="{{ action('RemindersController@postReset') }}" method="POST">
 <div>

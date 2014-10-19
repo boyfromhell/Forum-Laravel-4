@@ -96,23 +96,35 @@ class PageController extends BaseController
 			}
 			else
 			{
-				AdminMessage::create([
+				$data = [
 					'user_id' => $me->id,
 					'name'    => Input::get('name'),
 					'email'   => Input::get('email'),
 					'subject' => Input::get('subject'),
 					'message' => Input::get('message'),
 					'ip'      => Request::getClientIp(),
-				]);
+				];
 
-				// @todo
-				/*Mail::queue('emails.contact', $data, function($message) use ($subject)
-				{
-					$message->to('capristo@attnam.com')
-						->subject($subject);
-				});*/
+				// Save a copy in the database
+				$am = AdminMessage::create($data);
 
-				Session::push('messages', 'Your message has been sent. Thank you');
+				$data['user_url'] = $me->url;
+				$data['user_name'] = $me->name;
+
+				try {
+					// Send message
+					Mail::queue('emails.contact', $data, function($message)
+					{
+						$message->to(Config::get('app.admin_email'))
+							->subject(Input::get('subject'));
+					});
+
+					Session::push('messages', 'Your message has been sent. Thank you');
+				}
+				catch( Exception $e ) {
+					Session::push('errors', "Sorry, we're experiencing issues");
+					Session::push('errors', 'Please contact us directly at <b>'.Config::get('app.admin_email').'</b>');
+				}
 
 				return Redirect::to('contact');
 			}

@@ -173,4 +173,49 @@ class MessageController extends BaseController
 			->with('message', $message);
 	}
 
+	/**
+	 * Count totals for each folder
+	 *
+	 * @return array
+	 */
+	public static function countTotals()
+	{
+		global $me;
+
+		$data = DB::select("SELECT thread_id, MIN(archived) AS is_archived, MIN(read) AS is_read,
+					( MAX(from_user_id = ?) = 1 ) AS from_me,
+					( MIN(from_user_id = ?) = 0 ) AS to_me
+				FROM messages
+				WHERE owner_user_id = ?
+				GROUP BY thread_id",
+			[$me->id, $me->id, $me->id]);
+
+		$totals = array(
+			'inbox'    => 0,
+			'sent'     => 0,
+			'archived' => 0,
+			'unread'   => 0,
+		);
+
+		foreach( $data as $datum )
+		{
+			if( $datum->is_archived == 1 ) {
+				$totals['archived']++;
+			}
+			else if( $datum->to_me ) {
+				$totals['inbox']++;
+
+				if( ! $datum->is_read ) {
+					$totals['unread']++;
+				}
+			}
+			if( $datum->from_me ) {
+				$totals['sent']++;
+			}
+		}
+
+		return $totals;
+	}
+
 }
+

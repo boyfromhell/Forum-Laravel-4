@@ -10,7 +10,14 @@ class AdminController extends BaseController
 	 */
 	public function dashboard()
 	{
-		return View::make('admin.dashboard');
+		$_PAGE = array(
+			'category' => 'admin',
+			'section'  => 'general',
+			'title'    => 'Admin'
+		);
+
+		return View::make('admin.dashboard')
+			->with('_PAGE', $_PAGE);
 	}
 
 	/**
