@@ -9,7 +9,14 @@ class RemindersController extends Controller {
 	 */
 	public function getRemind()
 	{
-		return View::make('password.remind');
+		$_PAGE = array(
+			'category' => 'forums',
+			'section'  => 'signin',
+			'title'    => 'Sign in',
+		);
+
+		return View::make('password.remind')
+			->with('_PAGE', $_PAGE);
 	}
 
 	/**
@@ -46,9 +53,17 @@ class RemindersController extends Controller {
 	 */
 	public function getReset($token = null)
 	{
+		$_PAGE = array(
+			'category' => 'forums',
+			'section'  => 'signin',
+			'title'    => 'Sign in',
+		);
+
 		if (is_null($token)) App::abort(404);
 
-		return View::make('password.reset')->with('token', $token);
+		return View::make('password.reset')
+			->with('_PAGE', $_PAGE)
+			->with('token', $token);
 	}
 
 	/**

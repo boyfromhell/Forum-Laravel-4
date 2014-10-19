@@ -54,12 +54,24 @@
 		</div>
 	</div>
 
-	<div class="form-group">
-		<label class="col-sm-3 control-label">Options</label>
-		<div class="col-sm-7">
-			<label>{{ Form::checkbox('subscribe', 1, $check_sub) }} Notify me of replies</label><br>
-			<label>{{ Form::checkbox('show_smileys', 1, $show_smileys) }} Enable smileys</label><br>
-			<label>{{ Form::checkbox('attach_sig', 1, $attach_sig) }} Attach my signature to this post</label>
+	<div class="form-group form-group-sm">
+		<label class="col-sm-3 control-label">Notify me of replies</label>
+		<div class="col-sm-9">
+			{{ Helpers::radioGroup('subscribe', ['1' => 'Yes', '0' => 'No'], $check_sub, 'btn-group-sm') }}
+		</div>
+	</div>
+
+	<div class="form-group form-group-sm">
+		<label class="col-sm-3 control-label">Enable smileys</label>
+		<div class="col-sm-9">
+			{{ Helpers::radioGroup('show_smileys', ['1' => 'Yes', '0' => 'No'], $show_smileys, 'btn-group-sm') }}
+		</div>
+	</div>
+
+	<div class="form-group form-group-sm">
+		<label class="col-sm-3 control-label">Attach my signature</label>
+		<div class="col-sm-9">
+			{{ Helpers::radioGroup('attach_sig', ['1' => 'Yes', '0' => 'No'], $attach_sig, 'btn-group-sm') }}
 		</div>
 	</div>
 

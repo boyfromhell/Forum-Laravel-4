@@ -35,7 +35,9 @@
 
 		<div class="form-group">
 			<div class="col-sm-offset-3 col-sm-6">
-				<p class="form-control-static"><a href="/lost-password" style="color:#666">I forgot my password</a></p>
+				<p class="form-control-static">
+					<a href="/lost-password">I forgot my password</a>
+				</p>
 			</div>
 		</div>
 

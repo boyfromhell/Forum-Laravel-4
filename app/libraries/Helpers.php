@@ -172,9 +172,9 @@ class Helpers
 	 *
 	 * @return string
 	 */
-	public function radioGroup( $name, $options, $default = NULL )
+	public function radioGroup( $name, $options, $default = NULL, $extra_class )
 	{
-		$html = '<div class="btn-group" data-toggle="buttons">';
+		$html = '<div class="btn-group '.$extra_class.'" data-toggle="buttons">';
 
 		foreach( $options as $value => $label )
 		{

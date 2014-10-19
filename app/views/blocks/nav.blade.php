@@ -32,8 +32,8 @@
 				<li><a href="/users/settings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
 				<li><a href="/signout"><span class="glyphicon glyphicon-off"></span> Sign out</a></li>
 			@else
-				<li><a href="/signin">Sign in</a></li>
-				<li><a href="/signup">Register</a></li>
+				<li><a href="/signin"><span class="glyphicon glyphicon-log-in"></span> Sign in</a></li>
+				<li><a href="/signup"><span class="glyphicon glyphicon-user"></span> Register</a></li>
 			@endif
 			</ul>
 		</li>
