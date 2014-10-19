@@ -31,8 +31,8 @@
 			<ul class="dropdown-menu no-collapse" role="menu">
 			@if ( $me->id )
 				<li><a href="/profile"><span class="glyphicon glyphicon-user"></span> My profile</a></li>
-				<li><a href="/users/edit"><span class="glyphicon glyphicon-pencil"></span> Edit profile</a></li>
-				<li><a href="/users/settings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+				<li><a href="/edit-profile"><span class="glyphicon glyphicon-pencil"></span> Edit profile</a></li>
+				<li><a href="/settings"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
 				<li><a href="/signout"><span class="glyphicon glyphicon-off"></span> Sign out</a></li>
 			@else
 				<li><a href="/signin"><span class="glyphicon glyphicon-log-in"></span> Sign in</a></li>

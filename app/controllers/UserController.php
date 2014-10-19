@@ -86,7 +86,7 @@ class UserController extends Earlybird\FoundryController
 		$Smarty->assign('website_url', $user->website);
 		$Smarty->assign('website_text', $website_text);
 		$Smarty->assign('allow_email', $user->allow_email || $me->is_admin ? true : false);
-		$Smarty->assign('edit_url', ( $me->is_admin ? '/admin/edit_user?id=' . $u : '/users/edit' ));
+		$Smarty->assign('edit_url', ( $me->is_admin ? '/admin/edit_user?id=' . $u : '/edit-profile' ));
 		*/
 	}
 
@@ -128,7 +128,7 @@ class UserController extends Earlybird\FoundryController
 					Session::push('errors', $error);
 				}
 
-				return Redirect::to('users/edit')->withInput();
+				return Redirect::to('edit-profile')->withInput();
 			}
 			else {
 				$me->bdaypref = Input::get('bdaypref');
@@ -139,7 +139,7 @@ class UserController extends Earlybird\FoundryController
 
 				Session::push('messages', 'Profile updated');
 
-				return Redirect::to('users/edit');
+				return Redirect::to('edit-profile');
 			}
 		}
 
@@ -211,7 +211,7 @@ class UserController extends Earlybird\FoundryController
 
 			Session::push('messages', 'Settings saved');
 
-			return Redirect::to('users/settings');
+			return Redirect::to('settings');
 		}
 
 		$themes = Theme::orderBy('name', 'asc')->get();
@@ -541,7 +541,7 @@ class UserController extends Earlybird\FoundryController
 
 				Auth::login($user);
 
-				return Redirect::to('/user/settings');
+				return Redirect::to('settings');
 			}
 		}
 

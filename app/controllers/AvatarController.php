@@ -44,7 +44,7 @@ class AvatarController extends Earlybird\FoundryController
 				Session::push('messages', 'Avatar deleted');
 			}
 
-			return Redirect::to('users/avatar');
+			return Redirect::to('avatar');
 		}
 
 		$_PAGE = array(
@@ -107,7 +107,7 @@ class AvatarController extends Earlybird\FoundryController
 					$me->last = 1;
 					$me->save(array('fields' => array('avatar_id', 'last')));
 					
-					header("Location: /users/avatar");
+					header("Location: /avatar");
 					exit;
 				}
 				else {
@@ -119,7 +119,7 @@ class AvatarController extends Earlybird\FoundryController
 
 		Session::push('messages', 'Avatar updated');
 
-		return Redirect::to('users/avatar');
+		return Redirect::to('avatar');
 	}
 
 }

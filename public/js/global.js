@@ -414,11 +414,14 @@ function showData()
 
 function saveData()
 {
+	$('#shoutbox .btn').button('loading');
+
 	$.post('/shoutbox/post', {message: $('input[name=message]').val()}, function( data ) {
 		if( data.success ) {
 			$('#shoutbox input[type="text"]').val('');
 			$('#shoutbox input[type="text"]').focus();
 			showData();
 		}
+		$('#shoutbox .btn').button('reset');
 	}, 'json');
 }

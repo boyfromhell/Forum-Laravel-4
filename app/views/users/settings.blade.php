@@ -6,7 +6,7 @@
 
 	<div class="panel-heading">Settings</div>
 
-	<form class="form-horizontal unload-warning" method="post" action="/users/settings">
+	<form class="form-horizontal unload-warning" method="post" action="/settings">
 
 	<div class="panel-body">
 

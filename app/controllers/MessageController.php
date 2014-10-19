@@ -113,6 +113,11 @@ class MessageController extends BaseController
 			'from.groups',
 		]);
 
+		// Mark all messages read
+		$thread->messages()->update([
+			'read' => 1
+		]);
+
 		return View::make('messages.thread')
 			->with('thread', $thread);
 	}

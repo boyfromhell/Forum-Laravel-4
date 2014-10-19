@@ -11,7 +11,7 @@
 	<div class="input-group">
 		{{ Form::text('message', '', ['class' => 'form-control input-sm', 'placeholder' => 'type message here', 'autocomplete' => 'off']) }}
 		<div class="input-group-btn">
-		{{ Form::submit('Send', ['class' => 'btn btn-primary btn-sm']) }}
+		{{ Form::submit('Send', ['class' => 'btn btn-primary btn-sm', 'data-loading-text' => 'Send']) }}
 		</div>
 	</div>
     </form>

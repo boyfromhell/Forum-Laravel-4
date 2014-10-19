@@ -7,7 +7,7 @@
 @endif
 
 @section('content')
-<form class="form-horizontal unload-warning" method="post" action="/users/{{ $mode }}">
+<form class="form-horizontal unload-warning" method="post" action="">
 
 <div class="panel panel-primary">
 

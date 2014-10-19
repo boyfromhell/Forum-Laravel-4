@@ -14,7 +14,7 @@ function selectAvatar( id ) {
 }
 </script>
 
-<form class="form-horizontal unload-warning" name="myform" method="post" action="/users/avatar">
+<form class="form-horizontal unload-warning" name="myform" method="post" action="/avatar">
 
 <div class="panel panel-primary">
 

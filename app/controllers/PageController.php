@@ -164,28 +164,41 @@ class PageController extends BaseController
 	}
 
 	/**
-	 * Show the chat popup
+	 * Links page with bookmarks to other sites
 	 *
 	 * @return Response
 	 */
-	public function chatPopup()
+	public function links()
 	{
-		global $me;
+		$_PAGE = array(
+			'category' => 'home',
+			'section'  => 'links',
+			'title'    => 'Links',
+		);
 
-		if( $me->id ) {
-			$nick = preg_replace('/[^A-Za-z0-9]/', '_', $me->name);
-		} else {
-			$nick = 'Guest????';
-		}
+		$categories = array(
+			'IVAN' => array(
+				'http://ivan.sourceforge.net/' => 'Official IVAN homepage',
+				'http://sourceforge.net/projects/ivan' => 'Sourceforge project page',
+				'http://www.attnam.com/wiki/' => 'IVAN Wiki',
+				'http://ivan.fr.yuku.com/' => 'Ancient forums (rehosted)',
+				'http://www.attnam.com/wiki/Feedback_and_reviews' => 'Feedback and Reviews',
+				'http://wikiwiki.jp/ivan/' => 'Japanese Wiki',
+			),
+			'Development' => array(
+				'https://github.com/Attnam/ivan' => 'Open source fan continuation by members of this site',
+			),
+			'Obsolete' => array(
+				'http://ivan.greatboard.com/index.php' => 'Ancient forums (original URL, dead)',
+				'http://ivan.elwiki.com/index.php/Main_Page' => 'Old Wiki (dead)',
+				'http://attnam.jconserv.net/' => 'Old forums (dead)',
+				'http://cvs.sourceforge.net/viewcvs.py/ivan/' => 'CVS Viewer (broken)'
+			)
+		);
 
-		$smileys = BBCode::load_smileys();
-
-		$_PAGE['title'] = '#attnam';
-
-		return View::make('pages.chat_popup')
+		return View::make('pages.links')
 			->with('_PAGE', $_PAGE)
-			->with('nick', $nick)
-			->with('smileys', $smileys);
+			->with('categories', $categories);
 	}
 
 }

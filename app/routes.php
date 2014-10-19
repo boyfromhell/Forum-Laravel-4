@@ -63,10 +63,10 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('delete-message/{id}', array('uses' => 'MessageController@delete'));
 
 	// Settings
-	Route::any('users/avatar', array('uses' => 'AvatarController@manage'));
+	Route::any('avatar', array('uses' => 'AvatarController@manage'));
 	Route::post('upload-avatar', array('uses' => 'AvatarController@upload'));
-	Route::any('users/edit', array('uses' => 'UserController@editProfile'));
-	Route::any('users/settings', array('uses' => 'UserController@settings'));
+	Route::any('edit-profile', array('uses' => 'UserController@editProfile'));
+	Route::any('settings', array('uses' => 'UserController@settings'));
 	Route::get('users/topics', array('uses' => 'UserController@subscriptions'));
 
 	// Community
@@ -135,6 +135,7 @@ Route::get('privacy', array('uses' => 'PageController@display', 'as' => 'privacy
 Route::get('terms', array('uses' => 'PageController@display', 'as' => 'terms'));
 Route::get('community/chat', array('uses' => 'PageController@display', 'as' => 'chat'));
 Route::get('sitemap', array('uses' => 'PageController@sitemap'));
+Route::get('links', array('uses' => 'PageController@links'));
 
 // Stats
 Route::get('whos-online', array('uses' => 'ForumController@getOnline'));

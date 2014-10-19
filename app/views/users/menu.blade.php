@@ -3,7 +3,7 @@
 @if ( $me->is_admin )
 	<li><a href="/admin/edit_user?id={{ $user->id }}">Edit profile</a></li>
 @elseif ( $user->id == $me->id )
-	<li><a href="/users/edit">Edit profile</a></li>
+	<li><a href="/edit-profile">Edit profile</a></li>
 @endif
 
 	<li class="divider"></li>
