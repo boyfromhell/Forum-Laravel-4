@@ -12,6 +12,37 @@ class MessageController extends BaseController
 	{
 		global $me;
 
+		$threads = Input::get('threads');
+
+		// Bulk actions
+		if( Request::isMethod('post') && count($threads) > 0 )
+		{
+			$messages = Message::ownedBy($me->id)
+				->whereIn('thread_id', $threads);
+
+			if( isset($_POST['archive']) ) {
+				$messages->update(['archived' => 1]);
+			}
+			else if( isset($_POST['unarchive']) ) {
+				$messages->update(['archived' => 0]);
+			}
+			else if( isset($_POST['read']) ) {
+				$messages->update(['read' => 1]);
+			}
+			else if( isset($_POST['unread']) ) {
+				$messages->update(['read' => 0]);
+			}
+			else if( isset($_POST['delete']) ) {
+				$messages = $messages->get();
+
+				foreach( $messages as $message ) {
+					$message->delete();
+				}
+			}
+
+			return Redirect::to('messages/'.$folder);
+		}
+
 		$sort = Input::get('sort', 'date');
 		$order = Input::get('order', 'desc');
 

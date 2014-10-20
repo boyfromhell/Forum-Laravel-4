@@ -57,10 +57,10 @@ Route::group(array('before' => 'auth'), function()
 	Route::get('forum/attachments/{id}', array('uses' => 'AttachmentController@download'));
 
 	// Messages
-	Route::get('messages', array('uses' => 'MessageController@inbox'));
+	Route::any('messages', array('uses' => 'MessageController@inbox'));
 	Route::any('messages/compose', array('uses' => 'MessageController@compose'));
 	Route::get('messages/{id}', array('uses' => 'MessageController@displayThread'));
-	Route::get('messages/{folder}', array('uses' => 'MessageController@inbox'));
+	Route::any('messages/{folder}', array('uses' => 'MessageController@inbox'));
 	Route::any('delete-message/{id}', array('uses' => 'MessageController@delete'));
 
 	// Settings

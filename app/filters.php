@@ -21,7 +21,7 @@ View::creator(array('layout'), function($view)
 	$_PAGE = $view->_PAGE;
 
 	if( $me->id ) {
-		$total_unread = $me->unreadMessages()->count();
+		$total_unread = count($me->unreadMessages);
 	}
 
 	// Sub menu

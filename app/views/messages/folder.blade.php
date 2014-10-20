@@ -75,19 +75,19 @@ function select_threads( critera, value ) {
 		</div>
 		<div class="btn-group btn-group-md pull-right">
 		@if ( $folder == 'inbox' )
-			<button type="submit" name="archive_messages" class="btn btn-default">
+			<button type="submit" name="archive" class="btn btn-default">
 				<span class="glyphicon glyphicon-save"></span> Archive
 			</button>
 		@elseif ( $folder == 'archived' )
-			<button type="submit" name="unarchive_messages" class="btn btn-default">
+			<button type="submit" name="unarchive" class="btn btn-default">
 				<span class="glyphicon glyphicon-inbox"></span> Move to Inbox
 			</button>
 		@endif
-			<input id="delete-multiple" type="submit" name="delete_messages" class="btn btn-danger" value="Delete" data-item="thread" data-action="Delete">
+			<input id="delete-multiple" type="submit" name="delete" class="btn btn-danger" value="Delete" data-item="thread" data-action="Delete">
 		
 		@if ( $folder != 'sent' )
-			<input type="submit" name="read_messages" value="Mark Read" class="btn btn-default">
-			<input type="submit" name="unread_messages" value="Mark Unread" class="btn btn-default">
+			<input type="submit" name="read" value="Mark Read" class="btn btn-default">
+			<input type="submit" name="unread" value="Mark Unread" class="btn btn-default">
 		@endif
 		</div>
 		<div class="clearfix"></div>
