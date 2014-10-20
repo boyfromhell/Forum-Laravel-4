@@ -80,7 +80,7 @@ class ShoutboxController extends BaseController
 	 * @param  Collection  $shouts
 	 * @return Collection
 	 */
-	public function format( $shouts, $prevdate )
+	public function format( $shouts, $prevdate = NULL )
 	{
 		if( count($shouts) > 0 )
 		{
@@ -137,7 +137,7 @@ class ShoutboxController extends BaseController
 				->paginate(30);
 		}
 
-		$shouts = ShoutboxController::format($shouts, -1);
+		$shouts = ShoutboxController::format($shouts);
 
 		return View::make('shoutbox.history')
 			->with('_PAGE', $_PAGE)

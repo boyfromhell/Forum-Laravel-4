@@ -18,7 +18,7 @@
 	</td>
 
 	<td class="topic">
-		<div class="thread_preview">
+		<div class="thread-preview">
 		@if ( $thread->attachments )
 			<img src="{$skin}icons/attachment.png" alt="att">
 		@endif
@@ -33,7 +33,7 @@
 		</div>
 	</td>
 
-	<td class="lastpost message">
+	<td class="lastpost message nowrap">
 		{{ $thread->last_message[0]->date }}
 	</td>
 </tr>

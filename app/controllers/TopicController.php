@@ -242,8 +242,7 @@ class TopicController extends Earlybird\FoundryController
 		global $me;
 
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => 'forums',
+			'category' => 'home',
 			'title'    => 'Delete Topic'
 		);
 
@@ -266,6 +265,7 @@ class TopicController extends Earlybird\FoundryController
 
 		return View::make('topics.delete')
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('forum'))
 			->with('topic', $topic);
 	}
 

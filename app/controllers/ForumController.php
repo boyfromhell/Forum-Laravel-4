@@ -19,7 +19,7 @@ class ForumController extends Earlybird\FoundryController
 
 			Session::push('messages', 'All forums marked read');
 
-			return Redirect::to('forum');
+			return Redirect::to('/');
 		}
 
 		$_PAGE = array(
@@ -62,7 +62,7 @@ class ForumController extends Earlybird\FoundryController
 		$shouts = Shout::orderBy('id', 'desc')
 			->take(30)
 			->get();
-		$shouts = ShoutboxController::format($shouts, -1);
+		$shouts = ShoutboxController::format($shouts);
 
 		return View::make('forums.welcome')
 			->with('_PAGE', $_PAGE)
@@ -124,18 +124,11 @@ class ForumController extends Earlybird\FoundryController
 
 		/*while( $data = $exec->fetch_assoc() )
 		{
-			$forum = new Forum($data['id'], $data);
-
-			$forum->subforums = array();
 			$forum->perm_view = $forum->check_permission('view', $me, $mygroups);
 			$forum->perm_read = $forum->check_permission('read', $me, $mygroups);
 
-			if( $forum->perm_view ) {
-				if( $forum->external ) { $forum->alt = 'External'; }
-				else { $forum->alt = 'No new posts'; }
-
-				$forums[$forum->id] = $forum;
-			}
+			if( $forum->external ) { $forum->alt = 'External'; }
+			else { $forum->alt = 'No new posts'; }
 		}
 
 		if( count($read_ids) )
@@ -251,7 +244,7 @@ class ForumController extends Earlybird\FoundryController
 			'user',
 			'lastUser'
 		]);
-		
+
 		$children = array();
 		foreach( $forum->children as $child ) {
 			if( $child->check_permission('view') ) {

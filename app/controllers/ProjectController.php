@@ -13,6 +13,8 @@ class ProjectController extends Earlybird\FoundryController
 	{
 		global $me;
 
+		Session::push('notices', 'Be sure to check out the <a target="_blank" class="alert-link" href="http://github.com/Attnam/ivan">fan continuation on GitHub</a> by members of this site!');
+
 		if( ! Module::isActive('downloads') ) {
 			App::abort(404);
 		}

@@ -91,7 +91,7 @@ class Helpers
 		$time += ( $me->timezone * 3600 );
 		$gmt  += ( $me->timezone * 3600 );
 
-		$datestr = date('M&\n\b\s\p;j,&\n\b\s\p;Y',$time);
+		$datestr = date('M j, Y',$time);
 
 		if( date('m/j/Y', $gmt) == date('m/j/Y', $time) ) {
 			$datestr = 'Today';
@@ -100,12 +100,12 @@ class Helpers
 			$datestr = 'Yesterday';
 		}
 		else if( date('Y', $gmt) == date('Y', $time)) {
-			$datestr = date('M&\n\b\s\p;j', $time);
+			$datestr = date('M j', $time);
 		}
-		if( $format == 1 ) { $datestr .= '&nbsp;at'; }
+		if( $format == 1 ) { $datestr .= ' at'; }
 		else if( $format == 2 ) { $datestr .= ','; }
 
-		$datestr .= date('&\n\b\s\p;g:i&\n\b\s\p;a', $time);
+		$datestr .= date(' g:i a', $time);
 
 		return $datestr;
 	}

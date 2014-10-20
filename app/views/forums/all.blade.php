@@ -53,7 +53,7 @@
 
 @include ('blocks.jumpbox', ['jump_categories' => $categories])
 
-<div class="panel panel-info">
+<div class="panel panel-default">
 
 	<div class="panel-heading">
 		@if ( $me->id )

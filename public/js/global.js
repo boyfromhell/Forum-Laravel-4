@@ -173,9 +173,8 @@ var parangi = {
 
 		// Don't allow submit buttons to be pressed more than once
 		$('body').on('submit', 'form', function(e) {
-			var $btn = $(this).find('.btn-once');
-
-			if( $btn.exists() ) {
+			var $btn = $(this).find('[type=submit]:focus');
+			if( $btn.is('.btn-once') ) {
 				$btn.button('loading');
 			}
 		});
