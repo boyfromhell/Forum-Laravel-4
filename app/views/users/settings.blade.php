@@ -99,7 +99,7 @@
 
 	<div class="form-group">
 		<div class="col-sm-4 col-sm-offset-4">
-		{{ Form::submit('Save Settings', ['class' => 'btn btn-primary']) }}
+		{{ Form::submit('Save Settings', ['class' => 'btn btn-primary btn-once', 'data-loading-text' => 'Saving...']) }}
 		{{ Form::reset('Reset', ['class' => 'btn btn-default']) }}
 		</div>
 	</div>

@@ -90,59 +90,13 @@
 	--}}
 
 	<div class="form-group">
-		<div class="attachment-box">
-		<label class="col-sm-3 control-label">Attachments</label>
-		<div class="col-sm-8">
-		Select up to <b>{{ $max_file_uploads }}</b> files, <b>{{ $upload_max_filesize }} MB</b> each. Total limit is <b>{{ $post_max_size }} MB</b><br>
-			<input type="file" id="files" name="files[]" multiple />
-			<output id="list"></output>
-			<input name="attach" id="attach" type="submit" value="Attach Files" style="display:none">
-		</div>
-		</div>
-	</div>
-
-	<script type="text/javascript">
-		function handleFileSelect(evt) {
-			var total = 0, count = 0;
-			var files = evt.target.files; // FileList object
-
-			// files is a FileList of File objects. List some properties.
-			var output = [];
-			for (var i = 0, f; f = files[i]; i++) {
-				var content = '<li><strong>' + escape(f.name) + '</strong> (' + (f.type || 'n/a') + ') - ' + format_size(f.size);
-				if( f.size > {{ $max_bytes }} ) {
-					content += ' <span style="color:#a00">(TOO LARGE)</span>';
-				}
-				content += '</li>';
-				output.push(content);
-				total += f.size;
-				count++;
-			}
-			if( count > 0 ) {
-				var html = '<ul>' + output.join('') + '</ul>' + count + ' files, ' + format_size(total);
-				if( count > {{ $max_file_uploads }} ) {
-					html = '<br><span style="color:#a00"><b>You have selected too many files</b></span>';
-				}
-				if( total > {{ $max_total }} ) {
-					html = '<br><span style="color:#a00"><b>The total size for these files is too large</b></span>';
-				}
-				$('#list').html(html);
-				$('#attach').show();
-			} else {
-				$('#list').html('');
-				$('#attach').hide();
-			}
-		}
-
-		document.getElementById('files').addEventListener('change', handleFileSelect, false);
-	</script>
-	
-	<div class="form-group">
 		<label class="col-sm-3 control-label">Poll</label>
-		<div class="col-sm-7" style="padding:7px 0">
-		<a href="" onClick="return false">Add a poll</a>
+		<div class="col-sm-9">
+			<p class="form-control-static"><a href="" onClick="return false">Add a poll</a></p>
 		</div>
 	</div>
+
+	@include ('blocks.attachments')
 
 	</div>
 
@@ -150,7 +104,7 @@
 
 	<div class="form-group">
 		<div class="col-sm-7 col-sm-offset-3">
-			{{ Form::submit('Submit', ['name' => 'addpost', 'class' => 'btn btn-primary', 'accesskey' => 'S']) }}
+			{{ Form::submit('Submit Post', ['name' => 'addpost', 'class' => 'btn btn-primary btn-once', 'accesskey' => 'S', 'data-loading-text' => 'Submitting...']) }}
 			{{ Form::submit('Preview', ['name' => 'preview', 'class' => 'btn btn-default preview', 'accesskey' => 'P']) }}
 		</div>
 	</div>

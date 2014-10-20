@@ -57,7 +57,7 @@
 		
 	<div class="form-group">
 		<div class="col-sm-5 col-sm-offset-4">
-			{{ Form::submit('Submit', ['class' => 'btn btn-primary', 'accesskey' => 'S']) }}
+			{{ Form::submit('Submit Score', ['class' => 'btn btn-primary btn-once', 'accesskey' => 'S', 'data-loading-text' => 'Submitting...']) }}
 			{{ Form::reset('Reset', ['class' => 'btn btn-default']) }}
 		</div>
 	</div>

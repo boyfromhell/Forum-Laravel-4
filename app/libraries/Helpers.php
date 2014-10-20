@@ -174,6 +174,10 @@ class Helpers
 	 */
 	public function radioGroup( $name, $options, $default = NULL, $extra_class )
 	{
+		if( Input::old($name) !== NULL ) {
+			$default = Input::old($name);
+		}
+
 		$html = '<div class="btn-group '.$extra_class.'" data-toggle="buttons">';
 
 		foreach( $options as $value => $label )

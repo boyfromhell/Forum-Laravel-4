@@ -61,7 +61,7 @@
 
 	<div class="form-group">
 		<div class="col-sm-5 col-sm-offset-4">
-			{{ Form::submit('Send Message', ['class' => 'btn btn-primary']) }}
+			{{ Form::submit('Send Message', ['class' => 'btn btn-primary btn-once', 'data-loading-text' => 'Sending...']) }}
 		</div>
 	</div>
 

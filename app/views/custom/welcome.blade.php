@@ -12,10 +12,12 @@ Don't say we didn't warn you.
 This is the unofficial homepage of <a href="http://ivan.sourceforge.net">IVAN</a>, as unfortunately the game itself has not been updated since 2005. Here you will find a <a href="/wiki/">wiki</a> with spoilers, a <a href="/forum">forum</a> for discussion and tips, a <a href="/media">gallery</a> with screenshots, <a href="/downloads">downloads</a> including <a href="/downloads/variants">variants</a> developed by fans, and <a href="/sitemap">much more</a>. Be sure to <a href="/signup">register</a> for the website so that you can fully enjoy these resources!
 </p>
 
+@if ( !$me->id )
 <p>
 <a href="/signup" class="btn btn-success btn-lg">Register</a>
 <a href="/signin" class="btn btn-info btn-lg">Sign in</a>
 </p>
+@endif
 
 @if ( $rand )
 

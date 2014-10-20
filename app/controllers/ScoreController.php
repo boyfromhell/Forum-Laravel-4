@@ -58,9 +58,10 @@ class ScoreController extends Earlybird\FoundryController
 		{
 			$rules = [
 				'character' => 'required',
-				'score' => 'required|integer',
-				'variant' => 'required',
-				'ending' => 'required',
+				'score'     => 'required|integer',
+				'variant'   => 'required',
+				'ending'    => 'required',
+				'url'       => 'url',
 			];
 
 			$validator = Validator::make(Input::all(), $rules);

@@ -172,7 +172,7 @@
 		@if ( $mode == 'signup' )
 			{{ Form::submit('Create Account', ['class' => 'btn btn-primary']) }}
 		@else
-			{{ Form::submit('Save Profile', ['class' => 'btn btn-primary']) }}
+			{{ Form::submit('Save Profile', ['class' => 'btn btn-primary btn-once', 'data-loading-text' => 'Saving...']) }}
 			{{ Form::reset('Reset', ['class' => 'btn btn-default']) }}
 		@endif
 		</div>

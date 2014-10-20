@@ -68,7 +68,7 @@ function selectAvatar( id ) {
 	<div class="panel-footer">
 
 	<div class="text-center">
-		{{ Form::submit('Upload', ['name' => 'upload', 'class' => 'btn btn-primary']) }}
+		{{ Form::submit('Upload', ['name' => 'upload', 'class' => 'btn btn-primary btn-once', 'data-loading-text' => 'Uploading...']) }}
 	</div>
 	
 	</div>
