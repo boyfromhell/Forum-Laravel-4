@@ -12,7 +12,6 @@ class GroupController extends Earlybird\FoundryController
 	{
 		$_PAGE = array(
 			'category' => 'community',
-			'section'  => 'groups',
 			'title'    => 'Groups',
 		);
 
@@ -27,6 +26,7 @@ class GroupController extends Earlybird\FoundryController
 
 		return View::make('groups.list')
 			->with('_PAGE', $_PAGE)
+			->with('menu', GroupController::fetchMenu('groups'))
 			->with('groups', $groups);
 	}
 
@@ -214,4 +214,46 @@ class GroupController extends Earlybird\FoundryController
 		
 		// todo: delete badge image?
 	}
+
+	/**
+	 * Menu for community pages
+     *
+     * @return array
+     */
+    public static function fetchMenu( $active )
+    {
+		global $me;
+
+        $menu = array();
+
+        $menu['members'] = array(
+            'url' => '/members',
+            'name' => 'Members',
+        );
+        $menu['groups'] = array(
+            'url' => '/groups',
+            'name' => 'Groups',
+        );
+        $menu['honor-rolls'] = array(
+            'url' => '/honor-rolls',
+            'name' => 'Honor Rolls',
+        );
+        $menu['chat'] = array(
+            'url' => '/community/chat',
+            'name' => 'Chat',
+        );
+		if( $me->id ) {
+			$menu['gmail'] = array(
+				'url' => 'http://mail.attnam.com/',
+				'name' => 'Gmail',
+			);
+		}
+
+		if( $active ) {
+	        $menu[$active]['active'] = true;
+		}
+
+        return $menu;
+    }
+
 }

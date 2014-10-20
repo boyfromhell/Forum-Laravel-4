@@ -5,7 +5,7 @@ View::creator(array('layout'), function($view)
 	global $me;
 
 	// Menu
-	$menu = ModuleCategory::where('permission', '<=', $me->access)
+	$main_menu = ModuleCategory::where('permission', '<=', $me->access)
 		->orderBy('order', 'asc')
 		->get();
 
@@ -25,7 +25,7 @@ View::creator(array('layout'), function($view)
 	}
 
 	// Sub menu
-	foreach( $menu as $menu_item ) {
+	foreach( $main_menu as $menu_item ) {
 		if( $menu_item->page == $_PAGE['category'] ) {
 			$sub_nav = $menu_item->id;
 		}
@@ -37,7 +37,10 @@ View::creator(array('layout'), function($view)
 		}
 	}
 
-	if( $sub_nav ) {
+	if( $view->menu ) {
+		$sub_menu = $view->menu;
+	}
+	else if( $sub_nav ) {
 		$sub_menu = Module::where('permission', '<=', $me->access);
 
 		if( $me->id ) { $sub_menu = $sub_menu->where('permission', '>=', 0); }
@@ -46,6 +49,14 @@ View::creator(array('layout'), function($view)
 			->where('category_id', '=', $sub_nav)
 			->orderBy('order', 'asc')
 			->get();
+
+		$sub_menu = $sub_menu->toArray();
+
+		foreach( $sub_menu as $key => $item ) {
+			if( $item['section'] == $_PAGE['section'] ) {
+				$sub_menu[$key]['active'] = true;
+			}
+		}
 	}
 
 	if( ! $_PAGE['title'] ) {
@@ -80,7 +91,7 @@ View::creator(array('layout'), function($view)
 	//$resources = DB::table('resources')->get();
 
 	$view->with('_PAGE', $_PAGE)
-		->with('menu', $menu)
+		->with('main_menu', $main_menu)
 		->with('sub_menu', $sub_menu)
 		->with('messages', $messages)
 		->with('notices', $notices)

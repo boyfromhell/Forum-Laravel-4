@@ -10,13 +10,13 @@ class RemindersController extends Controller {
 	public function getRemind()
 	{
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => 'signin',
-			'title'    => 'Sign in',
+			'category' => 'home',
+			'title'    => 'I forgot my password',
 		);
 
 		return View::make('password.remind')
-			->with('_PAGE', $_PAGE);
+			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('signin'));
 	}
 
 	/**
@@ -55,15 +55,15 @@ class RemindersController extends Controller {
 	public function getReset($token = null)
 	{
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => 'signin',
-			'title'    => 'Sign in',
+			'category' => 'home',
+			'title'    => 'I forgot my password',
 		);
 
 		if (is_null($token)) App::abort(404);
 
 		return View::make('password.reset')
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('signin'))
 			->with('token', $token);
 	}
 

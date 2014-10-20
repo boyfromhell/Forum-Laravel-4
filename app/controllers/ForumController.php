@@ -24,7 +24,6 @@ class ForumController extends Earlybird\FoundryController
 
 		$_PAGE = array(
 			'category' => 'home',
-			'section'  => 'welcome',
 			'title'    => 'Welcome',
 		);
 
@@ -67,6 +66,7 @@ class ForumController extends Earlybird\FoundryController
 
 		return View::make('forums.welcome')
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('welcome'))
 			->with('announcement', $announcement)
 			->with('birthdays', $birthdays)
 			->with('topics', $topics)
@@ -101,8 +101,7 @@ class ForumController extends Earlybird\FoundryController
 		}
 
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => 'forums',
+			'category' => 'home',
 			'title'    => 'Forum',
 		);
 
@@ -193,6 +192,7 @@ class ForumController extends Earlybird\FoundryController
 
 		return View::make('forums.all')
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('forum'))
 			->with('announcement', $announcement)
 			->with('quote', $quote)
 			->with('categories', $categories)
@@ -228,8 +228,7 @@ class ForumController extends Earlybird\FoundryController
 		}
 
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => 'forums',
+			'category' => 'home',
 			'title'    => $forum->name,
 		);
 
@@ -274,6 +273,7 @@ class ForumController extends Earlybird\FoundryController
 
 		return View::make('forums.display')
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('forum'))
 			->with('forum', $forum)
 			->with('children', $children)
 			->with('topics', $topics)
@@ -339,6 +339,57 @@ class ForumController extends Earlybird\FoundryController
 		//elseif( $user->level == 1 ) { $user->class = 'mod'; }
 
 		return Response::json(['html' => $html]);
+	}
+
+	/**
+	 * Menu for forum pages
+	 *
+	 * @return array
+	 */
+	public static function fetchMenu( $active )
+	{
+		global $me;
+
+		$menu = array();
+
+		$menu['welcome'] = array(
+			'url' => '/',
+			'name' => 'Welcome',
+		);
+		$menu['forum'] = array(
+			'url' => '/forum',
+			'name' => 'Forum',
+		);
+		if( $me->id ) {
+			$menu['profile'] = array(
+				'url' => '/profile',
+				'name' => 'Profile',
+			);
+		}
+		$menu['search'] = array(
+			'url' => '/search',
+			'name' => 'Search',
+		);
+		if( $me->id ) {
+			$menu['signout'] = array(
+				'url' => '/signout',
+				'name' => 'Sign out',
+			);
+		}
+		else {
+			$menu['register'] = array(
+				'url' => '/signup',
+				'name' => 'Register',
+			);
+			$menu['signin'] = array(
+				'url' => '/signin',
+				'name' => 'Sign in',
+			);
+		}
+
+		$menu[$active]['active'] = true;
+
+		return $menu;
 	}
 
 }

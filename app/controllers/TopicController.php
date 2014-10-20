@@ -141,6 +141,7 @@ class TopicController extends Earlybird\FoundryController
 
 		return View::make($template)
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('forum'))
 			->with('forum', $forum)
 			->with('topic', $topic)
 			->with('posts', $posts)

@@ -112,10 +112,8 @@ class ShoutboxController extends BaseController
 	 */
 	public function history()
 	{
-		$_PAGE = array(
-			'category' => 'community',
-			'id' => 'shoutlog',
-		);
+		$_PAGE['category'] = 'community';
+		$_PAGE['title'] = 'Shoutbox History';
 
 		$search = Input::get('search');
 
@@ -143,6 +141,7 @@ class ShoutboxController extends BaseController
 
 		return View::make('shoutbox.history')
 			->with('_PAGE', $_PAGE)
+			->with('menu', GroupController::fetchMenu())
 			->with('shouts', $shouts)
 			->with('search', $search);
 	}

@@ -10,31 +10,25 @@ class PageController extends BaseController
 	 */
 	public function display()
 	{
-		$_PAGE = array(
-			'category' => 'home',
-			'section'  => 'welcome',
-		);
-
 		$page = Route::currentRouteName();
+
+		$menu = PageController::fetchMenu($page);
 
 		switch( $page ) {
 			case 'about':
-				$_PAGE['section'] = 'about';
-				$_PAGE['title']   = 'About';
+				$_PAGE['title'] = 'About';
 				$template = 'pages.about';
 				break;
 
 			case 'chat':
-				$_PAGE['category'] = 'community';
-				$_PAGE['section']  = 'chat';
-				$_PAGE['title']    = 'Chat';
+				$_PAGE['title'] = 'Chat';
 				$template = 'pages.chat';
+				$menu = GroupController::fetchMenu('chat');
 				break;
 
 			case 'donate':
 				$members_only = true;
-				$_PAGE['section'] = 'donate';
-				$_PAGE['title']   = 'Donate';
+				$_PAGE['title'] = 'Donate';
 				$template = 'pages.donate';
 				break;
 			
@@ -55,6 +49,7 @@ class PageController extends BaseController
 
 		return View::make($template)
 			->with('_PAGE', $_PAGE)
+			->with('menu', $menu)
 			->with('rand', rand(1,8));
 	}
 
@@ -131,7 +126,8 @@ class PageController extends BaseController
 		}
 
 		return View::make('pages.contact')
-			->with('_PAGE', $_PAGE);
+			->with('_PAGE', $_PAGE)
+			->with('menu', PageController::fetchMenu('contact'));
 	}
 
 	/**
@@ -170,11 +166,7 @@ class PageController extends BaseController
 	 */
 	public function links()
 	{
-		$_PAGE = array(
-			'category' => 'home',
-			'section'  => 'links',
-			'title'    => 'Links',
-		);
+		$_PAGE['title'] = 'Links';
 
 		$categories = array(
 			'IVAN' => array(
@@ -198,7 +190,43 @@ class PageController extends BaseController
 
 		return View::make('pages.links')
 			->with('_PAGE', $_PAGE)
+			->with('menu', PageController::fetchMenu('links'))
 			->with('categories', $categories);
+	}
+
+	/**
+	 * Menu for static pages
+	 *
+	 * @return array
+	 */
+	public static function fetchMenu( $active )
+	{
+		$menu = array();
+
+		$menu['about'] = array(
+			'url' => '/about',
+			'name' => 'About',
+		);
+		$menu['contact'] = array(
+			'url' => '/contact',
+			'name' => 'Contact',
+		);
+		$menu['links'] = array(
+			'url' => '/links',
+			'name' => 'Links',
+		);
+		$menu['privacy'] = array(
+			'url' => '/privacy',
+			'name' => 'Privacy',
+		);
+		$menu['terms'] = array(
+			'url' => '/terms',
+			'name' => 'Terms',
+		);
+
+		$menu[$active]['active'] = true;
+
+		return $menu;
 	}
 
 }

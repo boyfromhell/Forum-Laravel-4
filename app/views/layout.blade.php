@@ -62,7 +62,7 @@
 	@if ( count($sub_menu) > 0 )
 	<ul class="nav nav-tabs">
 	@foreach ( $sub_menu as $app )
-		<li class="{{ $_PAGE['section'] == $app->section ? 'active' : '' }}"><a href="{{ $app->url }}">{{{ $app->name }}}</a></li>
+		<li class="{{ $app['active'] ? 'active' : '' }}"><a href="{{ $app['url'] }}">{{{ $app['name'] }}}</a></li>
 	@endforeach
 	</ul>
 	@endif
@@ -115,8 +115,11 @@
 
 	&copy; {{ date('Y') }} {{{ Config::get('app.short_name') }}}
 
-	<a class="static-page" href="/privacy">Privacy</a>
-	<a class="static-page" href="/terms">Terms of Use</a>
+	<a href="/about">About</a>
+	<a href="/contact">Contact</a>
+	<a href="/links">Links</a>
+	<a href="/privacy">Privacy</a>
+	<a href="/terms">Terms of Use</a>
 </footer>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>

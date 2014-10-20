@@ -12,7 +12,6 @@ class ScoreController extends Earlybird\FoundryController
 	{
 		$_PAGE = array(
 			'category' => 'community',
-			'section'  => 'honorrolls',
 			'title'    => 'Honor Rolls',
 		);
 
@@ -36,6 +35,7 @@ class ScoreController extends Earlybird\FoundryController
 
 		return View::make('scores.index')
 			->with('_PAGE', $_PAGE)
+			->with('menu', GroupController::fetchMenu('honor-rolls'))
 			->with('categories', $categories);
 	}
 
@@ -50,7 +50,6 @@ class ScoreController extends Earlybird\FoundryController
 
 		$_PAGE = array(
 			'category' => 'community',
-			'section'  => 'honorrolls',
 			'title'    => 'Submit Score',
 		);
 
@@ -95,7 +94,8 @@ class ScoreController extends Earlybird\FoundryController
 		}
 
 		return View::make('scores.submit')
-			->with('_PAGE', $_PAGE);
+			->with('_PAGE', $_PAGE)
+			->with('menu', GroupController::fetchMenu('honor-rolls'));
 	}
 
 }

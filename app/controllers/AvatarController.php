@@ -47,16 +47,13 @@ class AvatarController extends Earlybird\FoundryController
 			return Redirect::to('avatar');
 		}
 
-		$_PAGE = array(
-			'category' => 'usercp',
-			'section'  => 'avatar',
-			'title'    => 'Avatar',
-		);
+		$_PAGE['title'] = 'Avatar';
 
 		$avatars = $me->avatars;
 	
 		return View::make('users.avatar')
 			->with('_PAGE', $_PAGE)
+			->with('menu', UserController::fetchMenu('avatar'))
 			->with('avatars', $avatars)
 			->with('default', ( $me->avatar_id ? $me->avatar_id : 0 ));
 	}

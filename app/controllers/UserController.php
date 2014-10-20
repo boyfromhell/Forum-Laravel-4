@@ -28,8 +28,8 @@ class UserController extends Earlybird\FoundryController
 		$user = User::findOrFail($id);
 
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => ( $me->id == $user->id ? 'profile' : 'forums' ),
+			'category' => 'home',
+			'section'  => ( $me->id == $user->id ? 'profile' : 'forum' ),
 			'title'    => $user->name,
 		);
 
@@ -68,6 +68,7 @@ class UserController extends Earlybird\FoundryController
 
 		return View::make('users.profile')
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu($_PAGE['section']))
 			->with('user', $user)
 			->with('custom', $custom)
 
@@ -99,11 +100,7 @@ class UserController extends Earlybird\FoundryController
 	{
 		global $me;
 
-		$_PAGE = array(
-			'category' => 'usercp',
-			'section'  => 'profile',
-			'title'    => 'Edit Profile',
-		);
+		$_PAGE['title'] = 'Edit Profile';
 
 		if( Request::isMethod('post') )
 		{
@@ -171,6 +168,7 @@ class UserController extends Earlybird\FoundryController
 
 		return View::make('users.edit')
 			->with('_PAGE', $_PAGE)
+			->with('menu', UserController::fetchMenu('profile'))
 			->with('mode', 'edit')
 			->with('customs', $customs)
 
@@ -191,11 +189,7 @@ class UserController extends Earlybird\FoundryController
 	{
 		global $me;
 
-		$_PAGE = array(
-			'category' => 'usercp',
-			'section'  => 'settings',
-			'title'    => 'Settings',
-		);
+		$_PAGE['title'] = 'Settings';
 
 		if( Request::isMethod('post') ) {
 			$me->lang = Input::get('lang', 'en');
@@ -232,6 +226,7 @@ class UserController extends Earlybird\FoundryController
 
 		return View::make('users.settings')
 			->with('_PAGE', $_PAGE)
+			->with('menu', UserController::fetchMenu('settings'))
 			->with('tzs', $tzs)
 			->with('languages', $languages)
 			->with('themes', $themes);
@@ -248,7 +243,6 @@ class UserController extends Earlybird\FoundryController
 
 		$_PAGE = array(
 			'category' => 'community',
-			'section'  => 'members',
 			'title'    => 'Members'
 		);
 
@@ -303,6 +297,7 @@ class UserController extends Earlybird\FoundryController
 
 		return View::make('users.members')
 			->with('_PAGE', $_PAGE)
+			->with('menu', GroupController::fetchMenu('members'))
 			->with('users', $users)
 			->with('customs', $customs)
 			->with('column_width', $column_width)
@@ -444,8 +439,7 @@ class UserController extends Earlybird\FoundryController
 	public function signin()
 	{
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => 'signin',
+			'category' => 'home',
 			'title'    => 'Sign in',
 		);
 
@@ -487,7 +481,8 @@ class UserController extends Earlybird\FoundryController
 		}
 
 		return View::make('users.signin')
-			->with('_PAGE', $_PAGE);
+			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('signin'));
 	}
 
 	/**
@@ -498,9 +493,8 @@ class UserController extends Earlybird\FoundryController
 	public function signup()
 	{
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => 'signup',
-			'title'    => 'Sign up',
+			'category' => 'home',
+			'title'    => 'Register',
 		);
 
 		if( Request::isMethod('post') )
@@ -550,6 +544,7 @@ class UserController extends Earlybird\FoundryController
 
 		return View::make('users.edit')
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('register'))
 			->with('mode', 'signup')
 
 			->with('customs', $customs);
@@ -571,6 +566,37 @@ class UserController extends Earlybird\FoundryController
 		Session::flush();
 
 		return Redirect::to('/');
+	}
+
+	/**
+	 * Menu for user pages
+	 *
+	 * @return array
+	 */
+	public static function fetchMenu( $active )
+	{
+		$menu = array();
+
+		$menu['profile'] = array(
+			'url' => '/edit-profile',
+			'name' => 'Profile',
+		);
+		$menu['settings'] = array(
+			'url' => '/settings',
+			'name' => 'Settings',
+		);
+		$menu['avatar'] = array(
+			'url' => '/avatar',
+			'name' => 'Avatar',
+		);
+		$menu['topics'] = array(
+			'url' => '/users/topics',
+			'name' => 'Topics',
+		);
+
+		$menu[$active]['active'] = true;
+
+		return $menu;
 	}
 
 }

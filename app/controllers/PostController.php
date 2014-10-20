@@ -412,8 +412,7 @@ class PostController extends Earlybird\FoundryController
 			->get();
 
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => 'forums',
+			'category' => 'home',
 			'title'    => $this->title
 		);
 
@@ -425,6 +424,7 @@ class PostController extends Earlybird\FoundryController
 
 		return View::make('posts.create')
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('forum'))
 			->with('mode', $this->mode)
 			->with('attachments', $attachments)
 			->with('hash', $hash)

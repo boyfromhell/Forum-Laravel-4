@@ -39,8 +39,7 @@ class SearchController extends BaseController
 		}
 
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => 'search',
+			'category' => 'home',
 			'title'    => 'Search',
 		);
 
@@ -48,6 +47,7 @@ class SearchController extends BaseController
 
 		return View::make('forums.search')
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('search'))
 			->with('query', $query)
 			->with('categories', $categories);
 	}
