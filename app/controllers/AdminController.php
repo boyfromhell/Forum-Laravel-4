@@ -16,8 +16,30 @@ class AdminController extends BaseController
 			'title'    => 'Admin'
 		);
 
+		$stats = array(
+			'Users'  => User::count(),
+			'Topics' => Topic::count(),
+			'Posts'  => Post::count(),
+			'Albums' => Album::count(),
+			'Photos' => Photo::count(),
+		);
+
+		foreach( $stats as $key => $val ) {
+			$stats[$key] = number_format($val);
+		}
+
+		$post_max_size = intval(ini_get('post_max_size'));
+		$upload_max_filesize = intval(ini_get('upload_max_filesize'));
+		$max_file_uploads = ini_get('max_file_uploads');
+
 		return View::make('admin.dashboard')
-			->with('_PAGE', $_PAGE);
+			->with('_PAGE', $_PAGE)
+
+			->with('stats', $stats)
+
+			->with('post_max_size', $post_max_size)
+			->with('upload_max_filesize', $upload_max_filesize)
+			->with('max_file_uploads', $max_file_uploads);
 	}
 
 	/**

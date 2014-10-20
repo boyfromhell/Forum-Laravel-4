@@ -71,7 +71,7 @@ View::creator(array('layout'), function($view)
 	}
 
 	if( !isset($_PAGE['og_image']) || empty($_PAGE['og_image']) ) {
-		$_PAGE['og_image'] = array(Config::get('app.url') . '/images/facebook.png');
+		$_PAGE['og_image'] = array(Config::get('app.url') . '/images/custom/facebook.png');
 	}
 	else if( !is_array($_PAGE['og_image']) ) {
 		$_PAGE['og_image'] = array($_PAGE['og_image']);

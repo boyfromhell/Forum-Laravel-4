@@ -114,8 +114,11 @@ View::addNamespace('foundry', base_path().'/vendor/earlybirdmvp/foundry/views');
 
 App::error( function(Exception $exception, $code )
 {
+	if( Config::get('app.debug') ) {
+		return;
+	}
 	if ( ! in_array($code, [401, 403, 404, 500]) ) {
-	   return;
+		return;
 	}
 
 	$data = array(
@@ -124,3 +127,4 @@ App::error( function(Exception $exception, $code )
 
 	return Response::view('errors.'.$code, $data, $code);
 });
+

@@ -68,58 +68,43 @@ class AvatarController extends Earlybird\FoundryController
 	 */
 	public function upload()
 	{
-		/*
-		$file = $_FILES['u_avatar'];
-		if( $file['name'] ) {
-			$data = array(
-				'user_id' => $me->id,
-				'date'    => $gmt
-			);
+		global $me;
 
-			try {
-				$avatar = new Avatar(null, $data);
-				
-				$options = array(
-					'max_width'  => 150,
-					'max_height' => 150,
-					'max_size'   => 32768
-				);			
-				$avatar->image = new Image($_FILES['u_avatar'], $options);
-			}
-			catch( Exception $e ) {
-				$errors[] = $e->getMessage();
-			}
-			
-			if( !count($errors) ) {
-				$file = strtolower(preg_replace('/[^A-Za-z0-9]/', '', $me->name));
-				$file = "{$file}_{$gmt}.{$avatar->image->extension}";
-				$dest = 'web/images/avatars/' . $file;
-				$avatar->file = $file;
+		if( Input::hasFile('avatar') )
+		{
+			$file = Input::file('avatar');
 
-				$success = $avatar->image->upload($dest);
+			if( $file->isValid() )
+			{
+				$name = time().'_'.str_random().'.'.$file->getClientOriginalExtension();
+				$file->move(storage_path().'/uploads', $name);
 
-				if( $success ) {
-					$avatar->save();
-					$avatar->push_to_s3();
-					$me->avatar_id = $avatar->id;
-					$me->avatar = $avatar;
-					
-					$me->last = 1;
-					$me->save(array('fields' => array('avatar_id', 'last')));
-					
-					header("Location: /avatar");
-					exit;
-				}
-				else {
-					$errors[] = 'Problem uploading avatar';
-				}
+				/*
+					max_width = 150
+					max_height = 150
+					max_size = 32768
+				*/
+
+				$image = new Image(storage_path().'/uploads/'.$name);
+				$image->scaleCrop(150, 150)
+					->save()
+					->pushToS3('images/avatars');
+				$image->unlink();
+
+				$avatar = Avatar::create([
+					'user_id' => $me->id,
+					'file'    => $name,
+				]);
+
+				$me->avatar_id = $avatar->id;
+				$me->save();
+
+				Session::push('messages', 'Avatar updated');
+
+				return Redirect::to('avatar');
 			}
 		}
-		*/
 
-		Session::push('messages', 'Avatar updated');
-
-		return Redirect::to('avatar');
 	}
 
 }

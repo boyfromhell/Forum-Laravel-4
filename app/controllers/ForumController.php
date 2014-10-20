@@ -86,7 +86,7 @@ class ForumController extends Earlybird\FoundryController
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function listAll()
 	{
 		global $me;
 
@@ -191,7 +191,7 @@ class ForumController extends Earlybird\FoundryController
 			'total_users'  => number_format(User::count()),
 		);
 
-		return View::make('forums.index')
+		return View::make('forums.all')
 			->with('_PAGE', $_PAGE)
 			->with('announcement', $announcement)
 			->with('quote', $quote)

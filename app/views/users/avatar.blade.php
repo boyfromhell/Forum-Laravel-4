@@ -58,10 +58,18 @@ function selectAvatar( id ) {
 	
 	<div class="panel-body">
 	
-	Upload Avatar from your computer:
+	<div class="form-group">
+		<label class="col-sm-4 control-label">
+			Upload Avatar from your computer
+		</label>
+		<div class="col-sm-8">
+			<p class="form-control-static">
+			{{ Form::file('avatar', ['accept' => 'image/*']) }}<br>
 
-	{{ Form::file('avatar') }}
-	<small>GIF, JPG, and PNG files only. Size limit: 150x150 pixels, 32 KB</small><br><br>
+			<small>GIF, JPG, and PNG files only. Anything larger than 150x150 pixels will be scaled down</small>
+			</p>
+		</div>
+	</div>
 
 	</div>
 

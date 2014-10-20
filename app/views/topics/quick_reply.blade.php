@@ -20,7 +20,7 @@
 	<div class="panel-footer">
 
 		<div class="text-center">
-			{{ Form::submit('Post Reply', ['name' => 'addpost', 'class' => 'btn btn-primary', 'accesskey' => 'S']) }}
+			{{ Form::submit('Post Reply', ['name' => 'addpost', 'class' => 'btn btn-primary btn-once', 'accesskey' => 'S', 'data-loading-text' => 'Posting...']) }}
 			{{ Form::submit('Advanced', ['name' => 'preview', 'class' => 'btn btn-default', 'accesskey' => 'P']) }}
 		</div>
 

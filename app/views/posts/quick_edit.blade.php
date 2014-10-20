@@ -11,7 +11,7 @@
 	</div>
 	
 	<div class="text-center">
-	{{ Form::submit('Save', ['name' => 'addpost', 'class' => 'btn btn-primary', 'accesskey' => 'S']) }}
+	{{ Form::submit('Save', ['name' => 'addpost', 'class' => 'btn btn-primary btn-once', 'accesskey' => 'S', 'btn-loading-text' => 'Saving...']) }}
 	{{ Form::submit('Advanced', ['name' => 'preview', 'class' => 'btn btn-default', 'accesskey' => 'P']) }}
 	{{ Form::submit('Cancel', ['name' => 'cancel', 'class' => 'btn btn-default cancel', 'accesskey' => 'C']) }}
 	</div>

@@ -3,6 +3,8 @@
 class Avatar extends Eloquent
 {
 
+	protected $guarded = array('id');
+
 	/**
 	 * User who uploaded this avatar
 	 *

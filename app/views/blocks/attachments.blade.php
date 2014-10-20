@@ -4,7 +4,7 @@
 		<p class="form-control-static">
 	Select up to <b>{{ $max_file_uploads }}</b> files, <b>{{ $upload_max_filesize }} MB</b> each. Total limit is <b>{{ $post_max_size }} MB</b><br>
 
-		<input type="file" id="files" name="files[]" multiple />
+		{{ Form::file('files[]', ['id' => 'files', 'multiple']) }}
 		</p>
 		<output id="list"></output>
 	{{--	<input name="attach" id="attach" type="submit" value="Attach Files" style="display:none">--}}

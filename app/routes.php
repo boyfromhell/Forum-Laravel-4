@@ -20,6 +20,7 @@ Route::group(array('before' => 'admin'), function()
 	Route::post('admin/reset-counters', array('uses' => 'AdminController@resetCounters'));
 	Route::get('admin/messages/{id}', array('uses' => 'AdminController@viewMessage'));
 
+	Route::resource('admin/forums', 'ForumController');
 	Route::resource('admin/groups', 'GroupController');
 	Route::resource('admin/projects', 'ProjectController');
 });
@@ -99,7 +100,7 @@ Route::group(array('before' => 'guest'), function()
 
 // All users
 Route::get('/', array('uses' => 'ForumController@home'));
-Route::get('forum', array('uses' => 'ForumController@index'));
+Route::get('forum', array('uses' => 'ForumController@listAll'));
 Route::get('forums', function() { return Redirect::to('forum'); });
 Route::get('forums/{id}/{name?}', array('uses' => 'ForumController@display'));
 Route::get('topics/{id}/{name?}', array('uses' => 'TopicController@display'));

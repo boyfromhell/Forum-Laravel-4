@@ -163,6 +163,12 @@ class Image
 				break;
 		}
 
+		// If it's already smaller, don't do anything
+		if( $this->width <= $nw && $this->height <= $nh ) {
+			$nw = $this->width;
+			$nh = $this->height;
+		}
+
 		$this->dest = ImageCreateTrueColor($nw, $nh);
 		ImageCopyResampled(
 			$this->dest, $this->src,
@@ -227,14 +233,14 @@ class Image
 	 */
 	public function setSuffix( $suffix )
 	{
-		$this->newname = $this->name . $suffix . '.jpg';
+		$this->newname = $this->name . $suffix;
 		return $this;
 	}
 
 	/**
 	 * Set name of new scaled file
 	 *
-	 * @param  string  $filename
+	 * @param  string  $filename  File name not including extension
 	 * @return Image
 	 */
 	public function setFilename( $filename )
@@ -245,12 +251,69 @@ class Image
 
 	/**
 	 * Save whatever current actions have been applied into a new file
+	 * using the same format as the original file
 	 *
+	 * @param  int  $quality
 	 * @return Image
 	 */
 	public function save( $quality = 94 )
 	{
+		switch( $this->ext ) {
+			case 'jpg':
+				return $this->saveJpg($quality);
+				break;
+
+			case 'gif':
+				return $this->saveGif();
+				break;
+
+			case 'png':
+				return $this->savePng();
+				break;
+		}
+	}
+
+	/**
+	 * Save as a JPG
+	 *
+	 * @param  int  $quality
+	 * @return Image
+	 */
+	public function saveJpg( $quality = 94 )
+	{
+		$this->newname .= '.jpg';
+
 		ImageJpeg($this->dest, $this->folder.'/'.$this->newname, $quality);
+		@imagedestroy($this->dest);
+
+		return $this;
+	}
+
+	/**
+	 * Save as a PNG
+	 *
+	 * @return Image
+	 */
+	public function savePng()
+	{
+		$this->newname .= '.png';
+
+		ImagePng($this->dest, $this->folder.'/'.$this->newname);
+		@imagedestroy($this->dest);
+
+		return $this;
+	}
+
+	/**
+	 * Save as a GIF
+	 *
+	 * @return Image
+	 */
+	public function saveGif()
+	{
+		$this->newname .= '.gif';
+
+		ImageGif($this->dest, $this->folder.'/'.$this->newname);
 		@imagedestroy($this->dest);
 
 		return $this;

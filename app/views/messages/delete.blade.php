@@ -15,7 +15,7 @@
 
 	<div class="panel-footer text-center">
 
-		{{ Form::submit('Yes', ['name' => 'confirm', 'class' => 'btn btn-danger']) }}
+		{{ Form::submit('Delete', ['name' => 'confirm', 'class' => 'btn btn-danger btn-once', 'data-loading-text' => 'Deleting...']) }}
 		{{ Form::submit('Cancel', ['name' => 'cancel', 'class' => 'btn btn-default']) }}
 
 	</div>
