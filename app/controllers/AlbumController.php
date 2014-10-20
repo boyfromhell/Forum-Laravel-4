@@ -45,20 +45,8 @@ class AlbumController extends Earlybird\FoundryController
 			->with('photos', $photos)
 			->with('albums', $albums);
 
-		/**
-		<?php 
+		/*
 		if( $board_apps["videos"]["enabled"] && $board_apps["videos"]["permission"] <= $me->access ) {
-		?>
-		<tr>
-			<th>Videos</th>
-		</tr>
-		<tr>
-			<td class="category">Recent Videos</td>
-		</tr>
-		<tr>
-			<td class="lower">
-			<div style='overflow:hidden; height:180px;'>
-			<?php
 			$sql = "SELECT video_id, users.id, users.name, video_filename, video_name
 			FROM videos, users, video_albums
 			WHERE video_approved = 1 AND video_owner = users.id 
@@ -73,11 +61,6 @@ class AlbumController extends Earlybird\FoundryController
 				<div style=\"height:16px;overflow:hidden;\">$name</div>
 				<small>by <a href=\"profile.php?u=$ownid\">$owner</a></small></div>\n";
 			}
-			?>
-			</div></td>
-		</tr>
-		<?php } else { echo "<tr><td class=\"spacer-bot\">&nbsp;</td></tr>"; } ?>
-		</table>
 		*/
 	}
 
@@ -115,32 +98,10 @@ class AlbumController extends Earlybird\FoundryController
 		);
 
 		// Permissions
-		/*if( $me->administrator ) { $allow = true; }
-		else if( $album->permission_upload == 0 && $album->user_id == $me->id ) { $allow = true; }
-		else if( $album->permission_upload == 1 && $me->loggedin ) { $allow = true; }
-		else { $allow = false; }*/
+		$allow = $album->check_permission();
 
 		// Parents and child albums
-		/*$sql = "SELECT `albums`.*, `users`.`name`
-			FROM `albums`
-				JOIN `users`
-					ON `albums`.`user_id` = `users`.`id`
-			WHERE `parent_id` = {$album->id}
-				AND `albums`.`permission_view` <= {$me->access}
-			ORDER BY `albums`.`name` ASC";
-		$exec = $_db->query($sql);
-
-		$children = array();
-		while( $data = $exec->fetch_assoc() ) {
-			$sql = "SELECT COUNT(1)
-				FROM `albums`
-				WHERE `parent_id` = {$child->id}
-					AND `permission_view` <= {$me->access}";
-			$exec2 = $_db->query($sql);
-			list( $total_albums ) = $exec2->fetch_row();
-			
-			$child->total_albums = $total_albums;
-			
+		/*
 			if( strlen($child->description) > 80 ) {
 				$child->description = substr($child->description, 0, 79) . '...';
 			}
@@ -153,9 +114,9 @@ class AlbumController extends Earlybird\FoundryController
 		return View::make('albums.display')
 			->with('_PAGE', $_PAGE)
 			->with('album', $album)
-			->with('photos', $photos);
+			->with('photos', $photos)
 
-		/*$Smarty->assign('allow', $allow);*/
+			->with('allow', $allow);
 	}
 	
 }

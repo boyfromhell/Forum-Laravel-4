@@ -65,7 +65,7 @@
 	@if ( count($sub_menu) > 0 )
 	<ul class="nav nav-tabs">
 	@foreach ( $sub_menu as $app )
-		<li class="{{ $app['active'] ? 'active' : '' }}"><a href="{{ $app['url'] }}">{{{ $app['name'] }}}</a></li>
+		<li class="{{ $app['active'] ? 'active' : '' }}"><a href="{{ $app['url'] }}">{{ $app['name'] }}</a></li>
 	@endforeach
 	</ul>
 	@endif

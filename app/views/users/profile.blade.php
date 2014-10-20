@@ -9,7 +9,7 @@
 	<div class="panel-body row">
 	
 	<div class="col-sm-6">
-	<h1>{{{ $user->name }}} <img src="/images/{{ $online_text }}.png" alt="{{{ $user->name }}} is {{ $online_text }}" title="{{{ $user->name }}} is {{ $online_text }}"></h1>
+	<h1>{{{ $user->name }}} <img src="/images/{{ $user->online }}.png" alt="{{{ $user->name }}} is {{ $user->online }}" title="{{{ $user->name }}} is {{ $user->online }}"></h1>
 	<small>
 	@if ( $user->level->image )
 	<img src="/images/titles/{{ $user->level->image }}" style="vertical-align:middle">

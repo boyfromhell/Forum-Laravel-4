@@ -28,6 +28,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		'access',
 		'custom',
 
+		'online',
+		'last_online',
+
 		'is_admin',
 		'is_mod',
 	);
@@ -217,6 +220,41 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		if( $this->is_admin ) { $access++; }
 
 		return $access;
+	}
+
+	/**
+	 * Check if the user is online and visible
+	 *
+	 * @return string
+	 */
+	public function getOnlineAttribute()
+	{
+		global $me;
+
+		if( strtotime($this->updated_at) <= ( time()-300 ) ||
+			( $this->online && !$me->is_admin ) ) {
+			return 'offline';
+		}
+
+		return 'online';
+	}
+
+	/**
+	 * Check and format when the user last visited
+	 *
+	 * @return string
+	 */
+	public function getLastOnlineAttribute()
+	{
+		global $me;
+
+		if( $this->online && !$me->is_admin ) {
+			return 'Unknown';
+		}
+		else {
+			$date = $this->last_visit ? $this->last_visit : $this->created_at;
+			return Helpers::date_string($date, 1);
+		}
 	}
 
 	/**

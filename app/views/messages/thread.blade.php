@@ -15,7 +15,7 @@
 
 @section('content')
 
-@foreach ( $thread->messages as $message )
+@foreach ( $thread->messages as $count => $message )
 	@include ('messages.row')
 @endforeach
 

@@ -6,6 +6,8 @@ class Message extends Earlybird\Foundry
 	protected $appends = array(
 		'url',
 		'date',
+		'folder',
+
 		'to',
 		'users',
 	);
@@ -55,6 +57,10 @@ class Message extends Earlybird\Foundry
 
 	/**
 	 * Owned by user
+	 *
+	 * @param  Query  $query
+	 * @param  int  $user_id
+	 * @return Query
 	 */
 	public function scopeOwnedBy( $query, $user_id )
 	{
@@ -79,6 +85,23 @@ class Message extends Earlybird\Foundry
 	public function getDateAttribute()
 	{
 		return Helpers::date_string(strtotime($this->created_at), 1);
+	}
+
+	/**
+	 * Determine which folder this message belongs to
+	 *
+	 * @return string
+	 */
+	public function getFolderAttribute()
+	{
+		if( $this->archived ) {
+			return 'archived';
+		}
+		else if( $this->from_user_id == Auth::id() ) {
+			return 'sent';
+		}
+
+		return 'inbox';
 	}
 
 	/**

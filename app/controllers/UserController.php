@@ -346,29 +346,6 @@ class UserController extends Earlybird\FoundryController
 	}
 
 	/**
-	 * Checks if the user is online or not
-	 */
-	public function check_online()
-	{
-		global $gmt, $me;
-	
-		if( $this->last_view <= $gmt-300 || ( $this->online && !$me->is_admin )) { 
-			$this->online = false;
-		}
-		else {
-			$this->online = true;
-		}
-		
-		if( $this->online && !$me->is_admin ) {
-			$this->last_online = 'Unknown';
-		}
-		else {
-			$this->last_online = $this->last_visit ? $this->last_visit : $this->created_at;
-			$this->last_online = datestring($this->last_online,1);
-		}
-	}
-
-	/**
 	 * Check if I should mark the "subscribe" checkbox when replying to this topic
 	 */
 	public function check_subscribe( $topic_id )

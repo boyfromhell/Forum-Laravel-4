@@ -9,6 +9,7 @@ class Album extends Earlybird\Foundry
 		'parents',
 
 		'total_photos',
+		'total_albums',
 	);
 
 	/**
@@ -28,7 +29,10 @@ class Album extends Earlybird\Foundry
 	 */
 	public function children()
 	{
+		global $me;
+
 		return $this->hasMany('Album', 'parent_id')
+			->where('permission_view', '<=', $me->access)
 			->orderBy('name', 'asc');
 	}
 
@@ -119,6 +123,16 @@ class Album extends Earlybird\Foundry
 	}
 
 	/**
+	 * Count how many sub-albums there are
+	 *
+	 * @return int
+	 */
+	public function getTotalAlbumsAttribute()
+	{
+		return $this->children()->count();
+	}
+
+	/**
 	 * Delete album
 	 */
 	public function delete()
@@ -128,6 +142,29 @@ class Album extends Earlybird\Foundry
 		}
 
 		return parent::delete();
+	}
+
+	/**
+	 * Check if the current user has permission to edit / upload
+	 * @todo improve this
+	 *
+	 * @return bool
+	 */
+	public function check_permission()
+	{
+		global $me;
+
+		if( $me->is_admin ) {
+			return true;
+		}
+		else if( $this->permission_upload == 0 && $this->user_id == $me->id ) {
+			return true;
+		}
+		else if( $album->permission_upload == 1 && $me->id ) {
+			return true;
+		}
+
+		return false;
 	}
 
 }

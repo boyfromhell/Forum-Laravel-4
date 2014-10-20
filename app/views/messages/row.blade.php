@@ -5,15 +5,15 @@
 			{{ $message->date }}<a name="{{ $message->id }}"></a>
 		</div>
 		<div class="pull-right">
-			#{{ $message->count }}
+			#{{ $count+1 }}
 		</div>
 		<div class="clearfix"></div>
 	</div>
 
 	<div class="recipients">
 		To: 
-		@foreach ( $message->to as $count => $user )
-			<a href="{{ $user->url }}">{{{ $user->name }}}</a>{{ $count < count($message->users)-1 ? ', ' : '' }}
+		@foreach ( $message->to as $i => $user )
+			<a href="{{ $user->url }}">{{{ $user->name }}}</a>{{ $i < count($message->users)-1 ? ', ' : '' }}
 		@endforeach
 	</div>
 

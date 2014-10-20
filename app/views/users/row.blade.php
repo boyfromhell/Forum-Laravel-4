@@ -18,7 +18,7 @@
 		@include ('users.menu')
 	</div>
 
-	<img src="/images/{{ $user->online_text }}.png" style="padding:7px 0px" title="{{{ $user->name }}} is {{ $user->online_text }}">
+	<img src="/images/{{ $user->online }}.png" style="padding:7px 0px" title="{{{ $user->name }}} is {{ $user->online }}">
 	<div class="clearfix"></div>
 	
 	<div style="font-size:8pt; margin-top:3px">

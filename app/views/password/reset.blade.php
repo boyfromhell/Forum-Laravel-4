@@ -36,7 +36,7 @@
 
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-4">
-		{{ Form::submit('Reset Password', ['class' => 'btn btn-primary']) }}
+		{{ Form::submit('Reset Password', ['class' => 'btn btn-primary btn-once', 'data-loading-text' => 'Resetting...']) }}
 	</div>
 </div>
 

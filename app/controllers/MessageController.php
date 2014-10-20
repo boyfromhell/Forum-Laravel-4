@@ -48,7 +48,6 @@ class MessageController extends BaseController
 
 		$_PAGE = array(
 			'category' => 'messages',
-			'section'  => $folder,
 			'title'    => ucwords($folder)
 		);
 
@@ -101,6 +100,7 @@ class MessageController extends BaseController
 
 		return View::make('messages.folder')
 			->with('_PAGE', $_PAGE)
+			->with('menu', MessageController::fetchMenu($folder))
 			->with('folder', $folder)
 			->with('threads', $threads);
 	}
@@ -114,12 +114,12 @@ class MessageController extends BaseController
 	{
 		$_PAGE = array(
 			'category' => 'messages',
-			'section'  => 'compose',
 			'title'    => 'Compose Message'
 		);
 
 		return View::make('messages.compose')
-			->with('_PAGE', $_PAGE);
+			->with('_PAGE', $_PAGE)
+			->with('menu', MessageController::fetchMenu('compose'));
 	}
 
 	/**
@@ -131,6 +131,11 @@ class MessageController extends BaseController
 	public function displayThread( $id )
 	{
 		$thread = MessageThread::findOrFail($id);
+
+		$_PAGE = array(
+			'category' => 'messages',
+			'title' => $thread->title,
+		);
 
 		// If no messages are found (filtered by owner)
 		// then this is not my thread, or I deleted them all
@@ -144,12 +149,17 @@ class MessageController extends BaseController
 			'from.groups',
 		]);
 
+		// Custom Fields
+		//$user->custom = $user->load_custom_fields($access, 'topic');
+
 		// Mark all messages read
 		$thread->messages()->update([
 			'read' => 1
 		]);
 
 		return View::make('messages.thread')
+			->with('_PAGE', $_PAGE)
+			->with('menu', MessageController::fetchMenu())
 			->with('thread', $thread);
 	}
 
@@ -162,28 +172,16 @@ class MessageController extends BaseController
 	{
 		global $me;
 
-		$_PAGE = array(
-			'category' => 'messages',
-			'title'    => 'Delete Private Message'
-		);
-
 		$message = Message::findOrFail($id);
 
 		if( $message->owner_user_id != $me->id ) {
 			App::abort(403);
 		}
 
-		if( $message->archived ) {
-			$folder = 'archived';
-		}
-		else if( $message->from_user_id == $me->id ) {
-			$folder = 'sent';
-		}
-		else {
-			$folder = 'inbox';
-		}
-
-		$_PAGE['section'] = $folder;
+		$_PAGE = array(
+			'category' => 'messages',
+			'title'    => 'Delete Private Message'
+		);
 
 		if( Request::isMethod('post') )
 		{
@@ -195,7 +193,7 @@ class MessageController extends BaseController
 				$redirect = $message->delete();
 
 				if( ! $redirect ) {
-					$redirect = '/messages/'.$folder;
+					$redirect = '/messages/'.$message->folder;
 				}
 
 				Session::push('messages', 'The private message has been successfully deleted');
@@ -206,6 +204,7 @@ class MessageController extends BaseController
 
 		return View::make('messages.delete')
 			->with('_PAGE', $_PAGE)
+			->with('menu', MessageController::fetchMenu($message->folder))
 			->with('message', $message);
 	}
 
@@ -218,7 +217,7 @@ class MessageController extends BaseController
 	{
 		global $me;
 
-		$data = DB::select("SELECT thread_id, MIN(archived) AS is_archived, MIN(read) AS is_read,
+		$data = DB::select("SELECT thread_id, MIN(archived) AS is_archived, MIN(`read`) AS is_read,
 					( MAX(from_user_id = ?) = 1 ) AS from_me,
 					( MIN(from_user_id = ?) = 0 ) AS to_me
 				FROM messages
@@ -251,6 +250,47 @@ class MessageController extends BaseController
 		}
 
 		return $totals;
+	}
+
+	/**
+	 * Menu for messages pages
+	 *
+	 * @return array
+	 */
+	public static function fetchMenu( $active )
+	{
+		$totals = MessageController::countTotals();
+
+		$menu = array();
+
+		$menu['compose'] = array(
+			'url' => '/messages/compose',
+			'name' => 'Compose',
+		);
+
+		$folders = array('inbox', 'sent', 'archived');
+
+		foreach( $folders as $folder ) {
+			$menu[$folder] = array(
+				'url' => '/messages/'.$folder,
+				'name' => ucwords($folder),
+			);
+
+			if( $totals[$folder] > 0 ) {
+				$menu[$folder]['name'] .= ' <span class="label label-default">'.$totals[$folder].'</span>';
+			}
+		}
+
+		$menu['search'] = array(
+			'url' => '/messages/search',
+			'name' => 'Search',
+		);
+
+		if( $active ) {
+			$menu[$active]['active'] = true;
+		}
+
+		return $menu;
 	}
 
 }

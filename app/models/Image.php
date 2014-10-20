@@ -126,14 +126,26 @@ class Image
 	 *
 	 * @param  int  $nw  New width to scale to
 	 * @param  int  $nh  New height to scale to
-	 * @param  string  $mode  Mode of scaling: crop, width, height, or long
+	 * @param  string  $mode  Mode of scaling: constrain, crop, width, height, or long
 	 * @return Image
 	 */
-	public function scale($nw, $nh, $mode)
+	public function scale($nw, $nh, $mode = 'constrain')
 	{
 		$this->create();
 
 		switch( $mode ) {
+			// Width and height are max, scale proportionately to fit
+			case 'constrain':
+				$ideal = $nw / $nh;
+
+				if( $this->ratio > $ideal ) {
+					$nh = (int)( $nw / $this->ratio );
+				}
+				else {
+					$nw = (int)( $nh * $this->ratio );
+				}
+				break;
+
 			// Width and height are exact
 			case 'crop':
 				break;

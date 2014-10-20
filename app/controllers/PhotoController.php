@@ -86,6 +86,97 @@ class PhotoController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Upload new photos to an album
+	 *
+	 * @param  int  $id  Album ID
+	 * @return Response
+	 */
+	public function upload( $id )
+	{
+		global $me;
+
+		$album = Album::findOrFail($id);
+
+		if( ! $album->check_permission() ) {
+			App::abort(403);
+		}
+
+		if( Request::isMethod('post') && Input::hasFile('photos') )
+		{
+			$successful = 0;
+			$total = count(Input::file('photos'));
+
+			foreach( Input::file('photos') as $file )
+			{
+				if( $file->isValid() )
+				{
+					try {
+						$name = time().'_'.str_random().'.'.$file->getClientOriginalExtension();
+						$file->move(storage_path().'/uploads', $name);
+
+						$image = new Image(storage_path().'/uploads/'.$name);
+						$image->scale(800, 600)
+							->saveJpg(96)
+							->pushToS3('photos/'.$album->folder.'/scale');
+						$image->scale(200, 150)
+							->saveJpg(96)
+							->pushToS3('photos/'.$album->folder.'/thumbs');
+						$image->unlink();
+
+						$photo = Photo::create([
+							'album_id' => $album->id,
+							'user_id'  => $me->id,
+							'file'     => $name,
+						]);
+
+						if( $album->cover_id === NULL ) {
+							$album->cover_id = $photo->id;
+							$album->save();
+						}
+
+						$successful++;
+					}
+					catch( Exception $e ) {
+					}
+				}
+			}
+
+			$album->touch();
+
+			if( $successful == $total ) {
+				Session::push('messages', '<b>'.$successful.' out of '.$total.'</b> photos uploaded');
+			}
+			else {
+				Session::push('errors', '<b>'.$successful.' out of '.$total.'</b> photos uploaded');
+			}
+
+			return Redirect::to('upload-photos/'.$album->id);
+		}
+
+		$_PAGE = array(
+			'category' => 'gallery',
+			'section'  => 'photos',
+			'title'    => 'Upload Photos'
+		);
+
+		$post_max_size = intval(ini_get('post_max_size'));
+		$max_total = $post_max_size * 1024 * 1024;
+		$upload_max_filesize = intval(ini_get('upload_max_filesize'));
+		$max_bytes = $upload_max_filesize * 1024 * 1024;
+		$max_file_uploads = ini_get('max_file_uploads');
+
+		return View::make('photos.upload')
+			->with('_PAGE', $_PAGE)
+			->with('album', $album)
+
+			->with('post_max_size', $post_max_size)
+			->with('max_total', $max_total)
+			->with('upload_max_filesize', $upload_max_filesize)
+			->with('max_bytes', $max_bytes)
+			->with('max_file_uploads', $max_file_uploads);
+	}
+
+	/**
 	 * Delete this photo, pass album folder as argument
 	 */
 	public function delete($folder, $database = true)
@@ -122,22 +213,5 @@ class PhotoController extends Earlybird\FoundryController
 
 		parent::delete();
 	}
-	
-	public function push_to_s3($folder)
-	{
-		list( $name, $ext ) = parse_file_name($this->file);
 
-		if( push_to_s3("photos/{$folder}/{$name}.{$ext}", false) ) {
-			unlink(ROOT . "web/photos/{$folder}/{$name}.{$ext}");
-
-			if( push_to_s3("photos/{$folder}/scale/{$name}.jpg", true) ) {
-				unlink(ROOT . "web/photos/{$folder}/scale/{$name}.jpg");
-			}
-			if( push_to_s3("photos/{$folder}/thumbs/{$name}.jpg", true) ) {
-				unlink(ROOT . "web/photos/{$folder}/thumbs/{$name}.jpg");
-			}
-			return true;
-		}
-		return false;
-	}
 }

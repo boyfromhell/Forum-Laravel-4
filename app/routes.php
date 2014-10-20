@@ -80,6 +80,11 @@ Route::group(array('before' => 'auth'), function()
 	Route::get('shoutbox/fetch', array('uses' => 'ShoutboxController@fetch'));
 	Route::post('shoutbox/post', array('uses' => 'ShoutboxController@post'));
 
+	// Gallery
+	Route::any('create-album/{id?}', array('uses' => 'AlbumController@create'));
+	Route::any('edit-album/{id}', array('uses' => 'AlbumController@edit'));
+	Route::any('upload-photos/{id}', array('uses' => 'PhotoController@upload'));
+
 	// Account
 	Route::get('signout', array('uses' => 'UserController@signout'));
 });
