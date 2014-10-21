@@ -28,7 +28,7 @@ Route::group(array('before' => 'admin'), function()
 // Moderators
 Route::group(array('before' => 'moderator'), function()
 {
-	Route::get('move-topic/{id}', array('uses' => 'TopicController@move'));
+	Route::any('move-topic/{id}', array('uses' => 'TopicController@move'));
 	Route::get('lock-topic/{id}', array('uses' => 'TopicController@lock'));
 	Route::get('unlock-topic/{id}', array('uses' => 'TopicController@unlock'));
 	Route::any('delete-topic/{id}', array('uses' => 'TopicController@delete'));
@@ -68,7 +68,7 @@ Route::group(array('before' => 'auth'), function()
 	Route::post('upload-avatar', array('uses' => 'AvatarController@upload'));
 	Route::any('edit-profile', array('uses' => 'UserController@editProfile'));
 	Route::any('settings', array('uses' => 'UserController@settings'));
-	Route::get('users/topics', array('uses' => 'UserController@subscriptions'));
+	Route::get('subscriptions', array('uses' => 'UserController@subscriptions'));
 
 	// Community
 	/*Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));

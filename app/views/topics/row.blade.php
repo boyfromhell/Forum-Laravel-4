@@ -54,7 +54,7 @@
 	</td>
 
 	@if ( $topic_mode == 'forum' || $topic_mode == 'subscription' )
-	<td class="lastpost topic">
+	<td>
 		<a href="{{ $topic->forum->url }}">{{{ $topic->forum->name }}}</a>
 	</td>
 	@endif

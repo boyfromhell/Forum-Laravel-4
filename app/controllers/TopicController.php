@@ -228,7 +228,55 @@ class TopicController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Move a topic to a different forum
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function move( $id )
+	{
+		$_PAGE = array(
+			'category' => 'home',
+			'title' => 'Move topic',
+		);
+
+		$topic = Topic::findOrFail($id);
+
+		if( Request::isMethod('post') )
+		{
+			if( isset($_POST['cancel']) ) {
+			}
+			elseif( isset($_POST['confirm']) ) {
+				$topic->forum->decrement('total_topics');
+				$topic->forum->decrement('total_posts', $topic->replies + 1);
+
+				$new_forum = Forum::find(Input::get('new_forum'));
+				$new_forum->increment('total_topics');
+				$new_forum->increment('total_posts', $topic->replies + 1);
+
+				$topic->forum_id = $new_forum->id;
+				$topic->save();
+
+				Session::push('messages', 'The topic has been successfully moved');
+			}
+
+			return Redirect::to($topic->url);
+		}
+
+		$categories = Category::orderBy('order', 'asc')->get();
+
+		return View::make('topics.move')
+			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('forum'))
+			->with('topic', $topic)
+			->with('categories', $categories);
+	}
+
+	/**
 	 * Lock a topic
+	 *
+	 * @param  int  $id
+	 * @return Response
 	 */
 	public function lock( $id )
 	{
@@ -236,13 +284,16 @@ class TopicController extends Earlybird\FoundryController
 		$topic->status = 1;
 		$topic->save();
 
-		Session::push('notices', 'Topic locked');
+		Session::push('notices', 'The topic has been locked');
 
 		return Redirect::back();
 	}
 
 	/**
 	 * Unlock a topic
+	 *
+	 * @param  int  $id
+	 * @return Response
 	 */
 	public function unlock( $id )
 	{
@@ -250,7 +301,7 @@ class TopicController extends Earlybird\FoundryController
 		$topic->status = 0;
 		$topic->save();
 
-		Session::push('notices', 'Topic unlocked');
+		Session::push('notices', 'The topic has been unlocked');
 
 		return Redirect::back();
 	}

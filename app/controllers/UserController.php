@@ -313,6 +313,27 @@ class UserController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Manage my topic subscriptions
+	 *
+	 * @return Response
+	 */
+	public function subscriptions()
+	{
+		global $me;
+
+		$_PAGE['title'] = 'Topic Subscriptions';
+
+		$topics = $me->subscriptions()
+			->orderBy('posted_at', 'desc')
+			->paginate(25);
+
+		return View::make('users.topics')
+			->with('_PAGE', $_PAGE)
+			->with('menu', UserController::fetchMenu('topics'))
+			->with('topics', $topics);
+	}
+
+	/**
 	 * Load all users whose birthday is today
 	 * @todo optional argument to check a different day
 	 */
@@ -570,7 +591,7 @@ class UserController extends Earlybird\FoundryController
 			'name' => 'Avatar',
 		);
 		$menu['topics'] = array(
-			'url' => '/users/topics',
+			'url' => '/subscriptions',
 			'name' => 'Topics',
 		);
 
