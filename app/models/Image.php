@@ -39,6 +39,13 @@ class Image
 	protected $ext;
 
 	/**
+	 * New extension for scaled version
+	 *
+	 * @param  string
+	 */
+	protected $newext;
+
+	/**
 	 * Image object generated from original file
 	 *
 	 * @param  Image
@@ -86,10 +93,11 @@ class Image
 
 		$this->folder = $info['dirname'];
 		$this->name = $info['filename'];
-		$this->ext = $info['extension'];
+		$this->ext = strtolower($info['extension']);
 
 		if( $this->ext == 'jpeg' ) { $this->ext = 'jpg'; }
 		$this->newname = $this->name;
+		$this->newext = $this->ext;
 	}
 
 	/**
@@ -103,13 +111,13 @@ class Image
 
 		switch( $this->ext ) {
 			case 'gif':
-				$this->src = imagecreatefromgif($this->path);
+				$this->src = ImageCreateFromGif($this->path);
 				break;
 			case 'png':
-				$this->src = imagecreatefrompng($this->path);
+				$this->src = ImageCreateFromPng($this->path);
 				break;
 			case 'jpg':
-				$this->src = imagecreatefromjpeg($this->path);
+				$this->src = ImageCreateFromJpeg($this->path);
 				break;
 			default:
 				throw new Exception('Unknown file type: '.$this->ext);
@@ -126,7 +134,7 @@ class Image
 	 *
 	 * @param  int  $nw  New width to scale to
 	 * @param  int  $nh  New height to scale to
-	 * @param  string  $mode  Mode of scaling: constrain, crop, width, height, or long
+	 * @param  string  $mode  Mode of scaling: constrain, crop, width, height
 	 * @return Image
 	 */
 	public function scale($nw, $nh, $mode = 'constrain')
@@ -160,16 +168,6 @@ class Image
 				$nw = (int)( $nh * $this->ratio );
 				break;
 
-			// Whichever side is longer
-			case 'long':
-				if( $this->ratio > 1 ) {
-					$nh = (int)( $nw / $this->ratio );
-				}
-				else {
-					$nw = (int)( $nh * $this->ratio );
-				}
-				break;
-
 			default:
 				throw new Exception('Unknown scale mode: '.$mode);
 				break;
@@ -187,6 +185,14 @@ class Image
 			0, 0, 0, 0,
 			$nw, $nh, $this->width, $this->height
 		);
+
+		// Use this as the new image to scale from
+		// Saves memory when scaling down multiple sizes
+		//@ImageDestroy($this->src);
+		$this->src = $this->est;
+		$this->width = $nw;
+		$this->height = $nh;
+		$this->ratio = ( $this->width / $this->height );
 
 		return $this;
 	}
@@ -228,13 +234,12 @@ class Image
 	/**
 	 * Scale based on longer side
 	 *
-	 * @param  int  $width
-	 * @param  int  $height
+	 * @param  int  $dimension
 	 * @return Image
 	 */
-	public function scaleLong($width, $height)
+	public function scaleLong($dimension)
 	{
-		return $this->scale($width, $height, 'long');
+		return $this->scale($dimension, $dimension);
 	}
 
 	/**
@@ -293,10 +298,9 @@ class Image
 	 */
 	public function saveJpg( $quality = 94 )
 	{
-		$this->newname .= '.jpg';
+		$this->newext = 'jpg';
 
-		ImageJpeg($this->dest, $this->folder.'/'.$this->newname, $quality);
-		@imagedestroy($this->dest);
+		ImageJpeg($this->dest, $this->folder.'/'.$this->newname.'.jpg', $quality);
 
 		return $this;
 	}
@@ -308,10 +312,9 @@ class Image
 	 */
 	public function savePng()
 	{
-		$this->newname .= '.png';
+		$this->newext = 'png';
 
-		ImagePng($this->dest, $this->folder.'/'.$this->newname);
-		@imagedestroy($this->dest);
+		ImagePng($this->dest, $this->folder.'/'.$this->newname.'.png');
 
 		return $this;
 	}
@@ -323,10 +326,9 @@ class Image
 	 */
 	public function saveGif()
 	{
-		$this->newname .= '.gif';
+		$this->newext = 'gif';
 
-		ImageGif($this->dest, $this->folder.'/'.$this->newname);
-		@imagedestroy($this->dest);
+		ImageGif($this->dest, $this->folder.'/'.$this->newname.'.gif');
 
 		return $this;
 	}
@@ -345,13 +347,13 @@ class Image
 		}
 
 		if( Helpers::push_to_s3(
-			$this->folder.'/'.$this->newname,
-			$folder.'/'.$this->newname,
+			$this->folder.'/'.$this->newname.'.'.$this->newext,
+			$folder.'/'.$this->newname.'.'.$this->newext,
 			$public
 		) ) {
-			if( $this->newname != $this->name ) {
-				unlink($this->folder.'/'.$this->newname);
-			}
+			/*if( $this->newname.'.'.$this->newext != $this->name.'.'.$this->ext ) {
+				unlink($this->folder.'/'.$this->newname.'.'.$this->newext);
+			}*/
 		}
 
 		return $this;
@@ -364,6 +366,8 @@ class Image
 	 */
 	public function unlink()
 	{
+		//@ImageDestroy($this->src);
+		//@ImageDestroy($this->dest);
 		unlink($this->path);
 	}
 

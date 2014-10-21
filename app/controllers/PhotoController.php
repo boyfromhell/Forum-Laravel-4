@@ -111,23 +111,29 @@ class PhotoController extends Earlybird\FoundryController
 				if( $file->isValid() )
 				{
 					try {
-						$name = time().'_'.str_random().'.'.$file->getClientOriginalExtension();
+						$ext = strtolower($file->getClientOriginalExtension());
+						$name = time().'_'.str_random().'.'.$ext;
 						$file->move(storage_path().'/uploads', $name);
 
 						$image = new Image(storage_path().'/uploads/'.$name);
+
+						// Scaled permalink version
 						$image->scale(800, 600)
-							->saveJpg(96)
-							->pushToS3('photos/'.$album->folder.'/scale');
+							->setSuffix('_sm')
+							->saveJpg(96);
+
+						// Thumbnail
 						$image->scale(200, 150)
-							->saveJpg(96)
-							->pushToS3('photos/'.$album->folder.'/thumbs');
-						$image->unlink();
+							->setSuffix('_tn')
+							->saveJpg(96);
 
 						$photo = Photo::create([
 							'album_id' => $album->id,
 							'user_id'  => $me->id,
 							'file'     => $name,
 						]);
+
+						$photo->pushToS3();
 
 						if( $album->cover_id === NULL ) {
 							$album->cover_id = $photo->id;
@@ -177,41 +183,46 @@ class PhotoController extends Earlybird\FoundryController
 	}
 
 	/**
-	 * Delete this photo, pass album folder as argument
+	 * Confirm deletion of a photo
+	 *
+	 * @return Response
 	 */
-	public function delete($folder, $database = true)
+	public function delete( $id )
 	{
-		global $_CONFIG, $_db;
-		
-		list( $name, $ext ) = parse_file_name($this->file);
-		
-		if( $_CONFIG['aws'] === null ) {
-			unlink(ROOT . "web/photos/{$folder}/{$name}.{$ext}");
-			unlink(ROOT . "web/photos/{$folder}/scale/{$name}.jpg");
-			unlink(ROOT . "web/photos/{$folder}/thumbs/{$name}.jpg");
+		global $me;
+
+		$_PAGE = array(
+			'category' => 'gallery',
+			'section'  => 'phtoos',
+			'title'    => 'Delete Photo'
+		);
+
+		$photo = Photo::findOrFail($id);
+
+		if( $photo->user_id != $me->id && !$me->is_moderator ) {
+			App::abort(403);
 		}
-		else {
-			delete_from_s3("photos/{$folder}/{$name}.{$ext}");
-			delete_from_s3("photos/{$folder}/scale/{$name}.jpg");
-			delete_from_s3("photos/{$folder}/thumbs/{$name}.jpg");
+
+		if( Request::isMethod('post') )
+		{
+			if( isset($_POST['cancel']) ) {
+				return Redirect::to($photo->url);
+			}
+			// Redirect to album
+			elseif( isset($_POST['confirm']) ) {
+				$album = $photo->album;
+				$photo->delete();
+
+				Session::push('messages', 'The photo has been successfully deleted');
+
+				return Redirect::to($album->url);
+			}
 		}
-		
-		// Stop if we are only deleting the file (i.e. album deletion)
-		if( !$database ) { return; }
 
-		// Fetch first photo in this album
-		$first_photo = Photo::where('album_id', '=', $this->album_id)
-			->where('id', '!=', $this->id)
-			->orderBy('date', 'asc')
-			->first();
-
-		// Replace album covers
-		$this->album->where('cover_id', '=', $this->id)
-			->update([
-				'cover_id' => $first_photo->id
-			]);
-
-		parent::delete();
+		return View::make('photos.delete')
+			->with('_PAGE', $_PAGE)
+			->with('photo', $photo);
 	}
 
 }
+

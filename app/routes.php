@@ -84,6 +84,8 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('create-album/{id?}', array('uses' => 'AlbumController@create'));
 	Route::any('edit-album/{id}', array('uses' => 'AlbumController@edit'));
 	Route::any('upload-photos/{id}', array('uses' => 'PhotoController@upload'));
+	Route::any('edit-photo/{id}', array('uses' => 'PhotoController@edit'));
+	Route::any('delete-photo/{id}', array('uses' => 'PhotoController@delete'));
 
 	// Account
 	Route::get('signout', array('uses' => 'UserController@signout'));

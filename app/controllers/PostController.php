@@ -563,7 +563,7 @@ class PostController extends Earlybird\FoundryController
 		<tr>
 			<td class="left">Question:</td>
 			<td class="right"><input tabindex="2" name="pollq" type="text" style="width:300px"
-			value="<?= $pollq; ?>"></td>
+			value="{{ $pollq; }}"></td>
 		</tr>
 		<tr>
 			<td class="left">Maximum Selection:</td>
@@ -571,8 +571,8 @@ class PostController extends Earlybird\FoundryController
 			value="<?= $pollmax; ?>">
 			&nbsp;&nbsp;&nbsp;Results:&nbsp;&nbsp;&nbsp;
 			<select name="pollpub" tabindex="1" style="width:100px">
-			<option value="0"<?php if( $pollpub == 0 ) { echo " selected"; } ?>>Private</option>
-			<option value="1"<?php if( $pollpub == 1 ) { echo " selected"; } ?>>Public</option>
+			<option value="0"{ if( $pollpub == 0 ) { echo " selected"; } }>Private</option>
+			<option value="1"{ if( $pollpub == 1 ) { echo " selected"; } }>Public</option>
 			</select>
 			<input tabindex="1" type="submit" name="poll" value="Update">
 			</td>
@@ -588,9 +588,7 @@ class PostController extends Earlybird\FoundryController
 					}
 				}
 			}
-		--></script>
-
-		<?php 
+		--></script> 
 			$counter = 1;
 			$sql = "
 			SELECT option_id, option_text 
@@ -602,21 +600,18 @@ class PostController extends Earlybird\FoundryController
 			while( $pollopt = mysql_fetch_array($res)) {
 				list( $optid, $opttext ) = $pollopt;
 				$opttext = stripslashes($opttext);
-		?>
-		<tr id="option<?= $counter; ?>" style="display:table-row">
+		<tr id="option{{ $counter }}" style="display:table-row">
 			<td class="left">Option:</td>
 			<td class="right"><input tabindex="2" name="opt<?= $optid; ?>" type="text" 
 			style="width:300px" value="<?= $opttext; ?>">
-			<?php if( $counter == 1 ) { ?>
+			@if( $counter == 1 )
 			<a href="#" onClick="javascript:addanother(); return false">Add another</a>
-			<?php } ?>
+			@endif
 			</td>
-		</tr>
-		<?php 
+		</tr> 
 				$counter++;
 			}
 			while( $counter <= 15 ) {
-		?>
 		<tr id="option<?= $counter; ?>" style="display:<?php if( $counter > $total+1 ) { echo "none"; } else { echo "table-row"; } ?>">
 			<td class="left">New Option:</td>
 			<td class="right"><input tabindex="2" name="new<?= $counter; ?>" type="text" style="width:300px">
@@ -625,10 +620,9 @@ class PostController extends Earlybird\FoundryController
 			<?php } ?>
 			</td>
 		</tr>
-		<?php 
 				$counter++;
 			}
-		} ?>
+		}
 
 		</form>
 
@@ -645,8 +639,7 @@ class PostController extends Earlybird\FoundryController
 		global $me;
 
 		$_PAGE = array(
-			'category' => 'forums',
-			'section'  => 'forums',
+			'category' => 'home',
 			'title'    => 'Delete Post'
 		);
 
@@ -655,7 +648,7 @@ class PostController extends Earlybird\FoundryController
 		if( $post->user_id != $me->id && !$me->is_moderator ) {
 			App::abort(403);
 		}
-		if( $topic->status && !$me->is_moderator ) {
+		if( $post->topic->status && !$me->is_moderator ) {
 			App::abort(403);
 		}
 
@@ -676,6 +669,7 @@ class PostController extends Earlybird\FoundryController
 
 		return View::make('posts.delete')
 			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('forum'))
 			->with('post', $post);
 	}
 

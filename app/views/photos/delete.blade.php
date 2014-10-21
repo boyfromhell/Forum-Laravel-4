@@ -2,17 +2,17 @@
 
 @section('content')
 
-<form class="form" method="post" action="/delete-post/{{ $post->id }}">
+<form class="form" method="post" action="/delete-photo/{{ $photo->id }}">
 <div class="panel panel-danger">
 
-	<div class="panel-heading">Delete Post</div>
+	<div class="panel-heading">Delete Photo</div>
 	
 	<div class="panel-body text-center">
 		<p>
-		Are you sure you wish to delete this post
+		Are you sure you wish to delete this photo
 
 		@if ( $me->is_moderator )
-		by <b>{{{ $post->user->name }}}</b>
+		by <b>{{{ $photo->user->name }}}</b>
 		@endif
 		?
 		</p>

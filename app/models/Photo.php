@@ -126,5 +126,70 @@ class Photo extends Earlybird\Foundry
 		return $height;
 	}
 
+	/**
+	 * Move original and scaled photos to S3
+	 */
+	public function pushToS3()
+	{
+		$pathinfo = pathinfo($this->file);
+		$basename = $pathinfo['filename'];
+		$ext = $pathinfo['extension'];
+
+		$local = storage_path().'/uploads/';
+		$remote = 'photos/'.$this->album->folder.'/';
+
+		if( Helpers::push_to_s3(
+			$local.$basename.'.'.$ext,
+			$remote.$basename.'.'.$ext,
+			false
+		) ) {
+			unlink($root.$basename.'.'.$ext);
+		}
+		if( Helpers::push_to_s3(
+			$local.$basename.'_sm.jpg',
+			$remote.'scale/'.$basename.'.jpg',
+			true
+		) ) {
+			unlink($root.$basename.'_sm.jpg');
+		}
+		if( Helpers::push_to_s3(
+			$local.$basename.'_tn.jpg',
+			$remote.'thumbs/'.$basename.'.jpg',
+			true
+		) ) {
+			unlink($root.$basename.'_tn.jpg');
+		}
+	}
+
+	/**
+	 * Delete a photo
+	 */
+	public function delete()
+	{
+		/*if( $_CONFIG['aws'] === null ) {
+			unlink(ROOT . "web/photos/{$folder}/{$name}.{$ext}");
+			unlink(ROOT . "web/photos/{$folder}/scale/{$name}.jpg");
+			unlink(ROOT . "web/photos/{$folder}/thumbs/{$name}.jpg");
+		}
+		else {
+			delete_from_s3("photos/{$folder}/{$name}.{$ext}");
+			delete_from_s3("photos/{$folder}/scale/{$name}.jpg");
+			delete_from_s3("photos/{$folder}/thumbs/{$name}.jpg");
+		}*/
+
+		if( $this->album->cover_id == $this->id ) {
+			// Fetch first photo in this album
+			$first_photo = Photo::where('album_id', '=', $this->album_id)
+				->where('id', '!=', $this->id)
+				->orderBy('created_at', 'asc')
+				->first();
+
+			$this->album->cover_id = $first_photo->id;
+			$this->album->save();
+		}
+
+		return parent::delete();
+	}
+
 }
 
