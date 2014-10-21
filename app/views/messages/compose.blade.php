@@ -14,7 +14,7 @@
 	<div class="form-group">
 		<label class="control-label col-sm-3">To</label>
 		<div class="col-sm-7">
-			{{ Form::textarea('recipients', $recipients, ['class' => 'form-control']) }}<br>
+			{{ Form::textarea('recipients', $recipients, ['class' => 'form-control textarea-sm']) }}<br>
 			<small>Separate multiple recipients with a comma or new line</small>
 		</div>
 	</div>

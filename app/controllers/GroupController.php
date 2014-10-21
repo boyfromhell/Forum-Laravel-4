@@ -55,12 +55,12 @@ class GroupController extends Earlybird\FoundryController
 
 		$_PAGE = array(
 			'category' => 'community',
-			'section'  => 'groups',
 			'title'    => $group->name,
 		);
 
 		return View::make('groups.display')
 			->with('_PAGE', $_PAGE)
+			->with('menu', GroupController::fetchMenu('groups'))
 			->with('group', $group);
 
 		/*$Smarty->assign('info', $group->get_info($mygroups));

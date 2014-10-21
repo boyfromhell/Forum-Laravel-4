@@ -21,6 +21,7 @@ class PageController extends BaseController
 				break;
 
 			case 'chat':
+				$_PAGE['category'] = 'community';
 				$_PAGE['title'] = 'Chat';
 				$template = 'pages.chat';
 				$menu = GroupController::fetchMenu('chat');
@@ -62,11 +63,7 @@ class PageController extends BaseController
 	{
 		global $me;
 
-		$_PAGE = array(
-			'category' => 'home',
-			'section'  => 'contact',
-			'title'    => 'Contact',
-		);
+		$_PAGE['title'] = 'Contact';
 
 		if( Request::isMethod('post') )
 		{
@@ -139,11 +136,7 @@ class PageController extends BaseController
 	{
 		global $me;
 
-		$_PAGE = array(
-			'category' => 'home',
-			'section'  => 'sitemap',
-			'title'    => 'Sitemap',
-		);
+		$_PAGE['title'] = 'Sitemap';
 
 		$categories = ModuleCategory::where('permission', '<=', $me->access)
 			->orderBy('order', 'asc')

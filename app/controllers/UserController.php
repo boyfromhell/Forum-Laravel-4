@@ -27,11 +27,15 @@ class UserController extends Earlybird\FoundryController
 
 		$user = User::findOrFail($id);
 
-		$_PAGE = array(
-			'category' => 'home',
-			'section'  => ( $me->id == $user->id ? 'profile' : 'forum' ),
-			'title'    => $user->name,
-		);
+		if( $me->id == $user->id ) {
+			$_PAGE['category'] = 'home';
+			$menu = ForumController::fetchMenu('profile');
+		}
+		else {
+			$_PAGE['category'] = 'community';
+			$menu = GroupController::fetchMenu('members');
+		}
+		$_PAGE['title'] = $user->name;
 
 		if( $me->id && ( $user->id != $me->id ) && !$me->is_admin ) {
 			$user->increment('views');
@@ -68,7 +72,7 @@ class UserController extends Earlybird\FoundryController
 
 		return View::make('users.profile')
 			->with('_PAGE', $_PAGE)
-			->with('menu', ForumController::fetchMenu($_PAGE['section']))
+			->with('menu', $menu)
 			->with('user', $user)
 			->with('custom', $custom)
 

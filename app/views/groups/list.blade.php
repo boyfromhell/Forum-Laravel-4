@@ -2,7 +2,7 @@
 
 @section('buttons')
 
-@if ( $me->id )
+@if ( $me->is_admin )
 <a href="/admin/groups/create" class="btn btn-primary">New Group</a>
 @endif
 

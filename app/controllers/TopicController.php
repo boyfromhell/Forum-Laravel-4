@@ -228,6 +228,34 @@ class TopicController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Lock a topic
+	 */
+	public function lock( $id )
+	{
+		$topic = Topic::findOrFail($id);
+		$topic->status = 1;
+		$topic->save();
+
+		Session::push('notices', 'Topic locked');
+
+		return Redirect::back();
+	}
+
+	/**
+	 * Unlock a topic
+	 */
+	public function unlock( $id )
+	{
+		$topic = Topic::findOrFail($id);
+		$topic->status = 0;
+		$topic->save();
+
+		Session::push('notices', 'Topic unlocked');
+
+		return Redirect::back();
+	}
+
+	/**
 	 * Confirm deletion of a topic
 	 *
 	 * @param  int  $id  Topic ID

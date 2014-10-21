@@ -117,9 +117,21 @@ class MessageController extends BaseController
 			'title'    => 'Compose Message'
 		);
 
+		$post_max_size = intval(ini_get('post_max_size'));
+		$max_total = $post_max_size * 1024 * 1024;
+		$upload_max_filesize = intval(ini_get('upload_max_filesize'));
+		$max_bytes = $upload_max_filesize * 1024 * 1024;
+		$max_file_uploads = ini_get('max_file_uploads');
+
 		return View::make('messages.compose')
 			->with('_PAGE', $_PAGE)
-			->with('menu', MessageController::fetchMenu('compose'));
+			->with('menu', MessageController::fetchMenu('compose'))
+
+			->with('post_max_size', $post_max_size)
+			->with('max_total', $max_total)
+			->with('upload_max_filesize', $upload_max_filesize)
+			->with('max_bytes', $max_bytes)
+			->with('max_file_uploads', $max_file_uploads);
 	}
 
 	/**
