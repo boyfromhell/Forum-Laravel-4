@@ -3,14 +3,7 @@
 @section('content')
 
 @if ( $announcement->id )
-<div class="panel panel-info">
-	<div class="panel-heading">
-		{{{ $announcement->title }}}
-	</div>
-	<div id="announcement_{{ $announcement->id }}" class="panel-body">
-		{{ BBCode::parse($announcement->text) }}
-	</div>
-</div>
+@include ('blocks.announcement')
 @endif
 
 @if ( $quote->id )

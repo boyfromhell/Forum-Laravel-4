@@ -18,7 +18,10 @@ Route::group(array('before' => 'admin'), function()
 {
 	Route::get('admin', array('uses' => 'AdminController@dashboard'));
 	Route::post('admin/reset-counters', array('uses' => 'AdminController@resetCounters'));
+	Route::any('admin/messages', array('uses' => 'AdminController@messages'));
 	Route::get('admin/messages/{id}', array('uses' => 'AdminController@viewMessage'));
+
+	Route::any('admin/edit-announcement', array('uses' => 'AdminController@editAnnouncement'));
 
 	Route::resource('admin/forums', 'ForumController');
 	Route::resource('admin/groups', 'GroupController');
@@ -45,6 +48,8 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('edit-post/{id}', array('uses' => 'PostController@edit'));
 	Route::any('quick-edit/{id}', array('uses' => 'PostController@quickEdit'));
 	Route::any('delete-post/{id}', array('uses' => 'PostController@delete'));
+	Route::any('flag-post/{id}', array('uses' => 'PostController@flag'));
+
 	Route::any('new-topic/{id}', array('uses' => 'PostController@newTopic'));
 	Route::get('topic-review/{id}', array('uses' => 'TopicController@review'));
 
@@ -68,7 +73,7 @@ Route::group(array('before' => 'auth'), function()
 	Route::post('upload-avatar', array('uses' => 'AvatarController@upload'));
 	Route::any('edit-profile', array('uses' => 'UserController@editProfile'));
 	Route::any('settings', array('uses' => 'UserController@settings'));
-	Route::get('subscriptions', array('uses' => 'UserController@subscriptions'));
+	Route::any('subscriptions', array('uses' => 'UserController@subscriptions'));
 
 	// Community
 	/*Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));

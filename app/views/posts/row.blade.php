@@ -58,7 +58,7 @@
 			<a href="/edit-post/{{ $post->id }}" onClick="parangi.quickEdit({{ $post->id }}, 'edit'); return false" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
 			<a href="/delete-post/{{ $post->id }}" class="btn btn-danger" title="Delete post"><span class="glyphicon glyphicon-remove"></span></a>
 		@else
-			<a href="/forum/report?p={{ $post->id }}" class="btn btn-danger" title="Flag post"><span class="glyphicon glyphicon-flag"></span></a>
+			<a href="/flag-post/{{ $post->id }}" class="btn btn-danger" title="Flag post"><span class="glyphicon glyphicon-flag"></span></a>
 		@endif
 	@endif
 	</div>

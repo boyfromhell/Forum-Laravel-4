@@ -323,6 +323,21 @@ class UserController extends Earlybird\FoundryController
 
 		$_PAGE['title'] = 'Topic Subscriptions';
 
+		if( Request::isMethod('post') ) {
+			$topics = Input::get('topics');
+			$total = count($topics);
+
+			if( $total > 0 ) {
+				TopicSubscription::where('user_id', '=', $me->id)
+					->whereIn('topic_id', $topics)
+					->delete();
+
+				Session::push('messages', 'Unsubscribed from '.$total.' topics');
+			}
+
+			return Redirect::to('subscriptions');
+		}
+
 		$topics = $me->subscriptions()
 			->orderBy('posted_at', 'desc')
 			->paginate(25);
@@ -493,6 +508,10 @@ class UserController extends Earlybird\FoundryController
 	 */
 	public function signup()
 	{
+		if( ! Config::get('app.registration_enabled') ) {
+			return Redirect::to('apply');
+		}
+
 		$_PAGE = array(
 			'category' => 'home',
 			'title'    => 'Register',
@@ -503,7 +522,7 @@ class UserController extends Earlybird\FoundryController
 			$unencrypted = Input::get('password');
 
 			$rules = [
-				'name'       => 'required|alpha_dash|max:25|unique:users',
+				'name'       => 'required|alpha_dash|max:25|unique:users|not_in:admin,administrator,moderator,guest',
 				'email'      => 'required|email|unique:users',
 				'password'   => 'required|min:6',
 				'confirm'    => 'required|same:password',
@@ -532,7 +551,7 @@ class UserController extends Earlybird\FoundryController
 					'lang'       => 'english',
 				]);
 
-				//UserController::join($user);
+				UserController::join($user, $unencrypted);
 
 				Auth::login($user);
 
@@ -549,6 +568,31 @@ class UserController extends Earlybird\FoundryController
 			->with('mode', 'signup')
 
 			->with('customs', $customs);
+	}
+
+	/**
+	 * Actions taken for all users regardless of signup method
+	 */
+	public function join( $user, $unencrypted = NULL )
+	{
+		Session::push('messages', '<p>Thank you for registering!</p>');
+
+		$data = array(
+			'user_name' => $user->name,
+			'unencrypted' => $unencrypted,
+		);
+
+		try {
+			Mail::queue('emails.welcome', $data, function($message) use ($user) {
+				$message->to($user->email)
+					->subject('Welcome to '.Config::get('app.forum_name'));
+			});
+
+			Session::push('messages', '<p>You will be receiving a welcome email from us shortly with your username and password for your records</p>');
+		}
+		catch( Exception $e ) {
+			Session::push('errors', '<p>There was a problem sending your account info to your email address. However, your account was created successfully</p>');
+		}
 	}
 
 	/**

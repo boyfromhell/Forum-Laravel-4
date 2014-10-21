@@ -13,6 +13,8 @@ return array(
 
 	'admin_email' => 'capristo@attnam.com',
 
+	'registration_enabled' => true,
+
 	/*
 	|--------------------------------------------------------------------------
 	| Application Debug Mode

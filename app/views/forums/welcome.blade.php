@@ -23,13 +23,7 @@
 <div class="row">
 <div class="col-sm-9 col-sm-push-3">
 	@if ( $announcement->id )
-	<div class="panel panel-info">
-
-		<div class="panel-heading">{{{ $announcement->title }}}</div>
-
-		<div id="announcement_{{ $announcement->id }}" class="panel-body">{{ BBCode::parse($announcement->text) }}</div>
-
-	</div>
+	@include ('blocks.announcement')
 	@endif
 
 	@if ( $me->id )

@@ -214,6 +214,66 @@ class PhotoController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Edit a photo
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function edit( $id )
+	{
+		global $me;
+
+		$photo = Photo::findOrFail($id);
+		$album = $photo->album;
+
+		if( $photo->user_id != $me->id && ! $me->is_admin ) {
+			App::abort(403);
+		}
+
+		if( Request::isMethod('post') ) {
+			$album_id = (int)$_POST['album_id'];
+			$cover    = Input::get('cover', 0);
+			
+			$photo->description = Input::get('description');
+
+			if( $me->is_admin ) {
+				$user = User::where('name', '=', Input::get('author'))->first();
+			
+				$photo->user_id = $user->id;
+				$photo->created_at = Input::get('date');
+				$photo->views = Input::get('views');
+			}
+
+			$photo->save();
+
+			// Set or unset cover photo
+			if( $cover ) {
+				$album->cover_id = $photo->id;
+				$album->save();
+			}
+			else if( $album->cover_id == $photo->id ) {
+				$album->cover_id = NULL;
+				$album->save();
+			}
+
+			Session::push('messages', 'Photo saved successfully');
+
+			return Redirect::to('edit-photo/'.$photo->id);
+		}
+
+		$_PAGE = array(
+			'category' => 'gallery',
+			'section' => 'photos',
+			'title' => 'Edit Photo',
+		);
+
+		return View::make('photos.edit')
+			->with('_PAGE', $_PAGE)
+			->with('photo', $photo)
+			->with('album', $album);
+	}
+
+	/**
 	 * Confirm deletion of a photo
 	 *
 	 * @return Response

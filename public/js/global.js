@@ -17,24 +17,23 @@ var parangi = {
 		setInterval("showOnline()", 20000);
 
 		$('.announcement').dblclick( function() {
-			var id = $(this).attr('id').match(/[\d]+/g)[0];
+			var $ann = $(this);
+			var id = $ann.data('id');
 			
 			$.get('/admin/edit-announcement', { id: id }, function( data ) {
-				json = $.parseJSON(data);
-				if( json.success ) {
-					$('#announcement_'+id).html( json.html );
-					$('#announcement_'+id+' textarea').focus();
+				if( data.success ) {
+					$ann.html(data.html);
+					$ann.find('textarea').focus();
 					
-					$('#announcement_'+id+' textarea').blur( function() {
+					$ann.find('textarea').blur( function() {
 						$.post('/admin/edit-announcement', $(this).closest('form').serialize(), function( data ) {
-							json = $.parseJSON(data);
-							if( json.success ) {
-								$('#announcement_'+id).html( json.html );
+							if( data.success ) {
+								$ann.html( data.html );
 							}
-						});
+						}, 'json');
 					});
 				}
-			});
+			}, 'json');
 		});
 
 		/**

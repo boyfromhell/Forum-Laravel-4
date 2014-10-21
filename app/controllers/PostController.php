@@ -630,6 +630,44 @@ class PostController extends Earlybird\FoundryController
 	}
 
 	/**
+	 * Flag a post
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function flag( $id )
+	{
+		global $me;
+
+		$_PAGE['title'] = 'Flag post';
+
+		$post = Post::findOrFail($id);
+
+		if( Request::isMethod('post') ) {
+			if( isset($_POST['cancel']) ) {
+			}
+			else {
+				$report = PostReport::create([
+					'post_id'  => $post->id,
+					'user_id'  => $me->id,
+					'reason'   => Input::get('reason'),
+					'comments' => Input::get('comments'),
+					'status'   => 'open',
+				]);
+
+				Session::push('messages', 'Thank you. The post has been flagged for moderator attention');
+			}
+
+			return Redirect::to($post->url);
+		}
+
+		return View::make('posts.flag')
+			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('forum'))
+			->with('post', $post);
+	}
+
+	/**
 	 * Confirm deletion of a post
 	 *
 	 * @return Response

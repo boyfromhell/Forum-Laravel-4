@@ -122,7 +122,7 @@ class AdminController extends BaseController
 	}
 
 	/**
-	 * View message
+	 * View a message
 	 *
 	 * @param  int  $id
 	 * @return Response
@@ -131,8 +131,115 @@ class AdminController extends BaseController
 	{
 		$message = AdminMessage::findOrFail($id);
 
-		return View::make('admin.view_message')
+		$_PAGE = array(
+			'category' => 'admin',
+			'section'  => 'messages',
+			'title'    => $message->subject,
+		);
+
+		$message->read = 1;
+		$message->save();
+
+		return View::make('admin.messages.display')
+			->with('_PAGE', $_PAGE)
 			->with('message', $message);
+	}
+
+	/**
+	 * View flagged posts and messages sent through the contact form
+	 *
+	 * @return Response
+	 */
+	public function messages()
+	{
+		$_PAGE = array(
+			'category' => 'admin',
+			'section'  => 'messages',
+			'title'    => 'Admin Messages'
+		);
+
+		if( Request::isMethod('post') ) {
+			$messages = Input::get('messages');
+
+			if( count($messages) > 0 ) {
+				$data = AdminMessage::whereIn('id', $messages);
+
+				if( isset($_POST['archive']) ) {
+					$data->update(['archived' => 1]);
+				}
+				else if( isset($_POST['unarchive']) ) {
+					$data->update(['archived' => 0]);
+				}
+				else if( isset($_POST['delete']) ) {
+					$data->delete();
+				}
+				else if( isset($_POST['read']) ) {
+					$data->update(['read' => 1]);
+				}
+				else if( isset($_POST['unread']) ) {
+					$data->update(['read' => 0]);
+				}
+
+				Session::push('messages', 'Action complete');
+			}
+
+			return Redirect::to('admin/messages');
+		}
+
+		// Reported posts
+		$reports = PostReport::join('posts', 'post_reports.post_id', '=', 'posts.id')
+			->where('status', '=', 'open')
+			->orderBy('id', 'desc')
+			->get(['post_reports.*']);
+
+		if( count($reports) > 0 ) {
+			$reports->load([
+				'post',
+				'post.topic',
+				'post.user',
+				'user',
+			]);
+		}
+
+		// Messages sent through the contact form
+		$admin_messages = AdminMessage::where('archived', '=', 0)
+			->orderBy('created_at', 'desc')
+			->paginate(20);
+
+		if( count($admin_messages) > 0 ) {
+			$admin_messages->load(['user']);
+		}
+
+		return View::make('admin.messages.index')
+			->with('_PAGE', $_PAGE)
+			->with('reports', $reports)
+			->with('admin_messages', $admin_messages);
+	}
+
+	/**
+	 * Edit an announcement
+	 */
+	public function editAnnouncement()
+	{
+		$id = Input::get('id');
+		$announcement = Announcement::findOrFail($id);
+
+		if( Request::isMethod('post') ) {
+			$announcement->text = Input::get('text');
+			$announcement->save();
+
+			$html = BBCode::parse($announcement->text);
+		}
+		else {
+			$html = View::make('admin.announcements.edit')
+				->with('announcement', $announcement)
+				->render();
+		}
+
+		return Response::json([
+			'success' => true,
+			'html' => $html
+		]);
 	}
 
 }
