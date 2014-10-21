@@ -56,6 +56,7 @@ class StandardizeCommand extends Command {
 			->update([
 				'created_at' => DB::raw('FROM_UNIXTIME(time)'),
 				'updated_at' => DB::raw('FROM_UNIXTIME(last_date)'),
+				'posted_at' => DB::raw('FROM_UNIXTIME(last_date)'),
 			]);
 
 		// Admin Messages
@@ -112,6 +113,8 @@ class StandardizeCommand extends Command {
 			->update([
 				'created_at' => DB::raw('FROM_UNIXTIME(joined)'),
 				'updated_at' => DB::raw('FROM_UNIXTIME(last_view)'),
+				'visited_at' => DB::raw('FROM_UNIXTIME(last_visit)'),
+				'viewed_at'  => DB::raw('FROM_UNIXTIME(last_view)'),
 			]);
 
 		// Groups

@@ -6,9 +6,11 @@ class PhotoController extends Earlybird\FoundryController
 	/**
 	 * Display a photo
 	 *
+	 * @param  int  $id
+	 * @param  string  $name  For SEO only
 	 * @return Response
 	 */
-	public function display( $id )
+	public function display( $id, $name = NULL )
 	{
 		global $me;
 
@@ -83,6 +85,35 @@ class PhotoController extends Earlybird\FoundryController
 			}
 		}
 		*/
+	}
+
+	/**
+	 * Download the full resolution version of a photo
+	 *
+	 * @param  int  $id
+	 * return Response
+	 */
+	public function download( $id )
+	{
+		global $me;
+
+		$photo = Photo::findOrFail($id);
+
+		if( $photo->album->permission_view > $me->access ) {
+			App::abort(403);
+		}
+
+		$photo->increment('downloads');
+
+		$path = 'photos/'.$photo->album->folder.'/'.$photo->file;
+
+		$s3 = new S3(
+			Config::get('services.aws.access_key'),
+			Config::get('services.aws.secret_key')
+		);
+		$url = $s3->getAuthenticatedURL(Config::get('services.aws.bucket'), $path, 60*60, true);
+
+		return Redirect::to($url);
 	}
 
 	/**

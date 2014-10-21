@@ -54,7 +54,7 @@ class Forum extends Earlybird\Foundry
 	{
 		return $this->hasMany('Topic')
 			->orderBy('type', 'desc')
-			->orderBy('updated_at', 'desc');
+			->orderBy('posted_at', 'desc');
 	}
 
 	/**
@@ -89,6 +89,18 @@ class Forum extends Earlybird\Foundry
 	}
 
 	/**
+	 * Most recent topic
+	 *
+	 * @return Topic
+	 */
+	public function getLatestTopicAttribute()
+	{
+		return Topic::where('forum_id', '=', $this->id)
+			->orderBy('posted_at', 'desc')
+			->first();
+	}
+
+	/**
 	 * Check if there are any unread topics in this forum
 	 *
 	 * @return bool
@@ -116,18 +128,6 @@ class Forum extends Earlybird\Foundry
 	public function getAltTextAttribute()
 	{
 		return ( $this->is_unread ? 'New posts' : 'No new posts' );
-	}
-
-	/**
-	 * Most recent topic
-	 *
-	 * @return Topic
-	 */
-	public function getLatestTopicAttribute()
-	{
-		return Topic::where('forum_id', '=', $this->id)
-			->orderBy('updated_at', 'desc')
-			->first();
 	}
 
 	/**

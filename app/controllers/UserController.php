@@ -74,8 +74,7 @@ class UserController extends Earlybird\FoundryController
 
 			->with('stats', $stats);
 
-		/*$Smarty->assign('online_text', $user->online ? 'online' : 'offline');
-		$Smarty->assign('user_last', $user_last);
+		/*$Smarty->assign('user_last', $user_last);
 
 		$Smarty->assign('show_birthday', $user->bdaypref < 2 ? true : false);
 		$Smarty->assign('birthday', $birthday);
@@ -193,7 +192,7 @@ class UserController extends Earlybird\FoundryController
 
 		if( Request::isMethod('post') ) {
 			$me->lang = Input::get('lang', 'en');
-			$me->online = Input::get('online', 0);
+			$me->hide_online = Input::get('hide_online', 0);
 			$me->notify = Input::get('notify', 0);
 			$me->attach_sig = Input::get('attach_sig', 0);
 			$me->notify_pm = Input::get('notify_pm', 0);
@@ -504,7 +503,7 @@ class UserController extends Earlybird\FoundryController
 					'email'      => Input::get('email'),
 					'password'   => Hash::make($unencrypted),
 					'user_type'  => 0,
-					'active'     => 1,
+					'is_active'  => 1,
 					'lang'       => 'english',
 				]);
 
@@ -536,7 +535,7 @@ class UserController extends Earlybird\FoundryController
 	{
 		global $me;
 
-		$me->last_visit = gmmktime();
+		$me->visited_at = DB::raw('NOW()');
 		$me->save();
 
 		Auth::logout();

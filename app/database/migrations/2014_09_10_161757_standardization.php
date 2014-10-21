@@ -21,6 +21,8 @@ class Standardization extends Migration {
 			$table->dropColumn('last');
 			$table->dropColumn('lastact');
 			$table->timestamps();
+			$table->dateTime('visited_at')->nullable();
+			$table->dateTime('viewed_at')->nullable();
 		});
 
 		// Admin messages

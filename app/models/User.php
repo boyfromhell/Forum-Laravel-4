@@ -22,6 +22,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 * @var array
 	 */
 	protected $hidden = array('password', 'remember_token');
+	protected $guarded = array('id');
 	protected $appends = array(
 		'url',
 		'level',
@@ -231,8 +232,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	{
 		global $me;
 
-		if( strtotime($this->updated_at) <= ( time()-300 ) ||
-			( $this->online && !$me->is_admin ) ) {
+		if( strtotime($this->viewed_at) <= ( time()-300 ) ||
+			( $this->hide_online && !$me->is_admin ) ) {
 			return 'offline';
 		}
 
@@ -248,11 +249,11 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	{
 		global $me;
 
-		if( $this->online && !$me->is_admin ) {
+		if( $this->hide_online && !$me->is_admin ) {
 			return 'Unknown';
 		}
 		else {
-			$date = $this->last_visit ? $this->last_visit : $this->created_at;
+			$date = $this->visited_at ? $this->visited_at : $this->created_at;
 			return Helpers::date_string($date, 1);
 		}
 	}

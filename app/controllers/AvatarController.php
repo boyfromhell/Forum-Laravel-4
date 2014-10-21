@@ -73,7 +73,8 @@ class AvatarController extends Earlybird\FoundryController
 
 			if( $file->isValid() )
 			{
-				$name = time().'_'.str_random().'.'.$file->getClientOriginalExtension();
+				$ext = strtolower($file->getClientOriginalExtension());
+				$name = time().'_'.str_random().'.'.$ext;
 				$file->move(storage_path().'/uploads', $name);
 
 				/*

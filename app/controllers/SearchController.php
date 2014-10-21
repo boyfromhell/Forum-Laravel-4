@@ -92,7 +92,7 @@ class SearchController extends BaseController
 
 		if( $this->since != 0 ) { 
 			if( $this->since != SINCE_LAST_VISIT ) { $sincewhen = $gmt-$this->since; }
-			else { $sincewhen = $me->last_visit; }
+			else { $sincewhen = $me->visited_at; }
 			$sql .= " AND `messages`.`date_sent` >= {$sincewhen} ";
 		}
 		if( $this->user->id ) {
@@ -166,7 +166,7 @@ class SearchController extends BaseController
 
 		if( $this->since != 0 ) { 
 			if( $this->since != SINCE_LAST_VISIT ) { $sincewhen = $gmt-$this->since; }
-			else { $sincewhen = $me->last_visit; }
+			else { $sincewhen = $me->visited_at; }
 			$sql .= " AND `posts`.`time` >= {$sincewhen} ";
 		}
 		if( $this->user->id ) {

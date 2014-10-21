@@ -51,6 +51,7 @@ class Timestamps extends Migration {
 		Schema::table('users', function($table)
 		{
 			$table->dropColumn('joined');
+			$table->dropColumn('last_visit');
 			$table->dropColumn('last_view');
 			$table->dropColumn('onsb');
 		});*/

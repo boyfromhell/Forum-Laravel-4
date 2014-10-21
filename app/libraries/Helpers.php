@@ -18,7 +18,7 @@ class Helpers
 			$time = strtotime($time);
 		}
 
-		$time += ($me->timezone*3600);
+		$time += ( $me->timezone * 3600 );
 
 		return date($format, $time);
 	}
@@ -85,6 +85,10 @@ class Helpers
 	public static function date_string( $time, $format )
 	{
 		global $me;
+
+		if( ! is_numeric($time) ) {
+			$time = strtotime($time);
+		}
 
 		$gmt = gmmktime();
 

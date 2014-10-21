@@ -30,6 +30,7 @@ class StandardizePartTwo extends Migration {
 			$table->renameColumn('poster', 'user_id');
 			$table->dropColumn('last');
 			$table->timestamps();
+			$table->dateTime('posted_at')->nullable();
 		});
 	}
 

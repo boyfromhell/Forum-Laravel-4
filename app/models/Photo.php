@@ -41,7 +41,7 @@ class Photo extends Earlybird\Foundry
 	 */
 	public function getUrlAttribute()
 	{
-		return '/media/photo/' . $this->id;
+		return '/photos/' . $this->id;
 	}
 
 	/**

@@ -13,7 +13,7 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Hide my online status</label>
 		<div class="col-sm-8">
-		{{ Helpers::radioGroup('online', ['1' => 'Yes', '0' => 'No'], $me->online) }}
+		{{ Helpers::radioGroup('hide_online', ['1' => 'Yes', '0' => 'No'], $me->hide_online) }}
 		</div>
 	</div>
 

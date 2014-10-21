@@ -129,10 +129,6 @@ class TopicController extends Earlybird\FoundryController
 				$post->ignored = true;
 			}
 
-			// Online
-			$user->check_online();
-			$user->online_text = $user->online ? 'online' : 'offline';
-			
 			// Custom Fields
 			$user->custom = $user->load_custom_fields($me->access, 'topic');
 		}*/

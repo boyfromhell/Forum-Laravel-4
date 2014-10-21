@@ -64,11 +64,19 @@ class AdminController extends BaseController
 
 		// Count posts in all topics and forums
 		foreach( $topics as $topic ) {
+			$latest_post = $topic->posts()
+				->orderBy('id', 'desc')
+				->first();
+
 			$posts = $topic->posts()->count();
 			$topic->replies = ( $posts-1 );
 			$forum_totals[$topic->forum_id] += $posts;
 
-			if( $topic->isDirty('replies') ) {
+			if( $topic->posted_at != $latest_post->created_at ) {
+				$topic->posted_at = $latest_post->created_at;
+			}
+
+			if( $topic->isDirty(['replies', 'posted_at']) ) {
 				$topic->save();
 				$totals['topics']++;
 			}

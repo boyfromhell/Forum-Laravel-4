@@ -86,6 +86,7 @@ Route::group(array('before' => 'auth'), function()
 	Route::any('upload-photos/{id}', array('uses' => 'PhotoController@upload'));
 	Route::any('edit-photo/{id}', array('uses' => 'PhotoController@edit'));
 	Route::any('delete-photo/{id}', array('uses' => 'PhotoController@delete'));
+	Route::get('media/download/{id}', array('uses' => 'PhotoController@download'));
 
 	// Account
 	Route::get('signout', array('uses' => 'UserController@signout'));
@@ -128,7 +129,7 @@ Route::get('albums', array('uses' => 'AlbumController@display'));
 Route::get('albums/{id}/{name?}', array('uses' => 'AlbumController@display'));
 Route::any('albums/edit/{id}', array('uses' => 'AlbumController@edit'));
 Route::any('albums/new', array('uses' => 'AlbumController@add'));
-Route::get('media/photo/{id}', array('uses' => 'PhotoController@display'));
+Route::get('photos/{id}/{name?}', array('uses' => 'PhotoController@display'));
 
 // Projects
 Route::get('downloads/{category?}', array('uses' => 'ProjectController@category'));

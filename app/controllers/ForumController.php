@@ -44,7 +44,7 @@ class ForumController extends Earlybird\FoundryController
 		// Most recent topics
 		$topics = Topic::join('forums', 'topics.forum_id', '=', 'forums.id')
 			->where('forums.read', '<=', $me->access)
-			->orderBy('updated_at', 'desc')
+			->orderBy('posted_at', 'desc')
 			->take(10)
 			->get(['topics.*']);
 
@@ -121,6 +121,10 @@ class ForumController extends Earlybird\FoundryController
 
 		// Categories
 		$categories = Category::orderBy('order', 'asc')->get();
+
+		$categories->load([
+			'forums',
+		]);
 
 		/*while( $data = $exec->fetch_assoc() )
 		{
@@ -287,7 +291,7 @@ class ForumController extends Earlybird\FoundryController
 
 		// Track that I'm online
 		if( $me->id ) {
-			$me->touch();
+			$me->update(['viewed_at' => DB::raw('NOW()')]);
 		}
 
 		$fivemin = time() - 300;
@@ -296,10 +300,10 @@ class ForumController extends Earlybird\FoundryController
 		$visitors = Visitor::where('last_view', '>', $fivemin)->count();
 
 		// Fetch members who are online and not hidden
-		$members = User::where('updated_at', '>', DB::raw('DATE_SUB(NOW(), INTERVAL 5 MINUTE)'));
+		$members = User::where('viewed_at', '>', DB::raw('DATE_SUB(NOW(), INTERVAL 5 MINUTE)'));
 
 		if( ! $me->is_admin ) {
-			$members = $members->where('online', '=', 0);
+			$members = $members->where('hide_online', '=', 0);
 		}
 
 		$members = $members->orderBy('name')

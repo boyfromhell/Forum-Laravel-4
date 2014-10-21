@@ -22,6 +22,7 @@ View::creator(array('layout'), function($view)
 
 	if( $me->id ) {
 		$total_unread = count($me->unreadMessages);
+		$me->update(['viewed_at' => DB::raw('NOW()')]);
 	}
 
 	// Sub menu
