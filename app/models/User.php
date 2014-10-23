@@ -34,6 +34,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 		'is_admin',
 		'is_mod',
+
+		'victory_rank',
+		'defeat_rank',
 	);
 
 	/**
@@ -284,6 +287,52 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 		/*$group = Group::where('name', '=', 'Moderators')->first();
 
 		return $group->allMembers->contains($this->id);*/
+	}
+
+	/**
+	 * Get user's rank in victory scores
+	 *
+	 * @return int
+	 */
+	public function getVictoryRankAttribute()
+	{
+		$victory = DB::select("SELECT *, FIND_IN_SET( score, (
+			SELECT GROUP_CONCAT( score
+				ORDER BY score DESC )
+				FROM scores
+				WHERE victory = 1 )
+			) AS rank
+			FROM scores
+			WHERE user_id = ?
+				AND victory = 1
+			ORDER BY score DESC
+			LIMIT 1",
+			[$this->id]);
+
+		return $victory[0];
+	}
+
+	/**
+	 * Get user's rank in defeat scores
+	 *
+	 * @return int
+	 */
+	public function getDefeatRankAttribute()
+	{
+		$defeat = DB::select("SELECT *, FIND_IN_SET( score, (
+			SELECT GROUP_CONCAT( score
+				ORDER BY score DESC )
+				FROM scores 
+				WHERE victory = 0 )
+			) AS rank
+			FROM scores
+			WHERE user_id = ?
+				AND victory = 0
+			ORDER BY score DESC
+			LIMIT 1",
+			[$this->id]);
+
+		return $defeat[0];
 	}
 
 	/**

@@ -45,6 +45,7 @@
 		@foreach ( $customs as $custom )
 		<th width="{{ $column_width }}%" class="hidden-xs">{{{ $custom->name }}}</th>
 		@endforeach
+		<th width="10%">Ranking</th>
 		<th class="date" width="14%"><a href="{{ $sort_url }}sort=joined&amp;order={{ $orderby == 'created_at' && $order == 'asc' ? 'desc' : 'asc' }}">Joined</a></th>
 		<th class="posts"><a href="{{ $sort_url }}sort=posts&amp;order={{ $orderby == 'posts' && $order == 'desc' ? 'asc' : 'desc' }}">Posts</a></th>
 	</tr>
@@ -65,6 +66,13 @@
 	@foreach ( $customs as $custom )
 		<td class="hidden-xs">{{{ $member->custom[$custom->id]->value }}}</td>
 	@endforeach
+		<td width="10%">
+		@if ( $member->victory_rank ) 
+		#{{ $member->victory_rank->rank }} - <strong>{{ $member->victory_rank->score }}</strong>
+		@else
+		&nbsp;
+		@endif
+		</td>
 		<td width="14%" class="date">{{ Helpers::local_date('M j, Y', $member->created_at) }}</td>
 		<td class="posts">{{ number_format($member->total_posts) }}</td>
 	</tr>

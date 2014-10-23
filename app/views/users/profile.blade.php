@@ -86,13 +86,13 @@
 	@endif
 	@if ( $website_url )<b>Website:</b><br><a href="{{{ $website_url }}}" rel="nofollow">{{{ $website_text }}}</a><br><br>
 	@endif
-	@if ( $victory_rank || $defeat_rank )
+	@if ( $user->victory_rank || $user->defeat_rank )
 	<b>Honor Rolls:</b><br>
-	@if( $victory_rank )
-	#{{ $victory_rank }} in victories - <strong>{{ $victory->score }}</strong> ({{ $victory->variant }})<br>
+	@if( $user->victory_rank )
+	#{{ $user->victory_rank->rank }} in victories - <strong>{{ $user->victory_rank->score }}</strong> ({{ $user->victory_rank->variant }})<br>
 	@endif
-	@if ( $defeat_rank )
-	#{{ $defeat_rank }} in defeats - <strong>{{ $defeat->score }}</strong> ({{ $defeat->variant }})<br>
+	@if ( $user->defeat_rank )
+	#{{ $user->defeat_rank->rank }} in defeats - <strong>{{ $user->defeat_rank->score }}</strong> ({{ $user->defeat_rank->variant }})<br>
 	@endif
 	<br>
 	@endif
