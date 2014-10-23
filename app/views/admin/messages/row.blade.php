@@ -1,7 +1,7 @@
 <tr class="thread-row{{ !$message->read ? ' unread' : '' }}" data-id="{{ $message->id }}" data-all="1" data-read="{{ $message->read }}" data-title="{{{ $message->subject }}}">
 
 	<td class="icon">
-		<input type="checkbox" name="admin_messages[]" value="{{ $message->id }}" tabindex="1">
+		<input type="checkbox" name="messages[]" value="{{ $message->id }}" tabindex="1">
 	</td>
 
 	<td class="icon">

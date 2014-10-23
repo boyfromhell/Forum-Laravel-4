@@ -530,9 +530,13 @@ class UserController extends Earlybird\FoundryController
 				'website'    => 'url',
 				'agree'      => 'in:1',
 			];
+			$messages = [
+				'name.not_in' => 'Sorry, that username is not allowed',
+				'agree.in' => 'You must agree to the Terms and Conditions',
+			];
 
 			// Run validation
-			$validator = Validator::make(Input::all(), $rules);
+			$validator = Validator::make(Input::all(), $rules, $messages);
 
 			if( $validator->fails() ) {
 				foreach( $validator->messages()->all() as $error ) {

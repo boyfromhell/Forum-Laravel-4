@@ -112,23 +112,22 @@ $('.action').click( function(e) {
 		<th class="lastpost">Date</th>
 	</tr>
 	<tr class="subheading messages">
-		<td colspan="6">
-		<div class="pull-right">
-
-		<input type="submit" name="archive_messages" value="Archive" class="primary" tabindex="1">
-		<input id="delete-multiple" type="submit" name="delete_messages" value="Delete" tabindex="1" data-item="message" data-action="Delete">
-		<input type="submit" name="read_messages" value="Mark Read" tabindex="1">
-		<input type="submit" name="unread_messages" value="Mark Unread" tabindex="1">
-		</div>
-
+		<td colspan="5">
 		<div class="pull-left">
-		Select: 
-		<a href="" onclick="select_messages('all', 1); return false">All</a>, 
-		<a href="" onclick="select_messages('all', 0); return false">None</a>,
-		<a href="" onclick="select_messages('read', 1); return false">Read</a>, 
-		<a href="" onclick="select_messages('read', 0); return false">Unread</a>
+			Select: 
+			<a href="" onclick="select_messages('all', 1); return false">All</a>, 
+			<a href="" onclick="select_messages('all', 0); return false">None</a>,
+			<a href="" onclick="select_messages('read', 1); return false">Read</a>, 
+			<a href="" onclick="select_messages('read', 0); return false">Unread</a>
 		</div>
-		
+		<div class="btn-group btn-group-md pull-right">
+			<button type="submit" name="archive" class="btn btn-default">
+				<span class="glyphicon glyphicon-save"></span> Archive
+			</button>
+			<input id="delete-multiple" type="submit" name="delete" class="btn btn-danger" value="Delete" data-item="message" data-action="Delete">
+			<input type="submit" name="read" value="Mark Read" class="btn btn-default">
+			<input type="submit" name="unread" value="Mark Unread" class="btn btn-default">
+		</div>	
 		<div class="clearfix"></div>
 		</td>
 	</tr>

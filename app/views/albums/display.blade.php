@@ -58,6 +58,8 @@
 		@foreach ( $album->children as $child )
 			@include ('albums.row')
 		@endforeach
+
+		<div class="clearfix"></div>
 	</div>
 </div>
 @endif

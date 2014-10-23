@@ -12,7 +12,6 @@ class AdminController extends BaseController
 	{
 		$_PAGE = array(
 			'category' => 'admin',
-			'section'  => 'general',
 			'title'    => 'Admin'
 		);
 
@@ -34,6 +33,7 @@ class AdminController extends BaseController
 
 		return View::make('admin.dashboard')
 			->with('_PAGE', $_PAGE)
+			->with('menu', AdminController::fetchMenu('dashboard'))
 
 			->with('stats', $stats)
 
@@ -133,7 +133,6 @@ class AdminController extends BaseController
 
 		$_PAGE = array(
 			'category' => 'admin',
-			'section'  => 'messages',
 			'title'    => $message->subject,
 		);
 
@@ -142,6 +141,7 @@ class AdminController extends BaseController
 
 		return View::make('admin.messages.display')
 			->with('_PAGE', $_PAGE)
+			->with('menu', AdminController::fetchMenu('messages'))
 			->with('message', $message);
 	}
 
@@ -154,7 +154,6 @@ class AdminController extends BaseController
 	{
 		$_PAGE = array(
 			'category' => 'admin',
-			'section'  => 'messages',
 			'title'    => 'Admin Messages'
 		);
 
@@ -212,6 +211,7 @@ class AdminController extends BaseController
 
 		return View::make('admin.messages.index')
 			->with('_PAGE', $_PAGE)
+			->with('menu', AdminController::fetchMenu('messages'))
 			->with('reports', $reports)
 			->with('admin_messages', $admin_messages);
 	}
@@ -240,6 +240,42 @@ class AdminController extends BaseController
 			'success' => true,
 			'html' => $html
 		]);
+	}
+
+	/**
+	 * Menu for admin pages
+	 *
+	 * @return array
+	 */
+	public static function fetchMenu( $active )
+	{
+		$menu = array();
+
+		$total = AdminMessage::where('archived', '=', 0)
+			->count();
+
+		$menu['dashboard'] = array(
+			'url' => '/admin',
+			'name' => 'Dashboard',
+		);
+		$menu['messages'] = array(
+			'url' => '/admin/messages',
+			'name' => 'Messages',
+		);
+		if( $total > 0 ) {
+			$menu['messages']['name'] .= ' <span class="label label-default">'.$total.'</span>';
+		}
+
+		$menu['user'] = array(
+			'url' => '/admin/users',
+			'name' => 'Users',
+		);
+
+		if( $active ) {
+			$menu[$active]['active'] = true;
+		}
+
+		return $menu;
 	}
 
 }

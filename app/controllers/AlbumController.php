@@ -118,5 +118,29 @@ class AlbumController extends Earlybird\FoundryController
 
 			->with('allow', $allow);
 	}
+
+	/**
+	 * Edit an album
+	 */
+	public function edit( $id )
+	{
+		global $me;
+
+		$album = Album::findOrFail($id);
+
+		if( $me->id != $album->user_id && !$me->is_admin ) {
+			App::abort(403);
+		}
+
+		$_PAGE = array(
+			'category' => 'gallery',
+			'section'  => 'photos',
+			'title'    => 'Edit Album',
+		);
+
+		return View::make('albums.edit')
+			->with('_PAGE', $_PAGE)
+			->with('album', $album);
+	}
 	
 }

@@ -166,25 +166,45 @@ footer {
 }
 
 .album {	
-	padding:5px 15px 5px 5px; border:0; height:162px;
-	position:relative;
+	padding: 0 15px 0 242px;
+	border: 0;
+	height: 182px;
+	position: relative;
 	
-	.photo { position:absolute; z-index:10; }
-	.description { position:absolute; z-index:1; padding:10px 5px 10px 230px; }
+	.photo {
+		position: absolute;
+		margin: 0;
+		left: 15px;
+		top: 0;
+		z-index: 10;
+	}
 }
-
 .photo, .photo-large {
-	float:left; padding:5px; border:0; text-align:center;
+	float: left;
+	margin: 10px;
+	border: 0;
+	text-align: center;
 	
 	a.thumb {
-		display: block; background:$photo-bg; border:1px solid $photo-border; line-height:0;
-		text-decoration:none; padding: 5px;
-		&:hover { background:$photo-hover; border:1px solid $photo-border-hover; }
+		display: block;
+		background: $photo-bg;
+		border: 1px solid $photo-border;
+		line-height: 0;
+		text-decoration: none;
+		padding: 5px;
+
+		&:hover {
+			background: $photo-hover;
+			border: 1px solid $photo-border-hover;
+		}
 	}
-	&.large { float:none; }
+	&.large {
+		float:none;
+	}
 }
 .photo {
-	width:222px; height:172px;
+	width: 212px;
+	height: 162px;
 }
 
 table.table {
@@ -431,12 +451,20 @@ pre.code {
 		}
 	}
 	.album {
-		width:100%; height:97px;
+		width: 100%;
+		min-height: 97px;
+		height: auto;
+		padding-left: 142px;
+		margin-bottom: 15px;
+
 		.photo {
-			width:122px; height:97px;
-			img { max-width:100px; max-height:75px; }
+			width: 112px;
+			height: 87px;
+			img {
+				max-width: 100px;
+				max-height: 75px;
+			}
 		}
-		.description { padding-left:130px; }
 	}
 
 	footer {

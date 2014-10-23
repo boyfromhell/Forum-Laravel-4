@@ -2,7 +2,6 @@
 		
 	<div class="photo"><a class="thumb" href="{{ $child->url }}"><img src="{{ $cdn }}{{ $child->coverPhoto->thumbnail }}"></a></div>
 	
-	<div class="description">
 	<b><a href="{{ $child->url }}">{{{ $child->name }}}</a></b><br>
 	by <a href="{{ $child->user->url }}">{{{ $child->user->name }}}</a>
 	<br><br>
@@ -19,12 +18,6 @@
 	@if ( $child->total_photos )
 		{{ $child->total_photos }} photo{{ $child->total_photos != 1 ? 's' : '' }}
 	@endif
-	</div>
-	
-	<div class="clearfix"></div>
-	
+
 </div>
 
-@if ( $is_mobile )
-	<div class="clearfix"></div>
-@endif
