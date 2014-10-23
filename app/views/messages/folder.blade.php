@@ -100,9 +100,13 @@ function select_threads( critera, value ) {
 		@include ('messages.thread_row', ['thread_mode' => 'folder'])
 	@endforeach
 	@else
-	<div class="empty">
+	<tr>
+		<td colspan="5">
+		<p class="empty">
 		You have no messages in this folder
-	</div>
+		</p>
+		</td>
+	</tr>
 	@endif
 	</tbody>
 	</table>

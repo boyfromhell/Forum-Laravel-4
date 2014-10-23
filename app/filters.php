@@ -24,6 +24,11 @@ View::creator(array('layout'), function($view)
 		$total_unread = count($me->unreadMessages);
 		$me->update(['viewed_at' => DB::raw('NOW()')]);
 	}
+	if( $me->is_admin ) {
+		$admin_unread = AdminMessage::where('archived', '=', 0)
+			->where('read', '=', 0)
+			->count();
+	}
 
 	// Sub menu
 	foreach( $main_menu as $menu_item ) {
@@ -35,6 +40,9 @@ View::creator(array('layout'), function($view)
 		if( $menu_item->page == 'messages' && $total_unread > 0 ) {
 			$menu_item->name .= ' <span class="badge">'.$total_unread.'</span>';
 			//$menu_item->class = 'btn-danger';
+		}
+		else if( $menu_item->page == 'admin' && $admin_unread > 0 ) {
+			$menu_item->name .= ' <span class="badge">'.$admin_unread.'</span>';
 		}
 	}
 

@@ -102,7 +102,7 @@ $('.action').click( function(e) {
 
 	<div class="panel-heading">Contact Form Messages</div>
 
-	<table class="table" cellpadding="0" cellspacing="0" border="0" width="100%">
+	<table class="table table-hover" cellpadding="0" cellspacing="0" border="0" width="100%">
 	<thead>
 	<tr>
 		<th class="icon">&nbsp;</th>
@@ -138,9 +138,13 @@ $('.action').click( function(e) {
 			@include ('admin.messages.row')
 		@endforeach
 	@else
-		<div class="empty">
+	<tr>
+		<td colspan="5">
+		<p class="empty">
 		There are no messages
-		</div>
+		</p>
+		</td>
+	</tr>
 	@endif
 	</tbody>
 	</table>

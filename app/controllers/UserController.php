@@ -70,13 +70,36 @@ class UserController extends Earlybird\FoundryController
 		$stats['shouts_per_day'] = round($stats['user_shouts']/$stats['days'], 2);
 		$stats['shouts_percent'] = round(100*($stats['user_shouts']/$stats['total_shouts']), 1);
 
+		// Honor Roll rankings
+		$victory = $user->scores()
+			->where('victory', '=', 1)
+			->first();
+		$defeat = $user->scores()
+			->where('victory', '=', 0)
+			->first();
+
+		if( $victory->id ) {
+			$victory_rank = 1 + Score::where('victory', '=', 1)
+				->where('score', '>', $victory->score)
+				->count();
+		}
+		if( $defeat->id ) {
+			$defeat_rank = 1 + Score::where('victory', '=', 0)
+				->where('score', '>', $defeat->score)
+				->count();
+		}
+
 		return View::make('users.profile')
 			->with('_PAGE', $_PAGE)
 			->with('menu', $menu)
 			->with('user', $user)
 			->with('custom', $custom)
 
-			->with('stats', $stats);
+			->with('stats', $stats)
+			->with('victory', $victory)
+			->with('victory_rank', $victory_rank)
+			->with('defeat', $defeat)
+			->with('defeat_rank', $defeat_rank);
 
 		/*$Smarty->assign('user_last', $user_last);
 

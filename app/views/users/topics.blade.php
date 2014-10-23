@@ -83,9 +83,17 @@ function select_threads( critera, value ) {
 	</tr>
 	</thead>
 	<tbody>
+	@if ( count($topics) > 0 )
 	@foreach ( $topics as $topic )
 		@include ('topics.row', ['topic_mode' => 'subscription'])
 	@endforeach
+	@else
+	<tr>
+		<td colspan="8">
+		<p class="empty">You are not subscribed to any topics</p>
+		</td>
+	</tr>
+	@endif
 	</tbody>
 	</table>
 
