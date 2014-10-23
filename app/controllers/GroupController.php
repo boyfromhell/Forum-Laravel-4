@@ -238,6 +238,10 @@ class GroupController extends Earlybird\FoundryController
             'url' => '/honor-rolls',
             'name' => 'Honor Rolls',
         );
+		$menu['badges'] = array(
+			'url' => '/badges',
+			'name' => 'Badges',
+		);
         $menu['chat'] = array(
             'url' => '/community/chat',
             'name' => 'Chat',

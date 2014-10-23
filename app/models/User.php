@@ -25,6 +25,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	protected $guarded = array('id');
 	protected $appends = array(
 		'url',
+		'post_level',
 		'level',
 		'access',
 		'custom',
@@ -185,6 +186,21 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	}
 
 	/**
+	 * User's level based on # of posts
+	 *
+	 * @return Level
+	 */
+	public function getPostLevelAttribute()
+	{
+		$post_level = Level::where('type', '=', 0)
+			->where('min_posts', '<=', $this->total_posts)
+			->orderBy('min_posts', 'desc')
+			->first();
+
+		return $post_level;
+	}
+
+	/**
 	 * User's level (specially assigned or based on # of posts)
 	 *
 	 * @return Level
@@ -198,17 +214,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 
 		// Title based on number of posts
 		if( ! $this->level_id || ! $level->image ) {
-			$post_level = Level::where('type', '=', 0)
-				->where('min_posts', '<=', $this->total_posts)
-				->orderBy('min_posts', 'desc')
-				->first();
-
 			if( $level && ! $level->image ) {
-				$level->image = $post_level->image;
+				$level->image = $this->post_level->image;
 			}
 		}
 
-		return ( $level ? $level : $post_level );
+		return ( $level ? $level : $this->post_level );
 	}
 
 	/**

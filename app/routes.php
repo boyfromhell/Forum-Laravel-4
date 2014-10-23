@@ -127,6 +127,7 @@ Route::get('groups/{id}/{name?}', array('uses' => 'GroupController@display'));
 Route::get('users/{id}/{name?}', array('uses' => 'UserController@display'));
 Route::get('honor-rolls', array('uses' => 'ScoreController@index'));
 Route::get('chat-popup', array('uses' => 'PageController@chatPopup'));
+Route::get('badges', array('uses' => 'LevelController@display'));
 
 // Gallery
 Route::get('media', array('uses' => 'AlbumController@gallery'));
