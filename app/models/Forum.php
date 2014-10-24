@@ -31,7 +31,10 @@ class Forum extends Earlybird\Foundry
 	 */
 	public function children()
 	{
+		global $me;
+
 		return $this->hasMany('Forum', 'parent_id')
+			->where('view', '<=', $me->access)
 			->orderBy('order', 'asc');
 	}
 
@@ -138,7 +141,7 @@ class Forum extends Earlybird\Foundry
 	 */
 	public function check_permission( $type )
 	{
-		$me = Auth::user();
+		global $me;
 
 		$group_type = 'group_' . $type;
 

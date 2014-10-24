@@ -2,6 +2,7 @@
 
 @section('content')
 
+@if ( $me->id )
 <div class="panel panel-danger">
 
 	<div class="panel-heading">Oops</div>
@@ -15,5 +16,10 @@
 	</div>
 
 </div>
+@else
+
+@include ('users.signin_form')
+
+@endif
 
 @stop

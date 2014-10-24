@@ -31,7 +31,7 @@
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Subject</label>
 		<div class="col-sm-7">
-			{{ Form::text('subject', $subject, ['class' => 'form-control', 'maxlength' => 70, 'autofocus']) }}
+			{{ Form::text('subject', $subject, ['class' => 'form-control', 'maxlength' => 70, ( $mode == 'newtopic' ? 'autofocus' : '' )]) }}
 		</div>
 	</div>
 
@@ -50,7 +50,7 @@
 		</label>
 		<div class="col-sm-7">
 			{{ BBCode::show_bbcode_controls() }}
-			{{ Form::textarea('content', $content, ['id' => 'bbtext', 'class' => 'form-control']) }}
+			{{ Form::textarea('content', $content, ['id' => 'bbtext', 'class' => 'form-control', ('mode' == 'newtopic' ? '' : 'autofocus')]) }}
 		</div>
 	</div>
 

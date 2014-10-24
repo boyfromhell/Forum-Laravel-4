@@ -45,8 +45,8 @@
 	<script type="text/javascript">
 	$(document).ready(function() {
 		parangi.init({
+			'loggedin' : {{ $me->id ? 'true' : 'false' }},
 			'category' : "{{{ $_PAGE['category'] }}}",
-			'section'  : "{{{ $_PAGE['section'] }}}",
 			'id'       : "{{{ $_PAGE['id'] }}}"
 		});
 	});
@@ -116,13 +116,16 @@
 	</div>
 	@endif
 
-	&copy; {{ date('Y') }} {{{ Config::get('app.short_name') }}}
+	<ul class="footer">
+		<li>&copy; {{ date('Y') }} {{{ Config::get('app.short_name') }}}</li>
+		<li><a href="/about">About</a></li>
+		<li><a href="/contact">Contact</a></li>
+		<li><a href="/links">Links</a></li>
+		<li><a href="/privacy">Privacy</a></li>
+		<li><a href="/terms">Terms of Use</a></li>
+		<li>powered by <a href="http://github.com/andrewtweber/parangi" target="_blank">parangi</a></li>
+	</ul>
 
-	<a href="/about">About</a>
-	<a href="/contact">Contact</a>
-	<a href="/links">Links</a>
-	<a href="/privacy">Privacy</a>
-	<a href="/terms">Terms of Use</a>
 </footer>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>

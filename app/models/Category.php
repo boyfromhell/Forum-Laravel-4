@@ -10,11 +10,16 @@ class Category extends Earlybird\Foundry
 	 */
 	public function forums()
 	{
+		global $me;
+
 		// @todo should be just whereNull
-		// @todo should check for permissions based on Auth::user
 		return $this->hasMany('Forum')
-			->where('parent_id', '=', 0)
-			->orWhereNull('parent_id')
+			->where(function($q)
+			{
+				$q->where('parent_id', '=', 0)
+					->orWhereNull('parent_id');
+			})
+			->where('view', '<=', $me->access)
 			->orderBy('order', 'asc');
 	}
 

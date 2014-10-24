@@ -114,6 +114,8 @@ View::addNamespace('foundry', base_path().'/vendor/earlybirdmvp/foundry/views');
 
 App::error( function(Exception $exception, $code )
 {
+	global $me;
+
 	if( Config::get('app.debug') ) {
 		return;
 	}
@@ -121,8 +123,12 @@ App::error( function(Exception $exception, $code )
 		return;
 	}
 
+	if( ! $me->id && $code == 403 ) {
+		Session::push('errors', 'You must login to view this page');
+	}
+
 	$data = array(
-		'code' => $code
+		'code' => $code,
 	);
 
 	return Response::view('errors.'.$code, $data, $code);

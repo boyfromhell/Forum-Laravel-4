@@ -14,7 +14,7 @@
 	<div class="form-group">
 		<label class="control-label col-sm-3">To</label>
 		<div class="col-sm-7">
-			{{ Form::textarea('recipients', $recipients, ['class' => 'form-control textarea-sm']) }}<br>
+			{{ Form::textarea('recipients', $recipients, ['class' => 'form-control textarea-sm', 'required', 'autofocus']) }}<br>
 			<small>Separate multiple recipients with a comma or new line</small>
 		</div>
 	</div>
@@ -25,7 +25,7 @@
 		@if ( $thread->id )
 			<p class="form-control-static">Re: {{{ $thread->title }}}</p>
 		@else
-			{{ Form::text('subject', $subject, ['maxlength' => 70, 'class' => 'form-control']) }}
+			{{ Form::text('subject', $subject, ['maxlength' => 70, 'class' => 'form-control', 'required']) }}
 		@endif
 		</div>
 	</div>

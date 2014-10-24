@@ -11,7 +11,7 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Character Name *</label>
 		<div class="col-sm-5">
-			{{ Form::text('character', '', ['class' => 'form-control', 'required']) }}
+			{{ Form::text('character', '', ['class' => 'form-control', 'required', 'autofocus']) }}
 		</div>
 	</div>
 		

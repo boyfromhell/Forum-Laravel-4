@@ -156,12 +156,19 @@ textarea.form-control.textarea-sm {
 }
 
 footer {
-	margin-bottom: 20px;
+	margin: 20px 0;
 	text-align: center;
 	font-size: 8pt;
 	color: #ccc;
-	a {
-		margin-left: 13px;
+	ul.footer {
+		margin: 0; padding: 0;
+		display: inline;
+
+		li {
+			margin: 0 6px; padding: 0;
+			list-style-type: none;
+			display: inline;
+		}
 	}
 }
 
@@ -475,7 +482,9 @@ pre.code {
 		#social-media {
 			float:none; margin:0 0 10px;
 			img { margin: 0; }
-			a { margin:0 3px; }
+			ul.footer {
+				li { margin:0 3px; }
+			}
 		}
 	}
 
