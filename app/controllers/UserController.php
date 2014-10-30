@@ -107,21 +107,29 @@ class UserController extends Earlybird\FoundryController
 
 		if( Request::isMethod('post') )
 		{
+			if( Input::has('password') ) {
+				$password = Input::get('password');
+			}
+
 			$rules = [
 				'confirm' => 'same:password',
-				'email' => 'email|unique:users,email,'.$me->id,
+				'email'   => 'required|email|unique:users,email,'.$me->id,
 				'website' => 'url',
 			];
 
 			// Do we need a password confirmation?
-			if( $me->email != Input::get('email') || Input::has('password') ) {
-				$rules['old_password'] = 'required';
+			if( $me->email != Input::get('email') || $password !== NULL ) {
+				$rules['old_password'] = 'required|checkHashedPass:'.$me->password;
 			}
-			if( strlen(Input::get('password')) > 0 ) {
+			if( $password !== NULL ) {
 				$rules['password'] = 'required|min:6';
 			}
 
-			$validator = Validator::make(Input::all(), $rules);
+			$messages = array(
+				'check_hashed_pass' => 'Current password is incorrect'
+			);
+
+			$validator = Validator::make(Input::all(), $rules, $messages);
 
 			if( $validator->fails() ) {
 				foreach( $validator->messages()->all() as $error ) {
@@ -135,7 +143,21 @@ class UserController extends Earlybird\FoundryController
 				$me->sig = substr(Input::get('sig'), 0, 512);
 				$me->website = $website;
 				$me->email = Input::get('email');
+
+				if( $password !== NULL ) {
+					$me->password = Hash::make($password);
+				}
+
 				$me->save();
+
+				// Save custom fields
+				$customs = CustomField::orderBy('order', 'asc')->get();
+
+				foreach( $customs as $custom )
+				{
+					$cdata = Input::get('custom'.$custom->id);
+					$me->save_field($custom->id, $cdata);
+				}
 
 				Session::push('messages', 'Profile updated');
 
@@ -143,7 +165,7 @@ class UserController extends Earlybird\FoundryController
 			}
 		}
 
-		// Custom fields
+		// Load custom fields
 		$customs = CustomField::leftJoin('custom_data', function($join) use ($me)
 			{
 				$join->on('custom_data.field_id', '=', 'custom_fields.id')

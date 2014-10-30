@@ -21,6 +21,8 @@ Route::group(array('before' => 'admin'), function()
 	Route::any('admin/messages', array('uses' => 'AdminController@messages'));
 	Route::get('admin/messages/{id}', array('uses' => 'AdminController@viewMessage'));
 
+	Route::post('admin/handle-report', array('uses' => 'AdminController@handleReport'));
+
 	Route::any('admin/edit-announcement', array('uses' => 'AdminController@editAnnouncement'));
 
 	Route::resource('admin/forums', 'ForumController');

@@ -151,5 +151,15 @@ class Post extends Earlybird\Foundry
         return $redirect;
     }
 
-}
+	/**
+	 * Posts from X days ago
+	 *
+	 * @param  int  $days
+	 * @return Query
+	 */
+	public function scopeDaysAgo($query, $days)
+	{
+		return $query->where('created_at', '>=', DB::raw('DATE_SUB(NOW(), INTERVAL '.$days.' DAY)'));
+	}
 
+}

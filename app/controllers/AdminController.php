@@ -19,6 +19,10 @@ class AdminController extends BaseController
 			'Users'  => User::count(),
 			'Topics' => Topic::count(),
 			'Posts'  => Post::count(),
+			'Posts - last 10 days' => Post::daysAgo(10)->count(),
+			'Posts - last 30 days' => Post::daysAgo(30)->count(),
+			'Shoutbox Posts' => Shout::count(),
+			'Shoutbox - last 30 days' => Shout::daysAgo(30)->count(),
 			'Albums' => Album::count(),
 			'Photos' => Photo::count(),
 		);
@@ -240,6 +244,29 @@ class AdminController extends BaseController
 			'success' => true,
 			'html' => $html
 		]);
+	}
+
+	/**
+	 * Mark a post flag as complete or rejected
+	 *
+	 * @return Response
+	 */
+	public function handleReport()
+	{
+		$id = Input::get('id');
+		$action = Input::get('action');
+		$report = PostReport::findOrFail($id);
+
+		if( $action != 'rejected' ) {
+			$action = 'complete';
+		}
+
+		$json['success'] = true;
+
+		$report->status = $action;
+		$report->save();
+
+		return Response::json($json);
 	}
 
 	/**

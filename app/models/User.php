@@ -347,6 +347,31 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	}
 
 	/**
+	 * Save a custom field
+	 *
+	 * @param  int  $field_id
+	 * @param  mixed  $data
+	 */
+	public function save_field( $field_id, $data )
+	{
+		// Delete data if empty
+		if( $data === '' || $data === NULL ) {
+			CustomData::where('user_id', '=', $this->id)
+				->where('field_id', '=', $field_id)
+				->delete();
+		}
+		else {
+			DB::insert("INSERT INTO custom_data SET
+					user_id  = ?,
+					field_id = ?,
+					value    = ?
+				ON DUPLICATE KEY UPDATE
+					value = ?",
+				[$this->id, $field_id, $data, $data]);
+		}
+	}
+
+	/**
 	 * Check if I voted in a poll
 	 * Fetch array of results if so, or false if not
 	 *

@@ -112,6 +112,15 @@ require app_path().'/filters.php';
 View::addLocation(base_path().'/vendor/earlybirdmvp/foundry/views');
 View::addNamespace('foundry', base_path().'/vendor/earlybirdmvp/foundry/views');
 
+Validator::extend('checkHashedPass', function($attribute, $value, $parameters)
+{
+	if( ! Hash::check( $value , $parameters[0] ) )
+	{
+		return false;
+	}
+	return true;
+});
+
 App::error( function(Exception $exception, $code )
 {
 	global $me;

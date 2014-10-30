@@ -89,7 +89,7 @@ $('.action').click( function(e) {
 		'id'     : $(this).data('id'),
 		'action' : $(this).data('action')
 	};
-	$.post('/admin/ajax/post_report.php', send_data, function(data) {
+	$.post('/admin/handle-report', send_data, function(data) {
 		$row.fadeOut('fast');
 	}, 'json');
 });
