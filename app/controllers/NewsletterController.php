@@ -8,13 +8,11 @@ class Newsletter extends Controller_W
 	 */
 	public function subscribe( $user_id )
 	{
-		global $_db, $gmt;
-
-		$sql = "INSERT IGNORE INTO `newsletter_users` SET
-			`newsletter_id`   = {$this->id},
-			`user_id`         = {$user_id},
-			`date_subscribed` = {$gmt}";
-		$_db->query($sql);
+		DB::insert("INSERT IGNORE INTO newsletter_users SET
+				newsletter_id = ?,
+				user_id       = ?,
+				subscribed_at = NOW()",
+			[$this->id, $user_id]);
 	}
 
 	/**
@@ -22,8 +20,6 @@ class Newsletter extends Controller_W
 	 */
 	public function unsubscribe( $user_id )
 	{
-		global $_db;
-
 		$sql = "DELETE FROM `newsletter_users`
 			WHERE `newsletter_id` = {$this->id}
 				AND `user_id`     = {$user_id}";

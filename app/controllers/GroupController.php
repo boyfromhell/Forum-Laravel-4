@@ -15,10 +15,6 @@ class GroupController extends Earlybird\FoundryController
 			'title'    => 'Groups',
 		);
 
-		/*if( !$me->is_admin ) {
-			$where_sql = 'WHERE `approved` = 1';
-		}*/
-
 		// Groups
 		$groups = Group::where('approved', '=', 1)
 			->orderBy('name', 'asc')
@@ -98,54 +94,6 @@ class GroupController extends Earlybird\FoundryController
 		}
 	}
 	
-	/**
-	 * Count number of members
-	 */
-	public function count_members()
-	{
-		global $_db;
-		
-		$sql = "SELECT COUNT(1)
-			FROM `group_members`
-			WHERE `group_id` = {$this->id}";
-		$exec = $_db->query($sql);
-		list( $count ) = $exec->fetch_row();
-		
-		return $count;
-	}
-
-	/**
-	 * Load member data into two arrays (moderators & members)
-	 */
-	public function load_members()
-	{
-		global $_db;
-	
-		// Members
-		$sql = "SELECT `users`.`id`, `users`.`name`, `users`.`user_type`, `users`.`posts`, `group_members`.`type`
-			FROM `users`
-				JOIN `group_members`
-					ON `users`.`id` = `group_members`.`user_id`
-			WHERE `group_members`.`group_id` = {$this->id}
-			ORDER BY `group_members`.`type` DESC, `users`.`name` ASC";
-		$exec = $_db->query($sql);
-
-		$this->moderators = $this->members = array();
-		
-		$counter = 0;
-		while( $data = $exec->fetch_assoc() )
-		{
-			$user = new User($data['id'], array('name' => $data['name'], 'user_type' => $data['user_type'], 'posts' => $data['posts']));
-			$user->counter = ++$counter;
-
-			if( $data['type'] == 1 ) {
-				$this->_extra['moderators'][] = $user;
-			} else {
-				$this->_extra['members'][] = $user;
-			}
-		}
-	}
-
 	/**
 	 * Add a member based on ID
 	 */

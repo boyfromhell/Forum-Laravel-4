@@ -51,10 +51,10 @@
 	
 	<div class="btn-group btn-group-sm pull-right">
 	@if ( $me->id )
-		@if ( !$topic->status )
+		@if ( ! $topic->is_locked )
 			<a href="/quote-post/{{ $post->id }}" class="btn btn-primary">Quote</a>
 		@endif
-		@if (( $me->id == $post->user_id && !$topic->status ) || $me->is_moderator )
+		@if (( $me->id == $post->user_id && ! $topic->is_locked ) || $me->is_moderator )
 			<a href="/edit-post/{{ $post->id }}" onClick="parangi.quickEdit({{ $post->id }}, 'edit'); return false" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
 			<a href="/delete-post/{{ $post->id }}" class="btn btn-danger" title="Delete post"><span class="glyphicon glyphicon-remove"></span></a>
 		@else

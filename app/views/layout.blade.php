@@ -4,7 +4,9 @@
 	<title>{{{ $_PAGE['window_title'] }}}</title>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
-	<meta name="AUTHOR" content="Andrew Weber">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<meta name="AUTHOR" content="{{{ Config::get('app.forum_name') }}}">
 	<meta name="COPYRIGHT" content="Copyright &copy; {{ date('Y') }} {{{ Config::get('app.forum_name') }}}">
 	<meta name="KEYWORDS" content="{{{ $_PAGE['html_keys'] }}}">
 	<meta name="DESCRIPTION" content="{{{ $_PAGE['html_desc'] }}}">

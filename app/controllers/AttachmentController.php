@@ -40,7 +40,7 @@ class AttachmentController extends Earlybird\FoundryController
 
 		$attachment->increment('downloads');
 
-		if( $_CONFIG['aws'] === null ) {
+		if( Config::get('app.aws') === null ) {
 			$path = ROOT . 'web' . $attachment->get_path() . $attachment->filename;
 		}
 		else {

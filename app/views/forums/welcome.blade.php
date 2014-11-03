@@ -56,6 +56,8 @@
 		</tbody>
 		</table>
 	</div>
+
+	@include ('blocks.jumpbox', ['jump_categories' => $categories, 'j_size' => 5])
 </div>
 
 <div class="col-sm-3 col-sm-pull-9">

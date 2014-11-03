@@ -58,6 +58,13 @@ class ForumController extends Earlybird\FoundryController
 			->orderBy('updated_at', 'desc')
 			->first();
 
+		// Categories
+		$categories = Category::orderBy('order', 'asc')->get();
+
+		$categories->load([
+			'forums',
+		]);
+
 		// Fetch most recent shouts
 		$shouts = Shout::orderBy('id', 'desc')
 			->take(30)
@@ -74,6 +81,7 @@ class ForumController extends Earlybird\FoundryController
 			->with('photo', $photo)
 			->with('album', $album)
 
+			->with('categories', $categories)
 			->with('stats', $stats)
 			->with('newest_user', $newest_user)
 			->with('online_stats', $this->getOnline(false))

@@ -2,7 +2,7 @@
 	<a href="/move-topic/{{ $topic->id }}" class="btn btn-default">
 		<span class="glyphicon glyphicon-arrow-right"></span> Move
 	</a>
-@if ( $topic->status == 1 )
+@if ( $topic->is_locked )
 	<a href="/unlock-topic/{{ $topic->id }}" class="btn btn-default">
 		<span class="glyphicon glyphicon-unlock"></span> Unlock
 	</a>

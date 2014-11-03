@@ -10,7 +10,7 @@ class AvatarController extends Earlybird\FoundryController
 	 */
 	public function manage()
 	{
-		$me = Auth::user();
+		global $me;
 
 		if( Request::isMethod('post') )
 		{

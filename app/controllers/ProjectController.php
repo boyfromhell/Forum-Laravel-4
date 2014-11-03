@@ -18,12 +18,6 @@ class ProjectController extends Earlybird\FoundryController
 		if( ! Module::isActive('downloads') ) {
 			App::abort(404);
 		}
-		/*else {
-			if( $board_apps['downloads']['permission'] > $me->access ) {
-				require_once(ROOT . 'web/login.php');
-				exit;
-			}
-		}*/
 
 		switch( $category ) {
 			case 'variants':
@@ -79,12 +73,6 @@ class ProjectController extends Earlybird\FoundryController
 		if( ! Module::isActive('downloads') ) {
 			App::abort(404);
 		}
-		/*else {
-			if( $board_apps['downloads']['permission'] > $me->access ) {
-				require_once(ROOT . 'web/login.php');
-				exit;
-			}
-		}*/
 
 		$project = Project::findOrFail($id);
 		$project->increment('views');

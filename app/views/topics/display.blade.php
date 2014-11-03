@@ -17,7 +17,7 @@
 @if ( $me->id )
 <div class="pull-left">
 <a href="/new-topic/{{ $forum->id }}" class="btn btn-default">New Topic</a>
-<a href="/reply-to-topic/{{ $topic->id }}" class="btn btn-{{ $topic->status ? 'danger' : 'primary' }}">{{ $topic->status ? 'Locked' : 'Reply' }}</a>
+<a href="/reply-to-topic/{{ $topic->id }}" class="btn btn-{{ $topic->is_locked ? 'danger' : 'primary' }}">{{ $topic->is_locked ? 'Locked' : 'Reply' }}</a>
 </div>
 @endif
 
@@ -57,7 +57,7 @@
 	<li><a href="{{ $topic->url }}">{{{ $topic->title }}}</a></li>
 </ol>
 
-@if ( $me->id && !$topic->status )
+@if ( $me->id && ! $topic->is_locked )
 	@include ('topics.quick_reply')
 @endif
 

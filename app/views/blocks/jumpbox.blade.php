@@ -1,7 +1,7 @@
 <div class="row">
 <form method="get" action="viewforum.php">
 
-<div class="col-sm-8 col-md-4 col-sm-push-4 col-md-push-8">
+<div class="col-sm-8 col-md-{{ $j_size or 4 }} col-sm-push-4 col-md-push-{{ $j_size ? 12-$j_size : 8 }}">
 <div class="well well-sm">
 
 <div class="input-group input-group-sm">

@@ -44,24 +44,6 @@ class AlbumController extends Earlybird\FoundryController
 			->with('_PAGE', $_PAGE)
 			->with('photos', $photos)
 			->with('albums', $albums);
-
-		/*
-		if( $board_apps["videos"]["enabled"] && $board_apps["videos"]["permission"] <= $me->access ) {
-			$sql = "SELECT video_id, users.id, users.name, video_filename, video_name
-			FROM videos, users, video_albums
-			WHERE video_approved = 1 AND video_owner = users.id 
-				AND video_album = album_id AND permission_view <= '$me->access'
-			ORDER BY video_date DESC LIMIT 6";
-			$res = query($sql, __FILE__, __LINE__);
-			while( $vid = mysql_fetch_array($res)) {
-				list( $v, $ownid, $owner, $thumb, $name ) = $vid;
-				$name = stripslashes($name);
-				echo "<div class=\"photo\" style=\"height:185px;\">
-				<a class=\"thumb\" href=\"video.php?v=$v\"><img src=\"videos/preview/".$thumb."_sm.jpg\"></a>
-				<div style=\"height:16px;overflow:hidden;\">$name</div>
-				<small>by <a href=\"profile.php?u=$ownid\">$owner</a></small></div>\n";
-			}
-		*/
 	}
 
 	/**
@@ -75,16 +57,16 @@ class AlbumController extends Earlybird\FoundryController
 	{
 		global $me;
 
-		$album = Album::findOrFail($id);
-
-		/*if( isset($_GET['gallery']) ) {
-			$sql = "SELECT `id`
-				FROM `albums`
-				WHERE `folder` = '" . $_db->escape($_GET['gallery']) . "'";
-			$exec = $_db->query($sql);
-			
-			list( $id ) = $exec->fetch_row();
-		}*/
+		if( $id ) {
+			$album = Album::findOrFail($id);
+		}
+		else if( Input::has('gallery') ) {
+			$album = Album::where('folder', '=', Input::get('gallery'))
+				->first();
+		}
+		if( ! $album->id ) {
+			App::abort(404);
+		}
 
 		// @todo
 		if( $album->permission_view > $me->access ) {
@@ -100,7 +82,7 @@ class AlbumController extends Earlybird\FoundryController
 		// Permissions
 		$allow = $album->check_permission();
 
-		// Parents and child albums
+		// @todo
 		/*
 			if( strlen($child->description) > 80 ) {
 				$child->description = substr($child->description, 0, 79) . '...';

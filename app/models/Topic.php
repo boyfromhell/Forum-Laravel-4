@@ -114,7 +114,7 @@ class Topic extends Earlybird\Foundry
 		else if( $this->type == 1 ) {
 			$image = 'topic_sticky';
 		}
-		else if( $this->status == 1 ) {
+		else if( $this->is_locked == 1 ) {
 			$image = 'topic_locked';
 		}
 		else {
@@ -145,7 +145,7 @@ class Topic extends Earlybird\Foundry
 		else if( $this->type == 1 ) {
 			return 'Sticky';
 		}
-		else if( $this->status == 1 ) {
+		else if( $this->is_locked == 1 ) {
 			return 'Locked';
 		}
 		else if( $this->unread_post->id ) {

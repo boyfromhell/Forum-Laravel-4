@@ -281,7 +281,7 @@ class TopicController extends Earlybird\FoundryController
 	public function lock( $id )
 	{
 		$topic = Topic::findOrFail($id);
-		$topic->status = 1;
+		$topic->is_locked = 1;
 		$topic->save();
 
 		Session::push('notices', 'The topic has been locked');
@@ -298,7 +298,7 @@ class TopicController extends Earlybird\FoundryController
 	public function unlock( $id )
 	{
 		$topic = Topic::findOrFail($id);
-		$topic->status = 0;
+		$topic->is_locked = 0;
 		$topic->save();
 
 		Session::push('notices', 'The topic has been unlocked');

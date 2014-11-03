@@ -28,7 +28,7 @@ class PostController extends Earlybird\FoundryController
 		$this->mode = 'reply';
 		$this->title = 'Post a reply';
 
-		if( $this->topic->status && !$me->is_moderator ) {
+		if( $this->topic->is_locked && !$me->is_moderator ) {
 			App::abort(403);
 		}
 
@@ -56,7 +56,7 @@ class PostController extends Earlybird\FoundryController
 		if( $this->post->user_id != $me->id && !$me->is_moderator ) {
 			App::abort(403);
 		}
-		if( $this->topic->status && !$me->is_moderator ) {
+		if( $this->topic->is_locked && !$me->is_moderator ) {
 			App::abort(403);
 		}
 
@@ -82,7 +82,7 @@ class PostController extends Earlybird\FoundryController
 		if( $post->user_id != $me->id && !$me->is_moderator ) {
 			App::abort(403);
 		}
-		if( $topic->status && !$me->is_moderator ) {
+		if( $topic->is_locked && !$me->is_moderator ) {
 			App::abort(403);
 		}
 
@@ -140,7 +140,7 @@ class PostController extends Earlybird\FoundryController
 		$this->mode = 'quote';
 		$this->title = 'Post a reply';
 
-		if( $this->topic->status && !$me->is_moderator ) {
+		if( $this->topic->is_locked && !$me->is_moderator ) {
 			App::abort(403);
 		}
 
@@ -686,7 +686,7 @@ class PostController extends Earlybird\FoundryController
 		if( $post->user_id != $me->id && !$me->is_moderator ) {
 			App::abort(403);
 		}
-		if( $post->topic->status && !$me->is_moderator ) {
+		if( $post->topic->is_locked && !$me->is_moderator ) {
 			App::abort(403);
 		}
 
