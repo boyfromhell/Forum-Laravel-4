@@ -45,6 +45,10 @@ class BBCode
 	 */
 	public static function parse( $text, $smileys = true, $text_only = false )
 	{
+		$pd = new Parsedown();
+		return $pd->text($text);
+
+
 		// For consistency
 		$text = str_replace("\r\n", "\n", $text);
 

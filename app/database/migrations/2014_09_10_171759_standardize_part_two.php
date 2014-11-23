@@ -18,11 +18,25 @@ class StandardizePartTwo extends Migration {
 			$table->timestamps();
 		});
 
+		// Downloads
+		DB::table('downloads')
+			->update([
+				'created_at' => DB::raw('FROM_UNIXTIME(date)'),
+				'updated_at' => DB::raw('FROM_UNIXTIME(date)'),
+			]);
+
 		// Posts
 		Schema::table('posts', function($table)
 		{
 			$table->timestamps();
 		});
+
+		// Posts
+		DB::table('posts')
+			->update([
+				'created_at' => DB::raw('FROM_UNIXTIME(time)'),
+				'updated_at' => DB::raw('FROM_UNIXTIME(edit_time)'),
+			]);
 
 		// Topics
 		Schema::table('topics', function($table)
@@ -32,6 +46,14 @@ class StandardizePartTwo extends Migration {
 			$table->timestamps();
 			$table->dateTime('posted_at')->nullable();
 		});
+
+		// Topics
+		DB::table('topics')
+			->update([
+				'created_at' => DB::raw('FROM_UNIXTIME(time)'),
+				'updated_at' => DB::raw('FROM_UNIXTIME(last_date)'),
+				'posted_at' => DB::raw('FROM_UNIXTIME(last_date)'),
+			]);
 	}
 
 	/**

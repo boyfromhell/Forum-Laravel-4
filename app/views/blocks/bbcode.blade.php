@@ -7,16 +7,16 @@
 </div>
 
 <div class="btn-group btn-group-sm">
-	<button type="button" onClick="addtext('[b]','[/b]',0);" class="btn btn-default" title="Bold">
+	<button type="button" onClick="addtext('**','**',0);" class="btn btn-default" title="Bold">
 		<span class="glyphicon glyphicon-bold"></span>
 	</button>
-	<button type="button" onClick="addtext('[i]','[/i]',0);" class="btn btn-default" title="Italic">
+	<button type="button" onClick="addtext('*','*',0);" class="btn btn-default" title="Italic">
 		<span class="glyphicon glyphicon-italic"></span>
 	</button>
 	<button type="button" onClick="addtext('[u]','[/u]',0);" class="btn btn-default btn-bbcode" title="Underline">
 		<span class="bbcode-underline">U</span>
 	</button>
-	<button type="button" onClick="addtext('[strike]','[/strike]',0);" class="btn btn-default btn-bbcode" title="Strikethrough">
+	<button type="button" onClick="addtext('~~','~~',0);" class="btn btn-default btn-bbcode" title="Strikethrough">
 		<span class="bbcode-strikethrough">S</span>
 	</button>
 </div>
@@ -60,22 +60,22 @@
 </div>
 
 <div class="btn-group btn-group-sm">
-	<button type="button" onClick="addtext('[quote]','[/quote]',0);" class="btn btn-default btn-bbcode" title="Quote">
+	<button type="button" onClick="addtext('> ','',0);" class="btn btn-default btn-bbcode" title="Quote">
 		<span class="bbcode-quote">&#8220;</span>
 	</button>
 	<button type="button" onClick="addtext('[code]','[/code]',0);" class="btn btn-default" title="Code">
 		<span class="glyphicon glyphicon-tower"></span>
 	</button>
-	<button type="button" onClick="addtext('[img]','[/img]',0);" class="btn btn-default" title="Image">
+	<button type="button" onClick="addtext('![](',')',0);" class="btn btn-default" title="Image">
 		<span class="glyphicon glyphicon-picture"></span>
 	</button>
-	<button type="button" onClick="addtext('[url=http://]','[/url]',0);" class="btn btn-default" title="URL">
+	<button type="button" onClick="addtext('[text](',')',0);" class="btn btn-default" title="URL">
 		<span class="glyphicon glyphicon-link"></span>
 	</button>
-	<button type="button" onClick="addtext('[list=1]\n[*]','\n[/list]',0);" class="btn btn-default btn-bbcode" title="List">
+	<button type="button" onClick="addtext('1. ','',0);" class="btn btn-default btn-bbcode" title="List">
 		<span class="bbcode-ol">1<br>2</span>
 	</button>
-	<button type="button" onClick="addtext('[list]\n[*]','\n[/list]',0);" class="btn btn-default" title="Bullets">
+	<button type="button" onClick="addtext('* ','',0);" class="btn btn-default" title="Bullets">
 		<span class="glyphicon glyphicon-list"></span>
 	</button>
 </div>

@@ -1,6 +1,7 @@
 <?php
 
-class Group extends Earlybird\Foundry
+class Group extends Cartalyst\Sentry\Groups\Eloquent\Group
+// Earlybird\Foundry
 {
 
 	protected $guarded = array('id');
@@ -25,7 +26,7 @@ class Group extends Earlybird\Foundry
 	 */
 	public function allMembers()
 	{
-		return $this->belongsToMany('user', 'group_members');
+		return $this->belongsToMany('user', 'users_groups');
 	}
 
 	/**
@@ -35,8 +36,8 @@ class Group extends Earlybird\Foundry
 	 */
 	public function moderators()
 	{
-		return $this->belongsToMany('User', 'group_members')
-			->where('group_members.type', '=', 1);
+		return $this->belongsToMany('User', 'users_groups')
+			->where('users_groups.type', '=', 1);
 	}
 
 	/**
@@ -46,8 +47,8 @@ class Group extends Earlybird\Foundry
 	 */
 	public function members()
 	{
-		return $this->belongsToMany('User', 'group_members')
-			->where('group_members.type', '=', 0);
+		return $this->belongsToMany('User', 'users_groups')
+			->where('users_groups.type', '=', 0);
 	}
 
 	/**

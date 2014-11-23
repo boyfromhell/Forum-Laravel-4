@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RenameUserColumns extends Migration {
+class AddTimestampsToQueriesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,12 +13,10 @@ class RenameUserColumns extends Migration {
 	public function up()
 	{
 		//
-		Schema::table('users', function($table)
+		Schema::table('queries', function($table)
 		{
-			$table->renameColumn('online', 'hide_online');
-			$table->dropColumn('upcoming');
-			$table->renameColumn('active', 'activated');
-			$table->renameColumn('style', 'theme_id');
+			$table->timestamps();
+			$table->dropColumn('date_searched');
 		});
 	}
 

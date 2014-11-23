@@ -59,6 +59,7 @@ Route::group(array('before' => 'auth'), function()
 
 	// Search
 	Route::any('search/{id?}', array('uses' => 'SearchController@index'));
+	Route::get('results/{id}', array('uses' => 'SearchController@results'));
 
 	// Attachments
 	Route::get('forum/attachments/{id}', array('uses' => 'AttachmentController@download'));

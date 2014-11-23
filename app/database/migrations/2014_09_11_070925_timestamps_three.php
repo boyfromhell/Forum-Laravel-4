@@ -12,7 +12,7 @@ class TimestampsThree extends Migration {
 	 */
 	public function up()
 	{
-		/*// Groups
+		// Groups
 		Schema::table('groups', function($table)
 		{
 			$table->dropColumn('date');
@@ -40,7 +40,7 @@ class TimestampsThree extends Migration {
 		Schema::table('messages', function($table)
 		{
 			$table->dropColumn('date_sent');
-		});*/
+		});
 	}
 
 	/**

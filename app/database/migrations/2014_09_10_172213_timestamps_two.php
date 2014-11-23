@@ -12,7 +12,7 @@ class TimestampsTwo extends Migration {
 	 */
 	public function up()
 	{
-		/*// Downloads
+		// Downloads
 		Schema::table('downloads', function($table)
 		{
 			$table->dropColumn('date');
@@ -30,7 +30,7 @@ class TimestampsTwo extends Migration {
 		{
 			$table->dropColumn('time');
 			$table->dropColumn('last_date');
-		});*/
+		});
 	}
 
 	/**

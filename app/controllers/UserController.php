@@ -482,10 +482,48 @@ class UserController extends Earlybird\FoundryController
 		);
 
 		if( Request::isMethod('post') ) {
-			$email = Input::get('email');
+			$email    = Input::get('email');
 			$password = Input::get('password');
 
 			$field = filter_var($email, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+			/*User::setLoginAttributeName($field);
+
+			try {
+				$credentials = array(
+					$field     => $email,
+					'password' => $password,
+				);
+
+				// Authenticate the user
+				$user = Sentry::authenticate($credentials, true);
+
+				return Redirect::intended('/');
+			}
+			catch (Cartalyst\Sentry\Users\WrongPasswordException $e)
+			{
+				$error = 'Wrong password, try again.';
+			}
+			catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
+			{
+				$error = 'User was not found.';
+			}
+			catch (Cartalyst\Sentry\Users\UserNotActivatedException $e)
+			{
+				$error = 'User is not activated.';
+			}
+
+			// The following is only required if the throttling is enabled
+			catch (Cartalyst\Sentry\Throttling\UserSuspendedException $e)
+			{
+				$error = 'User is suspended.';
+			}
+			catch (Cartalyst\Sentry\Throttling\UserBannedException $e)
+			{
+				$error = 'User is banned.';
+			}
+
+			Session::push('errors', $error);
+			*/
 
 			if (Auth::attempt(array($field => $email, 'password' => $password), true))
 			{
@@ -573,7 +611,7 @@ class UserController extends Earlybird\FoundryController
 					'email'      => Input::get('email'),
 					'password'   => Hash::make($unencrypted),
 					'user_type'  => 0,
-					'is_active'  => 1,
+					'activated'  => 0,
 					'lang'       => 'english',
 				]);
 

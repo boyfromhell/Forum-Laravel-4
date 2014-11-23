@@ -71,6 +71,11 @@ header {
 ul.nav-tabs {
 	margin: 10px 0;
 }
+.navbar-brand {
+	img {
+		height: 100%; width: auto;
+	}
+}
 
 ol.breadcrumb {
 	>li+li:before {
@@ -147,6 +152,16 @@ p {
 
 textarea.form-control.textarea-sm {
 	height: 5em;
+}
+
+.form-control.select-multiple {
+	min-height: 200px;
+	padding: 0;
+	border-radius: 0;
+
+	option {
+		padding: 4px;
+	}
 }
 
 .panel-footer {
@@ -386,6 +401,9 @@ table.calendar {
 		background: #3e444c;
 		color: #eee;
 		text-align: right;
+	}
+	p {
+		margin: 0;
 	}
 }
 #embed #shoutbox {

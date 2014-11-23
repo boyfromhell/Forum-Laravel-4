@@ -12,7 +12,7 @@ class Timestamps extends Migration {
 	 */
 	public function up()
 	{
-		/*// Admin messages
+		// Admin messages
 		Schema::table('admin_messages', function($table)
 		{
 			$table->dropColumn('date');
@@ -54,7 +54,7 @@ class Timestamps extends Migration {
 			$table->dropColumn('last_visit');
 			$table->dropColumn('last_view');
 			$table->dropColumn('onsb');
-		});*/
+		});
 	}
 
 	/**

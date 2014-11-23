@@ -101,7 +101,7 @@ class GroupController extends Earlybird\FoundryController
 	{
 		global $_db;
 
-		$sql = "INSERT INTO `group_members` SET
+		$sql = "INSERT INTO `users_groups` SET
 			`group_id` = {$this->id},
 			`user_id`  = {$user_id},
 			`type`     = {$type}
@@ -117,7 +117,7 @@ class GroupController extends Earlybird\FoundryController
 	{
 		global $_db;
 
-		$sql = "DELETE FROM `group_members`
+		$sql = "DELETE FROM `users_groups`
 			WHERE `group_id` = {$this->id}
 				AND `user_id` = {$user_id}";
 		$_db->query($sql);
@@ -136,7 +136,7 @@ class GroupController extends Earlybird\FoundryController
 		}
 	
 		$sql = "SELECT `type`
-			FROM `group_members`
+			FROM `users_groups`
 			WHERE `group_id` = {$this->id}
 				AND `user_id` = {$user_id}";
 		$exec = $_db->query($sql);
@@ -152,7 +152,7 @@ class GroupController extends Earlybird\FoundryController
 	{
 		global $_db;
 		
-		$sql = "DELETE FROM `group_members`
+		$sql = "DELETE FROM `users_groups`
 			WHERE `group_id` = {$this->id}";
 		$_db->query($sql);
 		

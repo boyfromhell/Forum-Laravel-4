@@ -12,12 +12,7 @@
 		<option value="">Forum Index</option>
 @foreach ( $jump_categories as $jc )
 		<option value="" style="background:#f7f7f7; color:#000" disabled>{{ $jc->name }}</option>
-	@foreach ( $jc->forums as $jf )
-		<option value="{{ $jf->id }}"{{ $selected == $jf->id ? ' selected' : '' }}>&nbsp;&nbsp;&nbsp;&nbsp;{{ $jf->name }}</option>
-		@foreach ( $jf->children as $jsf )
-		<option value="{{ $jsf->id }}"{{ $selected == $jsf->id ? ' selected' : '' }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $jsf->name }}</option>
-		@endforeach
-	@endforeach
+		@include ('blocks.forum_options', ['forums' => $jc->forums, 'level' => 1, 'show_external' => true])
 @endforeach
 	</select>
 	<div class="input-group-btn">

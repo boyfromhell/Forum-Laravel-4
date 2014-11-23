@@ -5,7 +5,8 @@ use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
-class User extends Eloquent implements UserInterface, RemindableInterface {
+class User extends Earlybird\Foundry //Cartalyst\Sentry\Users\Eloquent\User
+	implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait;
 
@@ -21,7 +22,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var array
 	 */
-	protected $hidden = array('password', 'remember_token');
+	protected $hidden = array('password', 'persist_code');
 	protected $guarded = array('id');
 	protected $appends = array(
 		'url',
@@ -78,7 +79,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	public function groups()
 	{
-		return $this->belongsToMany('Group', 'group_members')
+		return $this->belongsToMany('Group', 'users_groups')
 			->orderBy('name', 'asc');
 	}
 

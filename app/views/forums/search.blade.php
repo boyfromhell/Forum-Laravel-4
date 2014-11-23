@@ -75,13 +75,13 @@
 	<div class="form-group">
 		<label class="control-label col-sm-3">Forum</label>
 		<div class="col-sm-6 col-md-4">
-		{{--<select class="left" multiple name="forums[]" size="8" style="width:300px">
-			<option value="0"{if count($query->forum_array) == 0} selected{/if}>All Forums</option>
-			{foreach $categories as $category}
-			<option value="0" style="background:#333; color:#999" disabled>{$category['name']}</option>
-			{$category['forum_html']}
-			{/foreach}
-		</select>--}}
+		<select class="form-control select-multiple" multiple name="forums[]" size="8">
+			<option value="0"{{ empty($selected) ? ' selected' : '' }}>All Forums</option>
+			@foreach ( $categories as $category )
+			<option value="0" disabled>{{{ $category->name }}}</option>
+			@include ('blocks.forum_options', ['forums' => $category->forums, 'level' => 1])
+			@endforeach
+		</select>
 		</div>
 	</div>
 

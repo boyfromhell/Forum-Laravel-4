@@ -8,7 +8,7 @@
 		</button>
 
 		<a class="navbar-brand" href="/">
-			<span class="hidden-xs">{{{ Config::get('app.forum_name') }}}</span>
+			<span class="hidden-xs"><img src="/images/custom/logo_white.png" alt="{{{ Config::get('app.forum_name') }}}"></span>
 			<span class="visible-xs">{{{ Config::get('app.short_name') }}}</span>
 		</a>
 	</div>

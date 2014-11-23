@@ -5,8 +5,10 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
+		"cartalyst/sentry": "2.1.*",
 		"earlybirdmvp/foundry": "dev-master",
-		"greggilbert/recaptcha": "dev-master"
+		"greggilbert/recaptcha": "dev-master",
+		"erusev/parsedown": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

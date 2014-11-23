@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RenameUserColumns extends Migration {
+class SentryMerge extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,13 +13,7 @@ class RenameUserColumns extends Migration {
 	public function up()
 	{
 		//
-		Schema::table('users', function($table)
-		{
-			$table->renameColumn('online', 'hide_online');
-			$table->dropColumn('upcoming');
-			$table->renameColumn('active', 'activated');
-			$table->renameColumn('style', 'theme_id');
-		});
+		Schema::rename('group_members', 'users_groups');
 	}
 
 	/**
