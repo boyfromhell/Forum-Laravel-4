@@ -1,7 +1,8 @@
 <?php
 
-class PostText extends Earlybird\Foundry
+class PostText extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $table = 'posts_text';
 	protected $primaryKey = 'post_id';
@@ -9,3 +10,4 @@ class PostText extends Earlybird\Foundry
 	public $timestamps = false;
 
 }
+

@@ -34,11 +34,11 @@ class Query extends Eloquent
 	 */
 	public function getUrlAttribute()
 	{
-		if( $this->type == 'forum' ) {
-			return '/search'.( $this->id ? '/'.$this->id : '' );
+		if ($this->type == 'forum') {
+			return '/search' . ($this->id ? '/'.$this->id : '');
 		}
 		else {
-			return '/search-messages'.( $this->id ? '/'.$this->id : '' );
+			return '/search-messages' . ($this->id ? '/'.$this->id : '');
 		}
 	}
 
@@ -55,7 +55,7 @@ class Query extends Eloquent
 	/**
 	 * Get a text description of this query
 	 */
-	public function getDescription( $start, $num_results )
+	public function getDescription($start, $num_results)
 	{
 		$show_text = array(
 			'forum' => array(
@@ -93,18 +93,23 @@ class Query extends Eloquent
 		$total = count($this->words);
 
 		$html = 'Searched for ' . $show_text[$this->type][$this->show];
-		if( $this->user ) {
+		if ($this->user) {
 			$html .= " by <a href=\"{$this->user->url}\">" . e($this->user->name) . '</a> ';
 		}
-		if( $total > 0 ) {
+		if ($total > 0) {
 			$html .= 'with ' . $where_text[$this->where] . ' matching ';
 
-			for( $i=0; $i<$total; $i++ ) {
+			for ($i=0; $i<$total; $i++) {
 				$html .= '"<i>' . $this->words[$i] . '</i>"';
-				if( $i < $total-1 && $total > 2 ) { $html .= ', '; }
-				if( $i == $total-2 ) {
-					if( $this->match == MATCH_ANY ) { $html .= 'or '; }
-					else { $html .= 'and '; }
+				if ($i < $total-1 && $total > 2) {
+					$html .= ', ';
+				}
+				if ($i == $total-2) {
+					if ($this->match == MATCH_ANY) {
+						$html .= 'or ';
+					} else {
+						$html .= 'and ';
+					}
 				}
 			}
 			$html .= '<br>';
@@ -112,44 +117,50 @@ class Query extends Eloquent
 
 		$html .= 'in ';
 
-		if( $this->type == 'forum' ) {
+		if ($this->type == 'forum') {
 			$total_forums = count($this->forum_array);
 
-			if( $total_forums == 0 || $this->forum_array[0] == 0 ) {
+			if ($total_forums == 0 || $this->forum_array[0] == 0) {
 				$html .= 'all forums';
-			}
-			else {
+			} else {
 				$sql = "SELECT `id`, `name`
 					FROM `forums`
 					WHERE `id` IN ( " . $_db->escape($this->forums) . " )";
 				$exec = $_db->query($sql);
 
 				$forums = array();
-				while( $data = $exec->fetch_assoc() ) {
+				while ($data = $exec->fetch_assoc()) {
 					$forum = new Forum($data['id'], $data);
 					$forums[] = $forum;
 				}
 
-				for( $i=0; $i<$total_forums; $i++ ) {
+				for ($i=0; $i<$total_forums; $i++) {
 					$html .= "<a href=\"{$forums[$i]->url}\" style=\"color:#000\"><u>" . e($forums[$i]->name) . '</u></a>';
-					if( $i < $total_forums-1 && $total_forums > 2 ) { $html .= ', '; }
-					if( $i == $total_forums-2 ) { $html .= 'and '; }
+					if ($i < $total_forums-1 && $total_forums > 2) {
+						$html .= ', ';
+					}
+					if ($i == $total_forums-2) {
+						$html .= 'and ';
+					}
 				}
 			}
-		}
-		else if( $this->type == 'messages' ) {
+		} else if ($this->type == 'messages') {
 			$html .= $folder_text[$this->folder];
 		}
 
 		$html .= $since_text[$this->since] . '<br>';
 
 		$showing = 20;
-		if( $num_results < 20 ) { $showing = $num_results; }
-		if( $num_results ) {
+		if ($num_results < 20) {
+			$showing = $num_results;
+		}
+		if ($num_results) {
 			$html .= '<br>Showing ';
 			$begin = $start+1;
 			$end = $start+20;
-			if( $end > $num_results ) { $end = $num_results; }
+			if ($end > $num_results) {
+				$end = $num_results;
+			}
 
 			$html .= "results <b>{$begin} - {$end}</b> ";
 			$html .= "out of <b>{$num_results}</b> total";
@@ -160,3 +171,4 @@ class Query extends Eloquent
 	}
 
 }
+

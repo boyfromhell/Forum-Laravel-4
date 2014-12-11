@@ -50,14 +50,14 @@ class Image
 	 *
 	 * @param  Image
 	 */
-	protected $src = NULL;
+	protected $src = null;
 
 	/**
 	 * Image object created for scaled versions
 	 *
 	 * @param  Image
 	 */
-	protected $dest = NULL;
+	protected $dest = null;
 
 	/**
 	 * Width
@@ -217,7 +217,7 @@ class Image
 	 */
 	public function scaleWidth($width)
 	{
-		return $this->scale($width, NULL, 'width');
+		return $this->scale($width, null, 'width');
 	}
 
 	/**
@@ -228,7 +228,7 @@ class Image
 	 */
 	public function scaleHeight($height)
 	{
-		return $this->scale(NULL, $height, 'height');
+		return $this->scale(null, $height, 'height');
 	}
 
 	/**

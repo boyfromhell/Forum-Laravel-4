@@ -1,9 +1,11 @@
 <?php
 
-class BoardConfig extends Earlybird\Foundry
+class BoardConfig extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $table = 'config';
 	protected $guarded = array();
 
 }
+

@@ -1,7 +1,8 @@
 <?php
 
-class TopicController extends Earlybird\FoundryController
+class TopicController BaseController
 {
+    use extends Earlybird\FoundryController;
 
 	/**
 	 * Display a topic
@@ -10,7 +11,7 @@ class TopicController extends Earlybird\FoundryController
 	 * @param  string  $name  For SEO only
 	 * @return Response
 	 */
-	public function display( $id, $name = NULL, $print = false )
+	public function display($id, $name = null, $print = false)
 	{
 		global $me;
 
@@ -20,7 +21,7 @@ class TopicController extends Earlybird\FoundryController
 		//-----------------------------------------------------------------------------
 		// Determine which forum, topic, post, and page we are on
 
-		/*if( isset($_GET['p']) ) {
+		/*if (isset($_GET['p'])) {
 			$p = (int)$_GET['p'];
 			
 			try {
@@ -47,28 +48,27 @@ class TopicController extends Earlybird\FoundryController
 		);
 
 		// Permissions
-		if( ! $forum->check_permission('view') ) {
+		if (! $forum->check_permission('view')) {
 			App::abort(404);
-		}
-		else if( ! $forum->check_permission('read') ) {
+		} else if (! $forum->check_permission('read')) {
 			App::abort(403);
 		}
 
 		$subscribed = false;
 		$check_sub = $me->notify;
 
-		if( $me->id ) {
+		if ($me->id) {
 			// Mark topic read
 			SessionTopic::where('user_id', '=', $me->id)
 				->where('topic_id', '=', $topic->id)
 				->delete();
 
 			// Subscription
-			if( $me->subscriptions->contains($topic->id) ) {
+			if ($me->subscriptions->contains($topic->id)) {
 				$subscribed = $check_sub = true;
 
 				// Remove a subscription
-				if( isset($_GET['unsubscribe']) ) {
+				if (isset($_GET['unsubscribe'])) {
 					$me->subscriptions()->detach($topic->id);
 
 					Session::push('notices', 'You have unsubscribed from this topic');
@@ -82,7 +82,7 @@ class TopicController extends Earlybird\FoundryController
 			}
 			else {
 				// Add a subscription
-				if( isset($_GET['subscribe']) ) {
+				if (isset($_GET['subscribe'])) {
 					$me->subscriptions()->attach($topic->id, ['notified' => 1]);
 
 					Session::push('notices', 'You have subscribed to this topic');
@@ -101,17 +101,18 @@ class TopicController extends Earlybird\FoundryController
 		]);
 
 		/*
-		while( $data = $exec->fetch_assoc() )
-		{
+		while ($data = $exec->fetch_assoc()) {
 			$post->count = $count;
 
 			// Show subject line
 			$showhr = 0;
-			if( $post->smiley ) { $showhr = 1; }
-			if( $post->subject && $post->subject != 'Re: ' . $topic->title ) {
+			if ($post->smiley) {
+				$showhr = 1;
+			}
+			if ($post->subject && $post->subject != 'Re: ' . $topic->title) {
 				$showhr = 2;
 			}
-			if( count($posts) == 0 ) {
+			if (count($posts) == 0) {
 				$showhr = 2;
 				$post->subject = $topic->title;
 			}
@@ -125,7 +126,7 @@ class TopicController extends Earlybird\FoundryController
 				WHERE `entry_user` = {$me->id}
 					AND `entry_subject` = {$post->user_id}";
 			$exec2 = $_db->query($sql);
-			if( $exec2->num_rows ) {
+			if ($exec2->num_rows) {
 				$post->ignored = true;
 			}
 
@@ -151,7 +152,7 @@ class TopicController extends Earlybird\FoundryController
 		/*$Smarty->assign('total_posts', count($posts));
 
 		/**
-		if( $_POST["voted"] && $me->loggedin ) {
+		if ($_POST["voted"] && $me->loggedin) {
 			$pollid = (int)$_POST['pollid'];
 			$sql = "SELECT poll_max FROM polls WHERE poll_id = '" . $pollid . "'";
 			$res = query($sql);
@@ -197,7 +198,7 @@ class TopicController extends Earlybird\FoundryController
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function review( $id )
+	public function review($id)
 	{
 		$topic = Topic::findOrFail($id);
 
@@ -222,7 +223,7 @@ class TopicController extends Earlybird\FoundryController
 	 * @param  string  $name  For SEO only
 	 * @return Response
 	 */
-	public function printTopic( $id, $name = NULL )
+	public function printTopic($id, $name = null)
 	{
 		return $this->display($id, $name, true);
 	}
@@ -233,7 +234,7 @@ class TopicController extends Earlybird\FoundryController
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function move( $id )
+	public function move($id)
 	{
 		$_PAGE = array(
 			'category' => 'home',
@@ -242,11 +243,9 @@ class TopicController extends Earlybird\FoundryController
 
 		$topic = Topic::findOrFail($id);
 
-		if( Request::isMethod('post') )
-		{
-			if( isset($_POST['cancel']) ) {
-			}
-			elseif( isset($_POST['confirm']) ) {
+		if (Request::isMethod('post')) {
+			if (isset($_POST['cancel'])) {
+			} else if (isset($_POST['confirm'])) {
 				$topic->forum->decrement('total_topics');
 				$topic->forum->decrement('total_posts', $topic->replies + 1);
 
@@ -278,7 +277,7 @@ class TopicController extends Earlybird\FoundryController
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function lock( $id )
+	public function lock($id)
 	{
 		$topic = Topic::findOrFail($id);
 		$topic->is_locked = 1;
@@ -295,7 +294,7 @@ class TopicController extends Earlybird\FoundryController
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function unlock( $id )
+	public function unlock($id)
 	{
 		$topic = Topic::findOrFail($id);
 		$topic->is_locked = 0;
@@ -312,7 +311,7 @@ class TopicController extends Earlybird\FoundryController
 	 * @param  int  $id  Topic ID
 	 * @return Response
 	 */
-	public function delete( $id )
+	public function delete($id)
 	{
 		global $me;
 
@@ -323,12 +322,10 @@ class TopicController extends Earlybird\FoundryController
 
 		$topic = Topic::findOrFail($id);
 
-		if( Request::isMethod('post') )
-		{
-			if( isset($_POST['cancel']) ) {
+		if (Request::isMethod('post')) {
+			if (isset($_POST['cancel'])) {
 				return Redirect::to($topic->url);
-			}
-			elseif( isset($_POST['confirm']) ) {
+			} else if (isset($_POST['confirm'])) {
 				$forum = $topic->forum;
 				$topic->delete();
 

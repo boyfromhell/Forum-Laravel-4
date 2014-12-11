@@ -1,7 +1,8 @@
 <?php
 
-class PhotoController extends Earlybird\FoundryController
+class PhotoController extends BaseController
 {
+    use Earlybird\FoundryController;
 
 	/**
 	 * Display a photo
@@ -10,13 +11,13 @@ class PhotoController extends Earlybird\FoundryController
 	 * @param  string  $name  For SEO only
 	 * @return Response
 	 */
-	public function display( $id, $name = NULL )
+	public function display($id, $name = null)
 	{
 		global $me;
 
 		$photo = Photo::findOrFail($id);
 		
-		if( $photo->album->permission_view > $me->access ) {
+		if ($photo->album->permission_view > $me->access) {
 			App::abort(403);
 		}
 
@@ -41,44 +42,53 @@ class PhotoController extends Earlybird\FoundryController
 
 		$Smarty->assign('next_photo', $next_photo);
 
-		if( isset($_GET['ajax']) ) {
+		if (isset($_GET['ajax'])) {
 			$html = View::make('photos.photo')->render()
 
 			return Response::json(['html' => $html]);
 		}*/
 
 		/*
-		if( function_exists(exif_read_data)) {
-			$exif = @exif_read_data( "../photos/$folder/$file", "IFD0,COMPUTED,EXIF", true );
-			if( $exif ) {
+		if (function_exists(exif_read_data)) {
+			$exif = @exif_read_data("../photos/$folder/$file", "IFD0,COMPUTED,EXIF", true);
+			if ($exif) {
 				echo "<small><b>EXIF Data:</b><br>";
-				if( $exif['IFD0']['Make'] ) {	echo "Make: ".$exif['IFD0']['Make']."<br>";	}
-				if( $exif['IFD0']['Model'] ) {	echo "Model: ".$exif['IFD0']['Model']."<br>";	}
-				if( $exif['EXIF']['ExposureTime'] ) {
+				if ($exif['IFD0']['Make']) {
+					echo "Make: ".$exif['IFD0']['Make']."<br>";
+				}
+				if ($exif['IFD0']['Model']) {
+					echo "Model: ".$exif['IFD0']['Model']."<br>";
+				}
+				if ($exif['EXIF']['ExposureTime']) {
 					$shutspd = explode("/",$exif['EXIF']['ExposureTime'],2);
 					echo "Shutter Speed: ";
-					if( $shutspd[0] >= $shutspd[1] ) { echo round($shutspd[0]/$shutspd[1],1); }
-					else { echo $shutspd[0]."/".$shutspd[1]; }
+					if ($shutspd[0] >= $shutspd[1]) {
+						echo round($shutspd[0]/$shutspd[1],1);
+					} else {
+						echo $shutspd[0]."/".$shutspd[1];
+					}
 					echo " second";
-					if( $shutspd[0] > $shutspd[1] ) { echo "s"; }
+					if ($shutspd[0] > $shutspd[1]) {
+						echo "s";
+					}
 					echo "<br>";
 				}
-				if( $exif['COMPUTED']['ApertureFNumber'] ) {
+				if ($exif['COMPUTED']['ApertureFNumber']) {
 					echo "F Number: ".$exif['COMPUTED']['ApertureFNumber']."<br>";
 				}
-				if( $exif['EXIF']['FocalLength'] ) {
+				if ($exif['EXIF']['FocalLength']) {
 					$flength = explode("/",$exif['EXIF']['FocalLength'],2);
 					$flen = ($flength[0]/$flength[1]);
 					echo "Focal Length: ".$flen." mm<br>";
 				}
-				if( $exif['EXIF']['ISOSpeedRatings'] ) {
+				if ($exif['EXIF']['ISOSpeedRatings']) {
 					echo "ISO Speed: ".$exif['EXIF']['ISOSpeedRatings']."<br>";
 				}
 				$datetaken = $exif['EXIF']['DateTimeOriginal'];
 				$dtaken = substr($datetaken,0,11);
 				$dtaken = str_replace(":","/",$dtaken);
 				$ttaken = substr($datetaken,11,9);
-				if( substr($dtaken,0,4) > 2000 ) {
+				if (substr($dtaken,0,4) > 2000) {
 					echo "Date Taken: ".datestring(strtotime($dtaken.$ttaken),1)."<br>";
 				}
 				echo "</small>";
@@ -93,13 +103,13 @@ class PhotoController extends Earlybird\FoundryController
 	 * @param  int  $id
 	 * return Response
 	 */
-	public function download( $id )
+	public function download($id)
 	{
 		global $me;
 
 		$photo = Photo::findOrFail($id);
 
-		if( $photo->album->permission_view > $me->access ) {
+		if ($photo->album->permission_view > $me->access) {
 			App::abort(403);
 		}
 
@@ -122,25 +132,22 @@ class PhotoController extends Earlybird\FoundryController
 	 * @param  int  $id  Album ID
 	 * @return Response
 	 */
-	public function upload( $id )
+	public function upload($id)
 	{
 		global $me;
 
 		$album = Album::findOrFail($id);
 
-		if( ! $album->check_permission() ) {
+		if (! $album->check_permission()) {
 			App::abort(403);
 		}
 
-		if( Request::isMethod('post') && Input::hasFile('photos') )
-		{
+		if (Request::isMethod('post') && Input::hasFile('photos')) {
 			$successful = 0;
 			$total = count(Input::file('photos'));
 
-			foreach( Input::file('photos') as $file )
-			{
-				if( $file->isValid() )
-				{
+			foreach (Input::file('photos') as $file) {
+				if ($file->isValid()) {
 					try {
 						$ext = strtolower($file->getClientOriginalExtension());
 						$name = time().'_'.str_random().'.'.$ext;
@@ -166,24 +173,22 @@ class PhotoController extends Earlybird\FoundryController
 
 						$photo->pushToS3();
 
-						if( $album->cover_id === NULL ) {
+						if ($album->cover_id === null) {
 							$album->cover_id = $photo->id;
 							$album->save();
 						}
 
 						$successful++;
-					}
-					catch( Exception $e ) {
+					} catch (Exception $e) {
 					}
 				}
 			}
 
 			$album->touch();
 
-			if( $successful == $total ) {
+			if ($successful == $total) {
 				Session::push('messages', '<b>'.$successful.' out of '.$total.'</b> photos uploaded');
-			}
-			else {
+			} else {
 				Session::push('errors', '<b>'.$successful.' out of '.$total.'</b> photos uploaded');
 			}
 
@@ -219,24 +224,24 @@ class PhotoController extends Earlybird\FoundryController
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit( $id )
+	public function edit($id)
 	{
 		global $me;
 
 		$photo = Photo::findOrFail($id);
 		$album = $photo->album;
 
-		if( $photo->user_id != $me->id && ! $me->is_admin ) {
+		if ($photo->user_id != $me->id && ! $me->is_admin) {
 			App::abort(403);
 		}
 
-		if( Request::isMethod('post') ) {
+		if (Request::isMethod('post')) {
 			$album_id = (int)$_POST['album_id'];
 			$cover    = Input::get('cover', 0);
 			
 			$photo->description = Input::get('description');
 
-			if( $me->is_admin ) {
+			if ($me->is_admin) {
 				$user = User::where('name', '=', Input::get('author'))->first();
 			
 				$photo->user_id = $user->id;
@@ -247,12 +252,11 @@ class PhotoController extends Earlybird\FoundryController
 			$photo->save();
 
 			// Set or unset cover photo
-			if( $cover ) {
+			if ($cover) {
 				$album->cover_id = $photo->id;
 				$album->save();
-			}
-			else if( $album->cover_id == $photo->id ) {
-				$album->cover_id = NULL;
+			} else if ($album->cover_id == $photo->id) {
+				$album->cover_id = null;
 				$album->save();
 			}
 
@@ -278,7 +282,7 @@ class PhotoController extends Earlybird\FoundryController
 	 *
 	 * @return Response
 	 */
-	public function delete( $id )
+	public function delete($id)
 	{
 		global $me;
 
@@ -290,17 +294,16 @@ class PhotoController extends Earlybird\FoundryController
 
 		$photo = Photo::findOrFail($id);
 
-		if( $photo->user_id != $me->id && !$me->is_moderator ) {
+		if ($photo->user_id != $me->id && !$me->is_moderator) {
 			App::abort(403);
 		}
 
-		if( Request::isMethod('post') )
-		{
-			if( isset($_POST['cancel']) ) {
+		if (Request::isMethod('post')) {
+			if (isset($_POST['cancel'])) {
 				return Redirect::to($photo->url);
 			}
 			// Redirect to album
-			elseif( isset($_POST['confirm']) ) {
+			else if (isset($_POST['confirm'])) {
 				$album = $photo->album;
 				$photo->delete();
 

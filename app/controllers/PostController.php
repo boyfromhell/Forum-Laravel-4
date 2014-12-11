@@ -1,7 +1,8 @@
 <?php
 
-class PostController extends Earlybird\FoundryController
+class PostController extends BaseController
 {
+    use Earlybird\FoundryController;
 
 	protected $mode;
 	protected $title;
@@ -14,11 +15,26 @@ class PostController extends Earlybird\FoundryController
 	protected $content = '';
 
 	/**
-	 * Reply to a topic
+	 * Display a post in the context of the topic
 	 *
 	 * @return Response
 	 */
-	public function reply( $id )
+	public function display($id)
+	{
+		$post = Post::findOrFail($id);
+
+		$controller = new TopicController();
+		return $controller->display($post->topic_id);
+	}
+
+
+	/**
+	 * Reply to a topic
+	 *
+	 * @param  int  $id  topic ID you are repyling to
+	 * @return Response
+	 */
+	public function reply($id)
 	{
 		global $me;
 
@@ -28,7 +44,7 @@ class PostController extends Earlybird\FoundryController
 		$this->mode = 'reply';
 		$this->title = 'Post a reply';
 
-		if( $this->topic->is_locked && !$me->is_moderator ) {
+		if ($this->topic->is_locked && !$me->is_moderator) {
 			App::abort(403);
 		}
 
@@ -40,9 +56,10 @@ class PostController extends Earlybird\FoundryController
 	/**
 	 * Edit a post
 	 *
+	 * @param  int  $id  post ID to edit
 	 * @return Response
 	 */
-	public function edit( $id )
+	public function edit($id)
 	{
 		global $me;
 
@@ -53,10 +70,10 @@ class PostController extends Earlybird\FoundryController
 		$this->mode = 'edit';
 		$this->title = 'Edit post';
 
-		if( $this->post->user_id != $me->id && !$me->is_moderator ) {
+		if ($this->post->user_id != $me->id && !$me->is_moderator) {
 			App::abort(403);
 		}
-		if( $this->topic->is_locked && !$me->is_moderator ) {
+		if ($this->topic->is_locked && !$me->is_moderator) {
 			App::abort(403);
 		}
 
@@ -69,26 +86,25 @@ class PostController extends Earlybird\FoundryController
 	/**
 	 * Quick edit a post
 	 *
-	 * @param  int  $id
+	 * @param  int  $id  post ID to edit
 	 * @return Response
 	 */
-	public function quickEdit( $id )
+	public function quickEdit($id)
 	{
 		global $me;
 
 		$post = Post::findOrFail($id);
 		$topic = $post->topic;
 
-		if( $post->user_id != $me->id && !$me->is_moderator ) {
+		if ($post->user_id != $me->id && !$me->is_moderator) {
 			App::abort(403);
 		}
-		if( $topic->is_locked && !$me->is_moderator ) {
+		if ($topic->is_locked && !$me->is_moderator) {
 			App::abort(403);
 		}
 
-		if( Request::isMethod('post') )
-		{
-			if( isset($_POST['save']) ) {
+		if (Request::isMethod('post')) {
+			if (isset($_POST['save'])) {
 				$content = Input::get('content');
 				$content = BBCode::prepare($content);
 
@@ -108,10 +124,9 @@ class PostController extends Earlybird\FoundryController
 			$html = View::make('posts.body')
 				->with('post', $post)
 				->render();
-		}
-		else {
+		} else {
 			$check_sub = $me->notify;
-			if( $topic->id && $me->subscriptions->contains($topic->id) ) {
+			if ($topic->id && $me->subscriptions->contains($topic->id)) {
 				$check_sub = true;
 			}
 
@@ -127,9 +142,10 @@ class PostController extends Earlybird\FoundryController
 	/**
 	 * Quote a post
 	 *
+	 * @param  int  $id  post ID to quote
 	 * @return Response
 	 */
-	public function quote( $id )
+	public function quote($id)
 	{
 		global $me;
 
@@ -140,7 +156,7 @@ class PostController extends Earlybird\FoundryController
 		$this->mode = 'quote';
 		$this->title = 'Post a reply';
 
-		if( $this->topic->is_locked && !$me->is_moderator ) {
+		if ($this->topic->is_locked && !$me->is_moderator) {
 			App::abort(403);
 		}
 
@@ -155,9 +171,10 @@ class PostController extends Earlybird\FoundryController
 	/**
 	 * Create a new topic
 	 *
+	 * @param  int  $id  forum ID the topic is going into
 	 * @return Response
 	 */
-	public function newTopic( $id )
+	public function newTopic($id)
 	{
 		global $me;
 
@@ -187,50 +204,45 @@ class PostController extends Earlybird\FoundryController
 		$hash = Input::get('hash', md5($me->name.time().rand(0,9999)));
 
 		// Permissions
-		if( ! $forum->check_permission('view') ) {
+		if (! $forum->check_permission('view')) {
 			App::abort(404);
-		}
-		else if( ! $forum->check_permission('read') ) {
+		} else if (! $forum->check_permission('read')) {
 			App::abort(403);
 		}
 
 		// Check for existing subscription
 		$subscribed = false;
 		$check_sub = $me->notify;
-		if( $topic->id && $me->subscriptions->contains($topic->id) ) {
+		if ($topic->id && $me->subscriptions->contains($topic->id)) {
 			$subscribed = $check_sub = true;
 		}
 
 		// Form submitted
-		if( Input::has('preview') )
-		{
+		if (Input::has('preview')) {
 			// Don't validate anything for a preview
-		}
-		else if( Request::isMethod('post') )
-		{
+		} else if (Request::isMethod('post')) {
 			$rules = [
 				'content' => 'required',
 			];
-			if( $this->mode == 'newtopic' ) {
+			if ($this->mode == 'newtopic') {
 				$rules['subject'] = 'required';
 			}
 
 			// Upload attachments
 			/*$successful = $total = 0;
-			if( count($_FILES['files']) > 0 ) {
-				for( $i = 0; $i < count($_FILES['files']['name']); $i++ ) {
+			if (count($_FILES['files']) > 0) {
+				for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
 					$file_errors = array();
 				
-					if( $_FILES['files']['name'][$i] ) {
+					if ($_FILES['files']['name'][$i]) {
 					
 						try {
 							$success = Attachment::upload($_FILES['files'], $i, $hash);
-						}
-						catch( Exception $e ) {
+						} catch (Exception $e) {
 							$file_errors[] = $e->getMessage();
 							$errors[] = $e->getMessage();
 						}
-						if( $success ) {
+						if ($success) {
 							$successful++;
 						}
 
@@ -241,32 +253,29 @@ class PostController extends Earlybird\FoundryController
 
 			$validator = Validator::make(Input::all(), $rules);
 
-			if( $validator->fails() )
-			{
+			if ($validator->fails()) {
 				return View::make('posts.create')
 					->withInput()
 					->withErrors($validator);
-			}
-			else 
-			{
+			} else {
 				$content = BBCode::prepare($content);
 
 				// Only moderators can set type
 				$type = Input::get('type', 0);
 				$smiley = Input::get('smiley', 0);
 
-				if( !$me->is_moderator ) {
+				if (!$me->is_moderator) {
 					$type = 0;
 				}
 
 				// Editing a post is vastly different from the other modes
-				if( $this->mode == 'edit' ) {
-					if( $me->is_moderator ) {
+				if ($this->mode == 'edit') {
+					if ($me->is_moderator) {
 						$topic->type = $type;
 					}
 
 					// If this is the first post in the topic, change the subject
-					if( $topic->posts()->first()->id == $post->id && $subject ) {
+					if ($topic->posts()->first()->id == $post->id && $subject) {
 						$topic->title = $subject;
 						$topic->smiley = $smiley;
 					}
@@ -284,23 +293,25 @@ class PostController extends Earlybird\FoundryController
 						'post_text'    => $content,
 						'post_smiley'  => $smily
 					]);
-				}
-				else {
+				} else {
 					// New topics
-					if( $this->mode == 'newtopic' ) {
+					if ($this->mode == 'newtopic') {
 						$topic = Topic::create([
 							'forum_id'  => $forum->id,
 							'title'     => $subject,
 							'user_id'   => $me->id,
 							'type'      => $type,
-							'smiley'    => $smiley
+							'smiley'    => $smiley,
+							'posted_at' => DB::raw('NOW()')
 						]);
 
 						$forum->increment('total_topics');
 					}
 					// Replies
-					else if( $this->mode == 'reply' || $this->mode == 'quote' ) {
+					else if ($this->mode == 'reply' || $this->mode == 'quote') {
 						$topic->increment('replies');
+						$topic->posted_at = DB::raw('NOW()');
+						$topic->save();
 					}
 
 					$forum->increment('total_posts');
@@ -313,7 +324,7 @@ class PostController extends Earlybird\FoundryController
 						'signature'  => Input::get('attach_sig'),
 					]);
 
-					if( $subject == 'Re: '.$topic->title || $subject == $topic->title ) {
+					if ($subject == 'Re: '.$topic->title || $subject == $topic->title) {
 						$subject = '';
 					}
 
@@ -333,14 +344,14 @@ class PostController extends Earlybird\FoundryController
 							AND `user_id` != {$me->id}";
 					$exec = $_db->query($sql);
 					
-					while( $data = $exec->fetch_assoc() ) {
+					while ($data = $exec->fetch_assoc()) {
 						$sql = "SELECT `session_id`
 							FROM `session_topics`
 							WHERE `topic_id` = {$topic->id}
 								AND `forum_id` = {$forum->id}
 								AND `user_id` = {$data['user_id']}";
 						$exec2 = $_db->query($sql);
-						if( !$exec2->num_rows ) {
+						if (!$exec2->num_rows) {
 							// @todo set primary key on topic_id, user_id and just use insert ignore
 							$sql = "INSERT INTO `session_topics` SET
 								`topic_id`     = {$topic->id},
@@ -359,17 +370,15 @@ class PostController extends Earlybird\FoundryController
 					->where('user_id', '=', $me->id)
 					->where('hash', '=', $hash)
 					->update([
-						'hash'    => NULL,
+						'hash'    => null,
 						'post_id' => $post->id
 					]);
 
 				// Subscribe/unsubscribe
 
 				// Send topic subscribers an email notification
-				foreach( $topic->subscribers as $subscriber )
-				{
-					if( $subscriber->notified == 1 && $subscriber->id != $me->id )
-					{
+				foreach ($topic->subscribers as $subscriber) {
+					if ($subscriber->notified == 1 && $subscriber->id != $me->id) {
 						$html = View::make('emails.topic_reply')
 							->with('user', $me)
 							->with('topic', $topic)
@@ -393,16 +402,14 @@ class PostController extends Earlybird\FoundryController
 		}
 
 		// Load attachments, including pending
-		if( $post->id ) {
+		if ($post->id) {
 			$attachments = Attachment::where('post_id', '=', $post->id)
-				->orWhere( function($query) use ($me, $hash)
-				{
+				->orWhere(function ($query) use ($me, $hash) {
 					$query->whereNull('post_id')
 						->where('user_id', '=', $me->id)
 						->where('hash', '=', $hash);
 				});
-		}
-		else {
+		} else {
 			$attachments = Attachment::whereNull('post_id')
 				->where('user_id', '=', $me->id)
 				->where('hash', '=', $hash);
@@ -458,15 +465,19 @@ class PostController extends Earlybird\FoundryController
 			
 
 		$pollq = $_POST["pollq"];
-			if( $pollq && !$_POST["advanced"] ) {
+			if ($pollq && !$_POST["advanced"]) {
 				$pollmax = (int)$_POST["pollmax"];
 				$pollpub = (int)$_POST["pollpub"];
-				if( $pollmax < 1 ) { $pollmax = 1; }
+				if ($pollmax < 1) {
+					$pollmax = 1;
+				}
 
 				$sql = "SELECT poll_id FROM polls WHERE (poll_topic = '0' AND poll_hash = '" . $_db->escape($hash) . "')";
-				if( $mode == "edit" ) { $sql .= " OR (poll_topic = '" . (int)$t . "')"; }
+				if ($mode == "edit") {
+					$sql .= " OR (poll_topic = '" . (int)$t . "')";
+				}
 				$res = query($sql);
-				if( !mysql_num_rows($res)) {
+				if (!mysql_num_rows($res)) {
 					$sql = "INSERT INTO polls
 					( `poll_topic`, `poll_question`, `poll_max`, `poll_hash`, `poll_public` )
 					VALUES
@@ -475,9 +486,11 @@ class PostController extends Earlybird\FoundryController
 					$res2 = query($sql);
 				}
 				$sql = "SELECT poll_id FROM polls WHERE (poll_topic = '0' AND poll_hash = '" . $_db->escape($hash) . "')";
-				if( $mode == "edit" ) { $sql .= " OR (poll_topic = '" . (int)$t . "')"; }
+				if ($mode == "edit") {
+					$sql .= " OR (poll_topic = '" . (int)$t . "')";
+				}
 				$res = query($sql);
-				list( $pollid ) = mysql_fetch_array($res);
+				list($pollid) = mysql_fetch_array($res);
 
 				$sql = "UPDATE polls SET 
 					poll_question = '" . $_db->escape($pollq) . "',
@@ -488,25 +501,24 @@ class PostController extends Earlybird\FoundryController
 
 				$sql = "SELECT option_id FROM poll_options WHERE option_poll = '" . (int)$pollid . "'";
 				$res = query($sql);
-				while( $option = mysql_fetch_array($res)) {
-					list( $optid ) = $option;
-					if( $_POST["opt".$optid]) {
+				while ($option = mysql_fetch_array($res)) {
+					list($optid) = $option;
+					if ($_POST["opt".$optid]) {
 						$opttext = $_POST["opt".$optid];
 						$sql = "UPDATE poll_options SET option_text = '" . $_db->escape($opttext) . "' WHERE option_id = '" . (int)$optid . "'";
 						$res2 = query($sql);
-					}
-					else {
+					} else {
 						$sql = "DELETE FROM poll_options WHERE option_id = '" . $optid . "'";
 						$res2 = query($sql);
 						$sql = "SELECT vote_id, vote_choices FROM poll_votes WHERE vote_poll = '" . (int)$pollid . "'";
 						$res2 = query($sql);
-						while( $delvote = mysql_fetch_array($res2)) {
-							list( $voteid, $choices ) = $delvote;
+						while ($delvote = mysql_fetch_array($res2)) {
+							list($voteid, $choices) = $delvote;
 							$choicelist = explode(',',$choices);
-							$pos = array_search( $optid, $choicelist );
+							$pos = array_search($optid, $choicelist);
 							unset($choicelist[$pos]);
 							$choices = implode(',',$choicelist);
-							if( count($choicelist)) {
+							if (count($choicelist)) {
 								$sql = "UPDATE poll_votes SET vote_choices = '" . (int)$choices . "' WHERE vote_id = '" . (int)$voteid . "'";
 								$res3 = query($sql);
 							}
@@ -517,8 +529,8 @@ class PostController extends Earlybird\FoundryController
 						}
 					}
 				}
-				for( $i=1; $i<=15; $i++ ) {
-					if( $_POST["new".$i]) {
+				for ($i=1; $i<=15; $i++) {
+					if ($_POST["new".$i]) {
 						$opttext = $_POST["new".$i];
 						$sql = "INSERT INTO poll_options 
 						( `option_poll`, `option_text`, `option_votes` )
@@ -527,12 +539,11 @@ class PostController extends Earlybird\FoundryController
 						$res2 = query($sql);
 					}
 				}
-			}
-			else if( !$_POST["advanced"] ) {
-				if( $mode == "edit" ) {
+			} else if (!$_POST["advanced"]) {
+				if ($mode == "edit") {
 					$sql = "SELECT poll_id FROM polls WHERE poll_topic = '" . (int)$t . "'";
 					$res = query($sql);
-					list( $delpoll ) = mysql_fetch_array($res);
+					list($delpoll) = mysql_fetch_array($res);
 					$sql = "DELETE FROM polls WHERE poll_topic = '" . (int)$t . "'";
 					$res = query($sql);
 					$sql = "DELETE FROM poll_options WHERE option_poll = '" . (int)$delpoll . "'";
@@ -542,18 +553,19 @@ class PostController extends Earlybird\FoundryController
 				}
 			}
 			
-		if( $mode == "newtopic" || ( $mode == "edit" && ( $me->administrator || $me->moderator ))) { 
+		if ($mode == "newtopic" || ( $mode == "edit" && ( $me->administrator || $me->moderator ))) { 
 			$sql = "
 			SELECT poll_id, poll_question, poll_max, poll_public
 			FROM polls 
 			WHERE (poll_topic = '0' AND poll_hash = '" . $_db->escape($hash) . "')";
-			if( $mode == "edit" ) { $sql .= " OR (poll_topic = '" . (int)$t . "')"; }
-			$res = query($sql);
-			if( mysql_num_rows($res)) {
-				list( $pollid, $pollq, $pollmax, $pollpub ) = mysql_fetch_array($res);
-				$pollq = stripslashes($pollq);
+			if ($mode == "edit") {
+				$sql .= " OR (poll_topic = '" . (int)$t . "')";
 			}
-			else {
+			$res = query($sql);
+			if (mysql_num_rows($res)) {
+				list($pollid, $pollq, $pollmax, $pollpub) = mysql_fetch_array($res);
+				$pollq = stripslashes($pollq);
+			} else {
 				$pollid = 0; $pollmax = 1; $pollpub = 0;
 			}
 		?>
@@ -580,7 +592,7 @@ class PostController extends Earlybird\FoundryController
 
 		<script type="text/javascript"><!--
 			function addanother() {
-				for( i=1; i<=15; i++ ) {
+				for (i=1; i<=15; i++) {
 					var newrow = document.getElementById("option"+i);
 					if( newrow.style.display == "none" ) {
 						newrow.style.display = "table-row";
@@ -632,10 +644,10 @@ class PostController extends Earlybird\FoundryController
 	/**
 	 * Flag a post
 	 *
-	 * @param  int  $id
+	 * @param  int  $id  post ID to flag
 	 * @return Response
 	 */
-	public function flag( $id )
+	public function flag($id)
 	{
 		global $me;
 
@@ -643,10 +655,9 @@ class PostController extends Earlybird\FoundryController
 
 		$post = Post::findOrFail($id);
 
-		if( Request::isMethod('post') ) {
-			if( isset($_POST['cancel']) ) {
-			}
-			else {
+		if (Request::isMethod('post')) {
+			if (isset($_POST['cancel'])) {
+			} else {
 				$report = PostReport::create([
 					'post_id'  => $post->id,
 					'user_id'  => $me->id,
@@ -670,9 +681,10 @@ class PostController extends Earlybird\FoundryController
 	/**
 	 * Confirm deletion of a post
 	 *
+	 * @param  int  $id  post ID to delete
 	 * @return Response
 	 */
-	public function delete( $id )
+	public function delete($id)
 	{
 		global $me;
 
@@ -683,20 +695,19 @@ class PostController extends Earlybird\FoundryController
 
 		$post = Post::findOrFail($id);
 
-		if( $post->user_id != $me->id && !$me->is_moderator ) {
+		if ($post->user_id != $me->id && !$me->is_moderator) {
 			App::abort(403);
 		}
-		if( $post->topic->is_locked && !$me->is_moderator ) {
+		if ($post->topic->is_locked && !$me->is_moderator) {
 			App::abort(403);
 		}
 
-		if( Request::isMethod('post') )
-		{
-			if( isset($_POST['cancel']) ) {
+		if (Request::isMethod('post')) {
+			if (isset($_POST['cancel'])) {
 				return Redirect::to($post->url);
 			}
 			// Redirect to topic, or forum if topic has no more posts
-			elseif( isset($_POST['confirm']) ) {
+			else if (isset($_POST['confirm'])) {
 				$redirect = $post->delete();
 
 				Session::push('messages', 'The post has been successfully deleted');
@@ -712,7 +723,7 @@ class PostController extends Earlybird\FoundryController
 	}
 
 	/**
-	 * Choose smileys
+	 * Choose smileys in a small popup window
 	 *
 	 * @return Response
 	 */

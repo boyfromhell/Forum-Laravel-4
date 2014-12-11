@@ -1,7 +1,8 @@
 <?php
 
-class CustomData extends Earlybird\Foundry
+class CustomData extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $table = 'custom_data';
 
@@ -26,3 +27,4 @@ class CustomData extends Earlybird\Foundry
 	}
 
 }
+

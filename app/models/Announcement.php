@@ -1,7 +1,8 @@
 <?php
 
-class Announcement extends Earlybird\Foundry
+class Announcement extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	/**
 	 * User who created the announcement
@@ -14,3 +15,4 @@ class Announcement extends Earlybird\Foundry
 	}
 
 }
+

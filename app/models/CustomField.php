@@ -1,5 +1,7 @@
 <?php
 
-class CustomField extends Earlybird\Foundry
+class CustomField extends Eloquent
 {
+    use Earlybird\Foundry;
 }
+

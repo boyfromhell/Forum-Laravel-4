@@ -37,7 +37,7 @@ class PollOption extends Eloquent
 	 */
 	public function getPercentAttribute()
 	{
-		if( $this->poll->total_picks > 0 ) {
+		if ($this->poll->total_picks > 0) {
 			return round(100 * ($this->total_votes / $this->poll->total_picks));
 		}
 

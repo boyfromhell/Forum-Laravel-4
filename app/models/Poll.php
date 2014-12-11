@@ -1,7 +1,8 @@
 <?php
 
-class Poll extends Earlybird\Foundry
+class Poll extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $appends = array(
 		'type',
@@ -48,7 +49,7 @@ class Poll extends Earlybird\Foundry
 	 */
 	public function getTypeAttribute()
 	{
-		return( $this->max_options <= 1 ? 'radio' : 'checkbox' );
+		return ($this->max_options <= 1 ? 'radio' : 'checkbox');
 	}
 
 	/**
@@ -70,7 +71,7 @@ class Poll extends Earlybird\Foundry
 	{
 		$total = 0;
 
-		foreach( $this->options as $option ) {
+		foreach ($this->options as $option) {
 			$total += $option->total_votes;
 		}
 
@@ -86,8 +87,8 @@ class Poll extends Earlybird\Foundry
 	{
 		$max = 1;
 
-		foreach( $this->options as $option ) {
-			if( $option->percent > $max ) {
+		foreach ($this->options as $option) {
+			if ($option->percent > $max) {
 				$max = $option->percent;
 			}
 		}

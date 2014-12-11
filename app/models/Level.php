@@ -1,7 +1,8 @@
 <?php
 
-class Level extends Earlybird\Foundry
+class Level extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 
@@ -18,3 +19,4 @@ class Level extends Earlybird\Foundry
 	}
 
 }
+

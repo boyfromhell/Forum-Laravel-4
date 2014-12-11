@@ -1,7 +1,8 @@
 <?php
 
-class ProjectController extends Earlybird\FoundryController
+class ProjectController extends BaseController
 {
+    use Earlybird\FoundryController;
 
 	/**
 	 * List projects in this category
@@ -9,28 +10,34 @@ class ProjectController extends Earlybird\FoundryController
 	 * @param  string  $category
 	 * @return Response
 	 */
-	public function category( $category = 'official' )
+	public function category($category = 'official')
 	{
 		global $me;
 
 		Session::push('notices', 'Be sure to check out the <a target="_blank" class="alert-link" href="http://github.com/Attnam/ivan">fan continuation on GitHub</a> by members of this site!');
 
-		if( ! Module::isActive('downloads') ) {
+		if (! Module::isActive('downloads')) {
 			App::abort(404);
 		}
 
-		switch( $category ) {
+		switch ($category) {
 			case 'variants':
-				$section = 'variants'; $title = 'Variants'; $category_id = 0;
+				$section = 'variants';
+				$title = 'Variants';
+				$category_id = 0;
 				break;
 
 			case 'other':
-				$section = 'other'; $title = 'Other Projects'; $category_id = 2;
+				$section = 'other';
+				$title = 'Other Projects';
+				$category_id = 2;
 				break;
 
 			case 'official': 
-			case NULL:
-				$section = 'official'; $title = 'Official'; $category_id = 1;
+			case null:
+				$section = 'official';
+				$title = 'Official';
+				$category_id = 1;
 				break;
 
 			default:
@@ -50,7 +57,7 @@ class ProjectController extends Earlybird\FoundryController
 			->orderBy('name', 'asc')
 			->get();
 
-		if( count($projects) > 0 ) {
+		if (count($projects) > 0) {
 			$projects->load(['downloads']);
 		}
 
@@ -66,11 +73,11 @@ class ProjectController extends Earlybird\FoundryController
 	 * @param  string  $name  For SEO only
 	 * @return Response
 	 */
-	public function display( $id, $name = NULL )
+	public function display($id, $name = null)
 	{
 		global $me;
 
-		if( ! Module::isActive('downloads') ) {
+		if (! Module::isActive('downloads')) {
 			App::abort(404);
 		}
 
@@ -95,7 +102,7 @@ class ProjectController extends Earlybird\FoundryController
 	 * @param  string  $name  For SEO only
 	 * @return Response
 	 */
-	public function download( $id, $name = NULL )
+	public function download($id, $name = null)
 	{
 		$file = Download::findOrFail($id);
 		$file->increment('views');
@@ -104,3 +111,4 @@ class ProjectController extends Earlybird\FoundryController
 	}
 
 }
+

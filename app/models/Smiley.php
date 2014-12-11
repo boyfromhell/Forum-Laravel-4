@@ -1,5 +1,7 @@
 <?php
 
-class Smiley extends Earlybird\Foundry
+class Smiley extends Eloquent
 {
+    use Earlybird\Foundry;
 }
+

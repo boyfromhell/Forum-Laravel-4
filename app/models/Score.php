@@ -1,7 +1,8 @@
 <?php
 
-class Score extends Earlybird\Foundry
+class Score extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 
@@ -16,3 +17,4 @@ class Score extends Earlybird\Foundry
 	}
 
 }
+

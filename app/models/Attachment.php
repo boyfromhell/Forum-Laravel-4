@@ -1,7 +1,8 @@
 <?php
 
-class Attachment extends Earlybird\Foundry
+class Attachment extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 	protected $appends = array(
@@ -59,16 +60,15 @@ class Attachment extends Earlybird\Foundry
 	 * @param  string  $size
 	 * @return string
 	 */
-	protected function _getPhoto( $size )
+	protected function _getPhoto($size)
 	{
-		list( $name, $ext ) = Helpers::parse_file_name($this->filename);
+		list($name, $ext) = Helpers::parse_file_name($this->filename);
 
-		list( $year, $month, ) = explode('-', $this->created_at);
+		list($year, $month, ) = explode('-', $this->created_at);
 
 		$folder = '/attachments/' . $year . '/' . $month . '/';
 
-		switch( $size )
-		{
+		switch($size) {
 			case 'original':
 				return $folder.$name.'.'.$ext;
 				break;

@@ -1,7 +1,8 @@
 <?php
 
-class Topic extends Earlybird\Foundry
+class Topic extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $appends = array(
 		'url',
@@ -108,24 +109,21 @@ class Topic extends Earlybird\Foundry
 	 */
 	public function getImageAttribute()
 	{
-		if( $this->type == 2 ) {
+		if ($this->type == 2) {
 			$image = 'topic_announce';
-		}
-		else if( $this->type == 1 ) {
+		} else if ($this->type == 1) {
 			$image = 'topic_sticky';
-		}
-		else if( $this->is_locked == 1 ) {
+		} else if ($this->is_locked == 1) {
 			$image = 'topic_locked';
-		}
-		else {
+		} else {
 			$image = 'topic';
 
-			if( $this->pages > 1 ) {
+			if ($this->pages > 1) {
 				$image .= '_hot';
 			}
 		}
 
-		if( $this->unread_post->id ) {
+		if ($this->unread_post->id) {
 			$image .= '_unread';
 		}
 
@@ -139,19 +137,15 @@ class Topic extends Earlybird\Foundry
 	 */
 	public function getAltTextAttribute()
 	{
-		if( $this->type == 2 ) {
+		if ($this->type == 2) {
 			return 'Announcement';
-		}
-		else if( $this->type == 1 ) {
+		} else if ($this->type == 1) {
 			return 'Sticky';
-		}
-		else if( $this->is_locked == 1 ) {
+		} else if ($this->is_locked == 1) {
 			return 'Locked';
-		}
-		else if( $this->unread_post->id ) {
+		} else if ($this->unread_post->id) {
 			return 'New posts';
-		}
-		else {
+		} else {
 			return 'No new posts';
 		}
 	}
@@ -163,7 +157,7 @@ class Topic extends Earlybird\Foundry
 	 */
 	public function getShortTitleAttribute()
 	{
-		if( strlen($this->title) > 50 ) {
+		if (strlen($this->title) > 50) {
 			return substr($this->title, 0, 45) . '...';
 		}
 		return $this->title;
@@ -178,19 +172,19 @@ class Topic extends Earlybird\Foundry
 	{
 		global $me;
 
-		if( ! $me->id ) {
-			return NULL;
+		if (! $me->id) {
+			return null;
 		}
 
 		$session = SessionTopic::where('user_id', '=', $me->id)
 			->where('topic_id', '=', $this->id)
 			->first();
 
-		if( $session->session_post ) {
+		if ($session->session_post) {
 			return Post::find($session->session_post);
 		}
 
-		return NULL;
+		return null;
 	}
 
 	/**
@@ -216,7 +210,7 @@ class Topic extends Earlybird\Foundry
 			->where('posts.topic_id', '=', $this->id)
 			->count();
 
-		return ( $total > 0 ? true : false );
+		return ($total > 0 ? true : false);
 	}
 
 	/**
@@ -226,7 +220,7 @@ class Topic extends Earlybird\Foundry
 	 */
 	public function getHasPollAttribute()
 	{
-		return( $this->poll->id ? true : false );
+		return ($this->poll->id ? true : false);
 	}
 
 	/**
@@ -244,21 +238,21 @@ class Topic extends Earlybird\Foundry
 	 * This is automatically triggered from a Post::delete if the post is the last in its topic
 	 * @todo soft delete
 	 */
-	public function delete( $recursive = true )
+	public function delete($recursive = true)
 	{
-		foreach( $this->subscriptions as $subscription ) {
+		foreach ($this->subscriptions as $subscription) {
 			$subscription->delete();
 		}
-		foreach( $this->sessions as $session ) {
+		foreach ($this->sessions as $session) {
 			$session->delete();
 		}
 		$this->forum->decrement('total_topics');
 
 		// If this is triggered from a Post::delete, do not delete posts!
-		if( $recursive ) {
+		if ($recursive) {
 			$this->forum->decrement('total_posts', count($this->posts));
 
-			foreach( $this->posts as $post ) {
+			foreach ($this->posts as $post) {
 				$post->delete();
 			}
 		}

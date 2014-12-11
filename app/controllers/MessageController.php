@@ -8,34 +8,29 @@ class MessageController extends BaseController
 	 *
 	 * @return Response
 	 */
-	public function inbox( $folder = 'inbox' )
+	public function inbox($folder = 'inbox')
 	{
 		global $me;
 
 		$threads = Input::get('threads');
 
 		// Bulk actions
-		if( Request::isMethod('post') && count($threads) > 0 )
-		{
+		if (Request::isMethod('post') && count($threads) > 0) {
 			$messages = Message::ownedBy($me->id)
 				->whereIn('thread_id', $threads);
 
-			if( isset($_POST['archive']) ) {
+			if (isset($_POST['archive'])) {
 				$messages->update(['archived' => 1]);
-			}
-			else if( isset($_POST['unarchive']) ) {
+			} else if (isset($_POST['unarchive'])) {
 				$messages->update(['archived' => 0]);
-			}
-			else if( isset($_POST['read']) ) {
+			} else if (isset($_POST['read'])) {
 				$messages->update(['read' => 1]);
-			}
-			else if( isset($_POST['unread']) ) {
+			} else if (isset($_POST['unread'])) {
 				$messages->update(['read' => 0]);
-			}
-			else if( isset($_POST['delete']) ) {
+			} else if (isset($_POST['delete'])) {
 				$messages = $messages->get();
 
-				foreach( $messages as $message ) {
+				foreach ($messages as $message) {
 					$message->delete();
 				}
 			}
@@ -51,7 +46,7 @@ class MessageController extends BaseController
 			'title'    => ucwords($folder)
 		);
 
-		switch( $sort ) {
+		switch ($sort) {
 			case 'name':
 				$orderby = 'users.name';
 				break;
@@ -70,7 +65,7 @@ class MessageController extends BaseController
 			->where('messages.owner_user_id', '=', $me->id)
 			->groupBy('messages.thread_id');
 
-		switch( $folder ) {
+		switch ($folder) {
 			case 'sent':
 				$threads = $threads->having(DB::raw('MAX(from_user_id = '.$me->id.' )'), '=', 1);
 				break;
@@ -91,7 +86,7 @@ class MessageController extends BaseController
 			->orderBy('message_threads.date_updated', 'desc')
 			->paginate(25, ['message_threads.*', DB::raw('MIN(messages.read) AS `read`')]);
 
-		if( count($threads) > 0 ) {
+		if (count($threads) > 0) {
 			$threads->load([
 				'from',
 				'lastMessage'
@@ -140,7 +135,7 @@ class MessageController extends BaseController
 	 * @param  int  $id  MessageThread id
 	 * @return Response
 	 */
-	public function displayThread( $id )
+	public function displayThread($id)
 	{
 		$thread = MessageThread::findOrFail($id);
 
@@ -151,7 +146,7 @@ class MessageController extends BaseController
 
 		// If no messages are found (filtered by owner)
 		// then this is not my thread, or I deleted them all
-		if( ! count($thread->messages) ) {
+		if (! count($thread->messages)) {
 			App::abort(404);
 		}
 
@@ -180,13 +175,13 @@ class MessageController extends BaseController
 	 *
 	 * @return Response
 	 */
-	public function delete( $id )
+	public function delete($id)
 	{
 		global $me;
 
 		$message = Message::findOrFail($id);
 
-		if( $message->owner_user_id != $me->id ) {
+		if ($message->owner_user_id != $me->id) {
 			App::abort(403);
 		}
 
@@ -195,16 +190,15 @@ class MessageController extends BaseController
 			'title'    => 'Delete Private Message'
 		);
 
-		if( Request::isMethod('post') )
-		{
-			if( isset($_POST['cancel']) ) {
+		if (Request::isMethod('post')) {
+			if (isset($_POST['cancel'])) {
 				return Redirect::to($message->url);
 			}
 			// Redirect to thread, or folder if thread has no more messages
-			elseif( isset($_POST['confirm']) ) {
+			else if (isset($_POST['confirm'])) {
 				$redirect = $message->delete();
 
-				if( ! $redirect ) {
+				if (! $redirect) {
 					$redirect = '/messages/'.$message->folder;
 				}
 
@@ -244,19 +238,17 @@ class MessageController extends BaseController
 			'unread'   => 0,
 		);
 
-		foreach( $data as $datum )
-		{
-			if( $datum->is_archived == 1 ) {
+		foreach ($data as $datum) {
+			if ($datum->is_archived == 1) {
 				$totals['archived']++;
-			}
-			else if( $datum->to_me ) {
+			} else if ($datum->to_me) {
 				$totals['inbox']++;
 
-				if( ! $datum->is_read ) {
+				if (! $datum->is_read) {
 					$totals['unread']++;
 				}
 			}
-			if( $datum->from_me ) {
+			if ($datum->from_me) {
 				$totals['sent']++;
 			}
 		}
@@ -269,7 +261,7 @@ class MessageController extends BaseController
 	 *
 	 * @return array
 	 */
-	public static function fetchMenu( $active )
+	public static function fetchMenu($active)
 	{
 		$totals = MessageController::countTotals();
 
@@ -282,13 +274,13 @@ class MessageController extends BaseController
 
 		$folders = array('inbox', 'sent', 'archived');
 
-		foreach( $folders as $folder ) {
+		foreach ($folders as $folder) {
 			$menu[$folder] = array(
 				'url' => '/messages/'.$folder,
 				'name' => ucwords($folder),
 			);
 
-			if( $totals[$folder] > 0 ) {
+			if ($totals[$folder] > 0) {
 				$menu[$folder]['name'] .= ' <span class="label label-default">'.$totals[$folder].'</span>';
 			}
 		}
@@ -298,7 +290,7 @@ class MessageController extends BaseController
 			'name' => 'Search',
 		);
 
-		if( $active ) {
+		if ($active) {
 			$menu[$active]['active'] = true;
 		}
 

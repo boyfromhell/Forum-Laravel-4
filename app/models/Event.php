@@ -1,7 +1,8 @@
 <?php
 
-class Event extends Earlybird\Foundry
+class Event extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $appends = array(
 		'url',
@@ -20,3 +21,4 @@ class Event extends Earlybird\Foundry
 	}
 
 }
+

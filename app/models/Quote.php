@@ -1,7 +1,8 @@
 <?php
 
-class Quote extends Earlybird\Foundry
+class Quote extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $appends = array(
 		'url',
@@ -28,3 +29,4 @@ class Quote extends Earlybird\Foundry
 	}
 
 }
+

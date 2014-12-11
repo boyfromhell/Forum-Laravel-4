@@ -1,7 +1,8 @@
 <?php
 
-class AlbumController extends Earlybird\FoundryController
+class AlbumController extends BaseController
 {
+	use Earlybird\FoundryController;
 
 	/**
 	 * Gallery page
@@ -26,7 +27,7 @@ class AlbumController extends Earlybird\FoundryController
 			->orderBy(DB::raw('RAND()'), 'asc')
 			->take($limit)
 			->get(['photos.*']);
-		if( count($photos) > 0 ) {
+		if (count($photos) > 0) {
 			$photos->load(['album', 'user']);
 		}
 
@@ -36,7 +37,7 @@ class AlbumController extends Earlybird\FoundryController
 			->orderBy('updated_at', 'desc')
 			->take($limit)
 			->get();
-		if( count($albums) > 0 ) {
+		if (count($albums) > 0) {
 			$albums->load(['user']);
 		}
 
@@ -53,23 +54,23 @@ class AlbumController extends Earlybird\FoundryController
 	 * @param  string  $name  For SEO only
 	 * @return Response
 	 */
-	public function display( $id = 1, $name = NULL )
+	public function display($id = 1, $name = null)
 	{
 		global $me;
 
-		if( $id ) {
+		if ($id) {
 			$album = Album::findOrFail($id);
-		}
-		else if( Input::has('gallery') ) {
+		} else if (Input::has('gallery')) {
 			$album = Album::where('folder', '=', Input::get('gallery'))
 				->first();
 		}
-		if( ! $album->id ) {
+
+		if (! $album->id) {
 			App::abort(404);
 		}
 
 		// @todo
-		if( $album->permission_view > $me->access ) {
+		if ($album->permission_view > $me->access) {
 			App::abort(403);
 		}
 
@@ -84,7 +85,7 @@ class AlbumController extends Earlybird\FoundryController
 
 		// @todo
 		/*
-			if( strlen($child->description) > 80 ) {
+			if (strlen($child->description) > 80) {
 				$child->description = substr($child->description, 0, 79) . '...';
 			}
 			$child->description = BBCode::simplify($child->description);
@@ -104,13 +105,13 @@ class AlbumController extends Earlybird\FoundryController
 	/**
 	 * Edit an album
 	 */
-	public function edit( $id )
+	public function edit($id)
 	{
 		global $me;
 
 		$album = Album::findOrFail($id);
 
-		if( $me->id != $album->user_id && !$me->is_admin ) {
+		if ($me->id != $album->user_id && !$me->is_admin) {
 			App::abort(403);
 		}
 
@@ -126,3 +127,4 @@ class AlbumController extends Earlybird\FoundryController
 	}
 	
 }
+

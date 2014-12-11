@@ -1,7 +1,8 @@
 <?php
 
-class ModuleCategory extends Earlybird\Foundry
+class ModuleCategory extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $table = 'app_categories';
 	protected $appends = array(
@@ -41,3 +42,4 @@ class ModuleCategory extends Earlybird\Foundry
 	}
 
 }
+

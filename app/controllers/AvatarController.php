@@ -1,7 +1,8 @@
 <?php
 
-class AvatarController extends Earlybird\FoundryController
+class AvatarController extends BaseController
 {
+    use Earlybird\FoundryController;
 
 	/**
 	 * Choose and manage avatars
@@ -12,30 +13,28 @@ class AvatarController extends Earlybird\FoundryController
 	{
 		global $me;
 
-		if( Request::isMethod('post') )
-		{
+		if (Request::isMethod('post')) {
 			$id = Input::get('id');
 
 			// Make sure it's mine
-			if( $id > 0 ) {
+			if ($id > 0) {
 				$avatar = Avatar::findOrFail($id);
 
-				if( $avatar->user_id != Auth::id() ) {
+				if ($avatar->user_id != Auth::id()) {
 					App::abort(403);
 				}
 			}
 
 			// Select different avatar
-			if( Input::has('select') ) {
+			if (Input::has('select')) {
 				$me->avatar_id = $avatar->id;
 				$me->save();
 
 				Session::push('messages', 'Avatar updated');
-			}
-			// Delete avatar
-			else if( Input::has('delete') ) {
-				if( $me->avatar_id == $avatar->id ) {
-					$me->avatar_id = NULL;
+			} else if (Input::has('delete')) {
+				// Delete avatar
+				if ($me->avatar_id == $avatar->id) {
+					$me->avatar_id = null;
 					$me->save();
 				}
 
@@ -55,7 +54,7 @@ class AvatarController extends Earlybird\FoundryController
 			->with('_PAGE', $_PAGE)
 			->with('menu', UserController::fetchMenu('avatar'))
 			->with('avatars', $avatars)
-			->with('default', ( $me->avatar_id ? $me->avatar_id : 0 ));
+			->with('default', ($me->avatar_id ? $me->avatar_id : 0));
 	}
 
 	/**
@@ -67,12 +66,10 @@ class AvatarController extends Earlybird\FoundryController
 	{
 		global $me;
 
-		if( Input::hasFile('avatar') )
-		{
+		if (Input::hasFile('avatar')) {
 			$file = Input::file('avatar');
 
-			if( $file->isValid() )
-			{
+			if ($file->isValid()) {
 				$ext = strtolower($file->getClientOriginalExtension());
 				$name = time().'_'.str_random().'.'.$ext;
 				$file->move(storage_path().'/uploads', $name);

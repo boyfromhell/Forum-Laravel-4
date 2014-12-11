@@ -1,7 +1,8 @@
 <?php
 
-class Project extends Earlybird\Foundry
+class Project extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 	protected $appends = array(
@@ -76,7 +77,7 @@ class Project extends Earlybird\Foundry
 	 */
 	public function getTotalDownloadsAttribute()
 	{
-		return array_sum( array_pluck($this->downloads, 'views') );
+		return array_sum(array_pluck($this->downloads, 'views'));
 	}
 
 }

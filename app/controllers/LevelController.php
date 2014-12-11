@@ -1,7 +1,8 @@
 <?php
 
-class LevelController extends Earlybird\FoundryController
+class LevelController extends BaseController
 {
+    use Earlybird\FoundryController;
 
 	/**
 	 * Show all levels and how to get to them

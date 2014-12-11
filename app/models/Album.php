@@ -1,7 +1,8 @@
 <?php
 
-class Album extends Earlybird\Foundry
+class Album extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 	protected $appends = array(
@@ -65,11 +66,10 @@ class Album extends Earlybird\Foundry
 	 */
 	public function coverPhoto()
 	{
-		if( $this->cover_id ) {
+		if ($this->cover_id) {
 			return $this->belongsTo('Photo', 'cover_id');
-		}
-		else {
-			foreach( $this->children as $child ) {
+		} else {
+			foreach ($this->children as $child) {
 				return $child->coverPhoto();
 			}
 		}
@@ -84,7 +84,7 @@ class Album extends Earlybird\Foundry
 	 */
 	public function getUrlAttribute()
 	{
-		if( $this->id == 1 ) {
+		if ($this->id == 1) {
 			return '/albums/';
 		}
 
@@ -103,8 +103,7 @@ class Album extends Earlybird\Foundry
 		$parents = array();
 		$child = $this;
 
-		while( $child->parent_id )
-		{
+		while ($child->parent_id) {
 			$parent = Album::find($child->parent_id);
 			$parents[] = $parent;
 			$child = $parent;
@@ -137,7 +136,7 @@ class Album extends Earlybird\Foundry
 	 */
 	public function delete()
 	{
-		foreach( $this->photos as $photo ) {
+		foreach ($this->photos as $photo) {
 			$photo->delete();
 		}
 
@@ -154,13 +153,11 @@ class Album extends Earlybird\Foundry
 	{
 		global $me;
 
-		if( $me->is_admin ) {
+		if ($me->is_admin) {
 			return true;
-		}
-		else if( $this->permission_upload == 0 && $this->user_id == $me->id ) {
+		} else if ($this->permission_upload == 0 && $this->user_id == $me->id) {
 			return true;
-		}
-		else if( $album->permission_upload == 1 && $me->id ) {
+		} else if ($album->permission_upload == 1 && $me->id) {
 			return true;
 		}
 

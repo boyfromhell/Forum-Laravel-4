@@ -27,7 +27,7 @@ class AdminController extends BaseController
 			'Photos' => Photo::count(),
 		);
 
-		foreach( $stats as $key => $val ) {
+		foreach ($stats as $key => $val) {
 			$stats[$key] = number_format($val);
 		}
 
@@ -67,38 +67,38 @@ class AdminController extends BaseController
 		$html = 'Counters reset. ';
 
 		// Count posts in all topics and forums
-		foreach( $topics as $topic ) {
+		foreach ($topics as $topic) {
 			$latest_post = $topic->posts()
 				->orderBy('id', 'desc')
 				->first();
 
 			$posts = $topic->posts()->count();
-			$topic->replies = ( $posts-1 );
+			$topic->replies = ($posts - 1);
 			$forum_totals[$topic->forum_id] += $posts;
 
-			if( $topic->posted_at != $latest_post->created_at ) {
+			if ($topic->posted_at != $latest_post->created_at) {
 				$topic->posted_at = $latest_post->created_at;
 			}
 
-			if( $topic->isDirty(['replies', 'posted_at']) ) {
+			if ($topic->isDirty(['replies', 'posted_at'])) {
 				$topic->save();
 				$totals['topics']++;
 			}
 		}
 		// Count topics in all forums
-		foreach( $forums as $forum ) {
+		foreach ($forums as $forum) {
 			$forum->total_topics = $forum->topics()->count();
 			$forum->total_posts = $forum_totals[$forum->id];
 
-			if( $forum->isDirty('total_topics', 'total_posts') ) {
+			if ($forum->isDirty('total_topics', 'total_posts')) {
 				$forum->save();
 				$totals['forums']++;
 			}
 		}
 		// Count posts by all users
-		foreach( $users as $user ) {
+		foreach ($users as $user) {
 			$user->total_posts = $user->posts()->count();
-			if( $user->isDirty('total_posts') ) {
+			if ($user->isDirty('total_posts')) {
 				$user->save();
 				$totals['users']++;
 			}
@@ -106,17 +106,16 @@ class AdminController extends BaseController
 
 		// Format everything nicely
 		$html_totals = array();
-		foreach( $totals as $key => $total ) {
-			if( $total > 0 ) {
+		foreach ($totals as $key => $total) {
+			if ($total > 0) {
 				$html_totals[] = '<b>'.$total.'</b> '.$key;
 			}
 		}
 
-		if( count($html_totals) > 0 ) {
+		if (count($html_totals) > 0) {
 			$html .= implode(', ', $html_totals);
 			$html .= ' fixed';
-		}
-		else {
+		} else {
 			$html .= 'Nothing needed fixing';
 		}
 
@@ -131,7 +130,7 @@ class AdminController extends BaseController
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function viewMessage( $id )
+	public function viewMessage($id)
 	{
 		$message = AdminMessage::findOrFail($id);
 
@@ -161,25 +160,21 @@ class AdminController extends BaseController
 			'title'    => 'Admin Messages'
 		);
 
-		if( Request::isMethod('post') ) {
+		if (Request::isMethod('post')) {
 			$messages = Input::get('messages');
 
-			if( count($messages) > 0 ) {
+			if (count($messages) > 0) {
 				$data = AdminMessage::whereIn('id', $messages);
 
-				if( isset($_POST['archive']) ) {
+				if (isset($_POST['archive'])) {
 					$data->update(['archived' => 1]);
-				}
-				else if( isset($_POST['unarchive']) ) {
+				} else if (isset($_POST['unarchive'])) {
 					$data->update(['archived' => 0]);
-				}
-				else if( isset($_POST['delete']) ) {
+				} else if (isset($_POST['delete'])) {
 					$data->delete();
-				}
-				else if( isset($_POST['read']) ) {
+				} else if (isset($_POST['read'])) {
 					$data->update(['read' => 1]);
-				}
-				else if( isset($_POST['unread']) ) {
+				} else if (isset($_POST['unread'])) {
 					$data->update(['read' => 0]);
 				}
 
@@ -195,7 +190,7 @@ class AdminController extends BaseController
 			->orderBy('id', 'desc')
 			->get(['post_reports.*']);
 
-		if( count($reports) > 0 ) {
+		if (count($reports) > 0) {
 			$reports->load([
 				'post',
 				'post.topic',
@@ -209,7 +204,7 @@ class AdminController extends BaseController
 			->orderBy('created_at', 'desc')
 			->paginate(20);
 
-		if( count($admin_messages) > 0 ) {
+		if (count($admin_messages) > 0) {
 			$admin_messages->load(['user']);
 		}
 
@@ -228,13 +223,12 @@ class AdminController extends BaseController
 		$id = Input::get('id');
 		$announcement = Announcement::findOrFail($id);
 
-		if( Request::isMethod('post') ) {
+		if (Request::isMethod('post')) {
 			$announcement->text = Input::get('text');
 			$announcement->save();
 
 			$html = BBCode::parse($announcement->text);
-		}
-		else {
+		} else {
 			$html = View::make('admin.announcements.edit')
 				->with('announcement', $announcement)
 				->render();
@@ -257,7 +251,7 @@ class AdminController extends BaseController
 		$action = Input::get('action');
 		$report = PostReport::findOrFail($id);
 
-		if( $action != 'rejected' ) {
+		if ($action != 'rejected') {
 			$action = 'complete';
 		}
 
@@ -274,7 +268,7 @@ class AdminController extends BaseController
 	 *
 	 * @return array
 	 */
-	public static function fetchMenu( $active )
+	public static function fetchMenu($active)
 	{
 		$menu = array();
 
@@ -289,7 +283,7 @@ class AdminController extends BaseController
 			'url' => '/admin/messages',
 			'name' => 'Messages',
 		);
-		if( $total > 0 ) {
+		if ($total > 0) {
 			$menu['messages']['name'] .= ' <span class="label label-default">'.$total.'</span>';
 		}
 
@@ -298,7 +292,7 @@ class AdminController extends BaseController
 			'name' => 'Users',
 		);
 
-		if( $active ) {
+		if ($active) {
 			$menu[$active]['active'] = true;
 		}
 
@@ -306,3 +300,4 @@ class AdminController extends BaseController
 	}
 
 }
+

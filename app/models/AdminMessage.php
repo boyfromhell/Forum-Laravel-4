@@ -1,7 +1,8 @@
 <?php
 
-class AdminMessage extends Earlybird\Foundry
+class AdminMessage extends Eloquent
 {
+	use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 	protected $appends = array(
@@ -29,3 +30,4 @@ class AdminMessage extends Earlybird\Foundry
 	}
 
 }
+

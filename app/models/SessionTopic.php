@@ -17,3 +17,4 @@ class SessionTopic extends Eloquent
 	}
 
 }
+

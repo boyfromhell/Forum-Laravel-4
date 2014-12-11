@@ -1,8 +1,10 @@
 <?php
 
-class Application extends Earlybird\Foundry
+class Application extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 
 }
+

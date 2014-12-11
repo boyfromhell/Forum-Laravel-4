@@ -1,11 +1,11 @@
 <?php
 
-class Event extends Controller_W 
+// @todo rewrite
+
+/*class Event extends Controller_W 
 {
 	
-	/**
-	 * Delete event
-	 */
+	// Delete event
 	public function delete()
 	{
 		global $_db;
@@ -24,15 +24,6 @@ class Event extends Controller_W
 
 class EventRepeat extends Controller_W 
 {
-	protected static $_table = 'event_repeats';
-
-	public function __construct( $pri = null, $data = null )
-	{
-		parent::__construct($pri, $data);
-		
-		$this->generate_url();
-	}
-	
 	public function generate_url()
 	{
 		$url = preg_replace('/[^A-Za-z0-9]/', '_', $this->name);
@@ -40,9 +31,7 @@ class EventRepeat extends Controller_W
 		$this->url = '/events/' . $this->id . '/' . $url;
 	}
 
-	/**
-	 * Delete event
-	 */
+	// Delete event
 	public function delete()
 	{
 		global $_db;
@@ -52,3 +41,5 @@ class EventRepeat extends Controller_W
 		$_db->query($sql);
 	}
 }
+*/
+

@@ -5,10 +5,9 @@ use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
-class User extends Earlybird\Foundry //Cartalyst\Sentry\Users\Eloquent\User
-	implements UserInterface, RemindableInterface {
+class User extends Cartalyst\Sentry\Users\Eloquent\User implements UserInterface, RemindableInterface {
 
-	use UserTrait, RemindableTrait;
+	use UserTrait, RemindableTrait, Earlybird\Foundry;
 
 	/**
 	 * The database table used by the model.
@@ -209,18 +208,18 @@ class User extends Earlybird\Foundry //Cartalyst\Sentry\Users\Eloquent\User
 	public function getLevelAttribute()
 	{
 		// A custom assigned title
-		if( $this->level_id ) {
+		if ($this->level_id) {
 			$level = Level::find($this->level_id);
 		}
 
 		// Title based on number of posts
-		if( ! $this->level_id || ! $level->image ) {
-			if( $level && ! $level->image ) {
+		if (! $this->level_id || ! $level->image) {
+			if ($level && ! $level->image) {
 				$level->image = $this->post_level->image;
 			}
 		}
 
-		return ( $level ? $level : $this->post_level );
+		return ($level ? $level : $this->post_level);
 	}
 
 	/**
@@ -231,9 +230,15 @@ class User extends Earlybird\Foundry //Cartalyst\Sentry\Users\Eloquent\User
 	public function getAccessAttribute()
 	{
 		$access = 0;
-		if( $this->id ) { $access++; }
-		if( $this->is_moderator ) { $access++; }
-		if( $this->is_admin ) { $access++; }
+		if ($this->id) {
+			$access++;
+		}
+		if ($this->is_moderator) {
+			$access++;
+		}
+		if ($this->is_admin) {
+			$access++;
+		}
 
 		return $access;
 	}
@@ -247,8 +252,8 @@ class User extends Earlybird\Foundry //Cartalyst\Sentry\Users\Eloquent\User
 	{
 		global $me;
 
-		if( strtotime($this->viewed_at) <= ( time()-300 ) ||
-			( $this->hide_online && !$me->is_admin ) ) {
+		if (strtotime($this->viewed_at) <= (time()-300) ||
+			($this->hide_online && !$me->is_admin)) {
 			return 'offline';
 		}
 
@@ -264,7 +269,7 @@ class User extends Earlybird\Foundry //Cartalyst\Sentry\Users\Eloquent\User
 	{
 		global $me;
 
-		if( $this->hide_online && !$me->is_admin ) {
+		if ($this->hide_online && !$me->is_admin) {
 			return 'Unknown';
 		}
 		else {
@@ -280,7 +285,7 @@ class User extends Earlybird\Foundry //Cartalyst\Sentry\Users\Eloquent\User
 	 */
 	public function getIsAdminAttribute()
 	{
-		return ( $this->user_type >= 2 );
+		return ($this->user_type >= 2);
 
 		/*$group = Group::where('name', '=', 'Administrators')->first();
 
@@ -294,7 +299,7 @@ class User extends Earlybird\Foundry //Cartalyst\Sentry\Users\Eloquent\User
 	 */
 	public function getIsModeratorAttribute()
 	{
-		return ( $this->user_type >= 1 );
+		return ($this->user_type >= 1);
 
 		/*$group = Group::where('name', '=', 'Moderators')->first();
 
@@ -353,15 +358,14 @@ class User extends Earlybird\Foundry //Cartalyst\Sentry\Users\Eloquent\User
 	 * @param  int  $field_id
 	 * @param  mixed  $data
 	 */
-	public function save_field( $field_id, $data )
+	public function save_field($field_id, $data)
 	{
 		// Delete data if empty
-		if( $data === '' || $data === NULL ) {
+		if ($data === '' || $data === null) {
 			CustomData::where('user_id', '=', $this->id)
 				->where('field_id', '=', $field_id)
 				->delete();
-		}
-		else {
+		} else {
 			DB::insert("INSERT INTO custom_data SET
 					user_id  = ?,
 					field_id = ?,
@@ -378,13 +382,13 @@ class User extends Earlybird\Foundry //Cartalyst\Sentry\Users\Eloquent\User
 	 *
 	 * @return mixed
 	 */
-	public function votedIn( $poll_id )
+	public function votedIn($poll_id)
 	{
 		$vote = PollVote::where('user_id', '=', $this->id)
 			->where('poll_id', '=', $poll_id)
 			->first();
 
-		if( $vote->id ) {
+		if ($vote->id) {
 			return explode(',', $vote->choices);
 		}
 

@@ -1,7 +1,8 @@
 <?php
 
-class ForumController extends Earlybird\FoundryController
+class ForumController extends BaseController
 {
+    use Earlybird\FoundryController;
 
 	/**
 	 * Welcome page with recent activity
@@ -13,8 +14,7 @@ class ForumController extends Earlybird\FoundryController
 		global $me;
 
 		// Mark all forums read
-		if( isset($_GET['mark']) && $me->id )
-		{
+		if (isset($_GET['mark']) && $me->id) {
 			SessionTopic::where('user_id', '=', $me->id)->delete();
 
 			Session::push('messages', 'All forums marked read');
@@ -99,8 +99,7 @@ class ForumController extends Earlybird\FoundryController
 		global $me;
 
 		// Mark all forums read
-		if( isset($_GET['mark']) && $me->id )
-		{
+		if (isset($_GET['mark']) && $me->id) {
 			SessionTopic::where('user_id', '=', $me->id)->delete();
 
 			Session::push('messages', 'All forums marked read');
@@ -117,12 +116,10 @@ class ForumController extends Earlybird\FoundryController
 		$announcement = Announcement::where('id', '=', 2)->first();
 
 		// Quote bot
-		if( Module::isActive('quotebot') )
-		{
-			if( Input::has('quote') ) {
+		if (Module::isActive('quotebot')) {
+			if (Input::has('quote')) {
 				$quote = Quote::find(Input::get('quote'));
-			}
-			else {
+			} else {
 				$quote = Quote::orderBy(DB::raw('RAND()'))->first();
 			}
 		}
@@ -134,20 +131,20 @@ class ForumController extends Earlybird\FoundryController
 			'forums',
 		]);
 
-		/*while( $data = $exec->fetch_assoc() )
-		{
+		/*while ($data = $exec->fetch_assoc()) {
 			$forum->perm_view = $forum->check_permission('view', $me, $mygroups);
 			$forum->perm_read = $forum->check_permission('read', $me, $mygroups);
 
-			if( $forum->external ) { $forum->alt = 'External'; }
-			else { $forum->alt = 'No new posts'; }
+			if ($forum->external) {
+				$forum->alt = 'External';
+			} else {
+				$forum->alt = 'No new posts';
+			}
 		}
 
-		if( count($read_ids) )
-		{
-			while( $data = $exec->fetch_assoc() )
-			{
-				if( $topic->smiley ) {
+		if (count($read_ids)) {
+			while ($data = $exec->fetch_assoc()) {
+				if ($topic->smiley) {
 					list($topic->smiley_img, $topic->smiley_alt) = topic_smiley($topic->smiley);
 				}
 
@@ -155,10 +152,9 @@ class ForumController extends Earlybird\FoundryController
 			}
 		}
 
-		foreach( $forums as $key => &$forum )
-		{
+		foreach ($forums as $key => &$forum) {
 			// If latest topic is also unread
-			if( $forum->latest_topic->id && $forum->unread['topic_id'] == $forum->latest_topic->id ) {
+			if ($forum->latest_topic->id && $forum->unread['topic_id'] == $forum->latest_topic->id) {
 			
 				// Check for first unread post
 				$sql = "SELECT `session_post`
@@ -166,16 +162,15 @@ class ForumController extends Earlybird\FoundryController
 					WHERE `user_id` = {$me->id}
 						AND `topic_id` = {$forum->latest_topic->id}";
 				$exec = $_db->query($sql);
-				list( $unread_post_id ) = $exec->fetch_row();
+				list($unread_post_id) = $exec->fetch_row();
 			
 				$forum->latest_topic->url = '/posts/' . $unread_post_id . '#' . $unread_post_id;
 				$forum->latest_topic->alt = 'Go to first unread post';
 			}
 
-			if( $forum->parent_id != 0 )
-			{
+			if ($forum->parent_id != 0) {
 				// Find actual latest topic from parent/children
-				if( $forum->latest_topic->latest_post->time > $forums[$forum->parent_id]->latest_topic->latest_post->time ) {
+				if ($forum->latest_topic->latest_post->time > $forums[$forum->parent_id]->latest_topic->latest_post->time) {
 					$forums[$forum->parent_id]->latest_topic = $forum->latest_topic;
 				}
 
@@ -214,21 +209,20 @@ class ForumController extends Earlybird\FoundryController
 	 * @param  string  $name  For SEO only
 	 * @return Response
 	 */
-	public function display( $id, $name = NULL )
+	public function display($id, $name = null)
 	{
 		global $me;
 
 		$forum = Forum::findOrFail($id);
 			
 		// Am I even allowed to know this forum exists?
-		if( ! $forum->check_permission('view') ) {
+		if (! $forum->check_permission('view')) {
 			App::abort(404);
-		}
-		else if( ! $forum->check_permission('read') ) {
+		} else if (! $forum->check_permission('read')) {
 			App::abort(403);
 		}
 
-		if( $forum->external ) {
+		if ($forum->external) {
 			return Redirect::to($forum->external);
 		}
 
@@ -238,8 +232,7 @@ class ForumController extends Earlybird\FoundryController
 		);
 
 		// Mark all topics read
-		if( isset($_GET['mark']) && $me->id )
-		{
+		if (isset($_GET['mark']) && $me->id) {
 			SessionTopic::where('user_id', '=', $me->id)
 				->where('forum_id', '=', $forum->id)
 				->delete();
@@ -258,18 +251,16 @@ class ForumController extends Earlybird\FoundryController
 		]);
 
 		$children = array();
-		foreach( $forum->children as $child ) {
-			if( $child->check_permission('view') ) {
+		foreach ($forum->children as $child) {
+			if ($child->check_permission('view')) {
 				$children[] = $child;
 			}
 		}
 
 		// Check if unread
-/*		if( count($read_ids) )
-		{
-			while( $data = $exec->fetch_assoc() )
-			{
-				if( $topic->smiley ) {
+/*		if (count($read_ids)) {
+			while ($data = $exec->fetch_assoc()) {
+				if ($topic->smiley) {
 					list($topic->smiley_img, $topic->smiley_alt) = topic_smiley($topic->smiley);
 				}
 			}
@@ -290,7 +281,7 @@ class ForumController extends Earlybird\FoundryController
 	 *
 	 * @return Response
 	 */
-	public function getOnline( $ajax = true )
+	public function getOnline($ajax = true)
 	{
 		global $me;
 
@@ -298,7 +289,7 @@ class ForumController extends Earlybird\FoundryController
 		$online_when = BoardConfig::where('config_name', '=', 'online_when')->first();
 
 		// Track that I'm online
-		if( $me->id ) {
+		if ($me->id) {
 			$me->update(['viewed_at' => DB::raw('NOW()')]);
 		}
 
@@ -310,7 +301,7 @@ class ForumController extends Earlybird\FoundryController
 		// Fetch members who are online and not hidden
 		$members = User::where('viewed_at', '>', DB::raw('DATE_SUB(NOW(), INTERVAL 5 MINUTE)'));
 
-		if( ! $me->is_admin ) {
+		if (! $me->is_admin) {
 			$members = $members->where('hide_online', '=', 0);
 		}
 
@@ -320,8 +311,8 @@ class ForumController extends Earlybird\FoundryController
 		$total = count($members);
 
 		// New record is reached
-		if( $visitors + $total > $online_record->config_value ) {
-			$online_record->config_value = ( $visitors + $total );
+		if ($visitors + $total > $online_record->config_value) {
+			$online_record->config_value = ($visitors + $total);
 			$online_record->save();
 
 			$online_when->config_value = time();
@@ -336,12 +327,15 @@ class ForumController extends Earlybird\FoundryController
 			->with('record_date', Helpers::local_date('M j, Y, g:i a', $online_when->config_value))
 			->render();
 
-		if( ! $ajax ) {
+		if (! $ajax) {
 			return $html;
 		}
 
-		//if( $user->level == 2 ) { $user->class = 'admin'; }
-		//elseif( $user->level == 1 ) { $user->class = 'mod'; }
+		/*if ($user->level == 2) {
+			$user->class = 'admin';
+		} else if ($user->level == 1) {
+			$user->class = 'mod';
+		}*/
 
 		return Response::json(['html' => $html]);
 	}
@@ -351,7 +345,7 @@ class ForumController extends Earlybird\FoundryController
 	 *
 	 * @return array
 	 */
-	public static function fetchMenu( $active )
+	public static function fetchMenu($active)
 	{
 		global $me;
 
@@ -365,7 +359,7 @@ class ForumController extends Earlybird\FoundryController
 			'url' => '/forum',
 			'name' => 'Forum',
 		);
-		if( $me->id ) {
+		if ($me->id) {
 			$menu['profile'] = array(
 				'url' => '/profile',
 				'name' => 'Profile',
@@ -375,13 +369,12 @@ class ForumController extends Earlybird\FoundryController
 			'url' => '/search',
 			'name' => 'Search',
 		);
-		if( $me->id ) {
+		if ($me->id) {
 			$menu['signout'] = array(
 				'url' => '/signout',
 				'name' => 'Sign out',
 			);
-		}
-		else {
+		} else {
 			$menu['register'] = array(
 				'url' => '/signup',
 				'name' => 'Register',

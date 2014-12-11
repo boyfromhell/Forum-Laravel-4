@@ -1,7 +1,8 @@
 <?php
 
-class TopicSubscription extends Earlybird\Foundry
+class TopicSubscription extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $table = 'topic_subs';
 
@@ -16,3 +17,4 @@ class TopicSubscription extends Earlybird\Foundry
 	}
 
 }
+

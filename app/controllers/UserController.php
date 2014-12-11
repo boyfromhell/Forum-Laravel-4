@@ -1,7 +1,8 @@
 <?php
 
-class UserController extends Earlybird\FoundryController
+class UserController extends BaseController
 {
+    use Earlybird\FoundryController;
 
 	/**
 	 * My profile
@@ -21,13 +22,13 @@ class UserController extends Earlybird\FoundryController
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function display( $id, $name = NULL )
+	public function display($id, $name = null)
 	{
 		global $me;
 
 		$user = User::findOrFail($id);
 
-		if( $me->id == $user->id ) {
+		if ($me->id == $user->id) {
 			$_PAGE['category'] = 'home';
 			$menu = ForumController::fetchMenu('profile');
 		}
@@ -37,7 +38,7 @@ class UserController extends Earlybird\FoundryController
 		}
 		$_PAGE['title'] = $user->name;
 
-		if( $me->id && ( $user->id != $me->id ) && !$me->is_admin ) {
+		if ($me->id && ($user->id != $me->id) && !$me->is_admin) {
 			$user->increment('views');
 		}
 
@@ -46,7 +47,7 @@ class UserController extends Earlybird\FoundryController
 		$month = date('F', mktime(0, 0, 0, $month));
 		$day = (int)$day;
 		$birthday = $month . ' ' . $day;
-		if( $user->bdaypref == 0 ) {
+		if ($user->bdaypref == 0) {
 			$birthday .= ', ' . $year;
 		}
 
@@ -90,7 +91,7 @@ class UserController extends Earlybird\FoundryController
 		$Smarty->assign('website_url', $user->website);
 		$Smarty->assign('website_text', $website_text);
 		$Smarty->assign('allow_email', $user->allow_email || $me->is_admin ? true : false);
-		$Smarty->assign('edit_url', ( $me->is_admin ? '/admin/edit_user?id=' . $u : '/edit-profile' ));
+		$Smarty->assign('edit_url', ($me->is_admin ? '/admin/edit_user?id=' . $u : '/edit-profile'));
 		*/
 	}
 
@@ -105,9 +106,8 @@ class UserController extends Earlybird\FoundryController
 
 		$_PAGE['title'] = 'Edit Profile';
 
-		if( Request::isMethod('post') )
-		{
-			if( Input::has('password') ) {
+		if (Request::isMethod('post')) {
+			if (Input::has('password')) {
 				$password = Input::get('password');
 			}
 
@@ -118,10 +118,10 @@ class UserController extends Earlybird\FoundryController
 			];
 
 			// Do we need a password confirmation?
-			if( $me->email != Input::get('email') || $password !== NULL ) {
+			if ($me->email != Input::get('email') || $password !== null) {
 				$rules['old_password'] = 'required|checkHashedPass:'.$me->password;
 			}
-			if( $password !== NULL ) {
+			if ($password !== null) {
 				$rules['password'] = 'required|min:6';
 			}
 
@@ -131,20 +131,19 @@ class UserController extends Earlybird\FoundryController
 
 			$validator = Validator::make(Input::all(), $rules, $messages);
 
-			if( $validator->fails() ) {
-				foreach( $validator->messages()->all() as $error ) {
+			if ($validator->fails()) {
+				foreach ($validator->messages()->all() as $error) {
 					Session::push('errors', $error);
 				}
 
 				return Redirect::to('edit-profile')->withInput();
-			}
-			else {
+			} else {
 				$me->bdaypref = Input::get('bdaypref');
 				$me->sig = substr(Input::get('sig'), 0, 512);
 				$me->website = $website;
 				$me->email = Input::get('email');
 
-				if( $password !== NULL ) {
+				if ($password !== null) {
 					$me->password = Hash::make($password);
 				}
 
@@ -153,8 +152,7 @@ class UserController extends Earlybird\FoundryController
 				// Save custom fields
 				$customs = CustomField::orderBy('order', 'asc')->get();
 
-				foreach( $customs as $custom )
-				{
+				foreach ($customs as $custom) {
 					$cdata = Input::get('custom'.$custom->id);
 					$me->save_field($custom->id, $cdata);
 				}
@@ -175,19 +173,19 @@ class UserController extends Earlybird\FoundryController
 			->get(['custom_fields.*', 'custom_data.value']);
 
 		// Birthday
-		list( $year, $month, $day ) = explode('-', $me->birthday);
+		list($year, $month, $day) = explode('-', $me->birthday);
 
 		$years = [0 => '&ndash;'];
-		for( $i=date('Y')-100; $i<=date('Y'); $i++ ) {
+		for ($i=date('Y')-100; $i<=date('Y'); $i++) {
 			$years[$i] = $i;
 		}
 		$months = [0 => '&ndash;'];
-		for( $i=1; $i<=12; $i++ ) {
+		for ($i=1; $i<=12; $i++) {
 			$months[$i] = date('F', mktime(0, 0, 0, $i));
 		}
 
 		$days = [0 => '&ndash;'];
-		for( $i=1; $i<=31; $i++ ) {
+		for ($i=1; $i<=31; $i++) {
 			$days[$i] = $i;
 		}
 
@@ -216,7 +214,7 @@ class UserController extends Earlybird\FoundryController
 
 		$_PAGE['title'] = 'Settings';
 
-		if( Request::isMethod('post') ) {
+		if (Request::isMethod('post')) {
 			$me->lang = Input::get('lang', 'en');
 			$me->hide_online = Input::get('hide_online', 0);
 			$me->notify = Input::get('notify', 0);
@@ -276,17 +274,23 @@ class UserController extends Earlybird\FoundryController
 		$sort = Input::get('sort');
 		$order = Input::get('order');
 
-		if( $sort == 'name' ) { $orderby = 'name'; }
-		else if( $sort == 'posts' ) { $orderby = 'posts'; }
-		else { $sort = $orderby = 'created_at'; }
-		if( $order != 'desc' ) { $order = 'asc'; }
+		if ($sort == 'name') {
+			$orderby = 'name';
+		} else if ($sort == 'posts') {
+			$orderby = 'posts';
+		} else {
+			$sort = $orderby = 'created_at';
+		}
 
-		if( $search ) {
+		if ($order != 'desc') {
+			$order = 'asc';
+		}
+
+		if ($search) {
 			$users = User::leftJoin('custom_data', 'users.id', '=', 'custom_data.user_id')
 				->leftJoin('custom_fields', 'custom_data.field_id', '=', 'custom_fields.id')
 				->where('users.name', 'LIKE', '%'.$search.'%')
-				->orWhere( function($q) use ($search)
-				{
+				->orWhere(function ($q) use ($search) {
 					$q->where('custom_data.value', 'LIKE', '%'.$search.'%')
 						->where('custom_fields.memberlist', '=', 1)
 						->where('custom_fields.permission', '<=', 2);
@@ -303,14 +307,16 @@ class UserController extends Earlybird\FoundryController
 		$users = $users->paginate(25, ['users.*']);
 
 		/*$params = array();
-		if( $search ) { $params['search'] = $search; }
-		if( $orderby != 'created_at' || $order != 'asc' ) {
+		if ($search) {
+			$params['search'] = $search;
+		}
+		if ($orderby != 'created_at' || $order != 'asc') {
 			$params['sort'] = $orderby;
 			$params['order'] = $order;
 		}
 		$query_string = http_build_query($params);
-		$url = "/members" . ( $query_string ? '?' . $query_string : '' );
-		$sort_url = "/members?" . ( $search ? "search={$search}&amp;" : '' );*/
+		$url = "/members" . ($query_string ? '?' . $query_string : '');
+		$sort_url = "/members?" . ($search ? "search={$search}&amp;" : '');*/
 
 		// Load the custom fields
 		$customs = CustomField::where('memberlist', '=', 1)
@@ -345,11 +351,11 @@ class UserController extends Earlybird\FoundryController
 
 		$_PAGE['title'] = 'Topic Subscriptions';
 
-		if( Request::isMethod('post') ) {
+		if (Request::isMethod('post')) {
 			$topics = Input::get('topics');
 			$total = count($topics);
 
-			if( $total > 0 ) {
+			if ($total > 0) {
 				TopicSubscription::where('user_id', '=', $me->id)
 					->whereIn('topic_id', $topics)
 					->delete();
@@ -374,7 +380,7 @@ class UserController extends Earlybird\FoundryController
 	 * Load all users whose birthday is today
 	 * @todo optional argument to check a different day
 	 */
-	public static function check_birthdays( $date = null )
+	public static function check_birthdays($date = null)
 	{
 		global $_db;
 	
@@ -384,7 +390,7 @@ class UserController extends Earlybird\FoundryController
 		$exec = $_db->query($sql);
 
 		$birthdays = array();
-		while( $data = $exec->fetch_assoc() ) {
+		while ($data = $exec->fetch_assoc()) {
 			$user = new User($data['id'], $data);
 			$birthdays[] = $user;
 		}
@@ -395,21 +401,21 @@ class UserController extends Earlybird\FoundryController
 	/** 
 	 * Look up the ID of a user based on username
 	 */
-	public function lookup_id( $username )
+	public function lookup_id($username)
 	{
 		global $_db;
 		$sql = "SELECT `id` FROM `users`
 			WHERE `name` = '" . $_db->escape($username) . "'
 			LIMIT 1";
 		$exec = $_db->query($sql);
-		list( $id ) = $exec->fetch_row();
+		list($id) = $exec->fetch_row();
 		return $id;
 	}
 
 	/**
 	 * Check if I should mark the "subscribe" checkbox when replying to this topic
 	 */
-	public function check_subscribe( $topic_id )
+	public function check_subscribe($topic_id)
 	{
 		global $_db;
 	
@@ -419,7 +425,7 @@ class UserController extends Earlybird\FoundryController
 				AND `topic_id` = {$topic_id}";
 		$exec = $_db->query($sql);
 		
-		if( $exec->num_rows ) {
+		if ($exec->num_rows) {
 			$subscribed = true;
 			$check_sub = true;
 		}
@@ -430,15 +436,15 @@ class UserController extends Earlybird\FoundryController
 			// If the default is to notify them, check if they have ANY post in this thread
 			// If they do, that means they manually unsubscribed, if not, then we should subscribe them
 			// @todo Instead, better to track if they did unsubscribe to a thread?
-			if( $this->notify ) {
+			if ($this->notify) {
 				/*$sql = "SELECT COUNT(1)
 					FROM `posts`
 					WHERE `user_id` = {$this->id}
 						AND `topic_id` = {$topic_id}";
 				$exec = $_db->query($sql);
-				list( $has_posted ) = $exec->fetch_row();
+				list($has_posted) = $exec->fetch_row();
 				
-				if( !$has_posted ) {
+				if (!$has_posted) {
 					$check_sub = true;
 				}*/
 				
@@ -446,7 +452,7 @@ class UserController extends Earlybird\FoundryController
 			}
 		}
 		
-		return array( $subscribed, $check_sub );
+		return array($subscribed, $check_sub);
 	}
 
 	/**
@@ -454,15 +460,15 @@ class UserController extends Earlybird\FoundryController
 	 *
 	 * @return string
 	 */
-	public function encrypt( $text, $reset = false )
+	public function encrypt($text, $reset = false)
 	{
 		$salt = Config::get('app.old_salt');
 
-		if( !$reset ) {
+		if (!$reset) {
 			$text = md5($text); // So that the old passwords don't have to be changed
 		}
 
-		for( $i=0; $i<10; $i++ ) {
+		for ($i=0; $i<10; $i++) {
 			$text = sha1($salt.$text);
 			$text = sha1($text.salt);
 		}
@@ -481,7 +487,7 @@ class UserController extends Earlybird\FoundryController
 			'title'    => 'Sign in',
 		);
 
-		if( Request::isMethod('post') ) {
+		if (Request::isMethod('post')) {
 			$email    = Input::get('email');
 			$password = Input::get('password');
 
@@ -538,18 +544,16 @@ class UserController extends Earlybird\FoundryController
 					->where('old_pass', '=', $hash)
 					->first();
 
-				if( $old_user->id ) {
+				if ($old_user->id) {
 
 					$old_user->password = Hash::make($password);
-					$old_user->old_pass = NULL;
+					$old_user->old_pass = null;
 					$old_user->save();
 
 					Auth::login($old_user);
 
 					return Redirect::intended('/');
-
-				}
-				else {
+				} else {
 					// Error
 					Session::push('errors', 'Username or password is incorrect');
 				}
@@ -568,7 +572,7 @@ class UserController extends Earlybird\FoundryController
 	 */
 	public function signup()
 	{
-		if( ! Config::get('app.registration_enabled') ) {
+		if (! Config::get('app.registration_enabled')) {
 			return Redirect::to('apply');
 		}
 
@@ -577,8 +581,7 @@ class UserController extends Earlybird\FoundryController
 			'title'    => 'Register',
 		);
 
-		if( Request::isMethod('post') )
-		{
+		if (Request::isMethod('post')) {
 			$unencrypted = Input::get('password');
 
 			$rules = [
@@ -598,14 +601,13 @@ class UserController extends Earlybird\FoundryController
 			// Run validation
 			$validator = Validator::make(Input::all(), $rules, $messages);
 
-			if( $validator->fails() ) {
-				foreach( $validator->messages()->all() as $error ) {
+			if ($validator->fails()) {
+				foreach ($validator->messages()->all() as $error) {
 					Session::push('errors', $error);
 				}
 
 				return Redirect::to('signup')->withInput(Input::except('password'));
-			}
-			else {
+			} else {
 				$user = User::create([
 					'name'       => Input::get('name'),
 					'email'      => Input::get('email'),
@@ -637,7 +639,7 @@ class UserController extends Earlybird\FoundryController
 	/**
 	 * Actions taken for all users regardless of signup method
 	 */
-	public function join( $user, $unencrypted = NULL )
+	public function join($user, $unencrypted = null)
 	{
 		Session::push('messages', '<p>Thank you for registering!</p>');
 
@@ -653,8 +655,7 @@ class UserController extends Earlybird\FoundryController
 			});
 
 			Session::push('messages', '<p>You will be receiving a welcome email from us shortly with your username and password for your records</p>');
-		}
-		catch( Exception $e ) {
+		} catch (Exception $e) {
 			Session::push('errors', '<p>There was a problem sending your account info to your email address. However, your account was created successfully</p>');
 		}
 	}
@@ -682,7 +683,7 @@ class UserController extends Earlybird\FoundryController
 	 *
 	 * @return array
 	 */
-	public static function fetchMenu( $active )
+	public static function fetchMenu($active)
 	{
 		$menu = array();
 

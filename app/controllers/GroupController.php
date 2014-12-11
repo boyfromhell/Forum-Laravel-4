@@ -1,7 +1,8 @@
 <?php
 
-class GroupController extends Earlybird\FoundryController
+class GroupController extends BaseController
 {
+    use Earlybird\FoundryController;
 
 	/**
 	 * Show all groups
@@ -33,7 +34,7 @@ class GroupController extends Earlybird\FoundryController
 	 * @param  string  $name  For SEO only
 	 * @return Response
 	 */
-	public function display( $id, $name = NULL )
+	public function display($id, $name = null)
 	{
 		$group = Group::findOrFail($id);
 
@@ -42,7 +43,7 @@ class GroupController extends Earlybird\FoundryController
 		// @todo send private message to all members
 
 		// Add a new member to this group
-		/*if( isset($_POST['add_member']) && $group->check_membership($me->id) == 2 ) {
+		/*if (isset($_POST['add_member']) && $group->check_membership($me->id) == 2) {
 			$id = User::lookup_id($_POST['username']);
 			$group->add_member($id, (int)$_POST['type']);
 			header("Location: " . $group->url);
@@ -65,30 +66,39 @@ class GroupController extends Earlybird\FoundryController
 
 	public function get_type()
 	{
-		switch( $this->type ) {
+		switch ($this->type) {
 			case 'open':
-				return 'Open'; break;
+				return 'Open';
+				break;
+
 			case 'closed':
-				return 'Closed'; break;
-			case 'invite': default:
-				return 'Invite Only'; break;
+				return 'Closed';
+				break;
+
+			case 'invite':
+			default:
+				return 'Invite Only';
+				break;
 		}
 	}
 
-	public function get_info( $my_groups = array() )
+	public function get_info($my_groups = array())
 	{
-		if( in_array( $this->id, $my_groups ) ) {
+		if (in_array($this->id, $my_groups)) {
 			return 'You are a member of this group';
 		}
 
-		switch( $this->type ) {
+		switch ($this->type) {
 			case 'open':
 				return 'You may join this group';
 				break;
+
 			case 'closed':
 				return 'You may request to join this group';
 				break;
-			case 'invite': default:
+
+			case 'invite':
+			default:
 				return 'This group is invite-only';
 				break;
 		}
@@ -97,7 +107,7 @@ class GroupController extends Earlybird\FoundryController
 	/**
 	 * Add a member based on ID
 	 */
-	public function add_member( $user_id, $type )
+	public function add_member($user_id, $type)
 	{
 		global $_db;
 
@@ -113,7 +123,7 @@ class GroupController extends Earlybird\FoundryController
 	/**
 	 * Delete a member based on ID
 	 */
-	public function delete_member( $user_id )
+	public function delete_member($user_id)
 	{
 		global $_db;
 
@@ -127,11 +137,11 @@ class GroupController extends Earlybird\FoundryController
 	 * Check if user ID is a member
 	 * @return type mixed 1 if member, 2 if moderator, false if not a member
 	 */
-	public function check_membership( $user_id )
+	public function check_membership($user_id)
 	{
 		global $_db, $me;
 
-		if( $user_id == $me->id && $me->is_admin ) {
+		if ($user_id == $me->id && $me->is_admin) {
 			return 2;
 		}
 	
@@ -141,9 +151,9 @@ class GroupController extends Earlybird\FoundryController
 				AND `user_id` = {$user_id}";
 		$exec = $_db->query($sql);
 
-		if( $exec->num_rows ) {
-			list( $type ) = $exec->fetch_row();
-			return( $type+1 );
+		if ($exec->num_rows) {
+			list($type) = $exec->fetch_row();
+			return ($type + 1);
 		}
 		return false;
 	}
@@ -168,7 +178,7 @@ class GroupController extends Earlybird\FoundryController
      *
      * @return array
      */
-    public static function fetchMenu( $active )
+    public static function fetchMenu($active)
     {
 		global $me;
 
@@ -194,14 +204,14 @@ class GroupController extends Earlybird\FoundryController
             'url' => '/community/chat',
             'name' => 'Chat',
         );
-		if( $me->id ) {
+		if ($me->id) {
 			$menu['gmail'] = array(
 				'url' => 'http://mail.attnam.com/',
 				'name' => 'Gmail',
 			);
 		}
 
-		if( $active ) {
+		if ($active) {
 	        $menu[$active]['active'] = true;
 		}
 
@@ -209,3 +219,4 @@ class GroupController extends Earlybird\FoundryController
     }
 
 }
+

@@ -6,7 +6,7 @@ class Newsletter extends Controller_W
 	/**
 	 * Subscribe to this newsletter
 	 */
-	public function subscribe( $user_id )
+	public function subscribe($user_id)
 	{
 		DB::insert("INSERT IGNORE INTO newsletter_users SET
 				newsletter_id = ?,
@@ -18,7 +18,7 @@ class Newsletter extends Controller_W
 	/**
 	 * Unsubscribe
 	 */
-	public function unsubscribe( $user_id )
+	public function unsubscribe($user_id)
 	{
 		$sql = "DELETE FROM `newsletter_users`
 			WHERE `newsletter_id` = {$this->id}
@@ -39,3 +39,4 @@ class Newsletter extends Controller_W
 		$_db->query($sql);
 	}
 }
+

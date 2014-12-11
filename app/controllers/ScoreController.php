@@ -1,7 +1,8 @@
 <?php
 
-class ScoreController extends Earlybird\FoundryController
+class ScoreController extends BaseController
 {
+    use Earlybird\FoundryController;
 
 	/**
 	 * Show honor rolls
@@ -18,15 +19,14 @@ class ScoreController extends Earlybird\FoundryController
 		$categories = array();
 		$types = array('Victories', 'Defeats');
 
-		foreach( $types as $i => $name )
-		{
+		foreach ($types as $i => $name) {
 			$scores = Score::where('victory', '=', (1-$i))
 				->orderBy('score', 'desc')
 				->orderBy('id', 'asc')
 				->take(20)
 				->get();
 
-			if( count($scores) > 0 ) {
+			if (count($scores) > 0) {
 				$scores->load(['user']);
 			}
 
@@ -53,8 +53,7 @@ class ScoreController extends Earlybird\FoundryController
 			'title'    => 'Submit Score',
 		);
 
-		if( Request::isMethod('post') )
-		{
+		if (Request::isMethod('post')) {
 			$rules = [
 				'character' => 'required',
 				'score'     => 'required|integer',
@@ -65,9 +64,8 @@ class ScoreController extends Earlybird\FoundryController
 
 			$validator = Validator::make(Input::all(), $rules);
 
-			if( $validator->fails() )
-			{
-				foreach( $validator->messages()->all() as $error ) {
+			if ($validator->fails()) {
+				foreach ($validator->messages()->all() as $error) {
 					Session::push('errors', $error);
 				}
 
@@ -99,3 +97,4 @@ class ScoreController extends Earlybird\FoundryController
 	}
 
 }
+

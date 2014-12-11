@@ -1,7 +1,8 @@
 <?php
 
-class MessageThread extends Earlybird\Foundry
+class MessageThread extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $appends = array(
 		'url',

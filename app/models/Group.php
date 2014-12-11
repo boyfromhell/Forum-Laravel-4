@@ -1,8 +1,8 @@
 <?php
 
 class Group extends Cartalyst\Sentry\Groups\Eloquent\Group
-// Earlybird\Foundry
 {
+    use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 	protected $appends = array(

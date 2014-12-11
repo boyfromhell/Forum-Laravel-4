@@ -1,7 +1,8 @@
 <?php
 
-class Photo extends Earlybird\Foundry
+class Photo extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 	protected $appends = array(
@@ -50,14 +51,13 @@ class Photo extends Earlybird\Foundry
 	 * @param  string  $size
 	 * @return string
 	 */
-	protected function _getPhoto( $size )
+	protected function _getPhoto($size)
 	{
-		list( $name, $ext ) = Helpers::parse_file_name($this->file);
+		list($name, $ext) = Helpers::parse_file_name($this->file);
 
 		$folder = '/photos/'.$this->album->folder.'/';
 
-		switch( $size )
-		{
+		switch ($size) {
 			case 'original':
 				return $folder.$name.'.'.$ext;
 				break;
@@ -109,7 +109,7 @@ class Photo extends Earlybird\Foundry
 	 */
 	public function getWidthAttribute()
 	{
-		list( $width, $height ) = getimagesize(Config::get('app.cdn').$this->scale);
+		list($width, $height) = getimagesize(Config::get('app.cdn').$this->scale);
 
 		return $width;
 	}
@@ -121,7 +121,7 @@ class Photo extends Earlybird\Foundry
 	 */
 	public function getHeightAttribute()
 	{
-		list( $width, $height ) = getimagesize(Config::get('app.cdn').$this->scale);
+		list($width, $height) = getimagesize(Config::get('app.cdn').$this->scale);
 
 		return $height;
 	}
@@ -138,25 +138,25 @@ class Photo extends Earlybird\Foundry
 		$local = storage_path().'/uploads/';
 		$remote = 'photos/'.$this->album->folder.'/';
 
-		if( Helpers::push_to_s3(
-			$local.$basename.'.'.$ext,
-			$remote.$basename.'.'.$ext,
-			false
-		) ) {
+		if (Helpers::push_to_s3(
+				$local.$basename.'.'.$ext,
+				$remote.$basename.'.'.$ext,
+				false
+			)) {
 			unlink($root.$basename.'.'.$ext);
 		}
-		if( Helpers::push_to_s3(
-			$local.$basename.'_sm.jpg',
-			$remote.'scale/'.$basename.'.jpg',
-			true
-		) ) {
+		if (Helpers::push_to_s3(
+				$local.$basename.'_sm.jpg',
+				$remote.'scale/'.$basename.'.jpg',
+				true
+			)) {
 			unlink($root.$basename.'_sm.jpg');
 		}
-		if( Helpers::push_to_s3(
-			$local.$basename.'_tn.jpg',
-			$remote.'thumbs/'.$basename.'.jpg',
-			true
-		) ) {
+		if (Helpers::push_to_s3(
+				$local.$basename.'_tn.jpg',
+				$remote.'thumbs/'.$basename.'.jpg',
+				true
+			)) {
 			unlink($root.$basename.'_tn.jpg');
 		}
 	}
@@ -166,7 +166,7 @@ class Photo extends Earlybird\Foundry
 	 */
 	public function delete()
 	{
-		/*if( $_CONFIG['aws'] === null ) {
+		/*if (! Config::get('services.aws.enabled')) {
 			unlink(ROOT . "web/photos/{$folder}/{$name}.{$ext}");
 			unlink(ROOT . "web/photos/{$folder}/scale/{$name}.jpg");
 			unlink(ROOT . "web/photos/{$folder}/thumbs/{$name}.jpg");
@@ -177,7 +177,7 @@ class Photo extends Earlybird\Foundry
 			delete_from_s3("photos/{$folder}/thumbs/{$name}.jpg");
 		}*/
 
-		if( $this->album->cover_id == $this->id ) {
+		if ($this->album->cover_id == $this->id) {
 			// Fetch first photo in this album
 			$first_photo = Photo::where('album_id', '=', $this->album_id)
 				->where('id', '!=', $this->id)

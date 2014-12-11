@@ -1,7 +1,8 @@
 <?php
 
-class Message extends Earlybird\Foundry
+class Message extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $appends = array(
 		'url',
@@ -62,7 +63,7 @@ class Message extends Earlybird\Foundry
 	 * @param  int  $user_id
 	 * @return Query
 	 */
-	public function scopeOwnedBy( $query, $user_id )
+	public function scopeOwnedBy($query, $user_id)
 	{
 		return $query->where('owner_user_id', '=', $user_id);
 	}
@@ -94,10 +95,9 @@ class Message extends Earlybird\Foundry
 	 */
 	public function getFolderAttribute()
 	{
-		if( $this->archived ) {
+		if ($this->archived) {
 			return 'archived';
-		}
-		else if( $this->from_user_id == Auth::id() ) {
+		} else if ($this->from_user_id == Auth::id()) {
 			return 'sent';
 		}
 
@@ -113,7 +113,7 @@ class Message extends Earlybird\Foundry
 	{
 		$user_ids = explode(',', $this->to_users);
 
-		if( count($user_ids) > 0 ) {
+		if (count($user_ids) > 0) {
 			$users = User::whereIn('id', $user_ids)->get();
 
 			return $users;
@@ -137,7 +137,7 @@ class Message extends Earlybird\Foundry
 			unset($user_ids[$key]);
 		}
 
-		if( count($user_ids) > 0 ) {
+		if (count($user_ids) > 0) {
 			$users = User::whereIn('id', $user_ids)->get();
 
 			return $users;
@@ -152,7 +152,7 @@ class Message extends Earlybird\Foundry
 	public function delete()
 	{
 		$this->attachments()->update([
-			'message_id' => NULL,
+			'message_id' => null,
 			'hash' => 'deleted'
 		]);
 
@@ -160,7 +160,7 @@ class Message extends Earlybird\Foundry
 
 		parent::delete();
 
-		if( $thread->replies > 0 ) {
+		if ($thread->replies > 0) {
 			return $thread->url;
 		}
 

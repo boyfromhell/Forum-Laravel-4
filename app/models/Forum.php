@@ -1,7 +1,8 @@
 <?php
 
-class Forum extends Earlybird\Foundry
+class Forum extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 	protected $appends = array(
@@ -82,8 +83,7 @@ class Forum extends Earlybird\Foundry
 		$parents = array();
 		$child = $this;
 
-		while( $child->parent_id )
-		{
+		while ($child->parent_id) {
 			$parent = Forum::find($child->parent_id);
 			$parents[] = $parent;
 			$child = $parent;
@@ -112,7 +112,7 @@ class Forum extends Earlybird\Foundry
 	{
 		global $me;
 
-		if( ! $me->id ) {
+		if (! $me->id) {
 			return false;
 		}
 
@@ -120,7 +120,7 @@ class Forum extends Earlybird\Foundry
 			->where('forum_id', '=', $this->id)
 			->count();
 
-		return ( $unread > 0 ? true : false );
+		return ($unread > 0 ? true : false);
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Forum extends Earlybird\Foundry
 	 */
 	public function getAltTextAttribute()
 	{
-		return ( $this->is_unread ? 'New posts' : 'No new posts' );
+		return ($this->is_unread ? 'New posts' : 'No new posts');
 	}
 
 	/**
@@ -139,7 +139,7 @@ class Forum extends Earlybird\Foundry
 	 * @param  string  $type  view or read
 	 * @return bool
 	 */
-	public function check_permission( $type )
+	public function check_permission($type)
 	{
 		global $me;
 
@@ -148,10 +148,9 @@ class Forum extends Earlybird\Foundry
 		$allowed_groups = explode(',', $this->$group_type);
 		$my_groups = array_pluck($me->groups, 'id');
 
-		if( $me->access >= $this->$type ) {
+		if ($me->access >= $this->$type) {
 			return true;
-		}
-		else if( array_intersect($allowed_groups, $my_groups) ) {
+		} else if (array_intersect($allowed_groups, $my_groups)) {
 			return true;
 		}
 

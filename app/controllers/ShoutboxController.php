@@ -24,12 +24,12 @@ class ShoutboxController extends BaseController
 		$shouts = ShoutboxController::format($shouts, $prevdate);
 
 		$html = '';
-		foreach( $shouts as $i => $shout ) {
+		foreach ($shouts as $i => $shout) {
 			$html .= View::make('shoutbox.row')
 				->with('shout', $shout)
 				->render();
 
-			if( $i == 0 ) {
+			if ($i == 0) {
 				$group = 'shouts'.Helpers::local_date('md', $shout->created_at);
 				$last_id = $shout->id;
 				$last_time = (string)$shout->created_at;
@@ -53,15 +53,13 @@ class ShoutboxController extends BaseController
 	{
 		$message = trim(Input::get('message'));
 
-		if( strlen($message) >= 2 && strlen($message) <= 500 )
-		{
+		if (strlen($message) >= 2 && strlen($message) <= 500) {
 			// Check for duplicate
 			$last = Shout::where('user_id', '=', Auth::id())
 				->orderBy('id', 'desc')
 				->first();
 
-			if( $message != $last->message )
-			{
+			if ($message != $last->message) {
 				$shout = Shout::create([
 					'user_id' => Auth::id(),
 					'message' => $message
@@ -80,18 +78,17 @@ class ShoutboxController extends BaseController
 	 * @param  Collection  $shouts
 	 * @return Collection
 	 */
-	public function format( $shouts, $prevdate = NULL )
+	public function format($shouts, $prevdate = null)
 	{
-		if( count($shouts) > 0 )
-		{
+		if (count($shouts) > 0) {
 			$shouts->load(['user']);
 
-			foreach( $shouts as $i => $shout ) {
+			foreach ($shouts as $i => $shout) {
 				$thedate = Helpers::local_date('F j', $shout->created_at);
-				$shout->show_date = ( $thedate != $prevdate );
+				$shout->show_date = ($thedate != $prevdate);
 
 				$shout->at_me = false;
-				if( stristr($shout->message, '@'.$me->name) ) {
+				if (stristr($shout->message, '@'.$me->name)) {
 					$shout->at_me = true;
 				}
 
@@ -119,7 +116,7 @@ class ShoutboxController extends BaseController
 
 		// Delete shout
 		// @todo allow admins to delete
-		/*if( Input::has('del') ) {
+		/*if (Input::has('del')) {
 			Shout::where('id', '=', Input::get('del'))
 				->where('user_id', '=', $me->id)
 				->delete();
@@ -127,12 +124,11 @@ class ShoutboxController extends BaseController
 			return Redirect::to('community/shoutbox');
 		}*/
 
-		if( $search ) {
+		if ($search) {
 			$shouts = Shout::where('message', 'LIKE', '%'.$search.'%')
 				->orderBy('id', 'desc')
 				->paginate(30);
-		}
-		else {
+		} else {
 			$shouts = Shout::orderBy('id', 'desc')
 				->paginate(30);
 		}
@@ -147,3 +143,4 @@ class ShoutboxController extends BaseController
 	}
 
 }
+

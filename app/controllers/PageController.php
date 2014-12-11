@@ -14,7 +14,7 @@ class PageController extends BaseController
 
 		$menu = PageController::fetchMenu($page);
 
-		switch( $page ) {
+		switch ($page) {
 			case 'about':
 				$_PAGE['title'] = 'About';
 				$template = 'pages.about';
@@ -44,7 +44,7 @@ class PageController extends BaseController
 				break;
 		}
 
-		if( ! $me->id && $members_only ) {
+		if (! $me->id && $members_only) {
 			App::abort(403);
 		}
 
@@ -65,8 +65,7 @@ class PageController extends BaseController
 
 		$_PAGE['title'] = 'Contact';
 
-		if( Request::isMethod('post') )
-		{
+		if (Request::isMethod('post')) {
 			$rules = [
 				'name' => 'required',
 				'email' => 'required|email',
@@ -77,17 +76,14 @@ class PageController extends BaseController
 
 			$validator = Validator::make(Input::all(), $rules);
 
-			if( $validator->fails() )
-			{
-				foreach( $validator->messages()->all() as $error ) {
+			if ($validator->fails()) {
+				foreach ($validator->messages()->all() as $error) {
 					Session::push('errors', $error);
 				}
 
 				return Redirect::to('contact')
 					->withInput();
-			}
-			else
-			{
+			} else {
 				$data = [
 					'user_id' => $me->id,
 					'name'    => Input::get('name'),
@@ -112,8 +108,7 @@ class PageController extends BaseController
 					});
 
 					Session::push('messages', 'Your message has been sent. Thank you');
-				}
-				catch( Exception $e ) {
+				} catch (Exception $e) {
 					Session::push('errors', "Sorry, we're experiencing issues");
 					Session::push('errors', 'Please contact us directly at <b>'.Config::get('app.admin_email').'</b>');
 				}
@@ -192,7 +187,7 @@ class PageController extends BaseController
 	 *
 	 * @return array
 	 */
-	public static function fetchMenu( $active )
+	public static function fetchMenu($active)
 	{
 		$menu = array();
 
@@ -223,3 +218,4 @@ class PageController extends BaseController
 	}
 
 }
+

@@ -1,7 +1,8 @@
 <?php
 
-class Module extends Earlybird\Foundry
+class Module extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $table = 'apps';
 
@@ -21,13 +22,14 @@ class Module extends Earlybird\Foundry
 	 * @param  string  $name
 	 * @return bool
 	 */
-	public static function isActive( $name )
+	public static function isActive($name)
 	{
 		global $me;
 
-		//return( $board_apps[$appname]["enabled"] && $board_apps[$appname]["permission"] <= $me->access );
+		//return ($board_apps[$appname]["enabled"] && $board_apps[$appname]["permission"] <= $me->access);
 
 		return true;
 	}
 
 }
+

@@ -1,7 +1,8 @@
 <?php
 
-class Screenname extends Earlybird\Foundry
+class Screenname extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $appends = array(
 		'name',
@@ -45,8 +46,7 @@ class Screenname extends Earlybird\Foundry
 		$msn_domain = Config::get('app.domain').'/images/';
 		$domain = 'http://'.$msn_domain;
 
-		switch( $this->protocol )
-		{
+		switch ($this->protocol) {
 			case 'aim':
 				return "http://big.oscar.aol.com/{$this->screenname}?on_url={$domain}aim_online.png&off_url={$domain}aim_offline.png";
 				break;

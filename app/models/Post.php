@@ -1,7 +1,8 @@
 <?php
 
-class Post extends Earlybird\Foundry
+class Post extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $guarded = array('id');
 	protected $appends = array(
@@ -104,20 +105,20 @@ class Post extends Earlybird\Foundry
     public function delete()
     {
         // Decrement post counters
-		if( $this->topic->replies > 0 ) {
+		if ($this->topic->replies > 0) {
 	        $this->topic->decrement('replies');
 		}
         $this->topic->forum->decrement('total_posts');
         $this->user->decrement('total_posts');
 
         $this->attachments()->update([
-            'post_id' => NULL,
+            'post_id' => null,
             'hash' => 'deleted'
         ]);
 
         // Delete topic if this was the only post
 		// Checking before this post is deleted, so it should be 1 not 0
-        if( $this->topic->posts()->count() == 1 ) {
+        if ($this->topic->posts()->count() == 1) {
             $forum = $this->topic->forum;
 			$this->topic->delete($recursive = false);
 
@@ -133,7 +134,7 @@ class Post extends Earlybird\Foundry
 				->first();
 
             // Update existing sessions with newer post ID
-            if( $new_post->id ) {
+            if ($new_post->id) {
 				SessionTopic::where('session_post', '=', $this->id)
 					->update([
 						'session_post' => $new_post->id
@@ -163,3 +164,4 @@ class Post extends Earlybird\Foundry
 	}
 
 }
+

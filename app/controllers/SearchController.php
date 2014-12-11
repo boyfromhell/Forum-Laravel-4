@@ -8,14 +8,14 @@ class SearchController extends BaseController
 	 *
 	 * @return Response
 	 */
-	public function index( $id = NULL )
+	public function index($id = null)
 	{
 		global $me;
 
-		if( $id ) {
+		if ($id) {
 			$query = Query::find($id);
 		}
-		if( ! $query->id || $query->type != 'forum' ) {
+		if (! $query->id || $query->type != 'forum') {
 			$query = new Query();
 
 			// Defaults
@@ -29,7 +29,7 @@ class SearchController extends BaseController
 		$forums = array();
 		$create_query = false;
 
-		if( Request::isMethod('post') ) {
+		if (Request::isMethod('post')) {
 			$query->match = Input::get('match');
 			$query->where = Input::get('where');
 			$query->show  = Input::get('show');
@@ -42,26 +42,24 @@ class SearchController extends BaseController
 			$query->since   = Input::get('since');
 
 			$create_query = true;
-		}
-		else if( Input::has('user') ) {
+		} else if (Input::has('user')) {
 			$user = User::findOrFail(Input::get('user'));
 
 			$query->author = $user->name;
-			$query->show   = ( Input::get('mode') == 'topics' ? 1 : 0 );
+			$query->show   = (Input::get('mode') == 'topics' ? 1 : 0);
 			$query->starter = $query->show;
 
 			$create_query = true;
 		}
-		else if( Input::has('show') ) {
-			$query->show = ( Input::get('show') == 'newtopics' ? 1 : 0 );
+		else if (Input::has('show')) {
+			$query->show = (Input::get('show') == 'newtopics' ? 1 : 0);
 			$query->since = SINCE_LAST_VISIT;
 
 			$create_query = true;
 		}
 
 		// Construct query and redirect to results
-		if( $create_query )
-		{
+		if ($create_query) {
 			$query->forums = implode(',', $forums);
 			$query->save();
 
@@ -88,7 +86,7 @@ class SearchController extends BaseController
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function results( $id )
+	public function results($id)
 	{
 		$_PAGE = array(
 			'category' => 'forums',
@@ -97,7 +95,7 @@ class SearchController extends BaseController
 
 		$query = Query::findOrFail($id);
 
-		if( $query->type != 'forum' ) {
+		if ($query->type != 'forum') {
 			App::abort(404);
 		}
 		$forums = explode(',', $query->forums);
@@ -107,19 +105,19 @@ class SearchController extends BaseController
 		$keywords = explode(',', $keywords);
 		$total = count($keywords);
 
-		if( $query->author ) {
+		if ($query->author) {
 			$author = User::where('name', '=', $query->author)->first();
 		}
 
 		// @todo?
 		//$data = $query->paginate('max 200');
 
-		foreach( $data as $row ) {
-			if( $query->show == SHOW_POSTS ) {
+		foreach ($data as $row) {
+			if ($query->show == SHOW_POSTS) {
 				$post = Post::findOrFail($row->id);
 
 				$post->content = BBCode::strip_quotes($post->content);
-				if( strlen($post->content) > 250 ) {
+				if (strlen($post->content) > 250) {
 					$post->content = substr($post->content, 0, 250) . '...';
 				}
 
@@ -135,8 +133,7 @@ class SearchController extends BaseController
 			}
 		}
 
-		if( count($topic_ids) )
-		{
+		if (count($topic_ids)) {
 			// Check if unread
 			$sql = "SELECT `session_post`, `topic_id`
 				FROM `session_topics`
@@ -144,9 +141,8 @@ class SearchController extends BaseController
 				AND `topic_id` IN ( " . implode(',', $topic_ids) . " )";
 			$exec = $_db->query($sql);
 
-			while( $data = $exec->fetch_assoc() )
-			{
-				if( $topics[$data['topic_id']]->img == 'topic' ) {
+			while ($data = $exec->fetch_assoc()) {
+				if ($topics[$data['topic_id']]->img == 'topic') {
 					$topics[$data['topic_id']]->img_alt = 'New posts';
 				}
 				$topics[$data['topic_id']]->img .= '_unread';
@@ -166,7 +162,7 @@ class SearchController extends BaseController
 				GROUP BY `posts`.`topic_id`";
 			$exec = $_db->query($sql);
 
-			while( $data = $exec->fetch_assoc() ) {
+			while ($data = $exec->fetch_assoc()) {
 				$topics[$data['topic_id']]->attachments = $data['total'];
 			}
 
@@ -176,7 +172,7 @@ class SearchController extends BaseController
 				WHERE `poll_topic` IN ( " . implode(',', $topic_ids) . " )";
 			$exec = $_db->query($sql);
 
-			while( $data = $exec->fetch_assoc() ) {
+			while ($data = $exec->fetch_assoc()) {
 				$topics[$data['poll_topic']]->poll = $data['poll_id'];
 			}
 
@@ -194,8 +190,7 @@ class SearchController extends BaseController
 					ON posts.user_id = users.id";
 			$exec = $_db->query($sql);
 
-			while( $data = $exec->fetch_assoc() )
-			{
+			while ($data = $exec->fetch_assoc()) {
 				$data['author'] = new User($data['user_id'], array('name' => $data['name']));
 
 				$data['time'] += ($me->tz*3600);
@@ -219,16 +214,15 @@ class SearchController extends BaseController
 	/**
 	 * If it's a forum query
 	 */
-	protected function _fetch( $query )
+	protected function _fetch($query)
 	{
 		global $me;
 
 		$total = count($query->words);
 
-		if( $query->show == SHOW_TOPICS ) {
+		if ($query->show == SHOW_TOPICS) {
 			$data = Post::select('topic_id');
-		}
-		else {
+		} else {
 			$data = Post::select('posts.*');
 		}
 
@@ -238,39 +232,50 @@ class SearchController extends BaseController
 			->join('forums', 'topics.forum_id', '=', 'forums.id')
 			->where('forums.read', '<=', $me->access);
 
-		if( $query->since != 0 ) {
-			if( $query->since != SINCE_LAST_VISIT ) { $since_when = $gmt-$query->since; }
-			else { $since_when = $me->visited_at; }
+		if ($query->since != 0) {
+			if ($query->since != SINCE_LAST_VISIT) {
+				$since_when = $gmt-$query->since;
+			} else {
+				$since_when = $me->visited_at;
+			}
 
 			$data = $data->where('posts.time', '>=', $since_when);
 		}
-		if( $query->user->id ) {
+		if ($query->user->id) {
 			$data = $data->where('posts.user_id', '=', $query->user->id);
 
-			if( $query->starter == 1 ) {
+			if ($query->starter == 1) {
 				$data = $data->where('topics.poster', '=', $query->user->id);
 			}
 		}
-		if( ! in_array(0, $query->forum_array) && count($query->forum_array) > 0 ) {
+		if (! in_array(0, $query->forum_array) && count($query->forum_array) > 0) {
 			$data = $data->whereIn('topics.forum_id', $query->forums);
 		}
 
-		if( $total > 0 ) {
+		if ($total > 0) {
 			$sql .= " AND (";
 
-			if( $query->where == WHERE_TITLES || $query->where == WHERE_BOTH ) {
-				if( $query->where == WHERE_BOTH ) { $sql .= "("; }
-				for( $i=0; $i<$total; $i++ ) {
+			if ($query->where == WHERE_TITLES || $query->where == WHERE_BOTH) {
+				if ($query->where == WHERE_BOTH) {
+					$sql .= "(";
+				}
+				for ($i=0; $i<$total; $i++) {
 					$sql .= "`topics`.`title` LIKE '%" . $_db->escape(trim($query->words[$i])) . "%'";
-					if( $i != $total-1 ) {
-						if( $query->match == MATCH_ANY ) { $sql .= " OR "; }
+					if ($i != $total - 1) {
+						if ($query->match == MATCH_ANY) {
+							$sql .= " OR ";
+						}
 						else { $sql .= " AND "; }
 					}
 				}
-				if( $query->where == WHERE_BOTH ) { $sql .= ")"; }
+				if ($query->where == WHERE_BOTH) {
+					$sql .= ")";
+				}
 			}
-			if( $query->where == WHERE_TEXT || $query->where == WHERE_BOTH ) {
-				if( $query->where == WHERE_BOTH ) { $sql .= " OR ("; }
+			if ($query->where == WHERE_TEXT || $query->where == WHERE_BOTH) {
+				if ($query->where == WHERE_BOTH) {
+					$sql .= " OR (";
+				}
 				for( $i=0; $i<$total; $i++ ) {
 					$sql .= "`posts_text`.`post_text` LIKE '%" . $_db->escape(trim($query->words[$i])) . "%'";
 					if( $i != $total-1 ) {
@@ -369,3 +374,4 @@ class SearchController extends BaseController
 	}
 
 }
+

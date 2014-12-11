@@ -1,5 +1,7 @@
 <?php
 
-class Theme extends Earlybird\Foundry
+class Theme extends Eloquent
 {
+    use Earlybird\Foundry;
 }
+

@@ -1,7 +1,8 @@
 <?php
 
-class Download extends Earlybird\Foundry
+class Download extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $appends = array(
 		'url',

@@ -1,7 +1,8 @@
 <?php
 
-class Shout extends Earlybird\Foundry
+class Shout extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	protected $table = 'shoutbox';
 	protected $guarded = array('id');
@@ -28,3 +29,4 @@ class Shout extends Earlybird\Foundry
 	}
 
 }
+

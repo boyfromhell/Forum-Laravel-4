@@ -1,7 +1,8 @@
 <?php
 
-class Category extends Earlybird\Foundry
+class Category extends Eloquent
 {
+    use Earlybird\Foundry;
 
 	/**
 	 * Top level forums in this category
@@ -14,8 +15,7 @@ class Category extends Earlybird\Foundry
 
 		// @todo should be just whereNull
 		return $this->hasMany('Forum')
-			->where(function($q)
-			{
+			->where(function($q) {
 				$q->where('parent_id', '=', 0)
 					->orWhereNull('parent_id');
 			})
@@ -24,3 +24,4 @@ class Category extends Earlybird\Foundry
 	}
 
 }
+
