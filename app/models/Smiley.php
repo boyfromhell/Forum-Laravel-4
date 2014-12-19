@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Smiley extends Eloquent
+class Smiley extends BaseModel
 {
     use \Earlybird\Foundry;
 }

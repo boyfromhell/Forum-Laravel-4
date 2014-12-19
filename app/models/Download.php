@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Download extends Eloquent
+class Download extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -16,7 +16,7 @@ class Download extends Eloquent
 	 */
 	public function project()
 	{
-		return $this->belongsTo('Project');
+		return $this->belongsTo('Parangi\Project');
 	}
 
 	/**

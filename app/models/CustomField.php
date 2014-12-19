@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class CustomField extends Eloquent
+class CustomField extends BaseModel
 {
     use \Earlybird\Foundry;
 }

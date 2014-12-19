@@ -136,7 +136,6 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Greggilbert\Recaptcha\RecaptchaServiceProvider',
 		'Cartalyst\Sentry\SentryServiceProvider',
-		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 
 	),
 
@@ -205,6 +204,9 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
+
+		'BBCode'          => 'Parangi\BBCode',
+		'Helpers'         => 'Parangi\Helpers',
 
 	),
 

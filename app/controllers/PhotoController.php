@@ -242,7 +242,7 @@ class PhotoController extends BaseController
 			$photo->description = Input::get('description');
 
 			if ($me->is_admin) {
-				$user = User::where('name', '=', Input::get('author'))->first();
+				$user = \User::where('name', '=', Input::get('author'))->first();
 			
 				$photo->user_id = $user->id;
 				$photo->created_at = Input::get('date');

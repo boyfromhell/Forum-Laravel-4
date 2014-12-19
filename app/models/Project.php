@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Project extends Eloquent
+class Project extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -32,7 +32,7 @@ class Project extends Eloquent
 	 */
 	public function downloads()
 	{
-		return $this->hasMany('Download')
+		return $this->hasMany('Parangi\Download')
 			->orderBy('created_at', 'desc');
 	}
 

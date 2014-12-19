@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class PostText extends Eloquent
+class PostText extends BaseModel
 {
     use \Earlybird\Foundry;
 

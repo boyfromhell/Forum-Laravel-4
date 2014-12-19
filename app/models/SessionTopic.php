@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class SessionTopic extends Eloquent
+class SessionTopic extends BaseModel
 {
 
 	public $timestamps = false;
@@ -13,7 +13,7 @@ class SessionTopic extends Eloquent
 	 */
 	public function topic()
 	{
-		return $this->belongsTo('Topic');
+		return $this->belongsTo('Parangi\Topic');
 	}
 
 }

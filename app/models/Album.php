@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Album extends Eloquent
+class Album extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -20,7 +20,7 @@ class Album extends Eloquent
 	 */
 	public function parent()
 	{
-		return $this->belongsTo('Album', 'parent_id');
+		return $this->belongsTo('Parangi\Album', 'parent_id');
 	}
 
 	/**
@@ -32,7 +32,7 @@ class Album extends Eloquent
 	{
 		global $me;
 
-		return $this->hasMany('Album', 'parent_id')
+		return $this->hasMany('Parangi\Album', 'parent_id')
 			->where('permission_view', '<=', $me->access)
 			->orderBy('name', 'asc');
 	}
@@ -54,7 +54,7 @@ class Album extends Eloquent
 	 */
 	public function photos()
 	{
-		return $this->hasMany('Photo')
+		return $this->hasMany('Parangi\Photo')
 			->orderBy('created_at', 'asc')
 			->orderBy('id', 'asc');
 	}
@@ -67,14 +67,14 @@ class Album extends Eloquent
 	public function coverPhoto()
 	{
 		if ($this->cover_id) {
-			return $this->belongsTo('Photo', 'cover_id');
+			return $this->belongsTo('Parangi\Photo', 'cover_id');
 		} else {
 			foreach ($this->children as $child) {
 				return $child->coverPhoto();
 			}
 		}
 
-		return $this->belongsTo('Photo', 'cover_id');
+		return $this->belongsTo('Parangi\Photo', 'cover_id');
 	}
 
 	/**

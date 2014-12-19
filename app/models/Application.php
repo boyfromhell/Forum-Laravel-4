@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Application extends Eloquent
+class Application extends BaseModel
 {
     use \Earlybird\Foundry;
 

@@ -17,7 +17,7 @@ define('FOLDER_INBOX', 1);
 define('FOLDER_SENT', 2);
 define('FOLDER_ARCHIVED', 3);
 
-class Query extends Eloquent
+class Query extends BaseModel
 {
 
 	protected $table = 'queries';

@@ -44,7 +44,7 @@ class GroupController extends BaseController
 
 		// Add a new member to this group
 		/*if (isset($_POST['add_member']) && $group->check_membership($me->id) == 2) {
-			$id = User::lookup_id($_POST['username']);
+			$id = \User::lookup_id($_POST['username']);
 			$group->add_member($id, (int)$_POST['type']);
 			header("Location: " . $group->url);
 			exit;

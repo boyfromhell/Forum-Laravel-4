@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Shout extends Eloquent
+class Shout extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -25,7 +25,7 @@ class Shout extends Eloquent
 	 */
 	public function scopeDaysAgo($query, $days)
 	{
-		return $query->where('created_at', '>=', DB::raw('DATE_SUB(NOW(), INTERVAL '.$days.' DAY)'));
+		return $query->where('created_at', '>=', \DB::raw('DATE_SUB(NOW(), INTERVAL '.$days.' DAY)'));
 	}
 
 }

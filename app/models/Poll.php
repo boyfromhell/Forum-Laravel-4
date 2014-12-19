@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Poll extends Eloquent
+class Poll extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -18,7 +18,7 @@ class Poll extends Eloquent
 	 */
 	public function topic()
 	{
-		return $this->belongsTo('Topic');
+		return $this->belongsTo('Parangi\Topic');
 	}
 
 	/**
@@ -28,7 +28,7 @@ class Poll extends Eloquent
 	 */
 	public function options()
 	{
-		return $this->hasMany('PollOption')
+		return $this->hasMany('Parangi\PollOption')
 			->orderBy('weight', 'asc');
 	}
 
@@ -39,7 +39,7 @@ class Poll extends Eloquent
 	 */
 	public function votes()
 	{
-		return $this->hasMany('PollVote');
+		return $this->hasMany('Parangi\PollVote');
 	}
 
 	/**

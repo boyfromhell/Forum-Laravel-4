@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Level extends Eloquent
+class Level extends BaseModel
 {
     use \Earlybird\Foundry;
 

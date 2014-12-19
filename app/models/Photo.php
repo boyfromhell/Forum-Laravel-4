@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Photo extends Eloquent
+class Photo extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -22,7 +22,7 @@ class Photo extends Eloquent
 	 */
 	public function album()
 	{
-		return $this->belongsTo('Album');
+		return $this->belongsTo('Parangi\Album');
 	}
 
 	/**

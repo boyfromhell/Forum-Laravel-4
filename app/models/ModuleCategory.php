@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class ModuleCategory extends Eloquent
+class ModuleCategory extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -16,7 +16,7 @@ class ModuleCategory extends Eloquent
 	 */
 	public function modules()
 	{
-		return $this->hasMany('Module', 'category_id')
+		return $this->hasMany('Parangi\Module', 'category_id')
 			->where('enabled', '=', 1)
 			->orderBy('order', 'asc');
 	}
@@ -28,7 +28,7 @@ class ModuleCategory extends Eloquent
 	 */
 	public function primary()
 	{
-		return $this->belongsTo('Module', 'app_id');
+		return $this->belongsTo('Parangi\Module', 'app_id');
 	}
 
 	/**

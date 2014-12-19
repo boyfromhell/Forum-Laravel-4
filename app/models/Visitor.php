@@ -1,5 +1,5 @@
 <?php namespace Parangi;
 
-class Visitor extends Eloquent
+class Visitor extends BaseModel
 {
 }

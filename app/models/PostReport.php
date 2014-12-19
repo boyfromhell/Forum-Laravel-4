@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class PostReport extends Eloquent
+class PostReport extends BaseModel
 {
 
 	protected $guarded = array('id');
@@ -15,7 +15,7 @@ class PostReport extends Eloquent
 	 */
 	public function post()
 	{
-		return $this->belongsTo('Post');
+		return $this->belongsTo('Parangi\Post');
 	}
 
 	/**

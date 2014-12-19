@@ -16,7 +16,7 @@ class AdminController extends BaseController
 		);
 
 		$stats = array(
-			'Users'  => User::count(),
+			'Users'  => \User::count(),
 			'Topics' => Topic::count(),
 			'Posts'  => Post::count(),
 			'Posts - last 10 days' => Post::daysAgo(10)->count(),
@@ -62,7 +62,7 @@ class AdminController extends BaseController
 
 		$forums = Forum::all();
 		$topics = Topic::all();
-		$users = User::all();
+		$users = \User::all();
 
 		$html = 'Counters reset. ';
 

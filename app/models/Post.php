@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Post extends Eloquent
+class Post extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -21,7 +21,7 @@ class Post extends Eloquent
 	 */
 	public function postText()
 	{
-		return $this->hasOne('PostText', 'post_id');
+		return $this->hasOne('Parangi\PostText', 'post_id');
 	}
 
 	/**
@@ -31,7 +31,7 @@ class Post extends Eloquent
 	 */
 	public function topic()
 	{
-		return $this->belongsTo('Topic');
+		return $this->belongsTo('Parangi\Topic');
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Post extends Eloquent
 	 */
 	public function attachments()
 	{
-		return $this->hasMany('Attachment')
+		return $this->hasMany('Parangi\Attachment')
 			->orderBy('filetype', 'desc')
 			->orderBy('created_at', 'asc');
 	}
@@ -160,7 +160,7 @@ class Post extends Eloquent
 	 */
 	public function scopeDaysAgo($query, $days)
 	{
-		return $query->where('created_at', '>=', DB::raw('DATE_SUB(NOW(), INTERVAL '.$days.' DAY)'));
+		return $query->where('created_at', '>=', \DB::raw('DATE_SUB(NOW(), INTERVAL '.$days.' DAY)'));
 	}
 
 }

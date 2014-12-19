@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class PollOption extends Eloquent
+class PollOption extends BaseModel
 {
 
 	protected $appends = array(
@@ -15,7 +15,7 @@ class PollOption extends Eloquent
 	 */
 	public function poll()
 	{
-		return $this->belongsTo('Poll');
+		return $this->belongsTo('Parangi\Poll');
 	}
 
 	/**

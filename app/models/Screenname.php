@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Screenname extends Eloquent
+class Screenname extends BaseModel
 {
     use \Earlybird\Foundry;
 

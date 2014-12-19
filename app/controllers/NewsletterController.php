@@ -8,7 +8,7 @@ class Newsletter extends Controller_W
 	 */
 	public function subscribe($user_id)
 	{
-		DB::insert("INSERT IGNORE INTO newsletter_users SET
+		\DB::insert("INSERT IGNORE INTO newsletter_users SET
 				newsletter_id = ?,
 				user_id       = ?,
 				subscribed_at = NOW()",

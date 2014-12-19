@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Attachment extends Eloquent
+class Attachment extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -20,7 +20,7 @@ class Attachment extends Eloquent
 	 */
 	public function post()
 	{
-		return $this->belongsTo('Post');
+		return $this->belongsTo('Parangi\Post');
 	}
 
 	/**
@@ -31,7 +31,7 @@ class Attachment extends Eloquent
 	 */
 	public function message()
 	{
-		return $this->belongsTo('Message');
+		return $this->belongsTo('Parangi\Message');
 	}
 
 	/**

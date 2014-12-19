@@ -1,4 +1,5 @@
-<?php
+<?php namespace Parangi;
+
 class BBCode
 {
 	protected static $_code_regex = '%\[code\](\n?)((?:[^[]*(?:\[(?!/?code\])[^[]*)*| (?R))*)\[/code\](\n?)%isxu';
@@ -45,7 +46,7 @@ class BBCode
 	 */
 	public static function parse( $text, $smileys = true, $text_only = false )
 	{
-		$pd = new Parsedown();
+		$pd = new \Parsedown();
 		return $pd->text($text);
 
 

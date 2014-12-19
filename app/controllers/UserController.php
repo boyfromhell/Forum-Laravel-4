@@ -26,7 +26,7 @@ class UserController extends BaseController
 	{
 		global $me;
 
-		$user = User::findOrFail($id);
+		$user = \User::findOrFail($id);
 
 		if ($me->id == $user->id) {
 			$_PAGE['category'] = 'home';
@@ -287,7 +287,7 @@ class UserController extends BaseController
 		}
 
 		if ($search) {
-			$users = User::leftJoin('custom_data', 'users.id', '=', 'custom_data.user_id')
+			$users = \User::leftJoin('custom_data', 'users.id', '=', 'custom_data.user_id')
 				->leftJoin('custom_fields', 'custom_data.field_id', '=', 'custom_fields.id')
 				->where('users.name', 'LIKE', '%'.$search.'%')
 				->orWhere(function ($q) use ($search) {
@@ -300,7 +300,7 @@ class UserController extends BaseController
 				->orderBy('users.id', 'asc');
 		}
 		else {
-			$users = User::orderBy($orderby, $order)
+			$users = \User::orderBy($orderby, $order)
 				->orderBy('users.id', 'asc');
 		}
 
@@ -391,7 +391,7 @@ class UserController extends BaseController
 
 		$birthdays = array();
 		while ($data = $exec->fetch_assoc()) {
-			$user = new User($data['id'], $data);
+			$user = new \User($data['id'], $data);
 			$birthdays[] = $user;
 		}
 		
@@ -540,7 +540,7 @@ class UserController extends BaseController
 				// Log them in, then encrypt their password in the new method
 				$hash = UserController::encrypt($password);
 
-				$old_user = User::where($field, '=', $email)
+				$old_user = \User::where($field, '=', $email)
 					->where('old_pass', '=', $hash)
 					->first();
 
@@ -608,7 +608,7 @@ class UserController extends BaseController
 
 				return Redirect::to('signup')->withInput(Input::except('password'));
 			} else {
-				$user = User::create([
+				$user = \User::create([
 					'name'       => Input::get('name'),
 					'email'      => Input::get('email'),
 					'password'   => Hash::make($unencrypted),
@@ -669,7 +669,7 @@ class UserController extends BaseController
 	{
 		global $me;
 
-		$me->visited_at = DB::raw('NOW()');
+		$me->visited_at = \DB::raw('NOW()');
 		$me->save();
 
 		Auth::logout();

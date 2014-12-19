@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Score extends Eloquent
+class Score extends BaseModel
 {
     use \Earlybird\Foundry;
 

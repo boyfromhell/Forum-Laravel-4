@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class CustomData extends Eloquent
+class CustomData extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -23,7 +23,7 @@ class CustomData extends Eloquent
 	 */
 	public function field()
 	{
-		return $this->belongsTo('CustomField', 'field_id');
+		return $this->belongsTo('Parangi\CustomField', 'field_id');
 	}
 
 }

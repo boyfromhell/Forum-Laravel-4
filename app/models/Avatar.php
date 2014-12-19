@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Avatar extends Eloquent
+class Avatar extends BaseModel
 {
 
 	protected $guarded = array('id');

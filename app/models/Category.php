@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Category extends Eloquent
+class Category extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -14,7 +14,7 @@ class Category extends Eloquent
 		global $me;
 
 		// @todo should be just whereNull
-		return $this->hasMany('Forum')
+		return $this->hasMany('Parangi\Forum')
 			->where(function($q) {
 				$q->where('parent_id', '=', 0)
 					->orWhereNull('parent_id');

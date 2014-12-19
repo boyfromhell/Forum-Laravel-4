@@ -43,7 +43,7 @@ class SearchController extends BaseController
 
 			$create_query = true;
 		} else if (Input::has('user')) {
-			$user = User::findOrFail(Input::get('user'));
+			$user = \User::findOrFail(Input::get('user'));
 
 			$query->author = $user->name;
 			$query->show   = (Input::get('mode') == 'topics' ? 1 : 0);
@@ -106,7 +106,7 @@ class SearchController extends BaseController
 		$total = count($keywords);
 
 		if ($query->author) {
-			$author = User::where('name', '=', $query->author)->first();
+			$author = \User::where('name', '=', $query->author)->first();
 		}
 
 		// @todo?
@@ -191,7 +191,7 @@ class SearchController extends BaseController
 			$exec = $_db->query($sql);
 
 			while ($data = $exec->fetch_assoc()) {
-				$data['author'] = new User($data['user_id'], array('name' => $data['name']));
+				$data['author'] = new \User($data['user_id'], array('name' => $data['name']));
 
 				$data['time'] += ($me->tz*3600);
 				$data['date'] = datestring($data['time'], 2);

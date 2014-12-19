@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class MessageThread extends Eloquent
+class MessageThread extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -17,7 +17,7 @@ class MessageThread extends Eloquent
 	 */
 	public function messages()
 	{
-		return $this->hasMany('Message', 'thread_id')
+		return $this->hasMany('Parangi\Message', 'thread_id')
 			->ownedBy(Auth::id())
 			->orderBy('created_at', 'asc');
 	}

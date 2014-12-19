@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class BaseController extends Controller
+class BaseController extends \Controller
 {
 
     /**

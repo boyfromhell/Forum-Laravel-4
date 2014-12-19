@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class EmailQueue extends Eloquent
+class EmailQueue extends BaseModel
 {
 
 	protected $table = 'email_queue';

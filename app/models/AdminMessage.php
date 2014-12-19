@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class AdminMessage extends Eloquent
+class AdminMessage extends BaseModel
 {
 	use \Earlybird\Foundry;
 

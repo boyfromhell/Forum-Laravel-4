@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Forum extends Eloquent
+class Forum extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -22,7 +22,7 @@ class Forum extends Eloquent
 	 */
 	public function parent()
 	{
-		return $this->belongsTo('Forum', 'parent_id');
+		return $this->belongsTo('Parangi\Forum', 'parent_id');
 	}
 
 	/**
@@ -34,7 +34,7 @@ class Forum extends Eloquent
 	{
 		global $me;
 
-		return $this->hasMany('Forum', 'parent_id')
+		return $this->hasMany('Parangi\Forum', 'parent_id')
 			->where('view', '<=', $me->access)
 			->orderBy('order', 'asc');
 	}
@@ -46,7 +46,7 @@ class Forum extends Eloquent
 	 */
 	public function category()
 	{
-		return $this->belongsTo('Category');
+		return $this->belongsTo('Parangi\Category');
 	}
 
 	/**
@@ -56,7 +56,7 @@ class Forum extends Eloquent
 	 */
 	public function topics()
 	{
-		return $this->hasMany('Topic')
+		return $this->hasMany('Parangi\Topic')
 			->orderBy('type', 'desc')
 			->orderBy('posted_at', 'desc');
 	}

@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class BoardConfig extends Eloquent
+class BoardConfig extends BaseModel
 {
     use \Earlybird\Foundry;
 

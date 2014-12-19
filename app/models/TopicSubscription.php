@@ -1,11 +1,11 @@
 <?php
 
-class TopicSubscription extends Eloquent
+class TopicSubscription extends BaseModel
 {
 	 */
 	public function topic()
 	{
-		return $this->belongsTo('Topic');
+		return $this->belongsTo('Parangi\Topic');
 	}
 
 }

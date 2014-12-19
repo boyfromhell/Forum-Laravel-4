@@ -26,7 +26,7 @@ class Group extends \Cartalyst\Sentry\Groups\Eloquent\Group
 	 */
 	public function allMembers()
 	{
-		return $this->belongsToMany('user', 'users_groups');
+		return $this->belongsToMany('User', 'users_groups');
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Module extends Eloquent
+class Module extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -13,7 +13,7 @@ class Module extends Eloquent
 	 */
 	public function category()
 	{
-		return $this->belongsTo('ModuleCategory', 'category_id');
+		return $this->belongsTo('Parangi\ModuleCategory', 'category_id');
 	}
 
 	/**

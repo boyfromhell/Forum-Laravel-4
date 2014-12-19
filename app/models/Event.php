@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Event extends Eloquent
+class Event extends BaseModel
 {
     use \Earlybird\Foundry;
 

@@ -1,4 +1,4 @@
-<?php namespace Parangi;
+<?php
 
 use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
@@ -47,7 +47,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function albums()
 	{
-		return $this->hasMany('Album');
+		return $this->hasMany('Parangi\Album');
 	}
 
 	/**
@@ -57,7 +57,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function avatars()
 	{
-		return $this->hasMany('Avatar')
+		return $this->hasMany('Parangi\Avatar')
 			->orderBy('created_at', 'asc');
 	}
 
@@ -68,7 +68,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function avatar()
 	{
-		return $this->belongsTo('Avatar');
+		return $this->belongsTo('Parangi\Avatar');
 	}
 
 	/**
@@ -78,7 +78,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function groups()
 	{
-		return $this->belongsToMany('Group', 'users_groups')
+		return $this->belongsToMany('Parangi\Group', 'users_groups')
 			->orderBy('name', 'asc');
 	}
 
@@ -89,7 +89,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function scores()
 	{
-		return $this->hasMany('Score')
+		return $this->hasMany('Parangi\Score')
 			->orderBy('score', 'desc');
 	}
 
@@ -100,7 +100,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function custom()
 	{
-		return $this->hasMany('CustomData');
+		return $this->hasMany('Parangi\CustomData');
 	}
 
 	/**
@@ -110,7 +110,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function posts()
 	{
-		return $this->hasMany('Post');
+		return $this->hasMany('Parangi\Post');
 	}
 
 	/**
@@ -120,7 +120,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function screennames()
 	{
-		return $this->hasMany('Screenname')
+		return $this->hasMany('Parangi\Screenname')
 			->orderBy('protocol', 'asc')
 			->orderBy('screenname', 'asc');
 	}
@@ -154,7 +154,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function subscriptions()
 	{
-		return $this->belongsToMany('Topic', 'topic_subs');
+		return $this->belongsToMany('Parangi\Topic', 'topic_subs');
 	}
 
 	/**
@@ -167,7 +167,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function unreadMessages()
 	{
-		return $this->hasMany('Message', 'owner_user_id')
+		return $this->hasMany('Parangi\Message', 'owner_user_id')
 			->groupBy('thread_id')
 			->having(DB::raw('MIN(`read`)'), '=', 0)
 			->having(DB::raw('MIN(`archived`)'), '=', 0);

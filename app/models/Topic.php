@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Topic extends Eloquent
+class Topic extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -26,7 +26,7 @@ class Topic extends Eloquent
 	 */
 	public function forum()
 	{
-		return $this->belongsTo('Forum');
+		return $this->belongsTo('Parangi\Forum');
 	}
 
 	/**
@@ -46,7 +46,7 @@ class Topic extends Eloquent
 	 */
 	public function posts()
 	{
-		return $this->hasMany('Post')
+		return $this->hasMany('Parangi\Post')
 			->orderBy('created_at', 'asc');
 	}
 
@@ -67,7 +67,7 @@ class Topic extends Eloquent
 	 */
 	public function subscriptions()
 	{
-		return $this->hasMany('TopicSubscription');
+		return $this->hasMany('Parangi\TopicSubscription');
 	}
 
 	/**
@@ -77,7 +77,7 @@ class Topic extends Eloquent
 	 */
 	public function sessions()
 	{
-		return $this->hasMany('SessionTopic');
+		return $this->hasMany('Parangi\SessionTopic');
 	}
 
 	/**
@@ -87,7 +87,7 @@ class Topic extends Eloquent
 	 */
 	public function poll()
 	{
-		return $this->hasOne('Poll');
+		return $this->hasOne('Parangi\Poll');
 	}
 
 	/**

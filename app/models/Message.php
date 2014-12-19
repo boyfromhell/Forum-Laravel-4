@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Message extends Eloquent
+class Message extends BaseModel
 {
     use \Earlybird\Foundry;
 
@@ -20,7 +20,7 @@ class Message extends Eloquent
 	 */
 	public function thread()
 	{
-		return $this->belongsTo('MessageThread', 'thread_id');
+		return $this->belongsTo('Parangi\MessageThread', 'thread_id');
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Message extends Eloquent
 	 */
 	public function attachments()
 	{
-		return $this->hasMany('Attachment')
+		return $this->hasMany('Parangi\Attachment')
 			->orderBy('filetype', 'desc')
 			->orderBy('created_at', 'asc');
 	}

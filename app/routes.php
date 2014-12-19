@@ -14,16 +14,16 @@
 Route::pattern('id', '[0-9]+');
 
 // Admin only
-Route::group(array('before' => 'admin'), function()
+Route::group(array('before' => 'admin', 'namespace' => 'Parangi'), function()
 {
-	Route::get('admin', array('uses' => 'AdminController@dashboard'));
-	Route::post('admin/reset-counters', array('uses' => 'AdminController@resetCounters'));
-	Route::any('admin/messages', array('uses' => 'AdminController@messages'));
-	Route::get('admin/messages/{id}', array('uses' => 'AdminController@viewMessage'));
+	Route::get('admin', 'AdminController@dashboard');
+	Route::post('admin/reset-counters', 'AdminController@resetCounters');
+	Route::any('admin/messages', 'AdminController@messages');
+	Route::get('admin/messages/{id}', 'AdminController@viewMessage');
 
-	Route::post('admin/handle-report', array('uses' => 'AdminController@handleReport'));
+	Route::post('admin/handle-report', 'AdminController@handleReport');
 
-	Route::any('admin/edit-announcement', array('uses' => 'AdminController@editAnnouncement'));
+	Route::any('admin/edit-announcement', 'AdminController@editAnnouncement');
 
 	Route::resource('admin/forums', 'ForumController');
 	Route::resource('admin/groups', 'GroupController');
@@ -31,130 +31,133 @@ Route::group(array('before' => 'admin'), function()
 });
 
 // Moderators
-Route::group(array('before' => 'moderator'), function()
+Route::group(array('before' => 'moderator', 'namespace' => 'Parangi'), function()
 {
-	Route::any('move-topic/{id}', array('uses' => 'TopicController@move'));
-	Route::get('lock-topic/{id}', array('uses' => 'TopicController@lock'));
-	Route::get('unlock-topic/{id}', array('uses' => 'TopicController@unlock'));
-	Route::any('delete-topic/{id}', array('uses' => 'TopicController@delete'));
+	Route::any('move-topic/{id}', 'TopicController@move');
+	Route::get('lock-topic/{id}', 'TopicController@lock');
+	Route::get('unlock-topic/{id}', 'TopicController@unlock');
+	Route::any('delete-topic/{id}', 'TopicController@delete');
 });
 
 // Logged-in users
-Route::group(array('before' => 'auth'), function()
+Route::group(array('before' => 'auth', 'namespace' => 'Parangi'), function()
 {
-	Route::get('profile', array('uses' => 'UserController@myProfile'));
+	Route::get('profile', 'UserController@myProfile');
 
 	// Forum
-	Route::any('reply-to-topic/{id}', array('uses' => 'PostController@reply'));
-	Route::any('quote-post/{id}', array('uses' => 'PostController@quote'));
-	Route::any('edit-post/{id}', array('uses' => 'PostController@edit'));
-	Route::any('quick-edit/{id}', array('uses' => 'PostController@quickEdit'));
-	Route::any('delete-post/{id}', array('uses' => 'PostController@delete'));
-	Route::any('flag-post/{id}', array('uses' => 'PostController@flag'));
+	Route::any('reply-to-topic/{id}', 'PostController@reply');
+	Route::any('quote-post/{id}', 'PostController@quote');
+	Route::any('edit-post/{id}', 'PostController@edit');
+	Route::any('quick-edit/{id}', 'PostController@quickEdit');
+	Route::any('delete-post/{id}', 'PostController@delete');
+	Route::any('flag-post/{id}', 'PostController@flag');
 
-	Route::any('new-topic/{id}', array('uses' => 'PostController@newTopic'));
-	Route::get('topic-review/{id}', array('uses' => 'TopicController@review'));
+	Route::any('new-topic/{id}', 'PostController@newTopic');
+	Route::get('topic-review/{id}', 'TopicController@review');
 
-	Route::get('forum/smileys', array('uses' => 'PostController@smileys'));
+	Route::get('forum/smileys', 'PostController@smileys');
 
 	// Search
-	Route::any('search/{id?}', array('uses' => 'SearchController@index'));
-	Route::get('results/{id}', array('uses' => 'SearchController@results'));
+	Route::any('search/{id?}', 'SearchController@index');
+	Route::get('results/{id}', 'SearchController@results');
 
 	// Attachments
-	Route::get('forum/attachments/{id}', array('uses' => 'AttachmentController@download'));
+	Route::get('forum/attachments/{id}', 'AttachmentController@download');
 
 	// Messages
-	Route::any('messages', array('uses' => 'MessageController@inbox'));
-	Route::any('messages/compose', array('uses' => 'MessageController@compose'));
-	Route::get('messages/{id}', array('uses' => 'MessageController@displayThread'));
-	Route::any('messages/{folder}', array('uses' => 'MessageController@inbox'));
-	Route::any('delete-message/{id}', array('uses' => 'MessageController@delete'));
+	Route::any('messages', 'MessageController@inbox');
+	Route::any('messages/compose', 'MessageController@compose');
+	Route::get('messages/{id}', 'MessageController@displayThread');
+	Route::any('messages/{folder}', 'MessageController@inbox');
+	Route::any('delete-message/{id}', 'MessageController@delete');
 
 	// Settings
-	Route::any('avatar', array('uses' => 'AvatarController@manage'));
-	Route::post('upload-avatar', array('uses' => 'AvatarController@upload'));
-	Route::any('edit-profile', array('uses' => 'UserController@editProfile'));
-	Route::any('settings', array('uses' => 'UserController@settings'));
-	Route::any('subscriptions', array('uses' => 'UserController@subscriptions'));
+	Route::any('avatar', 'AvatarController@manage');
+	Route::post('upload-avatar', 'AvatarController@upload');
+	Route::any('edit-profile', 'UserController@editProfile');
+	Route::any('settings', 'UserController@settings');
+	Route::any('subscriptions', 'UserController@subscriptions');
 
 	// Community
-	/*Route::any('groups/edit/{id}', array('uses' => 'GroupController@edit'));
-	Route::any('groups/new', array('uses' => 'GroupController@add'));*/
-	Route::any('honor-rolls/submit', array('uses' => 'ScoreController@submit'));
+	/*Route::any('groups/edit/{id}', 'GroupController@edit');
+	Route::any('groups/new', 'GroupController@add');*/
+	Route::any('honor-rolls/submit', 'ScoreController@submit');
 
 	// Shoutbox
-	Route::get('shoutbox/history', array('uses' => 'ShoutboxController@history'));
-	Route::get('shoutbox/fetch', array('uses' => 'ShoutboxController@fetch'));
-	Route::post('shoutbox/post', array('uses' => 'ShoutboxController@post'));
+	Route::get('shoutbox/history', 'ShoutboxController@history');
+	Route::get('shoutbox/fetch', 'ShoutboxController@fetch');
+	Route::post('shoutbox/post', 'ShoutboxController@post');
 
 	// Gallery
-	Route::any('create-album/{id?}', array('uses' => 'AlbumController@create'));
-	Route::any('edit-album/{id}', array('uses' => 'AlbumController@edit'));
-	Route::any('upload-photos/{id}', array('uses' => 'PhotoController@upload'));
-	Route::any('edit-photo/{id}', array('uses' => 'PhotoController@edit'));
-	Route::any('delete-photo/{id}', array('uses' => 'PhotoController@delete'));
-	Route::get('media/download/{id}', array('uses' => 'PhotoController@download'));
+	Route::any('create-album/{id?}', 'AlbumController@create');
+	Route::any('edit-album/{id}', 'AlbumController@edit');
+	Route::any('upload-photos/{id}', 'PhotoController@upload');
+	Route::any('edit-photo/{id}', 'PhotoController@edit');
+	Route::any('delete-photo/{id}', 'PhotoController@delete');
+	Route::get('media/download/{id}', 'PhotoController@download');
 
 	// Account
-	Route::get('signout', array('uses' => 'UserController@signout'));
+	Route::get('signout', 'UserController@signout');
 });
 
 /**
  * Guests only
  */
-Route::group(array('before' => 'guest'), function()
+Route::group(array('before' => 'guest', 'namespace' => 'Parangi'), function()
 {
-	Route::any('signin', array('uses' => 'UserController@signin'));
-	Route::any('signup', array('uses' => 'UserController@signup'));
+	Route::any('signin', 'UserController@signin');
+	Route::any('signup', 'UserController@signup');
 
-	Route::get('lost-password', array('uses' => 'RemindersController@getRemind'));
-	Route::post('lost-password', array('uses' => 'RemindersController@postRemind'));
-	Route::get('reset-password/{token?}', array('uses' => 'RemindersController@getReset'));
-	Route::post('reset-password', array('uses' => 'RemindersController@postReset'));
+	Route::get('lost-password', 'RemindersController@getRemind');
+	Route::post('lost-password', 'RemindersController@postRemind');
+	Route::get('reset-password/{token?}', 'RemindersController@getReset');
+	Route::post('reset-password', 'RemindersController@postReset');
 });
 
 // All users
-Route::get('/', array('uses' => 'ForumController@home'));
-Route::get('forum', array('uses' => 'ForumController@listAll'));
-Route::get('forums', function() { return Redirect::to('forum'); });
-Route::get('forums/{id}/{name?}', array('uses' => 'ForumController@display'));
-Route::get('topics/{id}/{name?}', array('uses' => 'TopicController@display'));
-Route::get('print/{id}/{name?}', array('uses' => 'TopicController@printTopic'));
-Route::get('posts/{id}/{name?}', array('uses' => 'PostController@display'));
+Route::group(array('namespace' => 'Parangi'), function()
+{
+	Route::get('/', 'ForumController@home');
+	Route::get('forum', 'ForumController@listAll');
+	Route::get('forums', function() { return Redirect::to('forum'); });
+	Route::get('forums/{id}/{name?}', 'ForumController@display');
+	Route::get('topics/{id}/{name?}', 'TopicController@display');
+	Route::get('print/{id}/{name?}', 'TopicController@printTopic');
+	Route::get('posts/{id}/{name?}', 'PostController@display');
 
-// Community
-Route::any('members', array('uses' => 'UserController@members'));
-Route::get('groups', array('uses' => 'GroupController@showAll'));
-Route::get('groups/{id}/{name?}', array('uses' => 'GroupController@display'));
-Route::get('users/{id}/{name?}', array('uses' => 'UserController@display'));
-Route::get('honor-rolls', array('uses' => 'ScoreController@index'));
-Route::get('chat-popup', array('uses' => 'PageController@chatPopup'));
-Route::get('badges', array('uses' => 'LevelController@display'));
+	// Community
+	Route::any('members', 'UserController@members');
+	Route::get('groups', 'GroupController@showAll');
+	Route::get('groups/{id}/{name?}', 'GroupController@display');
+	Route::get('users/{id}/{name?}', 'UserController@display');
+	Route::get('honor-rolls', 'ScoreController@index');
+	Route::get('chat-popup', 'PageController@chatPopup');
+	Route::get('badges', 'LevelController@display');
 
-// Gallery
-Route::get('media', array('uses' => 'AlbumController@gallery'));
-Route::get('albums', array('uses' => 'AlbumController@display'));
-Route::get('albums/{id}/{name?}', array('uses' => 'AlbumController@display'));
-Route::any('albums/edit/{id}', array('uses' => 'AlbumController@edit'));
-Route::any('albums/new', array('uses' => 'AlbumController@add'));
-Route::get('photos/{id}/{name?}', array('uses' => 'PhotoController@display'));
+	// Gallery
+	Route::get('media', 'AlbumController@gallery');
+	Route::get('albums', 'AlbumController@display');
+	Route::get('albums/{id}/{name?}', 'AlbumController@display');
+	Route::any('albums/edit/{id}', 'AlbumController@edit');
+	Route::any('albums/new', 'AlbumController@add');
+	Route::get('photos/{id}/{name?}', 'PhotoController@display');
 
-// Projects
-Route::get('downloads/{category?}', array('uses' => 'ProjectController@category'));
-Route::get('projects/{id}/{name?}', array('uses' => 'ProjectController@display'));
-Route::get('download/{id}/{name?}', array('uses' => 'ProjectController@download'));
+	// Projects
+	Route::get('downloads/{category?}', 'ProjectController@category');
+	Route::get('projects/{id}/{name?}', 'ProjectController@display');
+	Route::get('download/{id}/{name?}', 'ProjectController@download');
 
-// Static pages
-Route::get('about', array('uses' => 'PageController@display', 'as' => 'about'));
-Route::any('contact', array('uses' => 'PageController@contact'));
-Route::get('donate', array('uses' => 'PageController@display', 'as' => 'donate'));
-Route::get('privacy', array('uses' => 'PageController@display', 'as' => 'privacy'));
-Route::get('terms', array('uses' => 'PageController@display', 'as' => 'terms'));
-Route::get('community/chat', array('uses' => 'PageController@display', 'as' => 'chat'));
-Route::get('sitemap', array('uses' => 'PageController@sitemap'));
-Route::get('links', array('uses' => 'PageController@links'));
+	// Static pages
+	Route::get('about', ['uses' => 'PageController@display', 'as' => 'about']);
+	Route::any('contact', 'PageController@contact');
+	Route::get('donate', ['uses' => 'PageController@display', 'as' => 'donate']);
+	Route::get('privacy', ['uses' => 'PageController@display', 'as' => 'privacy']);
+	Route::get('terms', ['uses' => 'PageController@display', 'as' => 'terms']);
+	Route::get('community/chat', ['uses' => 'PageController@display', 'as' => 'chat']);
+	Route::get('sitemap', 'PageController@sitemap');
+	Route::get('links', 'PageController@links');
 
-// Stats
-Route::get('whos-online', array('uses' => 'ForumController@getOnline'));
+	// Stats
+	Route::get('whos-online', 'ForumController@getOnline');
+});
 

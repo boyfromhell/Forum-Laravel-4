@@ -24,7 +24,7 @@ class AlbumController extends BaseController
 		// Get random photos
 		$photos = Photo::join('albums', 'photos.album_id', '=', 'albums.id')
 			->where('albums.permission_view', '<=', $me->access)
-			->orderBy(DB::raw('RAND()'), 'asc')
+			->orderBy(\DB::raw('RAND()'), 'asc')
 			->take($limit)
 			->get(['photos.*']);
 		if (count($photos) > 0) {

@@ -124,7 +124,7 @@
 </div>
 </div>
 
-@if ( $me->id && !$is_mobile && Module::isActive('shoutbox') )
+@if ( $me->id && !$is_mobile && Parangi\Module::isActive('shoutbox') )
 <div id="embed">
 @include ('shoutbox.embed', ['mini' => true])
 </div>
