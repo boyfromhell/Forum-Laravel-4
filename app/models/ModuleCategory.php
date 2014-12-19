@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class ModuleCategory extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	protected $table = 'app_categories';
 	protected $appends = array(

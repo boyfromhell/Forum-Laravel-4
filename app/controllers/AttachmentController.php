@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class AttachmentController extends BaseController
 {
-    use Earlybird\FoundryController;
+    use \Earlybird\FoundryController;
 
 	/**
 	 * Download

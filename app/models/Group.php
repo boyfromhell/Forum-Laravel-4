@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
-class Group extends Cartalyst\Sentry\Groups\Eloquent\Group
+class Group extends \Cartalyst\Sentry\Groups\Eloquent\Group
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	protected $guarded = array('id');
 	protected $appends = array(

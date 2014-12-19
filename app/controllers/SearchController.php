@@ -1,4 +1,4 @@
-<?php
+<?php namespace Parangi;
 
 class SearchController extends BaseController
 {

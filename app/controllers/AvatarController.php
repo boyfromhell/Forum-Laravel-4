@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class AvatarController extends BaseController
 {
-    use Earlybird\FoundryController;
+    use \Earlybird\FoundryController;
 
 	/**
 	 * Choose and manage avatars

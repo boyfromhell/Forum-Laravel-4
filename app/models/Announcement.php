@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class Announcement extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	/**
 	 * User who created the announcement

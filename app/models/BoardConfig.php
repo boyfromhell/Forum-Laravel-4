@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class BoardConfig extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	protected $table = 'config';
 	protected $guarded = array();

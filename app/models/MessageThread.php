@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class MessageThread extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	protected $appends = array(
 		'url',

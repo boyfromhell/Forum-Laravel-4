@@ -1,7 +1,7 @@
-<?php
+<?php namespace Parangi;
 
 class CustomField extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 }
 

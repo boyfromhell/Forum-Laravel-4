@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class GroupController extends BaseController
 {
-    use Earlybird\FoundryController;
+    use \Earlybird\FoundryController;
 
 	/**
 	 * Show all groups

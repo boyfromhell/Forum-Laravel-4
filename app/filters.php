@@ -5,18 +5,14 @@ View::creator(array('layout'), function($view)
 	global $me;
 
 	// Menu
-	$main_menu = ModuleCategory::where('permission', '<=', $me->access)
+	$main_menu = Parangi\ModuleCategory::where('permission', '<=', $me->access)
 		->orderBy('order', 'asc')
 		->get();
 
-	$messages = Session::get('messages');
-	$notices = Session::get('notices');
-	$errors = Session::get('errors');
-	$ga_events = Session::get('ga_events');
-	Session::forget('messages');
-	Session::forget('notices');
-	Session::forget('errors');
-	Session::forget('ga_events');
+	$messages = Session::pull('messages');
+	$notices = Session::pull('notices');
+	$errors = Session::pull('errors');
+	$ga_events = Session::pull('ga_events');
 
 	$_PAGE = $view->_PAGE;
 
@@ -25,7 +21,7 @@ View::creator(array('layout'), function($view)
 		$me->update(['viewed_at' => DB::raw('NOW()')]);
 	}
 	if( $me->is_admin ) {
-		$admin_unread = AdminMessage::where('archived', '=', 0)
+		$admin_unread = Parangi\AdminMessage::where('archived', '=', 0)
 			->where('read', '=', 0)
 			->count();
 	}
@@ -50,7 +46,7 @@ View::creator(array('layout'), function($view)
 		$sub_menu = $view->menu;
 	}
 	else if( $sub_nav ) {
-		$sub_menu = Module::where('permission', '<=', $me->access);
+		$sub_menu = Parangi\Module::where('permission', '<=', $me->access);
 
 		if( $me->id ) { $sub_menu = $sub_menu->where('permission', '>=', 0); }
 

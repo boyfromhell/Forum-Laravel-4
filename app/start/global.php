@@ -11,7 +11,7 @@ global $me;
 |
 */
 
-$me = new User();
+$me = new Parangi\User();
 
 if( Auth::check() || Auth::viaRemember() ) {
 	$me = Auth::user();

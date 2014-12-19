@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class Module extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	protected $table = 'apps';
 

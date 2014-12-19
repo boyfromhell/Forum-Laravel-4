@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class PostText extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	protected $table = 'posts_text';
 	protected $primaryKey = 'post_id';

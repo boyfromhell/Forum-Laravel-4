@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class PostController extends BaseController
 {
-    use Earlybird\FoundryController;
+    use \Earlybird\FoundryController;
 
 	protected $mode;
 	protected $title;

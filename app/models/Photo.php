@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class Photo extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	protected $guarded = array('id');
 	protected $appends = array(

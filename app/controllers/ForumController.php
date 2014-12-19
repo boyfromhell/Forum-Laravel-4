@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class ForumController extends BaseController
 {
-    use Earlybird\FoundryController;
+    use \Earlybird\FoundryController;
 
 	/**
 	 * Welcome page with recent activity

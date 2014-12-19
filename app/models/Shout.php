@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class Shout extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	protected $table = 'shoutbox';
 	protected $guarded = array('id');

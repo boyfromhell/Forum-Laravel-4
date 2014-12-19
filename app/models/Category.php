@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class Category extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	/**
 	 * Top level forums in this category

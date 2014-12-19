@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class ProjectController extends BaseController
 {
-    use Earlybird\FoundryController;
+    use \Earlybird\FoundryController;
 
 	/**
 	 * List projects in this category

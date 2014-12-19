@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class UserController extends BaseController
 {
-    use Earlybird\FoundryController;
+    use \Earlybird\FoundryController;
 
 	/**
 	 * My profile

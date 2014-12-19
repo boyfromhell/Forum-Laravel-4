@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class AlbumController extends BaseController
 {
-	use Earlybird\FoundryController;
+	use \Earlybird\FoundryController;
 
 	/**
 	 * Gallery page

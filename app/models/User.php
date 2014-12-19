@@ -1,13 +1,13 @@
-<?php
+<?php namespace Parangi;
 
 use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
-class User extends Cartalyst\Sentry\Users\Eloquent\User implements UserInterface, RemindableInterface {
+class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterface, RemindableInterface {
 
-	use UserTrait, RemindableTrait, Earlybird\Foundry;
+	use UserTrait, RemindableTrait, \Earlybird\Foundry;
 
 	/**
 	 * The database table used by the model.

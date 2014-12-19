@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
-class TopicController BaseController
+class TopicController extends BaseController
 {
-    use extends Earlybird\FoundryController;
+    use \Earlybird\FoundryController;
 
 	/**
 	 * Display a topic

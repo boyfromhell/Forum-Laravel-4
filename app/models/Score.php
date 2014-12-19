@@ -1,8 +1,8 @@
-<?php
+<?php namespace Parangi;
 
 class Score extends Eloquent
 {
-    use Earlybird\Foundry;
+    use \Earlybird\Foundry;
 
 	protected $guarded = array('id');
 

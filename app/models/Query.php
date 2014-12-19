@@ -1,4 +1,4 @@
-<?php
+<?php namespace Parangi;
 
 define('MATCH_ANY', 0);
 define('MATCH_ALL', 1);
