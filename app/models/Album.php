@@ -68,7 +68,9 @@ class Album extends BaseModel
 	{
 		if ($this->cover_id) {
 			return $this->belongsTo('Parangi\Photo', 'cover_id');
-		} else {
+		}
+		else
+		{
 			foreach ($this->children as $child) {
 				return $child->coverPhoto();
 			}
@@ -157,7 +159,7 @@ class Album extends BaseModel
 			return true;
 		} else if ($this->permission_upload == 0 && $this->user_id == $me->id) {
 			return true;
-		} else if ($album->permission_upload == 1 && $me->id) {
+		} else if ($this->permission_upload == 1 && $me->id) {
 			return true;
 		}
 

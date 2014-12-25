@@ -1,5 +1,14 @@
 <?php namespace Parangi;
 
+use App;
+use Hash;
+use Input;
+use Lang;
+use Password;
+use Redirect;
+use Session;
+use View;
+
 class RemindersController extends BaseController
 {
 

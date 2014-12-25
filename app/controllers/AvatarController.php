@@ -1,5 +1,13 @@
 <?php namespace Parangi;
 
+use App;
+use Auth;
+use Input;
+use Redirect;
+use Request;
+use Session;
+use View;
+
 class AvatarController extends BaseController
 {
     use \Earlybird\FoundryController;
@@ -96,7 +104,7 @@ class AvatarController extends BaseController
 
 				Session::push('messages', 'Avatar updated');
 
-				return Redirect::to('avatar');
+				return \Redirect::to('avatar');
 			}
 		}
 

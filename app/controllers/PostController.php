@@ -1,5 +1,14 @@
 <?php namespace Parangi;
 
+use App;
+use DB;
+use Input;
+use Redirect;
+use Request;
+use Session;
+use Validator;
+use View;
+
 class PostController extends BaseController
 {
     use \Earlybird\FoundryController;
@@ -109,7 +118,7 @@ class PostController extends BaseController
 				$content = BBCode::prepare($content);
 
 				// Track edit
-				\DB::table('posts')->where('id', '=', $post->id)
+				DB::table('posts')->where('id', '=', $post->id)
 					->increment('edit_count', 1, [
 						'edit_user_id' => $me->id
 					]);
@@ -302,7 +311,7 @@ class PostController extends BaseController
 							'user_id'   => $me->id,
 							'type'      => $type,
 							'smiley'    => $smiley,
-							'posted_at' => \DB::raw('NOW()')
+							'posted_at' => DB::raw('NOW()')
 						]);
 
 						$forum->increment('total_topics');
@@ -310,7 +319,7 @@ class PostController extends BaseController
 					// Replies
 					else if ($this->mode == 'reply' || $this->mode == 'quote') {
 						$topic->increment('replies');
-						$topic->posted_at = \DB::raw('NOW()');
+						$topic->posted_at = DB::raw('NOW()');
 						$topic->save();
 					}
 
@@ -390,7 +399,7 @@ class PostController extends BaseController
 							'user_id' => $subscriber->id,
 							'subject' => 'Topic Reply Notification',
 							'content' => $html,
-							'date_queued' => \DB::raw('NOW()'),
+							'date_queued' => DB::raw('NOW()'),
 						]);
 
 						$topic->subscribers()->updateExistingPivot($subscriber->id, ['notified' => 0]);

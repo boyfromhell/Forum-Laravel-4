@@ -1,8 +1,15 @@
 <?php namespace Parangi;
 
+use Input;
+use Redirect;
+use Request;
+use Session;
+use Validator;
+use View;
+
 class ScoreController extends BaseController
 {
-    use Earlybird\FoundryController;
+    use \Earlybird\FoundryController;
 
 	/**
 	 * Show honor rolls

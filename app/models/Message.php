@@ -1,5 +1,8 @@
 <?php namespace Parangi;
 
+use Auth;
+use User;
+
 class Message extends BaseModel
 {
     use \Earlybird\Foundry;

@@ -1,5 +1,7 @@
 <?php namespace Parangi;
 
+use Config;
+
 class Avatar extends BaseModel
 {
 

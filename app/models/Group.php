@@ -1,6 +1,6 @@
 <?php namespace Parangi;
 
-class Group extends \Cartalyst\Sentry\Groups\Eloquent\Group
+class Group extends BaseModel
 {
     use \Earlybird\Foundry;
 

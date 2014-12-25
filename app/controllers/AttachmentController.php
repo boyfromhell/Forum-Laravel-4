@@ -1,5 +1,9 @@
 <?php namespace Parangi;
 
+use Config;
+use Exception;
+use S3;
+
 class AttachmentController extends BaseController
 {
     use \Earlybird\FoundryController;
@@ -8,6 +12,7 @@ class AttachmentController extends BaseController
 	 * Download
 	 *
 	 * @param  int  $id
+	 * @throws Exception
 	 * @return Response
 	 */
 	public function download($id)
@@ -38,12 +43,12 @@ class AttachmentController extends BaseController
 
 		$attachment->increment('downloads');
 
-		if (Config::get('app.aws') === null) {
+		if (! Config::get('services.aws.enabled')) {
 			$path = ROOT . 'web' . $attachment->get_path() . $attachment->filename;
 		} else {
 			$path = ltrim($attachment->get_path(), '/') . $attachment->filename;
 			
-			$s3 = new S3($_CONFIG['aws']['access_key'], $_CONFIG['aws']['secret_key']);
+			$s3 = new S3(Config::get('services.aws.access_key'), Config::get('services.aws.secret_key'));
 			$url = $s3->getAuthenticatedURL($_CONFIG['s3_bucket'], $path, 60*60, true);
 		}
 
@@ -57,7 +62,7 @@ class AttachmentController extends BaseController
 			header("Content-Disposition: attachment; filename=" . $attachment->origfilename);
 		}
 
-		if ($_CONFIG['aws'] === null) {
+		if (! Config::get('services.aws.enabled')) {
 			@readfile($path);
 		} else {
 			echo file_get_contents($url);
@@ -74,7 +79,7 @@ class AttachmentController extends BaseController
 		global $me;
 	
 		// Determine the final, legal name and extension
-		list($name, $ext) = parse_file_name($files['name'][$i], true);
+		list($name, $ext) = Helpers::parse_file_name($files['name'][$i], true);
 		
 		if ($ext == 'jpeg') {
 			$ext = 'jpg';
@@ -120,7 +125,7 @@ class AttachmentController extends BaseController
 		
 		// Move file from temporary location
 		$success = false;
-		if (!count($file_errors)) {
+		if (! count($file_errors)) {
 			$success = move_uploaded_file($files['tmp_name'][$i], $original);
 		}
 
@@ -209,16 +214,16 @@ class AttachmentController extends BaseController
 		$month = date('m', $this->date);
 		$folder = "attachments/{$year}/{$month}";
 		
-		list($name, $ext) = parse_file_name($this->filename);
+		list($name, $ext) = Helpers::parse_file_name($this->filename);
 
-		if (push_to_s3("{$folder}/{$name}.{$ext}", false)) {
+		if (Helpers::push_to_s3("{$folder}/{$name}.{$ext}", false)) {
 			unlink(ROOT . "web/{$folder}/{$name}.{$ext}");
 
 			if ($this->filetype == 0) {
-				if (push_to_s3("{$folder}/scale/{$name}.jpg", true)) {
+				if (Helpers::push_to_s3("{$folder}/scale/{$name}.jpg", true)) {
 					unlink(ROOT . "web/{$folder}/scale/{$name}.jpg");
 				}
-				if (push_to_s3("{$folder}/thumbs/{$name}.jpg", true)) {
+				if (Helpers::push_to_s3("{$folder}/thumbs/{$name}.jpg", true)) {
 					unlink(ROOT . "web/{$folder}/thumbs/{$name}.jpg");
 				}
 			}
@@ -234,7 +239,7 @@ class AttachmentController extends BaseController
 	public function get_size()
 	{
 		if (file_exists(ROOT . 'web' . $this->get_path() . $this->filename)) {
-			return english_size(ROOT . 'web' . $this->get_path() . $this->filename);
+			return Helpers::english_size(ROOT . 'web' . $this->get_path() . $this->filename);
 		} else {
 			return 0;
 		}

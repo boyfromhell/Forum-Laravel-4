@@ -154,7 +154,7 @@ class Helpers
 	 * @param  string  $s3_path  Remote path
 	 * @return bool  Success
 	 */
-	public function delete_from_s3( $s3_path )
+	public static function delete_from_s3( $s3_path )
 	{
 		if( ! Config::get('services.aws.enabled') ) {
 			return false;

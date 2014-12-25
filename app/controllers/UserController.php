@@ -1,5 +1,19 @@
 <?php namespace Parangi;
 
+use Exception;
+use Auth;
+use Config;
+use DB;
+use Hash;
+use Input;
+use Mail;
+use Redirect;
+use Request;
+use Session;
+use Validator;
+use View;
+use User;
+
 class UserController extends BaseController
 {
     use \Earlybird\FoundryController;
@@ -26,7 +40,7 @@ class UserController extends BaseController
 	{
 		global $me;
 
-		$user = \User::findOrFail($id);
+		$user = User::findOrFail($id);
 
 		if ($me->id == $user->id) {
 			$_PAGE['category'] = 'home';
@@ -215,15 +229,15 @@ class UserController extends BaseController
 		$_PAGE['title'] = 'Settings';
 
 		if (Request::isMethod('post')) {
-			$me->lang = Input::get('lang', 'en');
-			$me->hide_online = Input::get('hide_online', 0);
-			$me->notify = Input::get('notify', 0);
-			$me->attach_sig = Input::get('attach_sig', 0);
-			$me->notify_pm = Input::get('notify_pm', 0);
-			$me->allow_email = Input::get('allow_email', 0);
+			$me->lang           = Input::get('lang', 'en');
+			$me->hide_online    = Input::get('hide_online', 0);
+			$me->notify         = Input::get('notify', 0);
+			$me->attach_sig     = Input::get('attach_sig', 0);
+			$me->notify_pm      = Input::get('notify_pm', 0);
+			$me->allow_email    = Input::get('allow_email', 0);
 			$me->enable_smileys = Input::get('enable_smileys', 0);
-			$me->timezone = Input::get('timezone');
-			$me->style = Input::get('style');
+			$me->timezone       = Input::get('timezone');
+			$me->style          = Input::get('style');
 			$me->save();
 
 			Session::push('messages', 'Settings saved');
@@ -271,8 +285,8 @@ class UserController extends BaseController
 
 		// Search for / sort members
 		$search = Input::get('search');
-		$sort = Input::get('sort');
-		$order = Input::get('order');
+		$sort   = Input::get('sort');
+		$order  = Input::get('order');
 
 		if ($sort == 'name') {
 			$orderby = 'name';
@@ -287,7 +301,7 @@ class UserController extends BaseController
 		}
 
 		if ($search) {
-			$users = \User::leftJoin('custom_data', 'users.id', '=', 'custom_data.user_id')
+			$users = User::leftJoin('custom_data', 'users.id', '=', 'custom_data.user_id')
 				->leftJoin('custom_fields', 'custom_data.field_id', '=', 'custom_fields.id')
 				->where('users.name', 'LIKE', '%'.$search.'%')
 				->orWhere(function ($q) use ($search) {
@@ -300,7 +314,7 @@ class UserController extends BaseController
 				->orderBy('users.id', 'asc');
 		}
 		else {
-			$users = \User::orderBy($orderby, $order)
+			$users = User::orderBy($orderby, $order)
 				->orderBy('users.id', 'asc');
 		}
 
@@ -391,7 +405,7 @@ class UserController extends BaseController
 
 		$birthdays = array();
 		while ($data = $exec->fetch_assoc()) {
-			$user = new \User($data['id'], $data);
+			$user = new User($data['id'], $data);
 			$birthdays[] = $user;
 		}
 		
@@ -492,44 +506,6 @@ class UserController extends BaseController
 			$password = Input::get('password');
 
 			$field = filter_var($email, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
-			/*User::setLoginAttributeName($field);
-
-			try {
-				$credentials = array(
-					$field     => $email,
-					'password' => $password,
-				);
-
-				// Authenticate the user
-				$user = Sentry::authenticate($credentials, true);
-
-				return Redirect::intended('/');
-			}
-			catch (Cartalyst\Sentry\Users\WrongPasswordException $e)
-			{
-				$error = 'Wrong password, try again.';
-			}
-			catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
-			{
-				$error = 'User was not found.';
-			}
-			catch (Cartalyst\Sentry\Users\UserNotActivatedException $e)
-			{
-				$error = 'User is not activated.';
-			}
-
-			// The following is only required if the throttling is enabled
-			catch (Cartalyst\Sentry\Throttling\UserSuspendedException $e)
-			{
-				$error = 'User is suspended.';
-			}
-			catch (Cartalyst\Sentry\Throttling\UserBannedException $e)
-			{
-				$error = 'User is banned.';
-			}
-
-			Session::push('errors', $error);
-			*/
 
 			if (Auth::attempt(array($field => $email, 'password' => $password), true))
 			{
@@ -540,7 +516,7 @@ class UserController extends BaseController
 				// Log them in, then encrypt their password in the new method
 				$hash = UserController::encrypt($password);
 
-				$old_user = \User::where($field, '=', $email)
+				$old_user = User::where($field, '=', $email)
 					->where('old_pass', '=', $hash)
 					->first();
 
@@ -608,7 +584,7 @@ class UserController extends BaseController
 
 				return Redirect::to('signup')->withInput(Input::except('password'));
 			} else {
-				$user = \User::create([
+				$user = User::create([
 					'name'       => Input::get('name'),
 					'email'      => Input::get('email'),
 					'password'   => Hash::make($unencrypted),
@@ -669,7 +645,7 @@ class UserController extends BaseController
 	{
 		global $me;
 
-		$me->visited_at = \DB::raw('NOW()');
+		$me->visited_at = DB::raw('NOW()');
 		$me->save();
 
 		Auth::logout();
@@ -710,4 +686,3 @@ class UserController extends BaseController
 	}
 
 }
-

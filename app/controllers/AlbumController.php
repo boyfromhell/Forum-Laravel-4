@@ -1,5 +1,10 @@
 <?php namespace Parangi;
 
+use App;
+use DB;
+use Input;
+use View;
+
 class AlbumController extends BaseController
 {
 	use \Earlybird\FoundryController;
@@ -19,12 +24,13 @@ class AlbumController extends BaseController
 			'title'    => 'Media'
 		);
 
-		$limit = $is_mobile ? 1 : 6;
+		//$limit = is_mobile() ? 1 : 6;
+		$limit = 6;
 
 		// Get random photos
 		$photos = Photo::join('albums', 'photos.album_id', '=', 'albums.id')
 			->where('albums.permission_view', '<=', $me->access)
-			->orderBy(\DB::raw('RAND()'), 'asc')
+			->orderBy(DB::raw('RAND()'), 'asc')
 			->take($limit)
 			->get(['photos.*']);
 		if (count($photos) > 0) {

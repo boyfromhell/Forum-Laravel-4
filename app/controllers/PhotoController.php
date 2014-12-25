@@ -1,8 +1,18 @@
 <?php namespace Parangi;
 
+use Exception;
+use App;
+use Input;
+use Redirect;
+use Request;
+use Session;
+use View;
+use S3;
+use User;
+
 class PhotoController extends BaseController
 {
-    use Earlybird\FoundryController;
+    use \Earlybird\FoundryController;
 
 	/**
 	 * Display a photo
@@ -242,7 +252,7 @@ class PhotoController extends BaseController
 			$photo->description = Input::get('description');
 
 			if ($me->is_admin) {
-				$user = \User::where('name', '=', Input::get('author'))->first();
+				$user = User::where('name', '=', Input::get('author'))->first();
 			
 				$photo->user_id = $user->id;
 				$photo->created_at = Input::get('date');

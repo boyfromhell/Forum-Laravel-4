@@ -1,5 +1,16 @@
 <?php namespace Parangi;
 
+use Exception;
+use App;
+use Input;
+use Mail;
+use Redirect;
+use Request;
+use Route;
+use Session;
+use Validator;
+use View;
+
 class PageController extends BaseController
 {
 
@@ -187,7 +198,7 @@ class PageController extends BaseController
 	 *
 	 * @return array
 	 */
-	public static function fetchMenu($active)
+	public static function fetchMenu($active = null)
 	{
 		$menu = array();
 
@@ -212,7 +223,9 @@ class PageController extends BaseController
 			'name' => 'Terms',
 		);
 
-		$menu[$active]['active'] = true;
+		if ($active !== null) {
+			$menu[$active]['active'] = true;
+		}
 
 		return $menu;
 	}

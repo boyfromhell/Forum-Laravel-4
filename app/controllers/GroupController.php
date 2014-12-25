@@ -1,5 +1,7 @@
 <?php namespace Parangi;
 
+use View;
+
 class GroupController extends BaseController
 {
     use \Earlybird\FoundryController;
@@ -44,7 +46,7 @@ class GroupController extends BaseController
 
 		// Add a new member to this group
 		/*if (isset($_POST['add_member']) && $group->check_membership($me->id) == 2) {
-			$id = \User::lookup_id($_POST['username']);
+			$id = User::lookup_id($_POST['username']);
 			$group->add_member($id, (int)$_POST['type']);
 			header("Location: " . $group->url);
 			exit;
@@ -178,7 +180,7 @@ class GroupController extends BaseController
      *
      * @return array
      */
-    public static function fetchMenu($active)
+    public static function fetchMenu($active = null)
     {
 		global $me;
 
@@ -211,7 +213,7 @@ class GroupController extends BaseController
 			);
 		}
 
-		if ($active) {
+		if ($active !== null) {
 	        $menu[$active]['active'] = true;
 		}
 

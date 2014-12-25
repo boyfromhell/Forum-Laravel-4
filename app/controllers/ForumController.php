@@ -1,6 +1,12 @@
 <?php namespace Parangi;
 
-use Illuminate\Support\Facades\View;
+use App;
+use DB;
+use Input;
+use Redirect;
+use Session;
+use View;
+use User;
 
 class ForumController extends BaseController
 {
@@ -32,15 +38,15 @@ class ForumController extends BaseController
 		// Announcements
 		$announcement = Announcement::where('id', '=', 2)->first();
 
-		//$birthdays = \User::check_birthdays();
+		//$birthdays = User::check_birthdays();
 
 		// Newest user
-		$newest_user = \User::orderBy('id', 'desc')->first();
+		$newest_user = User::orderBy('id', 'desc')->first();
 
 		$stats = array(
 			'total_topics' => number_format(Topic::count()),
 			'total_posts'  => number_format(Post::count()),
-			'total_users'  => number_format(\User::count()),
+			'total_users'  => number_format(User::count()),
 		);
 
 		// Most recent topics
@@ -53,7 +59,7 @@ class ForumController extends BaseController
 		// Random photo and recent album
 		$photo = Photo::join('albums', 'photos.album_id', '=', 'albums.id')
 			->where('permission_view', '<=', $me->access)
-			->orderBy(\DB::raw('RAND()'), 'asc')
+			->orderBy(DB::raw('RAND()'), 'asc')
 			->first(['photos.*']);
 
 		$album = Album::where('permission_view', '<=', $me->access)
@@ -122,7 +128,7 @@ class ForumController extends BaseController
 			if (Input::has('quote')) {
 				$quote = Quote::find(Input::get('quote'));
 			} else {
-				$quote = Quote::orderBy(\DB::raw('RAND()'))->first();
+				$quote = Quote::orderBy(DB::raw('RAND()'))->first();
 			}
 		}
 
@@ -184,12 +190,12 @@ class ForumController extends BaseController
 		}*/
 
 		// Newest user
-		$newest_user = \User::orderBy('id', 'desc')->first();
+		$newest_user = User::orderBy('id', 'desc')->first();
 
 		$stats = array(
 			'total_topics' => number_format(Topic::count()),
 			'total_posts'  => number_format(Post::count()),
-			'total_users'  => number_format(\User::count()),
+			'total_users'  => number_format(User::count()),
 		);
 
 		return View::make('forums.all')
@@ -292,7 +298,7 @@ class ForumController extends BaseController
 
 		// Track that I'm online
 		if ($me->id) {
-			$me->update(['viewed_at' => \DB::raw('NOW()')]);
+			$me->update(['viewed_at' => DB::raw('NOW()')]);
 		}
 
 		$fivemin = time() - 300;
@@ -301,7 +307,7 @@ class ForumController extends BaseController
 		$visitors = Visitor::where('last_view', '>', $fivemin)->count();
 
 		// Fetch members who are online and not hidden
-		$members = \User::where('viewed_at', '>', \DB::raw('DATE_SUB(NOW(), INTERVAL 5 MINUTE)'));
+		$members = User::where('viewed_at', '>', DB::raw('DATE_SUB(NOW(), INTERVAL 5 MINUTE)'));
 
 		if (! $me->is_admin) {
 			$members = $members->where('hide_online', '=', 0);
@@ -347,7 +353,7 @@ class ForumController extends BaseController
 	 *
 	 * @return array
 	 */
-	public static function fetchMenu($active)
+	public static function fetchMenu($active = null)
 	{
 		global $me;
 
@@ -387,7 +393,9 @@ class ForumController extends BaseController
 			);
 		}
 
-		$menu[$active]['active'] = true;
+		if ($active !== null) {
+			$menu[$active]['active'] = true;
+		}
 
 		return $menu;
 	}

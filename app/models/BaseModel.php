@@ -1,6 +1,7 @@
 <?php namespace Parangi;
 
-class BaseModel extends \Eloquent
+use Eloquent;
+
+class BaseModel extends Eloquent
 {
 }
-

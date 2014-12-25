@@ -1,5 +1,7 @@
 <?php namespace Parangi;
 
+use DB;
+
 class Post extends BaseModel
 {
     use \Earlybird\Foundry;
@@ -160,7 +162,7 @@ class Post extends BaseModel
 	 */
 	public function scopeDaysAgo($query, $days)
 	{
-		return $query->where('created_at', '>=', \DB::raw('DATE_SUB(NOW(), INTERVAL '.$days.' DAY)'));
+		return $query->where('created_at', '>=', DB::raw('DATE_SUB(NOW(), INTERVAL '.$days.' DAY)'));
 	}
 
 }

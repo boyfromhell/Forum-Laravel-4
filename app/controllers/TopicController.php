@@ -1,5 +1,12 @@
 <?php namespace Parangi;
 
+use App;
+use Input;
+use Redirect;
+use Request;
+use Session;
+use View;
+
 class TopicController extends BaseController
 {
     use \Earlybird\FoundryController;

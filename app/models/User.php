@@ -5,7 +5,7 @@ use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableTrait;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
-class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterface, RemindableInterface {
+class User extends Parangi\BaseModel implements UserInterface, RemindableInterface {
 
 	use UserTrait, RemindableTrait, \Earlybird\Foundry;
 
@@ -188,11 +188,11 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	/**
 	 * User's level based on # of posts
 	 *
-	 * @return Level
+	 * @return Parangi\Level
 	 */
 	public function getPostLevelAttribute()
 	{
-		$post_level = Level::where('type', '=', 0)
+		$post_level = Parangi\Level::where('type', '=', 0)
 			->where('min_posts', '<=', $this->total_posts)
 			->orderBy('min_posts', 'desc')
 			->first();
@@ -203,13 +203,13 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	/**
 	 * User's level (specially assigned or based on # of posts)
 	 *
-	 * @return Level
+	 * @return Parangi\Level
 	 */
 	public function getLevelAttribute()
 	{
 		// A custom assigned title
 		if ($this->level_id) {
-			$level = Level::find($this->level_id);
+			$level = Parangi\Level::find($this->level_id);
 		}
 
 		// Title based on number of posts
@@ -274,7 +274,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 		}
 		else {
 			$date = $this->visited_at ? $this->visited_at : $this->created_at;
-			return Helpers::date_string($date, 1);
+			return Parangi\Helpers::date_string($date, 1);
 		}
 	}
 
@@ -362,7 +362,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	{
 		// Delete data if empty
 		if ($data === '' || $data === null) {
-			CustomData::where('user_id', '=', $this->id)
+			Parangi\CustomData::where('user_id', '=', $this->id)
 				->where('field_id', '=', $field_id)
 				->delete();
 		} else {
@@ -384,7 +384,7 @@ class User extends \Cartalyst\Sentry\Users\Eloquent\User implements UserInterfac
 	 */
 	public function votedIn($poll_id)
 	{
-		$vote = PollVote::where('user_id', '=', $this->id)
+		$vote = Parangi\PollVote::where('user_id', '=', $this->id)
 			->where('poll_id', '=', $poll_id)
 			->first();
 

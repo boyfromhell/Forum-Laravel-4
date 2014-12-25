@@ -1,5 +1,13 @@
 <?php namespace Parangi;
 
+use Input;
+use Redirect;
+use Request;
+use Response;
+use Session;
+use View;
+use User;
+
 class AdminController extends BaseController
 {
 
@@ -16,7 +24,7 @@ class AdminController extends BaseController
 		);
 
 		$stats = array(
-			'Users'  => \User::count(),
+			'Users'  => User::count(),
 			'Topics' => Topic::count(),
 			'Posts'  => Post::count(),
 			'Posts - last 10 days' => Post::daysAgo(10)->count(),
@@ -62,7 +70,7 @@ class AdminController extends BaseController
 
 		$forums = Forum::all();
 		$topics = Topic::all();
-		$users = \User::all();
+		$users = User::all();
 
 		$html = 'Counters reset. ';
 
@@ -268,7 +276,7 @@ class AdminController extends BaseController
 	 *
 	 * @return array
 	 */
-	public static function fetchMenu($active)
+	public static function fetchMenu($active = null)
 	{
 		$menu = array();
 
@@ -292,7 +300,7 @@ class AdminController extends BaseController
 			'name' => 'Users',
 		);
 
-		if ($active) {
+		if ($active !== null) {
 			$menu[$active]['active'] = true;
 		}
 

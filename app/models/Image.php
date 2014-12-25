@@ -1,5 +1,7 @@
 <?php namespace Parangi;
 
+use Exception;
+
 class Image
 {
 

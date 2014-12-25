@@ -1,5 +1,7 @@
 <?php namespace Parangi;
 
+use Config;
+
 class Screenname extends BaseModel
 {
     use \Earlybird\Foundry;

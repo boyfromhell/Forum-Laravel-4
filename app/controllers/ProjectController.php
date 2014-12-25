@@ -1,5 +1,10 @@
 <?php namespace Parangi;
 
+use App;
+use Redirect;
+use Session;
+use View;
+
 class ProjectController extends BaseController
 {
     use \Earlybird\FoundryController;

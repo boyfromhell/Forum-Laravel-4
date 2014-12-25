@@ -1,5 +1,7 @@
 <?php namespace Parangi;
 
+use View;
+
 class BaseController extends \Controller
 {
 
@@ -16,4 +18,3 @@ class BaseController extends \Controller
     }
 
 }
-

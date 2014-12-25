@@ -1,5 +1,13 @@
 <?php namespace Parangi;
 
+use App;
+use DB;
+use Input;
+use Redirect;
+use Request;
+use Session;
+use View;
+
 class MessageController extends BaseController
 {
 
@@ -67,24 +75,24 @@ class MessageController extends BaseController
 
 		switch ($folder) {
 			case 'sent':
-				$threads = $threads->having(\DB::raw('MAX(from_user_id = '.$me->id.' )'), '=', 1);
+				$threads = $threads->having(DB::raw('MAX(from_user_id = '.$me->id.' )'), '=', 1);
 				break;
 
 			case 'archived':
-				$threads = $threads->having(\DB::raw('MIN(messages.archived)'), '=', 1);
+				$threads = $threads->having(DB::raw('MIN(messages.archived)'), '=', 1);
 				break;
 
 			case 'inbox':
 			default:
 				$folder = 'inbox';
-				$threads = $threads->having(\DB::raw('MIN(messages.archived)'), '=', 0)
-					->having(\DB::raw('MIN(from_user_id = '.$me->id.' )'), '=', 0);
+				$threads = $threads->having(DB::raw('MIN(messages.archived)'), '=', 0)
+					->having(DB::raw('MIN(from_user_id = '.$me->id.' )'), '=', 0);
 				break;
 		}
 
 		$threads = $threads->orderBy($orderby, $sort)
 			->orderBy('message_threads.date_updated', 'desc')
-			->paginate(25, ['message_threads.*', \DB::raw('MIN(messages.read) AS `read`')]);
+			->paginate(25, ['message_threads.*', DB::raw('MIN(messages.read) AS `read`')]);
 
 		if (count($threads) > 0) {
 			$threads->load([
@@ -223,7 +231,7 @@ class MessageController extends BaseController
 	{
 		global $me;
 
-		$data = \DB::select("SELECT thread_id, MIN(archived) AS is_archived, MIN(`read`) AS is_read,
+		$data = DB::select("SELECT thread_id, MIN(archived) AS is_archived, MIN(`read`) AS is_read,
 					( MAX(from_user_id = ?) = 1 ) AS from_me,
 					( MIN(from_user_id = ?) = 0 ) AS to_me
 				FROM messages
@@ -261,7 +269,7 @@ class MessageController extends BaseController
 	 *
 	 * @return array
 	 */
-	public static function fetchMenu($active)
+	public static function fetchMenu($active = null)
 	{
 		$totals = MessageController::countTotals();
 
@@ -290,7 +298,7 @@ class MessageController extends BaseController
 			'name' => 'Search',
 		);
 
-		if ($active) {
+		if ($active !== null) {
 			$menu[$active]['active'] = true;
 		}
 
