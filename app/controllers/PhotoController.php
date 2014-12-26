@@ -34,7 +34,6 @@ class PhotoController extends BaseController
 
 		$_PAGE = array(
 			'category' => 'gallery',
-			'section'  => 'photos',
 			'id'       => 'viewphoto',
 			'title'    => $photo->album->name
 		);
@@ -45,7 +44,8 @@ class PhotoController extends BaseController
 
 		return View::make('photos.display')
 			->with('_PAGE', $_PAGE)
-			->with('photo', $photo);
+			->with('photo', $photo)
+			->with('menu', AlbumController::fetchMenu('photos'));
 
 		/*$Smarty->assign('prev', $prev);
 		$Smarty->assign('next', $next);
@@ -208,7 +208,6 @@ class PhotoController extends BaseController
 
 		$_PAGE = array(
 			'category' => 'gallery',
-			'section'  => 'photos',
 			'title'    => 'Upload Photos'
 		);
 
@@ -221,6 +220,7 @@ class PhotoController extends BaseController
 		return View::make('photos.upload')
 			->with('_PAGE', $_PAGE)
 			->with('album', $album)
+			->with('menu', AlbumController::fetchMenu('photos'))
 
 			->with('post_max_size', $post_max_size)
 			->with('max_total', $max_total)
@@ -278,14 +278,14 @@ class PhotoController extends BaseController
 
 		$_PAGE = array(
 			'category' => 'gallery',
-			'section' => 'photos',
 			'title' => 'Edit Photo',
 		);
 
 		return View::make('photos.edit')
 			->with('_PAGE', $_PAGE)
 			->with('photo', $photo)
-			->with('album', $album);
+			->with('album', $album)
+			->with('menu', AlbumController::fetchMenu('photos'));
 	}
 
 	/**

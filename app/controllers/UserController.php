@@ -253,7 +253,7 @@ class UserController extends BaseController
 			$me->allow_email    = Input::get('allow_email', 0);
 			$me->enable_smileys = Input::get('enable_smileys', 0);
 			$me->timezone       = Input::get('timezone');
-			$me->style          = Input::get('style');
+			$me->theme_id       = Input::get('theme_id');
 			$me->save();
 
 			Session::push('messages', 'Settings saved');

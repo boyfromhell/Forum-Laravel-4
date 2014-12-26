@@ -109,6 +109,31 @@ class AlbumController extends BaseController
 	}
 
 	/**
+	 * Create an album
+	 */
+	public function create($id = null)
+	{
+		global $me;
+
+		if ($id) {
+			$parent = Album::findOrFail($id);
+		}
+
+		// Permissions
+
+		$_PAGE = array(
+			'category' => 'gallery',
+			'title'    => 'Create Album',
+		);
+
+		return View::make('albums.edit')
+			->with('mode', 'new')
+            ->with('_PAGE', $_PAGE)
+            ->with('parent', $parent)
+            ->with('menu', AlbumController::fetchMenu('photos'));
+	}
+
+			/**
 	 * Edit an album
 	 */
 	public function edit($id)
@@ -123,13 +148,15 @@ class AlbumController extends BaseController
 
 		$_PAGE = array(
 			'category' => 'gallery',
-			'section'  => 'photos',
 			'title'    => 'Edit Album',
 		);
 
 		return View::make('albums.edit')
+			->with('mode', 'edit')
 			->with('_PAGE', $_PAGE)
-			->with('album', $album);
+			->with('album', $album)
+			->with('parent', $album->parent)
+			->with('menu', AlbumController::fetchMenu('photos'));
 	}
 
 	/**

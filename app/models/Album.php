@@ -87,7 +87,7 @@ class Album extends BaseModel
 	public function getUrlAttribute()
 	{
 		if ($this->id == 1) {
-			return '/albums/';
+			return '/albums';
 		}
 
 		$url = preg_replace('/[^A-Za-z0-9]/', '_', $this->name);

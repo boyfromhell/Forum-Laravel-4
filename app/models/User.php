@@ -158,6 +158,16 @@ class User extends Parangi\BaseModel implements UserInterface, RemindableInterfa
 	}
 
 	/**
+	 * Theme user has selected
+	 *
+	 * @return Relation
+	 */
+	public function theme()
+	{
+		return $this->belongsTo('Parangi\Theme');
+	}
+
+	/**
 	 * Unread Messages
 	 * Check where at least one message in the thread is unread (MIN(read) = 0)
 	 * and at least one message isn't archived (MIN(archived) = 0)

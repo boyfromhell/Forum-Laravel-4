@@ -85,9 +85,9 @@
 	<div class="form-group">
 		<label class="col-sm-4 control-label">Style</label>
 		<div class="col-sm-3">
-		<select name="style" class="form-control">
+		<select name="theme_id" class="form-control">
 		@foreach ( $themes as $theme )
-			<option value="{{ $theme->id }}"{{ $theme->id == $me->style ? ' selected' : '' }}>{{{ $theme->name }}}</option>
+			<option value="{{ $theme->id }}"{{ $theme->id == $me->theme_id ? ' selected' : '' }}>{{{ $theme->name }}}</option>
 		@endforeach
 		</select>
 		</div>

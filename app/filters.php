@@ -95,7 +95,13 @@ View::creator(array('layout'), function($view)
 
 	//$resources = DB::table('resources')->get();
 
+	$theme = $me->theme;
+	if (! $theme) {
+		$theme = Parangi\Theme::orderBy('name', 'asc')->first();
+	}
+
 	$view->with('_PAGE', $_PAGE)
+		->with('theme', $theme)
 		->with('main_menu', $main_menu)
 		->with('sub_menu', $sub_menu)
 		->with('messages', $messages)

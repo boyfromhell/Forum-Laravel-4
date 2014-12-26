@@ -60,8 +60,8 @@ function selectThumbnail( id ) {
 			<div class="col-sm-5">
 				{{-- Form::select('parent_id', []) --}}
 				<p class="form-control-static">
-					{{ Form::hidden('parent_id', $album->parent_id) }}
-					{{{ $album->parent->name }}}
+					{{ Form::hidden('parent_id', $parent->id) }}
+					<a href="{{ $parent->url }}">{{{ $parent->name }}}</a>
 				</p>
 			</div>
 		</div>

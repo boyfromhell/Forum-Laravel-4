@@ -21,6 +21,7 @@ class LevelController extends BaseController
 			->get();
 		$special = Level::where('type', '=', 1)
 			->where('name', '!=', 'Banned')
+			->whereHas('users')
 			->orderBy('name', 'asc')
 			->get();
 
