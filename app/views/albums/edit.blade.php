@@ -1,5 +1,9 @@
 @extends('layout')
 
+@section('buttons')
+<a class="btn btn-primary" href="{{ $mode == 'new' ? $parent->url : $album->url }}">Return</a>
+@stop
+
 @section('content')
 
 <script type="text/javascript">
@@ -12,10 +16,6 @@ function selectThumbnail( id ) {
 	$('#id').val(id);
 }
 </script>
-
-<a href="{if $mode == 'new'}{if $parent->url}{$parent->url}{else}/albums/{/if}{else}{$album->url}{/if}" class="button">Return</a>
-
-<div class="break"></div>
 
 <form class="form-horizontal unload-warning" method="post" action="">
 <div class="panel panel-primary">
@@ -55,66 +55,66 @@ function selectThumbnail( id ) {
 		</div>
 		@endif
 
-		<label class="left">Parent Album</label>
-		{* <select class="left" name="parent_id" tabindex="1">
-		</select>
-		if( $me->administrator ) { $top = -1; } else { $top = 1; }	
-			showalbums( $top, $parent, 0 );
-			*}
-		<span class="left"><input type="hidden" name="parent_id" value="{$album->parent_id}">{htmlspecialchars($parent->name)}</span>
-		
-		<div class="break"></div>
-		
-		<label class="left">Who can view this album?</label>
-		<select class="left" name="permission_view" tabindex="1">
-			<option value="0"{if $album->permission_view == 0} selected{/if}>Everyone</option>
-			<option value="1"{if $album->permission_view == 1} selected{/if}>Members Only</option>
-			{if $me->administrator}<option value="2"{if $album->permission_view == 2} selected{/if}>Admin Only</option>{/if}
-		</select>
-		
-		<div class="break"></div>
-		
-		<label class="left">Who can upload photos?</label>
-		<select class="left" name="permission_upload" tabindex="1">
-			<option value="0"{if $album->permission_upload == 0} selected{/if}>Only Me</option>
-			<option value="1"{if $album->permission_upload == 1} selected{/if}>All Members</option>
-			{if $me->administrator}<option value="2"{if $album->permission_upload == 2} selected{/if}>Admin Only</option>{/if}
-		</select>
-		
-		<div class="break"></div>
-		
-		{if $mode == 'edit' && count($photos) > 0}
-		<label class="left">Thumbnail</label>
-		<div class="thumbnail-selector">
-		{foreach $photos as $photo}
-			<div class="thumbnail">
-			<div id="thumbnail{$photo->id}" onClick="selectThumbnail({$photo->id})"{if $photo->id == $album->cover} class="sel"{/if}>
-			<img src="{$cdn}{$photo->thumbnail}"></div></div>
-		{/foreach}
+		<div class="form-group">
+			<label class="control-label col-sm-3">Parent Album</label>
+			<div class="col-sm-5">
+				{{-- Form::select('parent_id', []) --}}
+				<p class="form-control-static">
+					{{ Form::hidden('parent_id', $album->parent_id) }}
+					{{{ $album->parent->name }}}
+				</p>
+			</div>
 		</div>
-		
-		<input id="id" type="hidden" name="cover_id" value="{$album->cover}">
-		<div class="break"></div>
-		{/if}
-		
-		<center>
 
-		<input class="primary" tabindex="1" name="save" type="submit" value="{if $mode == 'edit'}Save Album{else}Create Album{/if}">
-		{if $me->administrator && $mode == 'edit'}
-		<input id="delete" name="drop" type="submit" value="Delete Album" data-item="album">
-		{/if}
-		<input type="reset" value="Reset"{if $mode == 'edit'} onClick="selectThumbnail({$album->cover})"{/if}>
+		<div class="form-group">
+			<label class="control-label col-sm-3">Who can view this album?</label>
+			<div class="col-sm-9">
+				{{ Helpers::radioGroup('permission_view', [0 => 'Everyone', 1 => 'Members Only', 2 => 'Admins Only'], $album->permission_view) }}
+			</div>
+		</div>
 
+		<div class="form-group">
+			<label class="control-label col-sm-3">Who can upload photos?</label>
+			<div class="col-sm-9">
+				{{ Helpers::radioGroup('permission_upload', [0 => 'Only Me', 1 => 'All Members', 2 => 'Admins Only'], $album->permission_upload) }}
+			</div>
+		</div>
+
+		@if ($mode == 'edit' && count($photos) > 0)
+		<div class="form-group">
+			<label class="control-label col-sm-3">Thumbnail</label>
+			<div class="col-sm-9">
+			<div class="thumbnail-selector">
+				@foreach ($photos as $photo)
+				<div class="thumbnail">
+					<div id="thumbnail{{ $photo->id }}" onClick="selectThumbnail({{ $photo->id }})"{{$photo->id == $album->cover ? ' class="sel"' : '' }}>
+					<img src="{{ $cdn }}{{ $photo->thumbnail }}"></div></div>
+				@endforeach
+			</div>
+			</div>
+		</div>
+
+		<input id="id" type="hidden" name="cover_id" value="{{ $album->cover }}">
 		<div class="break"></div>
-		
-		</center>
+		@endif
+	</div>
+
+	<div class="panel-footer">
+
+		<div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+			{{ Form::submit(( $mode == 'edit' ? 'Save Album' : 'Create Album'), ['name' => 'save', 'class' => 'btn btn-primary btn-once', 'data-loading-text' => 'Saving...']) }}
+			@if ($me->administrator && $mode == 'edit')
+			{{ Form::submit('Delete Album', ['name' => 'drop', 'id' => 'delete', 'class' => 'btn btn-danger btn-once', 'data-loading-text' => 'Deleting...', 'data-item' => 'album']) }}
+			@endif
+			{{ Form::reset('Reset', ['class' => 'btn btn-default']) }}
+			{{-- if $mode == 'edit'} onClick="selectThumbnail({$album->cover})"{/--}}
+			</div>
+		</div>
+
 	</div>
 
 </div>
 </form>
-
-<a href="{if $mode == 'new'}{if $parent->url}{$parent->url}{else}/albums/{/if}{else}{$album->url}{/if}" class="button">Return</a>
-
-<div class="break"></div>
 
 @stop

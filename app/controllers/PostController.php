@@ -5,6 +5,7 @@ use DB;
 use Input;
 use Redirect;
 use Request;
+use Response;
 use Session;
 use Validator;
 use View;
@@ -291,11 +292,12 @@ class PostController extends BaseController
 
 					$topic->save();
 
-					$post->increment('edit_count', [
-						'edit_user_id' => $me->id,
-						'smileys'      => Input::get('show_smileys'),
-						'signature'    => Input::get('attach_sig'),
-					]);
+					DB::table('posts')->where('id', '=', $post->id)
+						->increment('edit_count', 1, [
+							'edit_user_id' => $me->id,
+							'smileys'      => Input::get('show_smileys'),
+							'signature'    => Input::get('attach_sig'),
+						]);
 
 					$post->postText->update([
 						'post_subject' => $subject,

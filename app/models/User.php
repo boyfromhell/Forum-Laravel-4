@@ -182,7 +182,8 @@ class User extends Parangi\BaseModel implements UserInterface, RemindableInterfa
 	{
 		$url = preg_replace('/[^A-Za-z0-9]/', '_', $this->name);
 		$url = trim(preg_replace('/(_)+/', '_', $url), '_');
-		return '/users/' . $this->id . '/' . $url;
+		//return '/users/' . $this->id . '/' . $url;
+		return '/users/' . urlencode($this->name);
 	}
 
 	/**

@@ -68,7 +68,8 @@ class ProjectController extends BaseController
 
 		return View::make('projects.category')
 			->with('_PAGE', $_PAGE)
-			->with('projects', $projects);
+			->with('projects', $projects)
+			->with('menu', ProjectController::fetchMenu($section));
 	}
 
 	/**
@@ -91,13 +92,13 @@ class ProjectController extends BaseController
 
 		$_PAGE = array(
 			'category' => 'downloads',
-			'section'  => $project->section,
 			'title'    => $project->name
 		);
 
 		return View::make('projects.display')
 			->with('_PAGE', $_PAGE)
-			->with('project', $project);
+			->with('project', $project)
+			->with('menu', ProjectController::fetchMenu($project->section));
 	}
 
 	/**
@@ -114,6 +115,35 @@ class ProjectController extends BaseController
 
 		return Redirect::to('files/'.$file->file);
 	}
+
+	/**
+     * Menu for project pages
+     *
+     * @return array
+     */
+    public static function fetchMenu($active = null)
+    {
+        $menu = array();
+
+        $menu['official'] = array(
+            'url' => '/downloads',
+            'name' => 'IVAN',
+        );
+        $menu['variants'] = array(
+            'url' => '/downloads/variants',
+            'name' => 'Variants',
+        );
+        $menu['other'] = array(
+            'url' => '/downloads/other',
+            'name' => 'Other Projects',
+        );
+
+		if ($active !== null) {
+            $menu[$active]['active'] = true;
+        }
+
+        return $menu;
+    }
 
 }
 

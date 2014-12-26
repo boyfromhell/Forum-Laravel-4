@@ -1,6 +1,7 @@
 <?php namespace Parangi;
 
 use Exception;
+use App;
 use Auth;
 use Config;
 use DB;
@@ -28,6 +29,21 @@ class UserController extends BaseController
 		global $me;
 
 		return $this->display($me->id);
+	}
+
+	/**
+	 * Display based on username only
+	 */
+	public function displayUsername($name)
+	{
+		$name = urldecode($name);
+		$user = User::where('name', '=', $name)->first();
+
+		if (! $user->id) {
+			App::abort(404);
+		} else {
+			return $this->display($user->id);
+		}	
 	}
 
 	/**

@@ -20,7 +20,6 @@ class AlbumController extends BaseController
 
 		$_PAGE = array(
 			'category' => 'gallery',
-			'section'  => 'gallery',
 			'title'    => 'Media'
 		);
 
@@ -50,7 +49,8 @@ class AlbumController extends BaseController
 		return View::make('albums.gallery')
 			->with('_PAGE', $_PAGE)
 			->with('photos', $photos)
-			->with('albums', $albums);
+			->with('albums', $albums)
+			->with('menu', AlbumController::fetchMenu('media'));
 	}
 
 	/**
@@ -82,7 +82,6 @@ class AlbumController extends BaseController
 
 		$_PAGE = array(
 			'category' => 'gallery',
-			'section'  => 'photos',
 			'title'    => $album->name
 		);
 
@@ -105,7 +104,8 @@ class AlbumController extends BaseController
 			->with('album', $album)
 			->with('photos', $photos)
 
-			->with('allow', $allow);
+			->with('allow', $allow)
+			->with('menu', AlbumController::fetchMenu('photos'));
 	}
 
 	/**
@@ -131,6 +131,31 @@ class AlbumController extends BaseController
 			->with('_PAGE', $_PAGE)
 			->with('album', $album);
 	}
-	
+
+	/**
+     * Menu for gallery pages
+     *
+     * @return array
+     */
+    public static function fetchMenu($active = null)
+    {
+        $menu = array();
+
+        $menu['media'] = array(
+            'url' => '/media',
+            'name' => 'Gallery',
+        );
+        $menu['photos'] = array(
+            'url' => '/albums',
+            'name' => 'Photos',
+        );
+
+        if ($active !== null) {
+            $menu[$active]['active'] = true;
+        }
+
+        return $menu;
+    }
+
 }
 

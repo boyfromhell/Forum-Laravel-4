@@ -2,6 +2,7 @@
 
 use Exception;
 use App;
+use Config;
 use Input;
 use Redirect;
 use Request;

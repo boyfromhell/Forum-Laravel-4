@@ -1,5 +1,10 @@
 <?php namespace Parangi;
 
+use Config;
+use Form;
+use Input;
+use S3;
+
 class Helpers
 {
 

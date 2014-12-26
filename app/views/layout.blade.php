@@ -35,7 +35,7 @@
 	<link rel="apple-touch-icon-precomposed" href="/images/custom/touchicon.png">
 
 	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script type="text/javascript" src="/js/global.js?v={{ $versions['js'] }}"></script>
+	<script type="text/javascript" src="/js/parangi.js?v={{ $versions['js'] }}"></script>
 	<script type="text/javascript" src="/js/highlight.min.js"></script>
 	
 	<!--[if lt IE 9]>

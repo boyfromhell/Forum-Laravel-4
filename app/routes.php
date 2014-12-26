@@ -130,6 +130,7 @@ Route::group(array('namespace' => 'Parangi'), function()
 	Route::get('groups', 'GroupController@showAll');
 	Route::get('groups/{id}/{name?}', 'GroupController@display');
 	Route::get('users/{id}/{name?}', 'UserController@display');
+	Route::get('users/{name}', 'UserController@displayUsername');
 	Route::get('honor-rolls', 'ScoreController@index');
 	Route::get('chat-popup', 'PageController@chatPopup');
 	Route::get('badges', 'LevelController@display');

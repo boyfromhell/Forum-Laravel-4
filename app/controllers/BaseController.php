@@ -5,6 +5,13 @@ use View;
 class BaseController extends \Controller
 {
 
+	/*protected $me;
+
+	public function __construct()
+	{
+		$this->me = Auth::user();
+	}*/
+
     /**
      * Setup the layout used by the controller.
      *

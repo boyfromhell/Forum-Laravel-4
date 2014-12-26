@@ -4,6 +4,7 @@ use App;
 use DB;
 use Input;
 use Redirect;
+use Response;
 use Session;
 use View;
 use User;

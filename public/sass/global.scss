@@ -57,6 +57,8 @@ header {
 }
 
 .navbar {
+	min-height: 50px;
+
 	.avatar {
 		max-width: 40px;
 		max-height: 40px;
@@ -67,11 +69,18 @@ header {
 	.glyphicon {
 		margin-right: 6px;
 	}
+	> li > a {
+		padding-top: 15px;
+		padding-bottom: 15px;
+	}
 }
 ul.nav-tabs {
 	margin: 10px 0;
 }
 .navbar-brand {
+	height: 50px;
+	padding: 15px;
+
 	img {
 		height: 100%; width: auto;
 	}
@@ -167,6 +176,11 @@ textarea.form-control.textarea-sm {
 .panel-footer {
 	.form-group {
 		margin-bottom: 0;
+	}
+}
+.disabled {
+	> span, > a {
+		cursor: default !important;
 	}
 }
 

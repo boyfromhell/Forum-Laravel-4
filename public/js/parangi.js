@@ -13,7 +13,9 @@ var parangi = {
 	
 		parangi.cfg = cfg;
 
-		var sb_reload = setInterval("showData()", 10000);
+		if( $('#shoutbox').exists() ) {
+			var sb_reload = setInterval("showData()", 10000);
+		}
 		setInterval("showOnline()", 20000);
 
 		$('.announcement').dblclick( function() {
