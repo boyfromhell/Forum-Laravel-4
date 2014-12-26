@@ -85,7 +85,7 @@ function select_threads( critera, value ) {
 	<tbody>
 	@if ( count($topics) > 0 )
 	@foreach ( $topics as $topic )
-		@include ('topics.row', ['topic_mode' => 'subscription'])
+		@include ('topics.row', ['show_checkbox' => true, 'show_last_post' => true, 'show_forum' => true])
 	@endforeach
 	@else
 	<tr>

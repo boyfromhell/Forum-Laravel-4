@@ -1,5 +1,6 @@
 <?php namespace Parangi;
 
+use App;
 use View;
 
 class GroupController extends BaseController
@@ -27,6 +28,23 @@ class GroupController extends BaseController
 			->with('_PAGE', $_PAGE)
 			->with('menu', GroupController::fetchMenu('groups'))
 			->with('groups', $groups);
+	}
+
+	/**
+	 * Display a group by name
+	 *
+	 * @param  string  $name
+	 */
+	public function displayName($name)
+	{
+		$name = urldecode($name);
+		$group = Group::where('name', '=', $name)->first();
+
+		if (! $group->id) {
+			App::abort(404);
+		} else {
+			return $this->display($group->id);
+		}
 	}
 
 	/**

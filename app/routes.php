@@ -128,6 +128,7 @@ Route::group(array('namespace' => 'Parangi'), function()
 	// Community
 	Route::any('members', 'UserController@members');
 	Route::get('groups', 'GroupController@showAll');
+	Route::get('groups/{name}', 'GroupController@displayName');
 	Route::get('groups/{id}/{name?}', 'GroupController@display');
 	Route::get('users/{id}/{name?}', 'UserController@display');
 	Route::get('users/{name}', 'UserController@displayUsername');

@@ -34,14 +34,14 @@
 	Posts: <b>{{ number_format($user->total_posts) }}</b> ({{ $stats['posts_per_day'] }} posts per day, {{ $stats['posts_percent'] }}% of total)<br>
 	Shoutbox Posts: <b>{{ number_format($stats['user_shouts']) }}</b> ({{ $stats['shouts_per_day'] }} per day, {{ $stats['shouts_percent'] }}% of total)
 	@if ( $me->id )<br><br>
-	<a href="/forum/search?u={{ $user->id }}">Find all posts by {{{ $user->name }}}</a><br>
-	<a href="/forum/search?u={{ $user->id }}&amp;mode=topics">Find all topics started by {{{ $user->name }}}</a>
+	<a href="/search?user={{ $user->id }}">Find all posts by {{{ $user->name }}}</a><br>
+	<a href="/search?user={{ $user->id }}&amp;mode=topics">Find all topics started by {{{ $user->name }}}</a>
 	@endif
 	<br><br>
 
 	<div class="btn-group btn-group-sm">
 	@if ( $me->is_admin || $me->id == $user->id )<a href="{{ $edit_url }}" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Edit</a>@endif
-	@if ( $me->is_moderator )<a href="/lookup.php?u={{ $user->id }}" class="btn btn-danger">IP</a>@endif
+	@if ( $me->is_moderator )<a href="/lookup.php?user={{ $user->id }}" class="btn btn-danger">IP</a>@endif
 	</div>
 
 	</div>
@@ -78,8 +78,8 @@
 	@endforeach
 
 	@if ( $me->id != $user->id )
-	{{--if $allow_email}<a href="/email.php?u={{ $user->id }}">Send {{{ $user->name }}} an email</a><br>--}}
-	<a href="/messages/compose?u={{ $user->id }}">Send {{{ $user->name }}} a message</a>
+	{{--if $allow_email}<a href="/email.php?user={{ $user->id }}">Send {{{ $user->name }}} an email</a><br>--}}
+	<a href="/messages/compose?user={{ $user->id }}">Send {{{ $user->name }}} a message</a>
 	<br>
 	@endif
 	<br>
@@ -99,13 +99,13 @@
 
 	@if ( $me->id && $me->id != $user->id )
 		@if ( $me->buddies->contains($user->id) )
-			<a href="/userlist.php?u={{ $user->id }}&amp;remove=1">Remove from buddy list</a>
+			<a href="/userlist.php?user={{ $user->id }}&amp;remove=1">Remove from buddy list</a>
 		@elseif ( $me->ignoredUsers->contains($user->id) )
-			<a href="/userlist.php?u={{ $user->id }}&amp;remove=1">Remove from ignore list</a>
+			<a href="/userlist.php?user={{ $user->id }}&amp;remove=1">Remove from ignore list</a>
 		@else
-			<a href="/userlist.php?u={{ $user->id }}&amp;buddy=1">Add to buddy list</a><br>
+			<a href="/userlist.php?user={{ $user->id }}&amp;buddy=1">Add to buddy list</a><br>
 			@if ( $user->level == 0 )
-			<a href="/userlist.php?u={{ $user->id }}@amp;ignore=1">Add to ignore list</a>
+			<a href="/userlist.php?user={{ $user->id }}@amp;ignore=1">Add to ignore list</a>
 			@endif
 		@endif
 	@endif

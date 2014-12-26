@@ -1,6 +1,8 @@
 <?php namespace Parangi;
 
 use App;
+use Collection;
+use DB;
 use Input;
 use Redirect;
 use Request;
@@ -112,35 +114,35 @@ class SearchController extends BaseController
 		$keywords = explode(',', $keywords);
 		$total = count($keywords);
 
-		if ($query->author) {
-			$author = User::where('name', '=', $query->author)->first();
-		}
+		$data = $this->forumQuery($query);
+		$results = $data->paginate(10); // max 200
 
-		// @todo?
-		//$data = $query->paginate('max 200');
+		$posts = new Collection;
+		$topics = new Collection;
 
-		foreach ($data as $row) {
+		foreach ($results as $row) {
 			if ($query->show == SHOW_POSTS) {
 				$post = Post::findOrFail($row->id);
 
-				$post->content = BBCode::strip_quotes($post->content);
-				if (strlen($post->content) > 250) {
-					$post->content = substr($post->content, 0, 250) . '...';
+				$post->text = BBCode::strip_quotes($post->text);
+				if (strlen($post->text) > 250) {
+					$post->text = substr($post->text, 0, 250) . '...';
 				}
 
-				$date = datestring($post->time, 1);
-
-				$posts[] = $post;
+				$posts->add($post);
 			}
 			else {
 				$topic = Topic::findOrFail($row->topic_id);
-				$topic->format();
 
-				$topics[] = $topic;
+				$topics->add($topic);
 			}
 		}
 
-		if (count($topic_ids)) {
+		if (count($posts) > 0) {
+			$posts->load(['topic', 'topic.forum']);
+		}
+
+		/*if (count($topic_ids)) {
 			// Check if unread
 			$sql = "SELECT `session_post`, `topic_id`
 				FROM `session_topics`
@@ -206,10 +208,11 @@ class SearchController extends BaseController
 
 				$topics[$data['topic_id']]->latest_post = $data;
 			}
-		}
+		}*/
 
 		return View::make('forums.results')
 			->with('query', $query)
+			->with('results', $results)
 			->with('topics', $topics)
 			->with('posts', $posts);
 
@@ -221,16 +224,22 @@ class SearchController extends BaseController
 	/**
 	 * If it's a forum query
 	 */
-	protected function _fetch($query)
+	protected function forumQuery($query)
 	{
 		global $me;
 
 		$total = count($query->words);
 
+		if ($query->author) {
+            $author = User::where('name', '=', $query->author)->first();
+        }
+
+		$data = DB::table('posts');
+
 		if ($query->show == SHOW_TOPICS) {
-			$data = Post::select('topic_id');
+			$data = $data->select('topic_id');
 		} else {
-			$data = Post::select('posts.*');
+			$data = $data->select('posts.*');
 		}
 
 		$data = $data->join('posts_text', 'posts.id', '=', 'posts_text.post_id')
@@ -248,11 +257,11 @@ class SearchController extends BaseController
 
 			$data = $data->where('posts.time', '>=', $since_when);
 		}
-		if ($query->user->id) {
-			$data = $data->where('posts.user_id', '=', $query->user->id);
+		if ($author->id) {
+			$data = $data->where('posts.user_id', '=', $author->id);
 
 			if ($query->starter == 1) {
-				$data = $data->where('topics.poster', '=', $query->user->id);
+				$data = $data->where('topics.user_id', '=', $author->id);
 			}
 		}
 		if (! in_array(0, $query->forum_array) && count($query->forum_array) > 0) {
@@ -261,38 +270,31 @@ class SearchController extends BaseController
 
 		if ($total > 0) {
 			$sql .= " AND (";
+			$data = $data->where(function ($q) use ($query) {
 
-			if ($query->where == WHERE_TITLES || $query->where == WHERE_BOTH) {
-				if ($query->where == WHERE_BOTH) {
-					$sql .= "(";
-				}
-				for ($i=0; $i<$total; $i++) {
-					$sql .= "`topics`.`title` LIKE '%" . $_db->escape(trim($query->words[$i])) . "%'";
-					if ($i != $total - 1) {
-						if ($query->match == MATCH_ANY) {
-							$sql .= " OR ";
+				if ($query->where == WHERE_TITLES || $query->where == WHERE_BOTH) {
+					$q->where(function ($q2) use ($query) {
+						for ($i=0; $i<$total; $i++) {
+							if ($query->match == MATCH_ANY) {
+								$q2->orWhere('topics.title', 'LIKE', '%'.trim($query->words[$i]).'%');
+							} else {
+								$q2->where('topics.title', 'LIKE', '%'.trim($query->words[$i]).'%'); // @todo escape
+							}
 						}
-						else { $sql .= " AND "; }
-					}
+					});
 				}
-				if ($query->where == WHERE_BOTH) {
-					$sql .= ")";
+				if ($query->where == WHERE_TEXT || $query->where == WHERE_BOTH) {
+					$q->orWhere(function ($q2) use ($query) {
+						for( $i=0; $i<$total; $i++ ) {
+							if ($query->match == MATCH_ANY) {
+								$q2->orWhere('posts_text.post_text', 'LIKE', '%'.trim($query->words[$i]).'%');
+							} else {
+								$q2->where('posts_text.post_text', 'LIKE', '%'.trim($query->words[$i]).'%');
+							}
+						}
+					});
 				}
-			}
-			if ($query->where == WHERE_TEXT || $query->where == WHERE_BOTH) {
-				if ($query->where == WHERE_BOTH) {
-					$sql .= " OR (";
-				}
-				for( $i=0; $i<$total; $i++ ) {
-					$sql .= "`posts_text`.`post_text` LIKE '%" . $_db->escape(trim($query->words[$i])) . "%'";
-					if( $i != $total-1 ) {
-						if( $query->match == MATCH_ANY ) { $sql .= " OR "; }
-						else { $sql .= " AND "; }
-					}
-				}
-				if( $query->where == WHERE_BOTH ) { $sql .= ")"; }
-			}
-			$sql .= ")";
+			});
 		}
 
 		if( $query->show == SHOW_TOPICS ) {
@@ -303,9 +305,7 @@ class SearchController extends BaseController
 			$data = $data->orderBy('posts.created_at', 'desc');
 		}
 
-		$results = $data->get();
-
-		return $results;
+		return $data;
 	}
 
 	/**

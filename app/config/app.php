@@ -206,6 +206,7 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 
 		'BBCode'          => 'Parangi\BBCode',
+		'Collection'      => 'Illuminate\Database\Eloquent\Collection',
 		'Helpers'         => 'Parangi\Helpers',
 
 	),

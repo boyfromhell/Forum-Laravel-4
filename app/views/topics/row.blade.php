@@ -1,6 +1,6 @@
 <tr class="thread-row{{ $topic->unread_post->id ? ' unread' : '' }}" data-id="{{ $topic->id }}" data-all="1" data-read="{{ $topic->unread_post->id ? '1' : '0' }}" data-title="{{{ $topic->title }}}">
 
-	@if ( $topic_mode == 'subscription' )
+	@if ($show_checkbox)
 	<td class="icon">
 		{{ Form::checkbox('topics[]', $topic->id) }}
 	</td>
@@ -18,7 +18,7 @@
 		@endif
 	</td>
 
-	<td style="min-width:{{ $topic_mode == 'subscription' ? '30%' : '50%' }}" class="topic">
+	<td style="min-width:{{ $show_forum && $show_last_post ? '30%' : '50%' }}" class="topic">
 		@if ( $topic->has_attachments )
 		<span class="glyphicon glyphicon-paperclip"></span>
 		@endif
@@ -53,13 +53,13 @@
 		<a class="tiny" href="{{ $topic->author->url }}" title="{{{ $topic->author->name }}}'s profile">{{{ $topic->author->name }}}</a>
 	</td>
 
-	@if ( $topic_mode == 'forum' || $topic_mode == 'subscription' )
+	@if ($show_forum)
 	<td>
 		<a href="{{ $topic->forum->url }}">{{{ $topic->forum->name }}}</a>
 	</td>
 	@endif
 	
-	@if ( $topic_mode != 'forum' )
+	@if ($show_last_post)
 	<td class="lastpost topic hidden-xs">
 		{{ $topic->latest_post->date }}
 		<br>

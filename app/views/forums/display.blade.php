@@ -38,23 +38,7 @@
 
 	<div class="panel-heading">Topics</div>
 
-	<table class="table">
-	<thead>
-	<tr>
-		<th class="icon">&nbsp;</th>
-		<th class="icon">&nbsp;</th>
-		<th style="min-width:50%">Topics</th>
-		<th class="hidden-xs">Last Post</th>
-		<th class="posts hidden-xs">Replies</th>
-		<th class="posts hidden-xs">Views</th>
-	</tr>
-	</thead>
-	<tbody>
-	@foreach ( $topics as $topic )
-		@include ('topics.row', ['topic_mode' => 'last_post'])
-	@endforeach
-	</tbody>
-	</table>
+	@include ('topics.list', ['show_last_post' => true, 'show_forum' => false])
 
 </div>
 

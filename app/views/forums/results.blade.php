@@ -1,3 +1,5 @@
+@extends('layout')
+
 @section('heading')
 <div class="row">
 <div class="col-md-12 col-lg-8">
@@ -14,7 +16,7 @@
 @stop
 
 @section('buttons')
-{{ $results->paginate() }}
+{{ $results->links() }}
 @stop
 
 @section('content')
@@ -24,16 +26,16 @@
 	<div class="panel panel-primary">
 
 		<div class="panel-heading">
-			Posted by <a href="{{ $post->user->url }}"><b>{{{ $post->user->name }}}</b></a>, {{ $post->formatted_date }}
+			Posted by <a href="{{ $post->user->url }}"><b>{{{ $post->user->name }}}</b></a>, {{ Helpers::date_string($post->created_at, 1) }}
 		</div>
 
 		<div class="subheading" style="padding:8px 10px">
 			<a href="{{ $post->url }}"><b>{{{ $post->topic->title }}}</b></a>
-			in forum <a href="{{ $post->forum->url }}"><b>{{{ $post->forum->name }}}</b></a>
+			in forum <a href="{{ $post->topic->forum->url }}"><b>{{{ $post->topic->forum->name }}}</b></a>
 		</div>
 		
 		<div class="body">
-			{{ BBCode::parse($post->content, $post->smileys, true) }}
+			@include ('posts.body')
 		</div>
 	</div>
 
@@ -44,7 +46,7 @@
 
 		<div class="panel-heading">Search Results</div>
 
-		@include ('topics.list', ['topic_mode' => 'forum'])
+		@include ('topics.list', ['show_last_post' => true, 'show_forum' => true])
 
 	</div>
 
@@ -56,7 +58,7 @@
 
 		<div class="panel-body">
 			<p class="empty">
-			No search results matched your critera. <a href="{{ $query->edit_url }}">Modify</a> your search
+			No search results matched your critera. <a href="{{ $query->url }}">Modify</a> your search
 			</p>
 		</div>
 

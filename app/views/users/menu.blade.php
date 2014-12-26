@@ -15,6 +15,6 @@
 
 	<li class="divider">
 	
-	<li><a href="/forum/search?u={{ $user->id }}">Find posts</a></li>
-	<li><a href="/forum/search?u={{ $user->id }}&amp;mode=topics">Find topics</a></li>
+	<li><a href="/search?user={{ $user->id }}">Find posts</a></li>
+	<li><a href="/search?user={{ $user->id }}&amp;mode=topics">Find topics</a></li>
 </ul>

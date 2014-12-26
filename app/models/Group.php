@@ -60,7 +60,8 @@ class Group extends BaseModel
 	{
 		$url = preg_replace('/[^A-Za-z0-9]/', '_', $this->name);
 		$url = trim(preg_replace('/(_)+/', '_', $url), '_');
-		return '/groups/' . $this->id . '/' . $url;
+		//return '/groups/' . $this->id . '/' . $url;
+		return '/groups/' . urlencode($this->name);
 	}
 
 }
