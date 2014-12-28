@@ -23,7 +23,7 @@
 		</div>
 		<div class="pull-right">
 			<a href="{{ $post->url }}">#{{ $post->count }}</a>
-		@if ( $me->is_moderator )
+		@if ( $me->is_mod )
 			<a href="/lookup.php?p={{ $post->id }}">IP</a>
 		@endif
 		</div>
@@ -54,11 +54,11 @@
 		@if ( ! $topic->is_locked )
 			<a href="/quote-post/{{ $post->id }}" class="btn btn-primary">Quote</a>
 		@endif
-		@if (( $me->id == $post->user_id && ! $topic->is_locked ) || $me->is_moderator )
+		@if (( $me->id == $post->user_id && ! $topic->is_locked ) || $me->is_mod )
 			<a href="/edit-post/{{ $post->id }}" onClick="parangi.quickEdit({{ $post->id }}, 'edit'); return false" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-			<a href="/delete-post/{{ $post->id }}" class="btn btn-danger" title="Delete post"><span class="glyphicon glyphicon-remove"></span></a>
+			<a href="/delete-post/{{ $post->id }}" class="btn btn-danger icon-only" title="Delete post"><span class="glyphicon glyphicon-remove"></span></a>
 		@else
-			<a href="/flag-post/{{ $post->id }}" class="btn btn-danger" title="Flag post"><span class="glyphicon glyphicon-flag"></span></a>
+			<a href="/flag-post/{{ $post->id }}" class="btn btn-danger icon-only" title="Flag post"><span class="glyphicon glyphicon-flag"></span></a>
 		@endif
 	@endif
 	</div>
@@ -86,7 +86,7 @@
 	</div>
 	@endif
 	
-	@include ('posts.attachments')
+	@include ('posts.attachments', ['attachments' => $post->attachments])
 
 @endif
 

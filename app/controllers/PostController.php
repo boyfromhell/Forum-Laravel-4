@@ -55,7 +55,7 @@ class PostController extends BaseController
 		$this->mode = 'reply';
 		$this->title = 'Post a reply';
 
-		if ($this->topic->is_locked && !$me->is_moderator) {
+		if ($this->topic->is_locked && !$me->is_mod) {
 			App::abort(403);
 		}
 
@@ -81,10 +81,10 @@ class PostController extends BaseController
 		$this->mode = 'edit';
 		$this->title = 'Edit post';
 
-		if ($this->post->user_id != $me->id && !$me->is_moderator) {
+		if ($this->post->user_id != $me->id && !$me->is_mod) {
 			App::abort(403);
 		}
-		if ($this->topic->is_locked && !$me->is_moderator) {
+		if ($this->topic->is_locked && !$me->is_mod) {
 			App::abort(403);
 		}
 
@@ -107,10 +107,10 @@ class PostController extends BaseController
 		$post = Post::findOrFail($id);
 		$topic = $post->topic;
 
-		if ($post->user_id != $me->id && !$me->is_moderator) {
+		if ($post->user_id != $me->id && !$me->is_mod) {
 			App::abort(403);
 		}
-		if ($topic->is_locked && !$me->is_moderator) {
+		if ($topic->is_locked && !$me->is_mod) {
 			App::abort(403);
 		}
 
@@ -167,7 +167,7 @@ class PostController extends BaseController
 		$this->mode = 'quote';
 		$this->title = 'Post a reply';
 
-		if ($this->topic->is_locked && !$me->is_moderator) {
+		if ($this->topic->is_locked && !$me->is_mod) {
 			App::abort(403);
 		}
 
@@ -269,13 +269,13 @@ class PostController extends BaseController
 				$type = Input::get('type', 0);
 				$smiley = Input::get('smiley', 0);
 
-				if (!$me->is_moderator) {
+				if (!$me->is_mod) {
 					$type = 0;
 				}
 
 				// Editing a post is vastly different from the other modes
 				if ($this->mode == 'edit') {
-					if ($me->is_moderator) {
+					if ($me->is_mod) {
 						$topic->type = $type;
 					}
 
@@ -557,7 +557,7 @@ class PostController extends BaseController
 				}
 			}
 			
-		if ($mode == "newtopic" || ( $mode == "edit" && ( $me->administrator || $me->moderator ))) { 
+		if ($mode == "newtopic" || ( $mode == "edit" && ( $me->is_admin || $me->is_mod ))) { 
 			$sql = "
 			SELECT poll_id, poll_question, poll_max, poll_public
 			FROM polls 
@@ -699,10 +699,10 @@ class PostController extends BaseController
 
 		$post = Post::findOrFail($id);
 
-		if ($post->user_id != $me->id && !$me->is_moderator) {
+		if ($post->user_id != $me->id && !$me->is_mod) {
 			App::abort(403);
 		}
-		if ($post->topic->is_locked && !$me->is_moderator) {
+		if ($post->topic->is_locked && !$me->is_mod) {
 			App::abort(403);
 		}
 

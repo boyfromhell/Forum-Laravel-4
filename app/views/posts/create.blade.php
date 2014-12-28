@@ -35,7 +35,7 @@
 		</div>
 	</div>
 
-	@if ( $me->is_moderator )
+	@if ( $me->is_mod )
 	<div class="form-group">
 		<label class="col-sm-3 control-label">Topic Type</label>
 		<div class="col-sm-3">

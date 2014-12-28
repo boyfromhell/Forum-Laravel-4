@@ -3,6 +3,7 @@
 use Config;
 use Exception;
 use Redirect;
+use Response;
 use S3;
 
 class AttachmentController extends BaseController
@@ -155,6 +156,24 @@ class AttachmentController extends BaseController
 		}
 		
 		return $success;
+	}
+
+	/**
+	 * Delete an attachment
+	 */
+	public function delete($id)
+	{
+		global $me;
+
+		$attachment = Attachment::findOrFail($id);
+
+		if ($attachment->user_id != $me->id && !$me->is_mod) {
+            App::abort(403);
+        }
+
+		$attachment->delete();
+
+		return Response::json(['success' => true]);
 	}
 
 }

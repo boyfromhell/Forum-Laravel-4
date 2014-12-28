@@ -70,12 +70,12 @@
 	</div>
 	@endif
 
-	@if ( $photo->user_id == $me->id || $me->is_moderator )
+	@if ( $photo->user_id == $me->id || $me->is_mod )
 	<div class="form-group">
 		<div class="col-sm-5 col-sm-offset-4">
 		<div class="btn-group btn-group-sm">
 			<a class="btn btn-primary" href="/edit-photo/{{ $photo->id }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-			<a class="btn btn-danger" href="/delete-photo/{{ $photo->id }}"><span class="glyphicon glyphicon-remove"></span></a>
+			<a class="btn btn-danger icon-only" href="/delete-photo/{{ $photo->id }}"><span class="glyphicon glyphicon-remove"></span></a>
 		</div>
 		</div>
 	</div>

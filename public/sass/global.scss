@@ -99,6 +99,14 @@ ol.breadcrumb {
 	}
 }
 
+.btn:not(.icon-only) .glyphicon {
+	margin-right: 4px;
+}
+.btn.icon-right .glyphicon {
+	margin-right: 0;
+	margin-left: 4px;
+}
+
 #main_beta {
 	position: relative;
 
@@ -393,6 +401,9 @@ ul.dropdown-menu {
 		line-height: 10px;
 		display: block;
 	}
+	.glyphicon {
+		margin-right: 0;
+	}
 }
 
 table.calendar {
@@ -473,6 +484,19 @@ pre.code {
 	color: $sig-color;
 	font-size: 10pt;
 	object { display:none; }
+}
+.with-attachments {
+	border-top: 1px dotted $sig-color;
+    color: $sig-color;
+
+	.media {
+		.media-left {
+			font-size:24pt;
+		}
+		.media-body {
+			padding-left: 20px;
+		}
+	}
 }
 
 .thumbnail-selector {

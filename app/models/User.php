@@ -35,6 +35,7 @@ class User extends Parangi\BaseModel implements UserInterface, RemindableInterfa
 
 		'is_admin',
 		'is_mod',
+		'is_moderator',
 
 		'victory_rank',
 		'defeat_rank',
@@ -244,7 +245,7 @@ class User extends Parangi\BaseModel implements UserInterface, RemindableInterfa
 		if ($this->id) {
 			$access++;
 		}
-		if ($this->is_moderator) {
+		if ($this->is_mod) {
 			$access++;
 		}
 		if ($this->is_admin) {
@@ -308,13 +309,23 @@ class User extends Parangi\BaseModel implements UserInterface, RemindableInterfa
 	 *
 	 * @return bool
 	 */
-	public function getIsModeratorAttribute()
+	public function getIsModAttribute()
 	{
 		return ($this->user_type >= 1);
 
 		/*$group = Group::where('name', '=', 'Moderators')->first();
 
 		return $group->allMembers->contains($this->id);*/
+	}
+
+	/**
+	 * Alias
+	 *
+	 * @return bool
+	 */
+	public function getIsModeratorAttribute()
+	{
+		return $this->is_mod;
 	}
 
 	/**

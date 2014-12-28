@@ -63,6 +63,7 @@ Route::group(array('before' => 'auth', 'namespace' => 'Parangi'), function()
 
 	// Attachments
 	Route::get('download-attachment/{id}', 'AttachmentController@download');
+	Route::post('delete-attachment/{id}', 'AttachmentController@delete');
 
 	// Messages
 	Route::any('messages', 'MessageController@inbox');

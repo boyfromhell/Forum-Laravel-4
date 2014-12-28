@@ -41,7 +41,7 @@
 
 	<div class="btn-group btn-group-sm">
 	@if ( $me->is_admin || $me->id == $user->id )<a href="{{ $edit_url }}" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span> Edit</a>@endif
-	@if ( $me->is_moderator )<a href="/lookup.php?user={{ $user->id }}" class="btn btn-danger">IP</a>@endif
+	@if ( $me->is_mod )<a href="/lookup.php?user={{ $user->id }}" class="btn btn-danger">IP</a>@endif
 	</div>
 
 	</div>

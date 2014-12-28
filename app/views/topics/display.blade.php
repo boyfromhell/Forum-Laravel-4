@@ -61,7 +61,7 @@
 	@include ('topics.quick_reply')
 @endif
 
-@if ( $me->is_moderator )
+@if ( $me->is_mod )
 	@include ('topics.moderate')
 @endif
 

@@ -29,7 +29,7 @@
 			<b>{{ $option->percent }}%</b>
 		</td>
 		<td class="nowrap">
-	@if (( $me->id && $poll->is_public ) || $me->is_moderator )
+	@if (( $me->id && $poll->is_public ) || $me->is_mod )
 			[ <a href="/poll-results/{{ $poll->id }}">{{ $option->total_votes }}</a> ]
 	@else
 			[ {{ $option->total_votes }} ]

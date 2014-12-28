@@ -305,7 +305,7 @@ class PhotoController extends BaseController
 
 		$photo = Photo::findOrFail($id);
 
-		if ($photo->user_id != $me->id && !$me->is_moderator) {
+		if ($photo->user_id != $me->id && !$me->is_mod) {
 			App::abort(403);
 		}
 

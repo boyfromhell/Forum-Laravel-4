@@ -1,27 +1,42 @@
-@if ( count($post->attachments) > 0 )
+@if (count($attachments) > 0)
 
-<fieldset><legend>Attached Files</legend>
+<div class="panel-footer with-attachments">
 
-<?php $prev_type = 0; ?>
+<?php $prev_type = -1; ?>
 
-@foreach ( $post->attachments as $attachment )
-	@if ( $attachment->filetype == 1 )
-		@if ( $prev_type == 0 )
-			<div style="padding:0 5px">
+@foreach ($attachments as $count => $attachment)
+	@if ($attachment->filetype == 1)
+		@if ($count == 0)
+	<div class="media">
+		<div class="media-left">
+			<span class="glyphicon glyphicon-paperclip"></span>
+		</div>
+		<div class="media-body">
+			<strong>Attached files</strong><br>
 		@endif
-		<a href="{{ $attachment->url }}">{{{ $attachment->origfilename }}}</a> ({{{ $attachment->size }}})
-		<div class="clearfix"></div>
+
+		<a href="{{ $attachment->url }}">{{{ $attachment->origfilename }}}</a> ({{{ $attachment->size }}})<br>
 	@else
-		@if ( $prev_type == 1 )
-			</div><br>
+		@if ($prev_type == 1)
+		</div>
+	</div>
 		@endif
+
 		<div class="photo{{ !$is_mobile ? '-large' : '' }}"> 
 		<a class="thumb" href="{{ $attachment->url }}">
 		<img src="{{ $cdn }}{{ $is_mobile ? $attachment->thumb : $attachment->scale }}"></a>
 		</div>
 	@endif
+
 	<?php $prev_type = $attachment->filetype; ?>
 @endforeach
-</fieldset>
+
+@if ($prev_type == 1)
+		</div>
+	</div>
+@endif
+
+	<div class="clearfix"></div>
+</div>
 
 @endif

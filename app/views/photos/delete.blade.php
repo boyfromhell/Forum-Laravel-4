@@ -11,7 +11,7 @@
 		<p>
 		Are you sure you wish to delete this photo
 
-		@if ( $me->is_moderator )
+		@if ( $me->is_mod )
 		by <b>{{{ $photo->user->name }}}</b>
 		@endif
 		?

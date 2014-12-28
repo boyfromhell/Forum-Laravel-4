@@ -11,7 +11,7 @@
 		<p>
 		Are you sure you wish to delete this post
 
-		@if ( $me->is_moderator )
+		@if ( $me->is_mod )
 		by <b>{{{ $post->user->name }}}</b>
 		@endif
 		?

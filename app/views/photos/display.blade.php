@@ -18,7 +18,7 @@
 </div>
 <div class="btn-group pull-right">
 	<a class="btn btn-default ajax-photo" data-id="{{ $prev->id }}" href="{{ $prev->url }}"><span class="glyphicon glyphicon-chevron-left"></span> Previous</a>
-	<a class="btn btn-default ajax-photo" data-id="{{ $next->id }}" href="{{ $next->url }}">Next <span class="glyphicon glyphicon-chevron-right"></span></a>
+	<a class="btn btn-default icon-right ajax-photo" data-id="{{ $next->id }}" href="{{ $next->url }}">Next <span class="glyphicon glyphicon-chevron-right"></span></a>
 </div>
 @stop
 

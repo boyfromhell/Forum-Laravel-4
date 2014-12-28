@@ -86,11 +86,10 @@ var parangi = {
 		$('a.delete-attachment').click( function(e) {
 			e.preventDefault();
 			var $attachment = $(this).closest('div');
-			var send_data = {
-				'id' : $(this).data('id')
-			};
+			var id = $(this).data('id');
+
 			if( confirm('Delete this attachment?') ) {
-				$.post('/delete-attachment', send_data, function(data) {
+				$.post('/delete-attachment/' + id, function(data) {
 					$attachment.fadeOut('fast');
 				});
 			} else {
