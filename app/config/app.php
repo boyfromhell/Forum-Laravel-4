@@ -4,7 +4,7 @@ return array(
 
 	'forum_name' => 'The Cathedral of Attnam',
 	'mobile_name' => 'Attnam',
-	'short_name' => 'Attnam.com',
+	'short_name' => 'New Attnam',
 
 	'skin' => 'ivan',
 

@@ -19,14 +19,13 @@
 		<li class="{{ $_PAGE['category'] == $app->page ? 'active' : '' }} {{ $app->class }}"><a href="{{ $app->url }}">{{ $app->name }}</a></li>
 	@endforeach
 	</ul>
+	</div>
 
-	<ul class="nav navbar-nav navbar-right">
+	<ul id="user-nav" class="nav navbar-nav navbar-right">
 		<li class="dropdown">
 			<a href="{{ $me->url }}" class="dropdown-toggle" data-toggle="dropdown">
-@if ( $me->avatar->id )
-<img class="avatar" src="{{ $cdn }}/images/avatars/{{ $me->avatar->file }}">
-@endif
-{{{ $me->name }}} <span class="caret"></span>
+			<img class="avatar" src="{{ $me->avatar_url }}">
+<span class="hidden-xs">{{{ $me->name }}}</span> <span class="caret"></span>
 </a>
 			<ul class="dropdown-menu no-collapse" role="menu">
 			@if ( $me->id )

@@ -22,8 +22,8 @@
 		<th class="icon">
 		<th>Project</th>
 		<th class="date" style="width:15%">Latest Version</th>
-		<th class="posts">Files</th>
-		<th class="posts">Views</th>
+		<th class="posts hidden-xs">Files</th>
+		<th class="posts hidden-xs">Views</th>
 		<th class="posts">Downloads</th>
 		@if ( $_PAGE['section'] != 'official' )
 		<th class="date" style="width:15%">Author</th>
@@ -41,8 +41,8 @@
 			<a href="{{ $project->url }}">{{{ $project->name }}}</a>
 		</td>
 		<td style="width:15%; text-align:center">{{{ $project->version }}}</td>
-		<td class="posts">{{ $project->total_files }}</td>
-		<td class="posts">{{ number_format($project->views) }}</td>
+		<td class="posts hidden-xs">{{ $project->total_files }}</td>
+		<td class="posts hidden-xs">{{ number_format($project->views) }}</td>
 		<td class="posts">{{ number_format($project->total_downloads) }}</td>
 		@if ( $_PAGE['section'] != 'official' )
 		<td style="width:15%; text-align:center">

@@ -30,6 +30,8 @@ class User extends Parangi\BaseModel implements UserInterface, RemindableInterfa
 		'access',
 		'custom',
 
+		'avatar_url',
+
 		'online',
 		'last_online',
 
@@ -326,6 +328,20 @@ class User extends Parangi\BaseModel implements UserInterface, RemindableInterfa
 	public function getIsModeratorAttribute()
 	{
 		return $this->is_mod;
+	}
+
+	/**
+	 * Get Avatar URL, with default
+	 *
+	 * @return string
+	 */
+	public function getAvatarUrlAttribute()
+	{
+		if ($this->avatar->id) {
+			return Config::get('app.cdn') . '/images/avatars/' . $this->avatar->file;
+		} else {
+			return '/images/custom/default-avatar.png';
+		}
 	}
 
 	/**

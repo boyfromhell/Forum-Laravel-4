@@ -4,7 +4,7 @@
 	<title>{{{ $_PAGE['window_title'] }}}</title>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
-	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
 
 	<meta name="AUTHOR" content="{{{ Config::get('app.forum_name') }}}">
 	<meta name="COPYRIGHT" content="Copyright &copy; {{ date('Y') }} {{{ Config::get('app.forum_name') }}}">
@@ -104,9 +104,7 @@
 
 </div>
 
-@if ( ! $is_mobile )
 @include ('custom.header')
-@endif
 
 <footer>
 	@if ( $is_mobile )

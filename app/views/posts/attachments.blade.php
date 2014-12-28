@@ -24,7 +24,7 @@
 
 		<div class="photo{{ !$is_mobile ? '-large' : '' }}"> 
 		<a class="thumb" href="{{ $attachment->url }}">
-		<img src="{{ $cdn }}{{ $is_mobile ? $attachment->thumb : $attachment->scale }}"></a>
+		<img src="{{ $cdn }}{{ $is_mobile ? $attachment->thumbnail : $attachment->scale }}"></a>
 		</div>
 	@endif
 

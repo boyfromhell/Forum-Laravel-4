@@ -20,6 +20,7 @@ else {
 	$me->name = 'Guest';
 }
 
+View::share('is_mobile', Helpers::is_mobile());
 View::share('me', $me);
 View::share('cdn', Config::get('app.cdn'));
 View::share('skin', '/images/skins/ivan/');

@@ -21,27 +21,27 @@
 	<tr>
 		<th class="icon">&nbsp;</th>
 		<th style="width:8%">Score</th>
-		<th style="width:13%">Character</th>
-		<th style="width:13%">Player</th>
+		<th style="width:13%" class="hidden-xs">Character</th>
+		<th>Player</th>
 		<th style="width:8%">Variant</th>
-		<th>Ending</th>
+		<th style="width:48%" class="hidden-xs">Ending</th>
 	</tr>
 	</thead>
 	<tbody>
 @foreach ( $scores as $count => $score )
 	<tr>
 		<td class="icon">{{ $count+1 }}</td>
-		<td style="width:8%"><b>
+		<td><b>
 		@if ( $score->url )
 			<a href="{{{ $score->url }}}">{{{ number_format($score->score) }}}</a>
 		@else
 			{{{ number_format($score->score) }}}
 		@endif
 		</b></td>
-		<td style="width:13%">{{{ $score->character }}}</td>
-		<td style="width:13%"><a href="{{ $score->user->url }}" style="text-decoration:none">{{{ $score->user->name }}}</a></td>
-		<td style="width:8%">{{{ $score->variant }}}</td>
-		<td class="ending">{{{ $score->ending }}}</td>
+		<td class="hidden-xs">{{{ $score->character }}}</td>
+		<td><a href="{{ $score->user->url }}" style="text-decoration:none">{{{ $score->user->name }}}</a></td>
+		<td>{{{ $score->variant }}}</td>
+		<td class="ending hidden-xs">{{{ $score->ending }}}</td>
 	</tr>
 @endforeach
 	</tbody>

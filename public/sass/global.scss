@@ -57,7 +57,9 @@ header {
 }
 
 .navbar {
-	min-height: 50px;
+	min-height: 0;
+	height: 50px !important;
+	overflow: hidden;
 
 	.avatar {
 		max-width: 40px;
@@ -66,12 +68,19 @@ header {
 	}
 }
 .navbar-nav {
+	margin-top: 0;
+	margin-bottom: 0;
+
 	.glyphicon {
 		margin-right: 6px;
 	}
 	> li > a {
 		padding-top: 15px;
 		padding-bottom: 15px;
+	}
+	.open .dropdown-menu {
+		left: 0;
+		width: 100%;
 	}
 }
 ul.nav-tabs {
@@ -84,6 +93,19 @@ ul.nav-tabs {
 	img {
 		height: 100%; width: auto;
 	}
+}
+.navbar-header {
+	float: left;
+}
+.navbar-toggle {
+	float: left;
+	margin: 8px 0 8px 15px;
+}
+.navbar-collapse {
+	float: left;
+}
+.navbar-right {
+	float: right;
 }
 
 ol.breadcrumb {
@@ -512,6 +534,15 @@ pre.code {
 }
 
 @media all and ( max-width: 767px ) {
+	.container-fluid {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+	.navbar {
+		.avatar {
+			margin-right: 0;
+		}
+	}
 	table.table {
 		th.icon, td.icon {
 			width:30px;

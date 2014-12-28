@@ -19,20 +19,20 @@
 	<thead>
 	<tr>
 		<th class="icon">&nbsp;</th>
-		<th style="width:15%">Name</th>
+		<th>Name</th>
 		<th class="posts" style="width:15%">Members</th>
-		<th style="width:15%">Type</th>
-		<th>Description</th>
+		<th style="width:15%" class="hidden-xs">Type</th>
+		<th style="width:45%" class="hidden-xs">Description</th>
 	</tr>
 	</thead>
 	<tbody>
 	@foreach ( $groups as $group )
 	<tr>
 		<td class="icon"><img src="{{ $group->badge ? '/images/groups/'.$group->badge : $skin.'icons/group.png' }}"></td>
-		<td style="width:15%"><a href="{{ $group->url }}">{{{ $group->name }}}</a></td>
-		<td class="posts" style="width:15%">{{ number_format($group->allMembers()->count()) }}</td>
-		<td style="width:15%">{{ $group->type }}</a></td>
-		<td>{{ BBCode::parse($group->description) }}</a></td>
+		<td><a href="{{ $group->url }}">{{{ $group->name }}}</a></td>
+		<td class="posts">{{ number_format($group->allMembers()->count()) }}</td>
+		<td class="hidden-xs">{{ $group->type }}</a></td>
+		<td class="hidden-xs">{{ BBCode::parse($group->description) }}</a></td>
 	</tr>
 	@endforeach
 	</tbody>
