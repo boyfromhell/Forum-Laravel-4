@@ -20,7 +20,7 @@
 <div class="post">
 	<div class="post-date">
 		<span>#{{ $post->count }}</span>
-		<span>{{ $post->formatted_date }}</span>
+		<span>{{ $post->date }}</span>
 		<span class="print-hide"><a href="" onClick="$(this).closest('.post').hide(); return false">Hide</a></span>
 	</div>
 	<div class="post-author">
@@ -33,7 +33,7 @@
 
 	<div class="clearfix"></div>
 	
-	@include ('posts.attachments')
+	@include ('posts.attachments', ['attachments' => $post->attachments])
 </div>
 @endif
 @endforeach

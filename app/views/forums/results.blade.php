@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('heading')
+@section('header')
 <div class="row">
 <div class="col-md-12 col-lg-8">
 <div class="panel panel-info">
@@ -8,7 +8,7 @@
 	<div class="panel-heading">Search Results</div>
 	
 	<div class="panel-body">
-		{{{ $searched_for_html }}}
+		{{ $searched_for_html }}
 	</div>
 </div>
 </div>
@@ -16,7 +16,9 @@
 @stop
 
 @section('buttons')
+<div class="pull-right">
 {{ $results->links() }}
+</div>
 @stop
 
 @section('content')

@@ -23,10 +23,17 @@
 
 	<ul id="user-nav" class="nav navbar-nav navbar-right">
 		<li class="dropdown">
+@if ($me->id)
 			<a href="{{ $me->url }}" class="dropdown-toggle" data-toggle="dropdown">
 			<img class="avatar" src="{{ $me->avatar_url }}">
-<span class="hidden-xs">{{{ $me->name }}}</span> <span class="caret"></span>
-</a>
+			<span class="hidden-xs">{{{ $me->name }}}</span> <span class="caret"></span>
+			</a>
+@else
+			<a href="/signin" class="dropdown-toggle" data-toggle="dropdown">
+			<img class="avatar" src="/images/custom/default-avatar.png">
+			<span class="hidden-xs">Guest</span> <span class="caret"></span>
+			</a>
+@endif
 			<ul class="dropdown-menu no-collapse" role="menu">
 			@if ( $me->id )
 				<li><a href="/profile"><span class="glyphicon glyphicon-user"></span> My profile</a></li>

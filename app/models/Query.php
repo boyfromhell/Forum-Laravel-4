@@ -1,5 +1,7 @@
 <?php namespace Parangi;
 
+use User;
+
 define('MATCH_ANY', 0);
 define('MATCH_ALL', 1);
 define('WHERE_TITLES', 0);
@@ -90,17 +92,25 @@ class Query extends BaseModel
 			FOLDER_ARCHIVED => 'your Archived folder',
 		);
 
-		$total = count($this->words);
+		// @todo use attribute
+		$keywords = str_replace([' ', ';'], ',', $this->keywords);
+        $keywords = explode(',', $keywords);
+        $total = count($keywords);
+
+		// @todo use attribute
+		if ($this->author) {
+            $author = User::where('name', '=', $this->author)->first();
+        }
 
 		$html = 'Searched for ' . $show_text[$this->type][$this->show];
-		if ($this->user) {
-			$html .= " by <a href=\"{$this->user->url}\">" . e($this->user->name) . '</a> ';
+		if ($author->id) {
+			$html .= " by <a href=\"{$author->url}\">" . e($author->name) . '</a> ';
 		}
 		if ($total > 0) {
 			$html .= 'with ' . $where_text[$this->where] . ' matching ';
 
 			for ($i=0; $i<$total; $i++) {
-				$html .= '"<i>' . $this->words[$i] . '</i>"';
+				$html .= '"<i>' . $keywords[$i] . '</i>"';
 				if ($i < $total-1 && $total > 2) {
 					$html .= ', ';
 				}
@@ -123,16 +133,7 @@ class Query extends BaseModel
 			if ($total_forums == 0 || $this->forum_array[0] == 0) {
 				$html .= 'all forums';
 			} else {
-				$sql = "SELECT `id`, `name`
-					FROM `forums`
-					WHERE `id` IN ( " . $_db->escape($this->forums) . " )";
-				$exec = $_db->query($sql);
-
-				$forums = array();
-				while ($data = $exec->fetch_assoc()) {
-					$forum = new Forum($data['id'], $data);
-					$forums[] = $forum;
-				}
+				$forums = Forum::whereIn('id', $this->forum_array)->get();
 
 				for ($i=0; $i<$total_forums; $i++) {
 					$html .= "<a href=\"{$forums[$i]->url}\" style=\"color:#000\"><u>" . e($forums[$i]->name) . '</u></a>';
@@ -165,7 +166,7 @@ class Query extends BaseModel
 			$html .= "results <b>{$begin} - {$end}</b> ";
 			$html .= "out of <b>{$num_results}</b> total";
 		}
-		$html .= "<br><a href=\"/{$this->url}\">Modify</a> your search";
+		$html .= "<br><a href=\"{$this->url}\">Modify</a> your search";
 
 		return $html;
 	}

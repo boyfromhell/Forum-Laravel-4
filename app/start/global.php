@@ -17,7 +17,7 @@ if( Auth::check() || Auth::viaRemember() ) {
 	$me = Auth::user();
 }
 else {
-	$me->name = 'Guest';
+	//$me->name = 'Guest';
 }
 
 View::share('is_mobile', Helpers::is_mobile());

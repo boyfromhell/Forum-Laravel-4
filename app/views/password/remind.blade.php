@@ -8,7 +8,7 @@
 
 	<div class="panel-body">
 
-<form class="form-horizontal" action="{{ action('RemindersController@postRemind') }}" method="POST">
+<form class="form-horizontal" action="{{ action('Parangi\RemindersController@postRemind') }}" method="POST">
 <div class="col-md-4">
 
 <div class="form-group">
@@ -21,6 +21,12 @@
 
 </div>
 </form>
+
+	<div class="clearfix"></div>
+
+	<p>
+	Still having issues? <a href="/contact">Contact me</a> for assistance
+	</p>
 
 	</div>
 </div>

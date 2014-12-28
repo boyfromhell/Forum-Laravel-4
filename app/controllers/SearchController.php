@@ -107,12 +107,6 @@ class SearchController extends BaseController
 		if ($query->type != 'forum') {
 			App::abort(404);
 		}
-		$forums = explode(',', $query->forums);
-
-		// @todo use attribute?
-		$keywords = str_replace([' ', ';'], ',', $query->keywords);
-		$keywords = explode(',', $keywords);
-		$total = count($keywords);
 
 		$data = $this->forumQuery($query);
 		$results = $data->paginate(10); // max 200
@@ -140,6 +134,8 @@ class SearchController extends BaseController
 
 		if (count($posts) > 0) {
 			$posts->load(['topic', 'topic.forum']);
+		} else if (count($topics) > 0) {
+			$topics->load(['forum']);
 		}
 
 		/*if (count($topic_ids)) {
@@ -161,64 +157,18 @@ class SearchController extends BaseController
 
 				$topics[$data['topic_id']]->unread = $data;
 			}
-
-			// Topic attachments
-			$sql = "SELECT `posts`.`topic_id`, COUNT( `attachments`.`id` ) AS `total`
-				FROM `attachments`
-					LEFT JOIN `posts`
-						ON `attachments`.`post_id` = `posts`.`id`
-				WHERE `posts`.`topic_id` IN ( " . implode(',', $topic_ids) . " )
-				GROUP BY `posts`.`topic_id`";
-			$exec = $_db->query($sql);
-
-			while ($data = $exec->fetch_assoc()) {
-				$topics[$data['topic_id']]->attachments = $data['total'];
-			}
-
-			// Polls
-			$sql = "SELECT `poll_id`, `poll_topic`
-				FROM `polls`
-				WHERE `poll_topic` IN ( " . implode(',', $topic_ids) . " )";
-			$exec = $_db->query($sql);
-
-			while ($data = $exec->fetch_assoc()) {
-				$topics[$data['poll_topic']]->poll = $data['poll_id'];
-			}
-
-			// Latest posts
-			$sql = "SELECT `posts`.`id`, `posts`.`topic_id`, `posts`.`user_id`, `users`.`name`, `posts`.`time`
-				FROM
-				( SELECT MAX( posts.time ) AS date, topics.id AS id
-					FROM posts, topics
-					WHERE posts.topic_id = topics.id
-					AND topics.id IN ( " . implode(',', $topic_ids ) . " )
-					GROUP BY topics.id ) p1
-				JOIN posts
-					ON posts.time = p1.date AND posts.topic_id = p1.id
-				JOIN users
-					ON posts.user_id = users.id";
-			$exec = $_db->query($sql);
-
-			while ($data = $exec->fetch_assoc()) {
-				$data['author'] = new User($data['user_id'], array('name' => $data['name']));
-
-				$data['time'] += ($me->tz*3600);
-				$data['date'] = datestring($data['time'], 2);
-				$data['url'] = '/posts/' . $data['id'] . '#' . $data['id'];
-
-				$topics[$data['topic_id']]->latest_post = $data;
-			}
-		}*/
+		*/
 
 		return View::make('forums.results')
+			->with('_PAGE', $_PAGE)
+			->with('menu', ForumController::fetchMenu('search'))
+
 			->with('query', $query)
 			->with('results', $results)
 			->with('topics', $topics)
-			->with('posts', $posts);
+			->with('posts', $posts)
 
-		/*$searched_for_html = $query->get_description($start, $num_results);
-
-		$Smarty->assign('searched_for_html', $searched_for_html);*/
+			->with('searched_for_html', $query->getDescription($start, $num_results));
 	}
 
 	/**
@@ -228,8 +178,14 @@ class SearchController extends BaseController
 	{
 		global $me;
 
-		$total = count($query->words);
+		$forums = explode(',', $query->forums);
 
+        // @todo use attribute
+        $keywords = str_replace([' ', ';'], ',', $query->keywords);
+        $keywords = explode(',', $keywords);
+        $total = count($keywords);
+
+		// @todo use attribute
 		if ($query->author) {
             $author = User::where('name', '=', $query->author)->first();
         }
@@ -269,27 +225,26 @@ class SearchController extends BaseController
 		}
 
 		if ($total > 0) {
-			$sql .= " AND (";
-			$data = $data->where(function ($q) use ($query) {
+			$data = $data->where(function ($q) use ($query, $total, $keywords) {
 
 				if ($query->where == WHERE_TITLES || $query->where == WHERE_BOTH) {
-					$q->where(function ($q2) use ($query) {
+					$q->where(function ($q2) use ($query, $total, $keywords) {
 						for ($i=0; $i<$total; $i++) {
 							if ($query->match == MATCH_ANY) {
-								$q2->orWhere('topics.title', 'LIKE', '%'.trim($query->words[$i]).'%');
+								$q2->orWhere('topics.title', 'LIKE', '%'.trim($keywords[$i]).'%');
 							} else {
-								$q2->where('topics.title', 'LIKE', '%'.trim($query->words[$i]).'%'); // @todo escape
+								$q2->where('topics.title', 'LIKE', '%'.trim($keywords[$i]).'%'); // @todo escape
 							}
 						}
 					});
 				}
 				if ($query->where == WHERE_TEXT || $query->where == WHERE_BOTH) {
-					$q->orWhere(function ($q2) use ($query) {
+					$q->orWhere(function ($q2) use ($query, $total, $keywords) {
 						for( $i=0; $i<$total; $i++ ) {
 							if ($query->match == MATCH_ANY) {
-								$q2->orWhere('posts_text.post_text', 'LIKE', '%'.trim($query->words[$i]).'%');
+								$q2->orWhere('posts_text.post_text', 'LIKE', '%'.trim($keywords[$i]).'%');
 							} else {
-								$q2->where('posts_text.post_text', 'LIKE', '%'.trim($query->words[$i]).'%');
+								$q2->where('posts_text.post_text', 'LIKE', '%'.trim($keywords[$i]).'%');
 							}
 						}
 					});
@@ -315,8 +270,6 @@ class SearchController extends BaseController
 	{
 		global $_db, $gmt, $me;
 	
-		$total = count($query->words);
-		
 		if( $query->show == SHOW_THREADS ) {
 			$sql = "SELECT `messages`.`thread_id`, MIN(`messages`.`read`) AS `read` ";
 		}

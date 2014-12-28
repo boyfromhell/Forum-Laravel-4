@@ -8,7 +8,7 @@
 
     <div class="panel-body">
 
-<form class="form-horizontal" action="{{ action('RemindersController@postReset') }}" method="POST">
+<form class="form-horizontal" action="{{ action('Parangi\RemindersController@postReset') }}" method="POST">
 <div>
 
 	{{ Form::hidden('token', $token) }}

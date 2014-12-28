@@ -1,41 +1,182 @@
+/* line 1, ../sass/print.scss */
 body {
-	background:#fff; margin:0; padding:20px;
-	font-family:Arial,Verdana,sans-serif; font-size:10pt;
+  background: #fff;
+  margin: 0;
+  padding: 20px;
+  font-family: Arial,Verdana,sans-serif;
+  font-size: 10pt;
 }
-* { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
-h1 { font-size:20pt; margin:0; }
-h2 { font-size:12pt; margin:0; }
-h3 { font-size:12pt; margin:0; }
-.break { width:100%; height:1px; margin:0 0 -1px; clear:both; }
-a { color:#369; text-decoration:none; }
-input { margin-right:6px; }
-label { margin-right:15px; }
 
-.post { border:1px solid #000; margin:15px 0; padding:10px; }
-.post-author { float:left; width:50%; margin-bottom:5px; }
-.post-date { float:right; width:40%; text-align:right; margin-bottom:5px; }
-.post-date span { margin-left:10px; }
+/* line 5, ../sass/print.scss */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-.quote { margin:5px 0 5px 20px; border:1px solid #333; padding:0; }
-.quote .author { margin:0; padding:5px; border-bottom:1px solid #333; }
-.quote .author img { display:none; }
-.quote .content { margin:0; padding:5px 15px 5px 5px; }
+/* line 6, ../sass/print.scss */
+h1 {
+  font-size: 20pt;
+  margin: 0;
+}
 
-a.scaled { display:none; }
-.spoiler-alert { display:none; }
-.spoiler { margin:5px 0 5px 20px; border:1px dashed #900; padding:5px }
+/* line 7, ../sass/print.scss */
+h2 {
+  font-size: 12pt;
+  margin: 0;
+}
 
+/* line 8, ../sass/print.scss */
+h3 {
+  font-size: 12pt;
+  margin: 0;
+}
+
+/* line 9, ../sass/print.scss */
+.break {
+  width: 100%;
+  height: 1px;
+  margin: 0 0 -1px;
+  clear: both;
+}
+
+/* line 10, ../sass/print.scss */
+a {
+  color: #369;
+  text-decoration: none;
+}
+
+/* line 11, ../sass/print.scss */
+input {
+  margin-right: 6px;
+}
+
+/* line 12, ../sass/print.scss */
+label {
+  margin-right: 15px;
+}
+
+/* line 14, ../sass/print.scss */
+.post {
+  border: 1px solid #000;
+  margin: 15px 0;
+  padding: 10px;
+}
+
+/* line 15, ../sass/print.scss */
+.post-author {
+  float: left;
+  width: 50%;
+  margin-bottom: 5px;
+}
+
+/* line 16, ../sass/print.scss */
+.post-date {
+  float: right;
+  width: 40%;
+  text-align: right;
+  margin-bottom: 5px;
+}
+
+/* line 17, ../sass/print.scss */
+.post-date span {
+  margin-left: 10px;
+}
+
+/* line 19, ../sass/print.scss */
+.quote {
+  margin: 5px 0 5px 20px;
+  border: 1px solid #333;
+  padding: 0;
+}
+
+/* line 20, ../sass/print.scss */
+.quote .author {
+  margin: 0;
+  padding: 5px;
+  border-bottom: 1px solid #333;
+}
+
+/* line 21, ../sass/print.scss */
+.quote .author img {
+  display: none;
+}
+
+/* line 22, ../sass/print.scss */
+.quote .content {
+  margin: 0;
+  padding: 5px 15px 5px 5px;
+}
+
+/* line 24, ../sass/print.scss */
+a.scaled {
+  display: none;
+}
+
+/* line 25, ../sass/print.scss */
+.spoiler-alert {
+  display: none;
+}
+
+/* line 26, ../sass/print.scss */
+.spoiler {
+  margin: 5px 0 5px 20px;
+  border: 1px dashed #900;
+  padding: 5px;
+}
+
+/* line 28, ../sass/print.scss */
 pre.code {
-	font-size:10pt; font-family:"Courier New",mono;
-	margin:5px 0 5px 20px; border:1px solid #666; background:#eee; padding:5px;
-	color:#666; word-wrap:normal; overflow-x:auto;
+  font-size: 10pt;
+  font-family: "Courier New",mono;
+  margin: 5px 0 5px 20px;
+  border: 1px solid #666;
+  background: #eee;
+  padding: 5px;
+  color: #666;
+  word-wrap: normal;
+  overflow-x: auto;
 }
 
-fieldset { border:1px grooved #ccc; margin:30px 0 0; padding:6px 10px 10px; }
-legend { padding:0 10px; color:#333; }
+/* line 34, ../sass/print.scss */
+fieldset {
+  border: 1px grooved #ccc;
+  margin: 30px 0 0;
+  padding: 6px 10px 10px;
+}
+
+/* line 35, ../sass/print.scss */
+legend {
+  padding: 0 10px;
+  color: #333;
+}
 
 @media print {
-	.print-hide { display:none; }
-	.post { border:0; padding:15px 0 0; border-top:1px solid #000; }
-	img { max-width:100%; height:auto; }
+  /* line 38, ../sass/print.scss */
+  .print-hide {
+    display: none;
+  }
+
+  /* line 39, ../sass/print.scss */
+  .post {
+    border: 0;
+    padding: 15px 0 0;
+    border-top: 1px solid #000;
+  }
+
+  /* line 40, ../sass/print.scss */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+/* line 43, ../sass/print.scss */
+.clearfix:before, .clearfix:after {
+  content: " ";
+  display: table;
+}
+
+/* line 47, ../sass/print.scss */
+.clearfix:after {
+  clear: both;
 }
