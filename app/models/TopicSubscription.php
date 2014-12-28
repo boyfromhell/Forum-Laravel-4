@@ -2,6 +2,7 @@
 
 class TopicSubscription extends BaseModel
 {
+	protected $table = 'topic_subs';
 
 	public function topic()
 	{

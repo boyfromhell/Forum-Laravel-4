@@ -4,7 +4,7 @@
 	{{ BBCode::show_bbcode_controls() }}
 	{{ Form::textarea('content', $post->text, ['id' => 'bbtext', 'class' => 'form-control']) }}
 
-	{{ Form::hidden('subject', $post->subject) }}
+	{{ Form::hidden('subject', $subject) }}
 	{{ Form::hidden('subscribe', ( $check_sub ? 1 : 0 )) }}
 	{{ Form::hidden('show_smileys', $post->smileys) }}
 	{{ Form::hidden('attach_sig', $post->signature) }}

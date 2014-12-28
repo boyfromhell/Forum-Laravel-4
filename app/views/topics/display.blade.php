@@ -1,7 +1,14 @@
 @extends('layout')
 
 @section('header')
-<h1><a href="{{ $topic->url }}">{{{ $topic->title }}}</a></h1>
+<h1><a href="{{ $topic->url }}">{{{ $topic->title }}}</a>
+
+@if ( $topic->type == 2 )
+<span class="label label-danger">Announcement</span>
+@elseif ( $topic->type == 1 )
+<span class="label label-default">Sticky</span>
+@endif
+</h1>
 
 <ol class="breadcrumb">
 	<li><a href="/">{{{ Config::get('app.forum_name') }}}</a></li>

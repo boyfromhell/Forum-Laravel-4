@@ -386,9 +386,7 @@ class UserController extends BaseController
 			$total = count($topics);
 
 			if ($total > 0) {
-				TopicSubscription::where('user_id', '=', $me->id)
-					->whereIn('topic_id', $topics)
-					->delete();
+				$me->subscriptions()->detach($topics);
 
 				Session::push('messages', 'Unsubscribed from '.$total.' topics');
 			}

@@ -88,7 +88,11 @@ class PostController extends BaseController
 			App::abort(403);
 		}
 
-		$this->subject = $this->post->subject;
+		if ($this->topic->posts()->first()->id == $this->post->id) {
+			$this->subject = $this->topic->title;
+		} else {
+			$this->subject = $this->post->subject;
+		}
 		$this->content = $this->post->text;
 
 		return $this->createPost();
@@ -141,7 +145,14 @@ class PostController extends BaseController
 				$check_sub = true;
 			}
 
+			if ($topic->posts()->first()->id == $post->id) {
+	            $subject = $topic->title;
+	        } else {
+    	        $subject = $post->subject;
+	        }
+
 			$html = View::make('posts.quick_edit')
+				->with('subject', $subject)
 				->with('post', $post)
 				->with('check_sub', $check_sub)
 				->render();

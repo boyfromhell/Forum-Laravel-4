@@ -33,7 +33,7 @@
 				<img src="{{ $forum->latest_topic->smiley_img }}" alt="{{ $forum->latest_topic->smiley_alt }}">
 			@endif
 			@if ( $forum->latest_topic->has_attachments )
-				<img src="{{ $skin }}icons/attachment.png" alt="att">
+				<span class="glyphicon glyphicon-paperclip"></span>
 			@endif
 
 			<a href="{{ $forum->latest_topic->url }}" title="{{{ $forum->latest_topic->alt_text }}}">{{{ $forum->latest_topic->short_title }}}</a><br>
