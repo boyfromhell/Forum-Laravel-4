@@ -11,8 +11,8 @@
 	</td>
 	
 	<td class="from" style="width:25%">
-		@foreach ( $thread->last_message[0]->users as $count => $user )
-			<a href="{{ $user->url }}">{{{ $user->name }}}</a>{{ $count < count($thread->last_message[0]->users)-1 ? ', ' : '' }}
+		@foreach ( $thread->users as $count => $user )
+			<a href="{{ $user->url }}">{{{ $user->name }}}</a>{{ $count < count($thread->users)-1 ? ', ' : '' }}
 		@endforeach
 		@if ( $thread->replies > 1 ) ({{ $thread->replies }}) @endif
 	</td>
@@ -25,15 +25,15 @@
 		
 		{{-- @todo ideally link to the oldest unread message --}}
 		@if ( !$thread->read )
-			<a href="{{ $thread->url }}#{{ $thread->last_message[0]->id }}"><img src="{{ $skin }}icons/newest_reply.png"></a>
+			<a href="{{ $thread->url }}#{{ $thread->lastMessage->id }}"><img src="{{ $skin }}icons/newest_reply.png"></a>
 		@endif
 		
-		<a href="{{ $thread->url }}#{{ $thread->last_message[0]->id }}">{{{ $thread->title }}}</a>
-		- {{ BBCode::simplify($thread->last_message[0]->content) }}
+		<a href="{{ $thread->url }}#{{ $thread->lastMessage->id }}">{{{ $thread->title }}}</a>
+		- {{ BBCode::simplify($thread->lastMessage->content) }}
 		</div>
 	</td>
 
 	<td class="lastpost message nowrap">
-		{{ $thread->last_message[0]->date }}
+		{{ $thread->lastMessage->date }}
 	</td>
 </tr>

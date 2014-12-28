@@ -64,20 +64,25 @@ class Helpers
 	 */
 	public static function english_size( $file )
 	{
-		if( ! file_exists($file) ) {
-			return 0;
+		if (is_numeric($file)) {
+			$bytes = $file;
+		} else {
+			if (! file_exists($file)) {
+				return 0;
+			}
+
+			$bytes = filesize($file);
 		}
 
-		$bytes = filesize($file);
 		$units = array('bytes', 'kb', 'MB', 'GB');
 		$counter = 0;
 		
-		while( $bytes >= 1024 ) {
+		while ($bytes >= 1024) {
 			$bytes /= 1024;
 			$counter++;
 		}
 
-		return( number_format($bytes, 2) . ' ' . $units[$counter] );
+		return number_format($bytes, 2) . ' ' . $units[$counter];
 	}
 
 	/**
@@ -125,9 +130,10 @@ class Helpers
 	 * @param  string  $local_path  Absolute path to file
 	 * @param  string  $s3_path  Remote path including folder and filename
 	 * @param  bool  $public  ACL setting
+	 * @param  bool  $unlink  Delete local file after successful upload
 	 * @return bool  Success
 	 */
-	public static function push_to_s3( $local_path, $s3_path, $public = false )
+	public static function push_to_s3( $local_path, $s3_path, $public = false, $unlink = true )
 	{
 		if( ! Config::get('services.aws.enabled') ) {
 			return false;
@@ -143,7 +149,7 @@ class Helpers
 			'Cache-Control' => 'public, max-age=31536000'
 		);
 
-		return $s3->putObjectFile(
+		$success = $s3->putObjectFile(
 			$local_path,                        // path on server
 			Config::get('services.aws.bucket'), // bucket
 			$s3_path,                           // path on S3
@@ -151,6 +157,12 @@ class Helpers
 			array(),                            // meta headers
 			$headers                            // request headers
 		);
+
+		if ($success && $unlink) {
+			unlink($local_path);
+		}
+
+		return $success;
 	}
 
 	/**
@@ -159,7 +171,7 @@ class Helpers
 	 * @param  string  $s3_path  Remote path
 	 * @return bool  Success
 	 */
-	public static function delete_from_s3( $s3_path )
+	public static function delete_from_s3($s3_path)
 	{
 		if( ! Config::get('services.aws.enabled') ) {
 			return false;

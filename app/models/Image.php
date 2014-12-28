@@ -271,6 +271,26 @@ class Image
         return $this;
     }
 
+	/**
+	 * Get new name with extension
+	 *
+	 * @return string
+	 */
+	public function getNewName ()
+	{
+		return $this->newname . '.' . $this->newext;
+	}
+
+	/**
+	 * Get local path
+	 *
+	 * @return string
+	 */
+	public function getLocalDirectory ()
+	{
+		return $this->folder;
+	}
+
     /**
      * Save whatever current actions have been applied into a new file
      * using the same format as the original file
@@ -354,7 +374,8 @@ class Image
         if (Helpers::push_to_s3(
             $this->folder . '/' . $this->newname . '.' . $this->newext,
             $folder . '/' . $this->newname . '.' . $this->newext,
-            $public
+            $public,
+			false
         )
         ) {
             /*if( $this->newname.'.'.$this->newext != $this->name.'.'.$this->ext ) {

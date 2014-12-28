@@ -89,10 +89,10 @@
 	@if ( $user->victory_rank || $user->defeat_rank )
 	<b>Honor Rolls:</b><br>
 	@if( $user->victory_rank )
-	#{{ $user->victory_rank->rank }} in victories - <strong>{{ $user->victory_rank->score }}</strong> ({{ $user->victory_rank->variant }})<br>
+	#{{ $user->victory_rank->rank }} in victories - <strong>{{ number_format($user->victory_rank->score) }}</strong> ({{ $user->victory_rank->variant }})<br>
 	@endif
 	@if ( $user->defeat_rank )
-	#{{ $user->defeat_rank->rank }} in defeats - <strong>{{ $user->defeat_rank->score }}</strong> ({{ $user->defeat_rank->variant }})<br>
+	#{{ $user->defeat_rank->rank }} in defeats - <strong>{{ number_format($user->defeat_rank->score) }}</strong> ({{ $user->defeat_rank->variant }})<br>
 	@endif
 	<br>
 	@endif

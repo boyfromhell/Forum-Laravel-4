@@ -33,9 +33,9 @@
 		<td class="icon">{{ $count+1 }}</td>
 		<td style="width:8%"><b>
 		@if ( $score->url )
-			<a href="{{{ $score->url }}}">{{{ $score->score }}}</a>
+			<a href="{{{ $score->url }}}">{{{ number_format($score->score) }}}</a>
 		@else
-			{{{ $score->score }}}
+			{{{ number_format($score->score) }}}
 		@endif
 		</b></td>
 		<td style="width:13%">{{{ $score->character }}}</td>

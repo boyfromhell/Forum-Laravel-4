@@ -74,175 +74,84 @@ class AttachmentController extends BaseController
 	/**
 	 * Upload an attachment
 	 */
-	public static function upload($files, $i, $hash)
+	public static function upload($file, $i, $hash)
 	{
 		global $me;
-	
-		// Determine the final, legal name and extension
-		list($name, $ext) = Helpers::parse_file_name($files['name'][$i], true);
-		
+
+		$orig_name = $file->getClientOriginalName();
+		$file_size = $file->getSize();
+		$mime_type = $file->getMimeType();
+		$ext = strtolower($file->getClientOriginalExtension());
+
 		if ($ext == 'jpeg') {
 			$ext = 'jpg';
 		}
-		
-		// Check for errors
-		if ($files['size'][$i] > 8192000) {
-			throw new Exception('Image is too large (limit is 8 MB)');
-		}
-		if (in_array($ext, array('gif', 'jpg', 'png'))) {
-			$attach_type = 0; // image
-		} else if (in_array($ext, array('doc', 'docx', 'gz', 'pdf', 'rtf', 'svg', 'tar', 'txt', 'zip'))) {
-			$attach_type = 1; // non-image
+
+		$date = gmmktime() + $i;
+		$year = date('Y', $date);
+		$month = date('m', $date);
+		$name = str_random(30) . '_' . $date;
+
+		// Validate extension
+		if (in_array($ext, ['gif', 'jpg', 'png'])) {
+			// Image
+			$attach_type = 0;
+		} else if (in_array($ext, ['doc', 'docx', 'gz', 'pdf', 'rtf', 'svg', 'tar', 'txt', 'zip'])) {
+			// Non-image
+			$attach_type = 1;
 		} else {
 			throw new Exception('You may only upload DOC, DOCX, GIF, GZ, JPG, PDF, PNG, RTF, SVG, TAR, TXT, or ZIP files');
 		}
-		
-		$year = date('Y', $gmt);
-		$month = date('m', $gmt);
-		$folder = ROOT . "web/attachments/{$year}/";
-		
-		if (!file_exists($folder)) {
-			mkdir($folder, 0755);
-		}
-		$folder .= $month . '/';
-		if (!file_exists($folder)) {
-			mkdir($folder, 0755);
-		}
-		if (!file_exists($folder . 'scale/')) {
-			mkdir($folder . 'scale/', 0755);
-		}
-		if (!file_exists($folder . 'thumbs/')) {
-			mkdir($folder . 'thumbs/', 0755);
-		}
 
-		// Full path of the file
-		$orig_name = $name . '.' . $ext;
-		
-		$name .= '_' . $gmt;
-		$original  = "{$folder}{$name}.{$ext}";
-		$scale     = "{$folder}scale/{$name}.jpg";
-		$thumbnail = "{$folder}thumbs/{$name}.jpg";
-		
 		// Move file from temporary location
-		$success = false;
-		if (! count($file_errors)) {
-			$success = move_uploaded_file($files['tmp_name'][$i], $original);
+		$success = $file->move(storage_path() . '/uploads/', $name . '.' . $ext);
+
+		// Resize if it's an image
+		if ($attach_type == 0) {
+			$img = new Image(storage_path() . '/uploads/' . $name . '.' . $ext);
+
+			$sizes = array();
+
+			$sizes['original'] = $name . '.' . $ext;
+
+			$sizes['scale'] = $img->scaleLong(800)
+				->setSuffix('_scale')
+				->saveJpg()
+				->getNewName();
+
+			$sizes['thumbs'] = $img->scaleLong(200)
+				->setSuffix('_thumb')
+				->saveJpg()
+				->getNewName();
+
+			foreach ($sizes as $folder => $size) {
+				$remote_path = 'attachments/'.$year.'/'.$month.'/';
+				if ($folder != 'original') {
+					$remote_path .= $folder . '/';
+				}
+
+				Helpers::push_to_s3(
+					$img->getLocalDirectory() . '/' . $size,
+					$remote_path . $name . '.' . ($folder == 'original' ? $ext : 'jpg'),
+					true
+				);
+			}
 		}
 
-		// Resize, if it's an image
-		if ($success && $attach_type == 0) {
-			// Create an image object from original
-			if ($ext == 'gif') {
-				$src_img = imagecreatefromgif($original);
-			} else if ($ext == 'png') {
-				$src_img = imagecreatefrompng($original);
-			} else {
-				$src_img = imagecreatefromjpeg($original);
-			}
-			
-			// Calculate new dimensions
-			$width    = ImageSx($src_img);
-			$height   = ImageSy($src_img);
-			$persp    = $width / $height;
-			$ideal    = 4/3;
-			$n_width  = $board_config['scale_width'];
-			$n_height = $board_config['scale_height'];
-			$t_width  = $board_config['thumb_width'];
-			$t_height = $board_config['thumb_height'];
-
-			if ($persp > $ideal) {
-				$n_height = round($board_config['scale_width'] / $persp);
-				$t_height = round($board_config['thumb_width'] / $persp);
-			} else { 
-				$n_width = round($board_config['scale_height'] * $persp);
-				$t_width = round($board_config['thumb_height'] * $persp);
-			}
-
-			if ($n_width > $width && $n_height > $height) {
-				$n_width = $width;
-				$n_height = $height;
-			}
-
-			// Create scaled versions
-			$dst_img = ImageCreateTrueColor($n_width, $n_height);
-			imagecopyresampled($dst_img, $src_img, 0, 0, 0, 0, $n_width, $n_height, $width, $height); 
-
-			if (($n_width < $width && $n_height < $height) || $ext != 'jpg') {
-				ImageJpeg($dst_img, $scale, 95);
-			} else {
-				copy($original, $scale);
-			}
-
-			if (($t_width < $width && $t_height < $height) || $ext != 'jpg') {
-				$dst_thumb = ImageCreateTrueColor($t_width, $t_height);
-				imagecopyresampled($dst_thumb, $dst_img, 0, 0, 0, 0, $t_width, $t_height, $n_width, $n_height); 
-				ImageJpeg($dst_thumb, $thumbnail, 95);
-			} else {
-				copy($original, $thumbnail);
-			}
-			
-			@imagedestroy($dst_img);
-			@imagedestroy($dst_thumb);
-			imagedestroy($src_img);
-		}
-		
 		if ($success) {
 			// Add to database
-			$data = array(
-				'post_id'      => null,
-				'message_id'   => null,
+			$attachment = Attachment::create([
 				'user_id'      => $me->id,
-				'date'         => $gmt + $i,
 				'hash'         => $hash,
-				'filename'     => $name . '.' . $ext,
+				'filename'     => $name.'.'.$ext,
 				'origfilename' => $orig_name,
-				'mimetype'     => $files['type'][$i],
+				'mimetype'     => $mime_type,
 				'filetype'     => $attach_type,
-				'downloads'    => 0
-			);
-			$attachment = new Attachment(null, $data);
-			$attachment->save();
-			$attachment->push_to_s3();
+				'filesize'     => $file_size,
+			]);
 		}
 		
 		return $success;
-	}
-	
-	public function push_to_s3()
-	{
-		$year = date('Y', $this->date);
-		$month = date('m', $this->date);
-		$folder = "attachments/{$year}/{$month}";
-		
-		list($name, $ext) = Helpers::parse_file_name($this->filename);
-
-		if (Helpers::push_to_s3("{$folder}/{$name}.{$ext}", false)) {
-			unlink(ROOT . "web/{$folder}/{$name}.{$ext}");
-
-			if ($this->filetype == 0) {
-				if (Helpers::push_to_s3("{$folder}/scale/{$name}.jpg", true)) {
-					unlink(ROOT . "web/{$folder}/scale/{$name}.jpg");
-				}
-				if (Helpers::push_to_s3("{$folder}/thumbs/{$name}.jpg", true)) {
-					unlink(ROOT . "web/{$folder}/thumbs/{$name}.jpg");
-				}
-			}
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Get a human readable file size
-	 * @todo cache this in the database when file is uploaded
-	 */
-	public function get_size()
-	{
-		if (file_exists(ROOT . 'web' . $this->get_path() . $this->filename)) {
-			return Helpers::english_size(ROOT . 'web' . $this->get_path() . $this->filename);
-		} else {
-			return 0;
-		}
 	}
 
 }

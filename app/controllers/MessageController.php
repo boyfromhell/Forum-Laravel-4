@@ -7,6 +7,7 @@ use Redirect;
 use Request;
 use Session;
 use View;
+use User;
 
 class MessageController extends BaseController
 {
@@ -46,6 +47,7 @@ class MessageController extends BaseController
 			return Redirect::to('messages/'.$folder);
 		}
 
+		// Sorting
 		$sort = Input::get('sort', 'date');
 		$order = Input::get('order', 'desc');
 
@@ -68,7 +70,11 @@ class MessageController extends BaseController
 				$orderby = 'message_threads.date_updated';
 				break;
 		}
+		if ($order != 'asc') {
+			$order = 'desc';
+		}
 
+		// Group messages by thread for this folder
 		$threads = MessageThread::join('messages', 'messages.thread_id', '=', 'message_threads.id')
 			->where('messages.owner_user_id', '=', $me->id)
 			->groupBy('messages.thread_id');
@@ -91,7 +97,7 @@ class MessageController extends BaseController
 		}
 
 		$threads = $threads->orderBy($orderby, $sort)
-			->orderBy('message_threads.date_updated', 'desc')
+			->orderBy($orderby, $order)
 			->paginate(25, ['message_threads.*', DB::raw('MIN(messages.read) AS `read`')]);
 
 		if (count($threads) > 0) {
@@ -115,10 +121,66 @@ class MessageController extends BaseController
 	 */
 	public function compose()
 	{
+		global $me;
+
+		$hash = Input::get('hash', md5($me->name.time().rand(0,9999)));
+
 		$_PAGE = array(
 			'category' => 'messages',
 			'title'    => 'Compose Message'
 		);
+
+		// Form submitted
+        if (Input::has('preview')) {
+            // Don't validate anything for a preview
+        } else if (Request::isMethod('post')) {
+            $rules = [
+                'content' => 'required',
+            ];
+            if ($this->mode == 'newtopic') {
+                $rules['subject'] = 'required';
+            }
+		}
+
+		if (Input::has('user')) {
+			// Composing to a user
+			$user = User::find(Input::get('user'));
+
+			if ($user->id != $me->id) {
+				$recipients = $user->name;
+			}
+		} else if (Input::has('t')) {
+			// Replying to a thread
+			$thread = MessageThread::findOrFail(Input::get('t'));
+
+			// If no messages are found (filtered by owner)
+	        // then this is not my thread, or I deleted them all
+	        if (! count($thread->messages)) {
+	            App::abort(404);
+	        }
+
+			if ($thread->lastMessage->from_user_id != $me->id && ! isset($_GET['all'] )) {
+				$recipients = $thread->lastMessage->from->name;
+			} else {
+				$users = $thread->users;
+				$names = array_pluck($users, 'name');
+				$recipients = implode(', ', $names);
+			}
+		} else if (Input::has('p')) {
+			// Replyling to an individual message
+			$message = Message::findOrFail(Input::get('p'));
+			$thread = $message->thread;
+
+			if ($message->owner_user_id != $me->id) {
+				App::abort(404);
+			}
+
+			$content = BBCode::quote($message->from->name, $message->content);
+
+			$users = $message->thread->users;
+			$names = array_pluck($users, 'name');
+			$recipients = implode(', ', $names);
+		}
 
 		$post_max_size = intval(ini_get('post_max_size'));
 		$max_total = $post_max_size * 1024 * 1024;
@@ -128,6 +190,11 @@ class MessageController extends BaseController
 
 		return View::make('messages.compose')
 			->with('_PAGE', $_PAGE)
+
+			->with('thread', $thread)
+			->with('recipients', $recipients)
+			->with('content', $content)
+
 			->with('menu', MessageController::fetchMenu('compose'))
 
 			->with('post_max_size', $post_max_size)

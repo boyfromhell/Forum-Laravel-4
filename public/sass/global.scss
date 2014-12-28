@@ -367,9 +367,10 @@ ul.dropdown-menu {
 		}
 	}
 }
-.btn.btn-bbcode {
+.bbcode-toolbar .btn {
 	min-width: 32px;
-	height: 30px;
+	height: 30px !important;
+	padding: 5px 10px;
 	overflow: hidden;
 
 	.bbcode-quote {

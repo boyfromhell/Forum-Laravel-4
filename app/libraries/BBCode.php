@@ -147,6 +147,16 @@ class BBCode
 	}
 
 	/**
+	 * Adds [quote] tags and strips nested quotes
+	 */
+	public static function quote($author, $content) {
+		$text = '[quote="'.$author.'"]' .
+            BBCode::strip_quotes($content) .
+            '[/quote]' . "\n\n";
+		return $text;
+	}
+
+	/**
 	 * Replaces any [x][/x] tags with <y></y>
 	 */
 	protected static function _simple_replace( $code, $text ) {

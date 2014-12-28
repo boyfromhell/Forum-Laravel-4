@@ -104,7 +104,7 @@ class AvatarController extends BaseController
 
 				Session::push('messages', 'Avatar updated');
 
-				return \Redirect::to('avatar');
+				return Redirect::to('avatar');
 			}
 		}
 

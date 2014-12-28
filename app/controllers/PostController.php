@@ -1,5 +1,6 @@
 <?php namespace Parangi;
 
+use Exception;
 use App;
 use DB;
 use Input;
@@ -171,9 +172,7 @@ class PostController extends BaseController
 		}
 
 		$this->subject = 'Re: '.$this->topic->title;
-		$this->content = '[quote="' . $this->post->user->name . '"]' .
-			BBCode::strip_quotes(BBCode::undo_prepare($this->post->text)) .
-			'[/quote]' . "\n\n";
+		$this->content = BBCode::quote($this->post->user->name, $this->post->text);
 
 		return $this->createPost();
 	}
@@ -239,34 +238,30 @@ class PostController extends BaseController
 			}
 
 			// Upload attachments
-			/*$successful = $total = 0;
-			if (count($_FILES['files']) > 0) {
-				for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
-					$file_errors = array();
-				
-					if ($_FILES['files']['name'][$i]) {
-					
+			$successful = $total = 0;
+			if (Input::hasFile('files')) {
+				foreach (Input::file('files') as $i => $file) {
+					if ($file->isValid()) {
 						try {
-							$success = Attachment::upload($_FILES['files'], $i, $hash);
+							$success = AttachmentController::upload($file, $i, $hash);
 						} catch (Exception $e) {
-							$file_errors[] = $e->getMessage();
-							$errors[] = $e->getMessage();
+							Session::push('errors', $e->getMessage());
 						}
 						if ($success) {
 							$successful++;
 						}
-
-						$total++;
 					}
+	
+					$total++;
 				}
-			}*/
+			}
 
 			$validator = Validator::make(Input::all(), $rules);
 
 			if ($validator->fails()) {
-				return View::make('posts.create')
-					->withInput()
-					->withErrors($validator);
+				foreach ($validator->messages()->all() as $error) {
+					Session::push('errors', $error);
+				}
 			} else {
 				$content = BBCode::prepare($content);
 
@@ -464,9 +459,7 @@ class PostController extends BaseController
 			->with('max_total', $max_total)
 			->with('upload_max_filesize', $upload_max_filesize)
 			->with('max_bytes', $max_bytes)
-			->with('max_file_uploads', $max_file_uploads)
-
-			->withInput();
+			->with('max_file_uploads', $max_file_uploads);
 
 		/*
 			$sql = "

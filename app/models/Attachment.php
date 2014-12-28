@@ -10,6 +10,7 @@ class Attachment extends BaseModel
 		'original',
 		'scale',
 		'thumbnail',
+		'size',
 	);
 
 	/**
@@ -60,7 +61,7 @@ class Attachment extends BaseModel
 	 * @param  string  $size
 	 * @return string
 	 */
-	protected function _getPhoto($size)
+	protected function getPhoto($size)
 	{
 		list($name, $ext) = Helpers::parse_file_name($this->filename);
 
@@ -90,7 +91,7 @@ class Attachment extends BaseModel
 	 */
 	public function getOriginalAttribute()
 	{
-		return $this->_getPhoto('original');
+		return $this->getPhoto('original');
 	}
 
 	/**
@@ -100,7 +101,7 @@ class Attachment extends BaseModel
 	 */
 	public function getScaleAttribute()
 	{
-		return $this->_getPhoto('scale');
+		return $this->getPhoto('scale');
 	}
 
 	/**
@@ -110,8 +111,16 @@ class Attachment extends BaseModel
 	 */
 	public function getThumbnailAttribute()
 	{
-		return $this->_getPhoto('thumbnail');
+		return $this->getPhoto('thumbnail');
 	}
+
+	/**
+     * Get a human readable file size
+     */
+    public function getSizeAttribute()
+    {
+		return Helpers::english_size($this->filesize);
+    }
 
 }
 

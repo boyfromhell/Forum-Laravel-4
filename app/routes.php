@@ -125,12 +125,20 @@ Route::group(array('namespace' => 'Parangi'), function()
 	Route::get('print/{id}/{name?}', 'TopicController@printTopic');
 	Route::get('posts/{id}/{name?}', 'PostController@display');
 
+	// Legacy URLs
+	Route::get('users/{id}/{name?}', function($id, $name) {
+		$user = User::findOrFail($id);
+		return Redirect::to($user->url, 301);
+	});
+	Route::get('groups/{id}/{name?}', function($id, $name) {
+		$group = Parangi\Group::findOrFail($id);
+		return Redirect::to($group->url, 301);
+	});
+
 	// Community
 	Route::any('members', 'UserController@members');
 	Route::get('groups', 'GroupController@showAll');
 	Route::get('groups/{name}', 'GroupController@displayName');
-	Route::get('groups/{id}/{name?}', 'GroupController@display');
-	Route::get('users/{id}/{name?}', 'UserController@display');
 	Route::get('users/{name}', 'UserController@displayUsername');
 	Route::get('honor-rolls', 'ScoreController@index');
 	Route::get('chat-popup', 'PageController@chatPopup');

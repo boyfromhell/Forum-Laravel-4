@@ -23,10 +23,7 @@ class Avatar extends BaseModel
 	public function delete()
 	{
 		// if ($this->user_id == $me->id) {
-
-		if (Config::get('services.aws.enabled')) {
-			Helpers::delete_from_s3("images/avatars/".$this->file);
-		}
+		Helpers::delete_from_s3('images/avatars/' . $this->file);
 
 		return parent::delete();
 	}
@@ -38,11 +35,11 @@ class Avatar extends BaseModel
 	 */
 	public function push_to_s3()
 	{
-		if (Helpers::push_to_s3("images/avatars/".$this->file, true)) {
-			unlink(storage_path()."/uploads/avatars/".$this->file);
-			return true;
-		}
-		return false;
+		return Helpers::push_to_s3(
+			'uploads/avatars/' . $this->file,
+			'images/avatars/' . $this->file,
+			true
+		);
 	}
 
 }

@@ -1,4 +1,4 @@
-<div class="btn-toolbar" role="toolbar">
+<div class="btn-toolbar bbcode-toolbar" role="toolbar">
 
 <div class="btn-group btn-group-sm">
 	<button type="button" onClick="stripbbtags();" class="btn btn-default" title="Clear Formatting">
