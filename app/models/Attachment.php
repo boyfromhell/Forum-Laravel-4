@@ -52,7 +52,7 @@ class Attachment extends BaseModel
 	 */
 	public function getUrlAttribute()
 	{
-		return '/forum/attachments/' . $this->id;
+		return '/download-attachment/' . $this->id;
 	}
 
 	/**

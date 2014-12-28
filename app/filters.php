@@ -1,6 +1,21 @@
 <?php
 
-View::creator(array('layout'), function($view)
+View::creator(['minimal'], function($view)
+{
+	global $me;
+
+	$theme = $me->theme;
+    if (! $theme) {
+        $theme = Parangi\Theme::orderBy('name', 'asc')->first();
+    }
+
+	//$resources = DB::table('resources')->get();
+
+	$view->with('theme', $theme)
+		->with('resources', $resources);
+});
+
+View::creator(['layout'], function($view)
 {
 	global $me;
 

@@ -59,33 +59,7 @@
 
 <div id="preview"></div>
 
-@if ( count($attachments) > 0 )
-<div class="welcome wide">
-
-	<div class="header">Attachments</div>
-	
-	<div class="body">
-		{$prev_type = 0}
-		{foreach $attachments as $attachment}
-			{if $attachment->filetype == 1}
-				{if $prev_type == 0}<div style="padding:0 5px">{/if}
-				<div><a href="{$attachment->url}">{$attachment->origfilename}</a> ({$attachment->get_size()}) -
-				<a href="" class="delete-attachment" data-id="{$attachment->id}">Remove</a></div>
-				<div class="break"></div>
-			{else}
-				{if $prev_type == 1}</div><br>{/if}
-				<div class="photo" style="height:192px">
-				<a class="thumb" href="{$attachment->url}">
-				<img src="{$cdn}{$attachment->get_path()}thumbs/{$attachment->thumb}"></a>
-				<a href="" class="delete-attachment" data-id="{$attachment->id}">Remove</a></div>
-			{/if}
-			{$prev_type = $attachment->filetype}
-		{/foreach}
-		
-		<div class="break"></div>
-	</div>
-</div>
-@endif
+@include ('blocks.edit_attachments')
 </form>
 
 @stop

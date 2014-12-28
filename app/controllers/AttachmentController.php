@@ -2,6 +2,7 @@
 
 use Config;
 use Exception;
+use Redirect;
 use S3;
 
 class AttachmentController extends BaseController
@@ -17,6 +18,8 @@ class AttachmentController extends BaseController
 	 */
 	public function download($id)
 	{
+		global $me;
+
 		$attachment = Attachment::findOrFail($id);
 
 		// Check if they have read permission on this forum / message
@@ -24,19 +27,19 @@ class AttachmentController extends BaseController
 			$forum = $attachment->post->topic->forum;
 
 			// @todo support group view/read permission
-			if ($forum->id == 19) {
+			/*if ($forum->id == 19) {
 				if (in_array(1, $mygroups) || $me->is_mod) {
 					$access = $forum->read;
 				} else {
 					$access = $forum->read-1;
 				}
-			}
+			}*/
 
-			if ($access < $forum->read) {
+			if ($me->access < $forum->read) {
 				throw new Exception('You do not have permission to view this attachment');
 			}
 		} else {
-			if (!$me->loggedin || $me->id != $attachment->user_id) {
+			if (!$me->id || $me->id != $attachment->user_id) {
 				throw new Exception('You do not have permission to view this attachment');
 			}
 		}
@@ -44,15 +47,15 @@ class AttachmentController extends BaseController
 		$attachment->increment('downloads');
 
 		if (! Config::get('services.aws.enabled')) {
-			$path = ROOT . 'web' . $attachment->get_path() . $attachment->filename;
+			$path = storage_path() . $attachment->original;
 		} else {
-			$path = ltrim($attachment->get_path(), '/') . $attachment->filename;
-			
+			$path = ltrim($attachment->original, '/');
+
 			$s3 = new S3(Config::get('services.aws.access_key'), Config::get('services.aws.secret_key'));
-			$url = $s3->getAuthenticatedURL($_CONFIG['s3_bucket'], $path, 60*60, true);
+			$url = $s3->getAuthenticatedURL(Config::get('services.aws.bucket'), $path, 60*60, true);
 		}
 
-		header("Content-type: " . $attachment->mimetype);
+		/*header("Content-type: " . $attachment->mimetype);
 		header("Content-transfer-encoding: binary");
 		header("Content-length: " . filesize($path));
 			
@@ -60,12 +63,12 @@ class AttachmentController extends BaseController
 			header("Content-Disposition: inline; filename=". $attachment->origfilename);
 		} else {
 			header("Content-Disposition: attachment; filename=" . $attachment->origfilename);
-		}
+		}*/
 
 		if (! Config::get('services.aws.enabled')) {
 			@readfile($path);
 		} else {
-			echo file_get_contents($url);
+			return Redirect::to($url);
 		}
 
 		exit;
@@ -133,7 +136,7 @@ class AttachmentController extends BaseController
 				Helpers::push_to_s3(
 					$img->getLocalDirectory() . '/' . $size,
 					$remote_path . $name . '.' . ($folder == 'original' ? $ext : 'jpg'),
-					true
+					($folder == 'original' ? false : true)
 				);
 			}
 		}

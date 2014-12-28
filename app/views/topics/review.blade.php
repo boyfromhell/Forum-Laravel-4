@@ -4,7 +4,7 @@
 
 <body class="minimal">
 
-<table class="table">
+<table class="table" style="margin-bottom: 0">
 <tbody>
 @foreach ( $posts as $i => $post )
 <tr>

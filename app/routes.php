@@ -62,7 +62,7 @@ Route::group(array('before' => 'auth', 'namespace' => 'Parangi'), function()
 	Route::get('results/{id}', 'SearchController@results');
 
 	// Attachments
-	Route::get('forum/attachments/{id}', 'AttachmentController@download');
+	Route::get('download-attachment/{id}', 'AttachmentController@download');
 
 	// Messages
 	Route::any('messages', 'MessageController@inbox');

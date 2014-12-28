@@ -6,6 +6,7 @@ use Input;
 use Redirect;
 use Request;
 use Session;
+use Validator;
 use View;
 use User;
 
@@ -130,18 +131,6 @@ class MessageController extends BaseController
 			'title'    => 'Compose Message'
 		);
 
-		// Form submitted
-        if (Input::has('preview')) {
-            // Don't validate anything for a preview
-        } else if (Request::isMethod('post')) {
-            $rules = [
-                'content' => 'required',
-            ];
-            if ($this->mode == 'newtopic') {
-                $rules['subject'] = 'required';
-            }
-		}
-
 		if (Input::has('user')) {
 			// Composing to a user
 			$user = User::find(Input::get('user'));
@@ -154,10 +143,10 @@ class MessageController extends BaseController
 			$thread = MessageThread::findOrFail(Input::get('t'));
 
 			// If no messages are found (filtered by owner)
-	        // then this is not my thread, or I deleted them all
-	        if (! count($thread->messages)) {
-	            App::abort(404);
-	        }
+			// then this is not my thread, or I deleted them all
+			if (! count($thread->messages)) {
+				App::abort(404);
+			}
 
 			if ($thread->lastMessage->from_user_id != $me->id && ! isset($_GET['all'] )) {
 				$recipients = $thread->lastMessage->from->name;
@@ -182,6 +171,73 @@ class MessageController extends BaseController
 			$recipients = implode(', ', $names);
 		}
 
+		$subject = Input::get('subject');
+		$recipients = Input::get('recipients', $recipients);
+
+		// Form submitted
+        if (Input::has('preview')) {
+            // Don't validate anything for a preview
+        } else if (Request::isMethod('post')) {
+            $rules = [
+                'content' => 'required',
+            ];
+            if ($this->mode == 'newtopic') {
+                $rules['subject'] = 'required';
+            }
+
+			// Upload attachments
+            $successful = $total = 0;
+            if (Input::hasFile('files')) {
+                foreach (Input::file('files') as $i => $file) {
+                    if ($file->isValid()) {
+                        try {
+                            $success = AttachmentController::upload($file, $i, $hash);
+                        } catch (Exception $e) {
+                            Session::push('errors', $e->getMessage());
+                        }
+                        if ($success) {
+                            $successful++;
+                        }
+                    }
+
+                    $total++;
+                }
+            }
+
+			$validator = Validator::make(Input::all(), $rules);
+
+            if ($validator->fails()) {
+                foreach ($validator->messages()->all() as $error) {
+                    Session::push('errors', $error);
+                }
+            } else {
+				$content = BBCode::prepare($content);
+
+				// @todo Save stuff
+
+				// Update attachments with message ID
+                Attachment::whereNull('message_id')
+                    ->where('user_id', '=', $me->id)
+                    ->where('hash', '=', $hash)
+                    ->update([
+                        'hash'       => null,
+                        'message_id' => $message->id
+                    ]);
+
+				// @todo Send emails
+
+				return Redirect::to($post->url);
+			}
+		}
+
+		// Load pending attachments
+		$attachments = Attachment::whereNull('message_id')
+            ->where('user_id', '=', $me->id)
+            ->where('hash', '=', $hash)
+        	->orderBy('filetype', 'desc')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
 		$post_max_size = intval(ini_get('post_max_size'));
 		$max_total = $post_max_size * 1024 * 1024;
 		$upload_max_filesize = intval(ini_get('upload_max_filesize'));
@@ -190,12 +246,16 @@ class MessageController extends BaseController
 
 		return View::make('messages.compose')
 			->with('_PAGE', $_PAGE)
+			->with('menu', MessageController::fetchMenu('compose'))
+			->with('attachments', $attachments)
+			->with('hash', $hash)
 
 			->with('thread', $thread)
-			->with('recipients', $recipients)
-			->with('content', $content)
 
-			->with('menu', MessageController::fetchMenu('compose'))
+			// From input or pre-filled
+			->with('recipients', $recipients)
+			->with('subject', $subject)
+			->with('content', $content)
 
 			->with('post_max_size', $post_max_size)
 			->with('max_total', $max_total)
